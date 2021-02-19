@@ -4,7 +4,7 @@ public class Application {
      * @param args CLI args (ignored)
      */
     public static void main(String[] args) {
-        CalculatorWindow window = new CalculatorWindow();
+        CalculatorWindowFormatted window = new CalculatorWindowFormatted();
         window.show();
     }
 }
