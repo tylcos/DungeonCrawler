@@ -10,13 +10,13 @@ public class MainPlayer {
 
         switch (difficulty) {
         case "Easy":
-            this.money = 10;
+            this.money = 100;
             break;
         case "Medium":
-            this.money = 20;
+            this.money = 75;
             break;
         case "Hard":
-            this.money = 30;
+            this.money = 50;
             break;
         default:
             throw new IllegalStateException("Unexpected value: " + difficulty);
