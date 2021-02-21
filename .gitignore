@@ -145,3 +145,5 @@ hs_err_pid*
 checkstyle-*.jar
 .classpath
 .project
+/bin/
+*.prefs
