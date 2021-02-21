@@ -142,8 +142,13 @@ hs_err_pid*
 
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij,visualstudiocode
 
+# Compiled Java directory
+/bin/
+
+# Checkstyle
 checkstyle-*.jar
+
+# Eclipse specific
 .classpath
 .project
-/bin/
 *.prefs
