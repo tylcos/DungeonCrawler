@@ -2,7 +2,7 @@ import javafx.scene.input.MouseEvent;
 
 public class TitleScreen {
 
-    private void OnStartClick(MouseEvent event) {
+    public void OnStartClick(MouseEvent mouseEvent) {
         SceneLoader.loadScene(SceneLoader.CONFIG);
     }
 
