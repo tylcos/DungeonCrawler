@@ -1,3 +1,5 @@
+package dungeonUI;
+
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
@@ -14,6 +16,9 @@ import javafx.geometry.Pos;
 import javafx.stage.Stage;
 
 public class DungeonCrawlerDriver extends Application {
+    private final int WIDTH = 750;
+    private final int HEIGHT = 550;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -27,7 +32,7 @@ public class DungeonCrawlerDriver extends Application {
         setupConfigScreen(primaryStage, configBorderPane);
 
         primaryStage.setTitle("Dungeon Crawler");
-        primaryStage.setScene(new Scene(startBorderPane, 750, 550));
+        primaryStage.setScene(new Scene(startBorderPane, WIDTH, HEIGHT));
         primaryStage.show();
     }
 
@@ -46,7 +51,7 @@ public class DungeonCrawlerDriver extends Application {
         start.setPrefWidth(125);
         start.setPrefHeight(75);
         start.setOnAction(event -> {
-            primaryStage.setScene(new Scene(configuration, 750, 550));
+            primaryStage.setScene(new Scene(configuration, WIDTH, HEIGHT));
         });
 
         Label version = new Label("version 1.0");
@@ -119,7 +124,7 @@ public class DungeonCrawlerDriver extends Application {
                         difficultyOptions.getValue()
                 );
                 BorderPane firstRoomBorder = new BorderPane();
-                primaryStage.setScene(new Scene(firstRoomBorder, 750, 550));
+                primaryStage.setScene(new Scene(firstRoomBorder, WIDTH, HEIGHT));
                 displayFirstRoom(player, firstRoomBorder);
             } else {
                 nameError.setText("Name is not valid. Try again.");
