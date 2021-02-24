@@ -1,3 +1,5 @@
+package dungeonUI;
+
 public class MainPlayer {
     private String name;
     private Weapon weapon;
