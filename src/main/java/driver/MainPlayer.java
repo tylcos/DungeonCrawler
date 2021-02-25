@@ -1,4 +1,4 @@
-package dungeonUI;
+package driver;
 
 public class MainPlayer {
     private String name;
