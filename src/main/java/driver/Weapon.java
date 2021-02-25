@@ -1,4 +1,4 @@
-package dungeonUI;
+package driver;
 
 public class Weapon {
     private String name;
