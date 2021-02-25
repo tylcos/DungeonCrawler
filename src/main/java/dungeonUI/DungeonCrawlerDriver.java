@@ -30,7 +30,7 @@ public class DungeonCrawlerDriver extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         BorderPane startBorderPane = new BorderPane();
         BorderPane configBorderPane = new BorderPane();
         initialGameScreen(primaryStage, startBorderPane, configBorderPane);
@@ -42,12 +42,18 @@ public class DungeonCrawlerDriver extends Application {
         primaryStage.show();
     }
 
-    private void initialGameScreen(Stage primaryStage, BorderPane startBorderPane, BorderPane configuration) throws FileNotFoundException {
-        //loading images
-        FileInputStream titleImageFile = new FileInputStream("src/main/java/Image/Dungeon Crawler Font imag resize.gif");
-        FileInputStream backgroundImageFile = new FileInputStream("src/main/java/Image/IntroPage.gif");
-        //For testing purpose. This may need change as we progress. (NULL backgorund)
-        FileInputStream whiteBackground = new FileInputStream("src/main/java/Image/WhiteBackground.gif");
+    private void initialGameScreen(Stage primaryStage, BorderPane startBorderPane,
+                                   BorderPane configuration) throws FileNotFoundException {
+        // loading images
+        FileInputStream titleImageFile = new FileInputStream(
+                "src/main/java/images/Dungeon Crawler Font imag resize.gif");
+
+        FileInputStream backgroundImageFile = new FileInputStream(
+                "src/main/java/images/IntroPage.gif");
+
+        // For testing purpose. This may need change as we progress. (NULL background)
+        FileInputStream whiteBackground = new FileInputStream(
+                "src/main/java/images/WhiteBackground.gif");
 
         Image backgroundImage = new Image(backgroundImageFile);
         Image titleImage = new Image(titleImageFile);
@@ -78,7 +84,8 @@ public class DungeonCrawlerDriver extends Application {
         team.setFont(new Font(
                 "Times New Roman", 10
         ));
-        //COORDIATE FOR EACH NODE
+
+        //COORDINATE FOR EACH NODE
         int backgorundStartingPointX = 0;
         int backgorundStartingPointY = 0;
         backgroundView.setTranslateX(backgorundStartingPointX);
@@ -89,27 +96,26 @@ public class DungeonCrawlerDriver extends Application {
 
 
         int titlePixelSizeX = 200;
-        int titlePixelSizeY = 200;
-        int titleStartingPointX = (WIDTH/2) - (titlePixelSizeX/2);
+        int titleStartingPointX = (WIDTH / 2) - (titlePixelSizeX / 2);
 
-        int titleStartingPointY= 200;
         titleImageView.setTranslateX(titleStartingPointX);
         titleImageView.setTranslateY(0);
 
-        int startButtonLocX = (WIDTH/2) - (buttonWidth/2);
-        int startButtonLocY = (HEIGHT/2) - (buttonHeight/2);
+        int startButtonLocX = (WIDTH / 2) - (buttonWidth / 2);
+        int startButtonLocY = (HEIGHT / 2) - (buttonHeight / 2);
         start.setTranslateX(startButtonLocX);
         start.setTranslateY(startButtonLocY);
 
-        version.setTranslateX(WIDTH-45);
+        version.setTranslateX(WIDTH - 45);
         version.setTranslateY(HEIGHT - 30);
 
-        team.setTranslateX(WIDTH-90);
-        team.setTranslateY(HEIGHT-15);
+        team.setTranslateX(WIDTH - 90);
+        team.setTranslateY(HEIGHT - 15);
 
         Group initalScreenGroup = new Group();
         //whiteImageView is only for testing purpose. May delete later
-        initalScreenGroup.getChildren().addAll(whiteImageView,backgroundView,titleImageView, start , version, team);
+        initalScreenGroup.getChildren().addAll(whiteImageView, backgroundView,
+                titleImageView, start, version, team);
 
         startBorderPane.setTop(initalScreenGroup);
     }
