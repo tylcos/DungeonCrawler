@@ -2,11 +2,14 @@ package dungeonUI;
 
 import javafx.application.Application;
 import javafx.geometry.HPos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.*;
@@ -14,6 +17,9 @@ import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class DungeonCrawlerDriver extends Application {
     private final int WIDTH = 750;
@@ -24,7 +30,7 @@ public class DungeonCrawlerDriver extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception{
         BorderPane startBorderPane = new BorderPane();
         BorderPane configBorderPane = new BorderPane();
         initialGameScreen(primaryStage, startBorderPane, configBorderPane);
@@ -36,20 +42,27 @@ public class DungeonCrawlerDriver extends Application {
         primaryStage.show();
     }
 
-    private void initialGameScreen(Stage primaryStage, BorderPane startBorderPane, BorderPane configuration) {
-        StackPane startScreen = new StackPane();
-        VBox versionTeamNumber = new VBox();
+    private void initialGameScreen(Stage primaryStage, BorderPane startBorderPane, BorderPane configuration) throws FileNotFoundException {
+        //loading images
+        FileInputStream titleImageFile = new FileInputStream("src/main/java/Image/Dungeon Crawler Font imag resize.gif");
+        FileInputStream backgroundImageFile = new FileInputStream("src/main/java/Image/IntroPage.gif");
+        //For testing purpose. This may need change as we progress. (NULL backgorund)
+        FileInputStream whiteBackground = new FileInputStream("src/main/java/Image/WhiteBackground.gif");
 
-        Label title = new Label("Dungeon Crawler");
-        title.setFont(new Font("Times New Roman", 40));
-        title.setTextFill(Color.BLACK);
-        title.setTextAlignment(TextAlignment.CENTER);
-        title.setPadding(new Insets(30, 0, 0, 0));
+        Image backgroundImage = new Image(backgroundImageFile);
+        Image titleImage = new Image(titleImageFile);
+        Image whiteBackgroundImage = new Image(whiteBackground);
 
+        ImageView backgroundView = new ImageView(backgroundImage);
+        ImageView titleImageView = new ImageView(titleImage);
+        ImageView whiteImageView = new ImageView(whiteBackgroundImage);
+
+        int buttonWidth = 125;
+        int buttonHeight = 75;
         Button start = new Button();
         start.setText("Start");
-        start.setPrefWidth(125);
-        start.setPrefHeight(75);
+        start.setPrefWidth(buttonWidth);
+        start.setPrefHeight(buttonHeight);
         start.setOnAction(event -> {
             primaryStage.setScene(new Scene(configuration, WIDTH, HEIGHT));
         });
@@ -65,21 +78,41 @@ public class DungeonCrawlerDriver extends Application {
         team.setFont(new Font(
                 "Times New Roman", 10
         ));
-        version.setTextFill(Color.BLACK);
-        version.setTextAlignment(TextAlignment.RIGHT);
+        //COORDIATE FOR EACH NODE
+        int backgorundStartingPointX = 0;
+        int backgorundStartingPointY = 0;
+        backgroundView.setTranslateX(backgorundStartingPointX);
+        backgroundView.setTranslateY(backgorundStartingPointY);
 
-        versionTeamNumber.getChildren().addAll(version, team);
-        versionTeamNumber.setAlignment(Pos.CENTER_RIGHT);
-        versionTeamNumber.setPadding(new Insets(0, 10, 10, 0));
+        whiteImageView.setTranslateX(0);
+        whiteImageView.setTranslateY(0);
 
-        startScreen.getChildren().addAll(start);
 
-        startBorderPane.setCenter(startScreen);
-        startBorderPane.setTop(title);
-        startBorderPane.setBottom(versionTeamNumber);
-        BorderPane.setAlignment(title, Pos.TOP_CENTER);
+        int titlePixelSizeX = 200;
+        int titlePixelSizeY = 200;
+        int titleStartingPointX = (WIDTH/2) - (titlePixelSizeX/2);
+
+        int titleStartingPointY= 200;
+        titleImageView.setTranslateX(titleStartingPointX);
+        titleImageView.setTranslateY(0);
+
+        int startButtonLocX = (WIDTH/2) - (buttonWidth/2);
+        int startButtonLocY = (HEIGHT/2) - (buttonHeight/2);
+        start.setTranslateX(startButtonLocX);
+        start.setTranslateY(startButtonLocY);
+
+        version.setTranslateX(WIDTH-45);
+        version.setTranslateY(HEIGHT - 30);
+
+        team.setTranslateX(WIDTH-90);
+        team.setTranslateY(HEIGHT-15);
+
+        Group initalScreenGroup = new Group();
+        //whiteImageView is only for testing purpose. May delete later
+        initalScreenGroup.getChildren().addAll(whiteImageView,backgroundView,titleImageView, start , version, team);
+
+        startBorderPane.setTop(initalScreenGroup);
     }
-
     private void setupConfigScreen(Stage primaryStage, BorderPane configBorderPane) {
         StackPane configuration = new StackPane();
         GridPane options = new GridPane();
