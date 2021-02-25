@@ -1,6 +1,6 @@
 import javafx.stage.Stage;
 import org.junit.Test;
-import dungeonUI.DungeonCrawlerDriver;
+import driver.DungeonCrawlerDriver;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 

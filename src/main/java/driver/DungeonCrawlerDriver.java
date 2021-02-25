@@ -1,4 +1,4 @@
-package dungeonUI;
+package driver;
 
 import javafx.application.Application;
 import javafx.geometry.HPos;
