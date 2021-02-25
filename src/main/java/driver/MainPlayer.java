@@ -23,7 +23,6 @@ public class MainPlayer {
         default:
             throw new IllegalStateException("Unexpected value: " + difficulty);
         }
-
         this.hitpoints = 100;
     }
 

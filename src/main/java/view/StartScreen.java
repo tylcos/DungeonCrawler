@@ -57,7 +57,6 @@ public class StartScreen {
         whiteImageView.setTranslateX(0);
         whiteImageView.setTranslateY(0);
 
-
         int titlePixelSizeX = 200;
         int titleStartingPointX = (width / 2) - (titlePixelSizeX / 2);
 
@@ -97,5 +96,4 @@ public class StartScreen {
     public Button getStartButton() {
         return startButton;
     }
-
 }
