@@ -17,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
+import view.ConfigScreen;
+import view.StartScreen;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,6 +26,7 @@ import java.io.FileNotFoundException;
 public class DungeonCrawlerDriver extends Application {
     private final int WIDTH = 750;
     private final int HEIGHT = 550;
+    private Stage primaryStage;
 
     public static void main(String[] args) {
         launch(args);
@@ -31,151 +34,45 @@ public class DungeonCrawlerDriver extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
         BorderPane startBorderPane = new BorderPane();
         BorderPane configBorderPane = new BorderPane();
-        initialGameScreen(primaryStage, startBorderPane, configBorderPane);
 
-        setupConfigScreen(primaryStage, configBorderPane);
 
-        primaryStage.setTitle("Dungeon Crawler");
-        primaryStage.setScene(new Scene(startBorderPane, WIDTH, HEIGHT));
+        //setupConfigScreen(configBorderPane);
+
+        this.primaryStage.setTitle("Dungeon Crawler");
+        showStartScreen();
+    }
+
+    private void showStartScreen() throws FileNotFoundException {
+        StartScreen startScreen = new StartScreen(WIDTH, HEIGHT);
+        Button startButton = startScreen.getStartButton();
+        startButton.setOnAction(event -> showConfigScreen());
+        primaryStage.setScene(startScreen.getScene());
         primaryStage.show();
     }
 
-    private void initialGameScreen(Stage primaryStage, BorderPane startBorderPane,
-                                   BorderPane configuration) throws FileNotFoundException {
-        // loading images
-        FileInputStream titleImageFile = new FileInputStream(
-                "src/main/java/images/Dungeon Crawler Font imag resize.gif");
-
-        FileInputStream backgroundImageFile = new FileInputStream(
-                "src/main/java/images/IntroPage.gif");
-
-        // For testing purpose. This may need change as we progress. (NULL background)
-        FileInputStream whiteBackground = new FileInputStream(
-                "src/main/java/images/WhiteBackground.gif");
-
-        Image backgroundImage = new Image(backgroundImageFile);
-        Image titleImage = new Image(titleImageFile);
-        Image whiteBackgroundImage = new Image(whiteBackground);
-
-        ImageView backgroundView = new ImageView(backgroundImage);
-        ImageView titleImageView = new ImageView(titleImage);
-        ImageView whiteImageView = new ImageView(whiteBackgroundImage);
-
-        int buttonWidth = 125;
-        int buttonHeight = 75;
-        Button start = new Button();
-        start.setText("Start");
-        start.setPrefWidth(buttonWidth);
-        start.setPrefHeight(buttonHeight);
-        start.setOnAction(event -> {
-            primaryStage.setScene(new Scene(configuration, WIDTH, HEIGHT));
-        });
-
-        Label version = new Label("version 1.0");
-        version.setFont(new Font(
-                "Times New Roman", 10
-        ));
-        version.setTextFill(Color.BLACK);
-        version.setTextAlignment(TextAlignment.RIGHT);
-
-        Label team = new Label("Team 03: Team Azula");
-        team.setFont(new Font(
-                "Times New Roman", 10
-        ));
-
-        //COORDINATE FOR EACH NODE
-        int backgorundStartingPointX = 0;
-        int backgorundStartingPointY = 0;
-        backgroundView.setTranslateX(backgorundStartingPointX);
-        backgroundView.setTranslateY(backgorundStartingPointY);
-
-        whiteImageView.setTranslateX(0);
-        whiteImageView.setTranslateY(0);
-
-
-        int titlePixelSizeX = 200;
-        int titleStartingPointX = (WIDTH / 2) - (titlePixelSizeX / 2);
-
-        titleImageView.setTranslateX(titleStartingPointX);
-        titleImageView.setTranslateY(0);
-
-        int startButtonLocX = (WIDTH / 2) - (buttonWidth / 2);
-        int startButtonLocY = (HEIGHT / 2) - (buttonHeight / 2);
-        start.setTranslateX(startButtonLocX);
-        start.setTranslateY(startButtonLocY);
-
-        version.setTranslateX(WIDTH - 45);
-        version.setTranslateY(HEIGHT - 30);
-
-        team.setTranslateX(WIDTH - 90);
-        team.setTranslateY(HEIGHT - 15);
-
-        Group initalScreenGroup = new Group();
-        //whiteImageView is only for testing purpose. May delete later
-        initalScreenGroup.getChildren().addAll(whiteImageView, backgroundView,
-                titleImageView, start, version, team);
-
-        startBorderPane.setTop(initalScreenGroup);
-    }
-    private void setupConfigScreen(Stage primaryStage, BorderPane configBorderPane) {
-        StackPane configuration = new StackPane();
-        GridPane options = new GridPane();
-
-        options.setAlignment(Pos.CENTER);
-        options.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
-        options.setHgap(8);
-        options.setVgap(8);
-
-        ComboBox<String> difficultyOptions = new ComboBox<>();
-        difficultyOptions.getItems().add("Easy");
-        difficultyOptions.getItems().add("Medium");
-        difficultyOptions.getItems().add("Hard");
-        difficultyOptions.setValue("Easy");
-
-        ComboBox<String> weaponOptions = new ComboBox<>();
-        weaponOptions.getItems().add("Knife");
-        weaponOptions.getItems().add("Axe");
-        weaponOptions.getItems().add("Sword");
-        weaponOptions.setValue("Knife");
-
-        TextField nameTextField = new TextField();
-        Text nameError = new Text();
-        nameError.setFill(Color.RED);
-
-        options.add(nameError, 1, 0);
-        options.add(new Label("Name"), 0, 1);
-        options.add(nameTextField, 1, 1);
-        options.add(new Label("Difficulty"), 0, 2);
-        options.add(difficultyOptions, 1, 2);
-        options.add(new Label("Weapon"), 0, 3);
-        options.add(weaponOptions, 1, 3);
-
-        // todo change first room into shop
-        Button toFirstRoom = new Button("Go to first room");
-        toFirstRoom.setOnAction(event -> {
-            if (validatePlayerName(nameTextField.getText())) {
+    private void showConfigScreen() {
+        ConfigScreen configScreen = new ConfigScreen(WIDTH, HEIGHT);
+        Button goToFirstRoomButton = configScreen.getGoToFirstRoomButton();
+        goToFirstRoomButton.setOnAction(event -> {
+            if (validatePlayerName(configScreen.getNameTextField().getText())) {
                 MainPlayer player = new MainPlayer(
                         // todo fix weapon damage and price
-                        nameTextField.getText(),
-                        new Weapon(weaponOptions.getValue(), 0, 0),
-                        difficultyOptions.getValue()
+                        configScreen.getNameTextField().getText(),
+                        new Weapon(configScreen.getWeaponOptions().getValue(), 0, 0),
+                        configScreen.getDifficultyOptions().getValue()
                 );
                 BorderPane firstRoomBorder = new BorderPane();
                 primaryStage.setScene(new Scene(firstRoomBorder, WIDTH, HEIGHT));
                 displayFirstRoom(player, firstRoomBorder);
             } else {
-                nameError.setText("Name is not valid. Try again.");
+                configScreen.getNameError().setText("Name is not valid. Try again.");
             }
         });
-
-        options.add(toFirstRoom, 2, 4);
-        GridPane.setHalignment(toFirstRoom, HPos.RIGHT);
-
-        configuration.getChildren().add(options);
-
-        configBorderPane.setCenter(configuration);
+        primaryStage.setScene(configScreen.getScene());
+        primaryStage.show();
     }
 
     private void displayFirstRoom(MainPlayer player, BorderPane firstRoomBorder) {
