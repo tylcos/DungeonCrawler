@@ -65,7 +65,7 @@ public class DungeonCrawlerDriver extends Application {
                         configScreen.getDifficultyOptions().getValue()
                 );
                 BorderPane firstRoomBorder = new BorderPane();
-                primaryStage.setScene(new Scene(firstRoomBorder, WIDTH, HEIGHT));
+                primaryStage.setScene(configScreen.getScene());
                 displayFirstRoom(player, firstRoomBorder);
             } else {
                 configScreen.getNameError().setText("Name is not valid. Try again.");
