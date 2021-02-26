@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class SceneLoader {
-    public static Stage window;
+    private static Stage window;
 
 
     public static final String TITLE  = "/views/TitleScreen.fxml";
@@ -41,5 +41,13 @@ public class SceneLoader {
         } catch (IOException e) {
             System.err.println("Error loading fxml scene: " + TITLE);
         }
+    }
+
+    public static Stage getWindow() {
+        return window;
+    }
+
+    public static void setWindow(Stage window) {
+        SceneLoader.window = window;
     }
 }

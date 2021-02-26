@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-// TODO: Convert to FXML
+// todo: Convert to FXML
 public class InitialRoom {
     private int width;
     private int height;

@@ -7,7 +7,7 @@
     <!-- Credit to the CS 1332 team for the basis of this checkstyle
     configuration file -->
 
-    <!-- ! Make sure you are using Checkstyle 8.24 for this file ! -->
+    <!-- ! Make sure you are using Checkstyle 8.40 for this file ! -->
     <property name="charset" value="UTF-8"/>
     <property name="severity" value="warning"/>
 
@@ -88,9 +88,8 @@
         <module name="MultipleVariableDeclarations"/>
         <module name="AbbreviationAsWordInName"/>
 
-        <!-- Javadoc checks.                              -->
+        <!-- Javadoc checks.                              -->   
         <module name="JavadocMethod">
-            <property name="allowUndeclaredRTE" value="true"/>
             <property name="allowedAnnotations" value="Override, Test, Before, After, BeforeClass, AfterClass"/>
         </module>
         <module name="JavadocStyle">
