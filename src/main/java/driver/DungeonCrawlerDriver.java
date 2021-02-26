@@ -47,7 +47,6 @@ public class DungeonCrawlerDriver extends Application {
                         new Weapon(configScreen.getWeaponOptions().getValue(), 0, 0),
                         configScreen.getDifficultyOptions().getValue()
                 );
-                BorderPane firstRoomBorder = new BorderPane();
                 primaryStage.setScene(configScreen.getScene());
                 showInitialRoom();
             } else {
