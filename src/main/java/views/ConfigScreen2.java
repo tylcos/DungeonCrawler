@@ -1,4 +1,4 @@
-package view;
+package views;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -13,7 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-public class ConfigScreen {
+public class ConfigScreen2 {
     private int width;
     private int height;
     private ComboBox<String> difficultyOptions;
@@ -22,7 +22,7 @@ public class ConfigScreen {
     private Button goToFirstRoom;
     private Text nameError;
 
-    public ConfigScreen(int width, int height) {
+    public ConfigScreen2(int width, int height) {
         this.width = width;
         this.height = height;
 

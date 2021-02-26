@@ -1,4 +1,4 @@
-package view;
+package views;
 
 import driver.MainPlayer;
 import javafx.geometry.Insets;

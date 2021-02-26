@@ -6,7 +6,7 @@ plugins {
 
 version '1.0-SNAPSHOT'
 apply plugin:'application'
-mainClassName = "src/main/java/DungeonCrawlerDriver.java"
+mainClassName = "src/main/java/driver/DungeonCrawlerDriver.java"
 
 
 repositories {
@@ -14,9 +14,9 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile "org.testfx:testfx-core:4.0.+"
-    testCompile "org.testfx:testfx-junit:4.0.+"
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation "org.testfx:testfx-core:4.0.+"
+    testImplementation "org.testfx:testfx-junit:4.0.+"
 }
 
 javafx {
