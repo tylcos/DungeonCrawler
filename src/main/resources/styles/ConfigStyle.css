@@ -1,0 +1,18 @@
+.optionText {
+    -fx-font: 42px "Javanese Text";
+}
+
+.inputText {
+    -fx-font: 30px "Javanese Text";
+    -fx-highlight-fill: lightblue;
+    -fx-highlight-text-fill: black;
+}
+
+
+Label.buttonText {
+    -fx-padding: 0 50 0 50;
+}
+
+Label.buttonText:hover {
+    -fx-background-color: lightgrey;
+}
