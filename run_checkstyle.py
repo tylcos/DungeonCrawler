@@ -160,7 +160,7 @@ def main(root=None, verbose=False):
     path = os.path.abspath(root) if root is not None else os.getcwd()
     files = find_files(path, JAVA_EXTENSION)
 
-    verbose_tip = " (run with -v to view files)" if not verbose else ""
+    verbose_tip = " (run with -v to views files)" if not verbose else ""
     print("Running Checkstyle on {} files{}:".format(len(files), verbose_tip))
     # Print each file in verbose mode
     if verbose:
