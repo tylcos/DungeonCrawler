@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.StackPane?>
-<StackPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../styles/GameStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.ConfigScreen">
+<StackPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../styles/GameStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GameScreen">
 
 </StackPane>

@@ -41,8 +41,8 @@ JAVA_EXTENSION = ".java"
 BASE_PROCESS = ["java", "-jar"]
 CHECKSTYLE_XML_NAME = "cs2340_checks.xml"
 CHECKSTYLE_XML_URL = "https://raw.githubusercontent.com/Georgia-Tech-CS2340/cs2340-codestyle/master/cs2340_checks.xml" # pylint: disable=line-too-long
-CHECKSTYLE_JAR_NAME = "checkstyle-8.24-all.jar"
-CHECKSTYLE_JAR_URL = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.24/checkstyle-8.24-all.jar" # pylint: disable=line-too-long
+CHECKSTYLE_JAR_NAME = "checkstyle-8.40-all.jar"
+CHECKSTYLE_JAR_URL = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.40/checkstyle-8.40-all.jar" # pylint: disable=line-too-long
 CHECKSTYLE_JAR_GITIGNORE = "checkstyle-*.jar"
 CHECKSTYLE_JAR_PATTERN = r"checkstyle-.*\.jar"
 SENTINEL = object()
@@ -160,7 +160,7 @@ def main(root=None, verbose=False):
     path = os.path.abspath(root) if root is not None else os.getcwd()
     files = find_files(path, JAVA_EXTENSION)
 
-    verbose_tip = " (run with -v to views files)" if not verbose else ""
+    verbose_tip = " (run with -v to view files)" if not verbose else ""
     print("Running Checkstyle on {} files{}:".format(len(files), verbose_tip))
     # Print each file in verbose mode
     if verbose:

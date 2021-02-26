@@ -8,13 +8,13 @@
 <?import javafx.scene.Scene?>
 <?import javafx.scene.text.*?>
 <?import javafx.stage.Stage?>
-<Stage fx:id="stage" minHeight="720.0" minWidth="1280.0" title="Dungeon Crawler" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TitleScreen">
+<Stage fx:id="stage" maximized="true" minHeight="720.0" minWidth="1280.0" title="Dungeon Crawler" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TitleScreen">
     <scene>
         <Scene fx:id="scene" stylesheets="@../styles/TitleStyle.css">
          <StackPane fx:id="scalePane" prefWidth="1486.0">
             <children>
                      <VBox maxHeight="-Infinity" maxWidth="-Infinity" StackPane.alignment="BOTTOM_LEFT">
-                         <Label onMouseClicked="#OnStartClick" styleClass="buttonText" text="Start">
+                         <Label onMouseClicked="#onStartClick" styleClass="buttonText" text="Start">
                              <font>
                                  <Font name="Javanese Text" size="55.0" />
                              </font>
@@ -24,7 +24,7 @@
                                  <Font name="Javanese Text" size="55.0" />
                              </font>
                          </Label>
-                         <Label layoutX="10.0" layoutY="161.0" onMouseClicked="#OnExitClick" styleClass="buttonText" text="Exit">
+                         <Label layoutX="10.0" layoutY="161.0" onMouseClicked="#onExitClick" styleClass="buttonText" text="Exit">
                              <font>
                                  <Font name="Javanese Text" size="55.0" />
                              </font>
