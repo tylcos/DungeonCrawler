@@ -15,7 +15,7 @@ public class DungeonCrawlerTest extends ApplicationTest {
         DungeonCrawlerDriver dcd = new DungeonCrawlerDriver();
         dcd.start(primaryStage);
     }
-    
+
     @Test
     public void testStartNameFieldExists() {
         clickOn("Start");
