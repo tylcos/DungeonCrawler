@@ -1,6 +1,5 @@
 package driver;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,52 +10,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import views.ConfigScreen2;
 
-class DungeonCrawlerDriver2 extends Application {
-    private final int WIDTH = 750;
-    private final int HEIGHT = 550;
-    private Stage primaryStage;
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        this.primaryStage = primaryStage;
-        BorderPane startBorderPane = new BorderPane();
-        BorderPane configBorderPane = new BorderPane();
-
-
-        //setupConfigScreen(configBorderPane);
-
-        this.primaryStage.setTitle("Dungeon Crawler");
-    }
-
-    private void showConfigScreen() {
-        ConfigScreen2 configScreen2 = new ConfigScreen2(WIDTH, HEIGHT);
-        Button goToFirstRoomButton = configScreen2.getGoToFirstRoomButton();
-        goToFirstRoomButton.setOnAction(event -> {
-            if (validatePlayerName(configScreen2.getNameTextField().getText())) {
-                MainPlayer player = new MainPlayer(
-                        // TODO: fix weapon damage and price
-                        configScreen2.getNameTextField().getText(),
-                        new Weapon(configScreen2.getWeaponOptions().getValue(), 0, 0),
-                        configScreen2.getDifficultyOptions().getValue()
-                );
-                BorderPane firstRoomBorder = new BorderPane();
-                primaryStage.setScene(configScreen2.getScene());
-                displayFirstRoom(player, firstRoomBorder);
-            } else {
-                configScreen2.getNameError().setText("Name is not valid. Try again.");
-            }
-        });
-        primaryStage.setScene(configScreen2.getScene());
-        primaryStage.show();
-    }
-
+// TODO: Convert to FXML
+class DungeonCrawlerDriver2 {
     private void displayFirstRoom(MainPlayer player, BorderPane firstRoomBorder) {
         StackPane centerOfRoom = new StackPane();
         VBox playerStats = new VBox();
@@ -92,9 +48,5 @@ class DungeonCrawlerDriver2 extends Application {
         firstRoomBorder.setRight(exit);
         BorderPane.setAlignment(playerStats, Pos.TOP_LEFT);
         BorderPane.setAlignment(exit, Pos.TOP_CENTER);
-    }
-
-    private static boolean validatePlayerName(String name) {
-        return name.trim().length() > 0;
     }
 }

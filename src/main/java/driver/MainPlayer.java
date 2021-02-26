@@ -6,22 +6,17 @@ public class MainPlayer {
     private int money;
     private int hitpoints;
 
-    public MainPlayer(String name, Weapon weapon, String difficulty) {
+
+    // TODO: fix weapon damage and price
+    public MainPlayer(String name, String weapon, String difficulty) {
         this.name = name;
-        this.weapon = weapon;
+        this.weapon = new Weapon(weapon, 0, 0);
 
         switch (difficulty) {
-        case "Easy":
-            this.money = 100;
-            break;
-        case "Medium":
-            this.money = 75;
-            break;
-        case "Hard":
-            this.money = 50;
-            break;
-        default:
-            throw new IllegalStateException("Unexpected value: " + difficulty);
+            case "Boring" -> this.money = 100;
+            case "Normal" -> this.money = 75;
+            case "Hard"   -> this.money = 50;
+            default -> throw new IllegalStateException("Unexpected value: " + difficulty);
         }
 
         this.hitpoints = 100;

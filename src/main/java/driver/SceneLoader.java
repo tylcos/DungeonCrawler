@@ -10,8 +10,11 @@ import java.io.IOException;
 public class SceneLoader {
     public static Stage window;
 
+
     public static final String TITLE  = "/views/TitleScreen.fxml";
     public static final String CONFIG = "/views/ConfigScreen.fxml";
+    public static final String GAME   = "/views/GameScreen.fxml";
+
 
     /**
      * Loads normal scenes and shows them
@@ -20,9 +23,7 @@ public class SceneLoader {
      */
     public static void loadScene(String fxmlPath) {
         try {
-            System.out.println(SceneLoader.class.getResource(fxmlPath));
             Parent newParent = FXMLLoader.load(SceneLoader.class.getResource(fxmlPath));
-            System.out.println("here");
             window.setScene(new Scene(newParent));
             window.show();
         } catch (IOException e) {

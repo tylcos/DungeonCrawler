@@ -6,7 +6,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.util.function.Supplier;
 
@@ -24,11 +23,11 @@ public class TitleScreen {
 
 
     private final double windowWidth = 1920d;
-    private final double aspectRatio = 9d/16d;
+    private final double aspectRatio = 9d / 16d;
     private final Supplier<Double> scaleFactor = () -> scene.getWidth() / windowWidth;
 
 
-    public void OnShow(WindowEvent windowEvent) {
+    public void initialize() {
         titleImageWidth = titleImage.getFitWidth();
         image1Width = image1.getFitWidth();
 
@@ -51,6 +50,7 @@ public class TitleScreen {
         // Sets windows initial size
         stage.setWidth(windowWidth);
     }
+
 
     public void OnStartClick(MouseEvent mouseEvent) {
         System.out.println("Load config scene");
