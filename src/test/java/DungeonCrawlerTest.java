@@ -7,6 +7,7 @@ import org.testfx.matcher.base.NodeMatchers;
 import static org.testfx.api.FxAssert.verifyThat;
 
 public class DungeonCrawlerTest extends ApplicationTest {
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         DungeonCrawlerDriver dcd = new DungeonCrawlerDriver();

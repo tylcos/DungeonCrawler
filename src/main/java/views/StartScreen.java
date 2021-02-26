@@ -1,4 +1,4 @@
-package view;
+package views;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
