@@ -1,2 +1,3 @@
 rootProject.name = 'dungeon-crawler'
 
+include 'javafx'
