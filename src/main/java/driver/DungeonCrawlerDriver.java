@@ -41,11 +41,11 @@ public class DungeonCrawlerDriver extends Application {
         Button goToFirstRoomButton = configScreen.getGoToFirstRoomButton();
         goToFirstRoomButton.setOnAction(event -> {
             if (validatePlayerName(configScreen.getNameTextField().getText())) {
-                    this.mainPlayer = new MainPlayer(
-                        // todo fix weapon damage and price
-                        configScreen.getNameTextField().getText(),
-                        new Weapon(configScreen.getWeaponOptions().getValue(), 0, 0),
-                        configScreen.getDifficultyOptions().getValue()
+                this.mainPlayer = new MainPlayer(
+                    // todo fix weapon damage and price
+                    configScreen.getNameTextField().getText(),
+                    new Weapon(configScreen.getWeaponOptions().getValue(), 0, 0),
+                    configScreen.getDifficultyOptions().getValue()
                 );
                 primaryStage.setScene(configScreen.getScene());
                 showInitialRoom();

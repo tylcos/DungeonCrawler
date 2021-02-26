@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <testsuite name="DungeonCrawlerTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2021-02-26T03:55:12" hostname="DESKTOP-4ORPF14" time="7.408">
   <properties/>
   <testcase name="testPlayerNamePopulation" classname="DungeonCrawlerTest" time="2.569"/>
@@ -7,6 +8,12 @@
   <testcase name="testStartDifficultyFieldExists" classname="DungeonCrawlerTest" time="0.612"/>
   <testcase name="testWhitespaceName" classname="DungeonCrawlerTest" time="1.537"/>
   <testcase name="testStartNameFieldExists" classname="DungeonCrawlerTest" time="0.765"/>
+=======
+<testsuite name="DungeonCrawlerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-02-25T16:30:40" hostname="kp-mbp.fios-router.home" time="2.976">
+  <properties/>
+  <testcase name="testStartDifficultyFieldExists" classname="DungeonCrawlerTest" time="2.324"/>
+  <testcase name="testStartNameFieldExists" classname="DungeonCrawlerTest" time="0.652"/>
+>>>>>>> 75f7a33379506daaac09b7f45f071741bad30bae
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
