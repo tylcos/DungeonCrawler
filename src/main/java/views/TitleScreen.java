@@ -1,6 +1,7 @@
 package views;
 
 import driver.SceneLoader;
+import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -10,13 +11,18 @@ import javafx.stage.Stage;
 import java.util.function.Supplier;
 
 public class TitleScreen {
-    public Stage stage;
-    public Scene scene;
-    public Pane scalePane;
+    @FXML
+    private Stage stage;
+    @FXML
+    private Scene scene;
+    @FXML
+    private Pane scalePane;
 
 
-    public ImageView titleImage;
-    public ImageView image1;
+    @FXML
+    private ImageView titleImage;
+    @FXML
+    private ImageView image1;
 
     private double titleImageWidth;
     private double image1Width;
@@ -52,12 +58,12 @@ public class TitleScreen {
     }
 
 
-    public void OnStartClick(MouseEvent mouseEvent) {
+    public void onStartClick(MouseEvent mouseEvent) {
         System.out.println("Load config scene");
         SceneLoader.loadScene(SceneLoader.CONFIG);
     }
 
-    public void OnExitClick(MouseEvent mouseEvent) {
+    public void onExitClick(MouseEvent mouseEvent) {
         System.exit(0);
     }
 }

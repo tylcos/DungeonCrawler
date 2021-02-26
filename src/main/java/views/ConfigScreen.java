@@ -3,32 +3,41 @@ package views;
 import data.RandomNames;
 import driver.MainPlayer;
 import driver.SceneLoader;
+import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class ConfigScreen  {
-    public TextField inputTextName;
-    public ComboBox<String> inputWeapon;
-    public ComboBox<String> inputDifficulty;
+public class ConfigScreen {
+
+    @FXML
+    private TextField inputTextName;
+    @FXML
+    private ComboBox<String> inputWeapon;
+    @FXML
+    private ComboBox<String> inputDifficulty;
 
 
     public void initialize() {
         inputTextName.setText(RandomNames.getRandomName());
+        inputTextName.selectAll();
     }
 
 
-    public void OnNameChange(KeyEvent keyEvent) {
+    public void onNameChange(KeyEvent keyEvent) {
         isNameInvalid();
     }
 
-    public void OnStartClick(MouseEvent mouseEvent) {
-        if (isNameInvalid())
+    public void onStartClick(MouseEvent mouseEvent) {
+        if (isNameInvalid()) {
             return;
+        }
 
 
-        MainPlayer player = new MainPlayer(inputTextName.getText(), inputWeapon.getValue(), inputDifficulty.getValue());
+        /* todo: Save in GameManager */
+        MainPlayer player = new MainPlayer(inputTextName.getText(),
+                inputWeapon.getValue(), inputDifficulty.getValue());
 
         SceneLoader.loadScene(SceneLoader.GAME);
     }
