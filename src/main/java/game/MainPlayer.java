@@ -47,16 +47,20 @@ public class MainPlayer extends Entity {
             // https://github.com/checkstyle/checkstyle/issues/9302
             Vector2d input;
             switch (key.getCode()) {
-            case W, UP:
+            case W:
+            case UP:
                 input = new Vector2d(0, -1);
                 break;
-            case D, RIGHT:
+            case D:
+            case RIGHT:
                 input = new Vector2d(1, 0);
                 break;
-            case S, DOWN:
+            case S:
+            case DOWN:
                 input = new Vector2d(0, 1);
                 break;
-            case A, LEFT:
+            case A:
+            case LEFT:
                 input = new Vector2d(-1, 0);
                 break;
             default:
@@ -118,7 +122,6 @@ public class MainPlayer extends Entity {
     }
 
     public String toStringFormatted() {
-        return "Name: %s \nWeapon: %s \nMoney: %d \nHealth: %d"
-                .formatted(name, weapon, money, health);
+        return "Name: %s \nWeapon: %s \nMoney: %d \nHealth: %d".format(name, weapon, money, health);
     }
 }
