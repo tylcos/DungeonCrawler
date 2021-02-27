@@ -80,7 +80,8 @@ public class DungeonCrawlerTest extends ApplicationTest {
         clickOn("Start");
         ComboBox<String> weaponTest = lookup("#inputWeapon").queryComboBox();
 
-        verifyThat(weaponTest, ComboBoxMatchers.containsItems("Knife", "Axe", "Sword", "Bow", "Staff"));
+        verifyThat(weaponTest, ComboBoxMatchers.containsItems(
+                "Knife", "Axe", "Sword", "Bow", "Staff"));
     }
 
     @Test
