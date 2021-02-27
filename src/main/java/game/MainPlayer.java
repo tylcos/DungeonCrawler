@@ -1,10 +1,10 @@
-package driver;
+package game;
 
 public class MainPlayer {
     private String name;
     private Weapon weapon;
     private int money;
-    private int hitpoints;
+    private int health;
 
 
     // todo: fix weapon damage and price
@@ -15,11 +15,11 @@ public class MainPlayer {
         this.money = switch (difficulty) {
         case "Boring" -> 100;
         case "Normal" -> 75;
-        case "Hard"   -> 50;
-        default -> throw new IllegalStateException("Unexpected value: " + difficulty);
+            case "Hard" -> 50;
+            default -> throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         };
 
-        this.hitpoints = 100;
+        this.health = 100;
     }
 
     public String getName() {
@@ -46,11 +46,22 @@ public class MainPlayer {
         this.money = money;
     }
 
-    public int getHitpoints() {
-        return hitpoints;
+    public int getHealth() {
+        return health;
     }
 
-    public void setHitpoints(int hitpoints) {
-        this.hitpoints = hitpoints;
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+
+    @Override
+    public String toString() {
+        return toStringFormatted();
+    }
+
+    public String toStringFormatted() {
+        return "Name: %s \nWeapon: %s \nMoney: %d \nHealth: %d"
+                .formatted(name, weapon, money, health);
     }
 }

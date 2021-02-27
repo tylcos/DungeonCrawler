@@ -1,8 +1,9 @@
 package views;
 
+import core.GameManager;
+import core.SceneLoader;
 import data.RandomNames;
-import driver.MainPlayer;
-import driver.SceneLoader;
+import game.MainPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -35,9 +36,8 @@ public class ConfigScreen {
         }
 
 
-        /* todo: Save in GameManager */
-        MainPlayer player = new MainPlayer(inputTextName.getText(),
-                inputWeapon.getValue(), inputDifficulty.getValue());
+        GameManager.setPlayer(new MainPlayer(inputTextName.getText(),
+                inputWeapon.getValue(), inputDifficulty.getValue()));
 
         SceneLoader.loadScene(SceneLoader.GAME);
     }
