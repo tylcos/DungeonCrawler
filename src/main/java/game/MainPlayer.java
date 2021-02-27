@@ -43,8 +43,6 @@ public class MainPlayer extends Entity {
 
 
         InputManager.addKeyListener(key -> {
-            // Cant use switch expression because of Checkstyle bug
-            // https://github.com/checkstyle/checkstyle/issues/9302
             Vector2d input;
             switch (key.getCode()) {
             case W:
@@ -122,6 +120,7 @@ public class MainPlayer extends Entity {
     }
 
     public String toStringFormatted() {
-        return "Name: %s \nWeapon: %s \nMoney: %d \nHealth: %d".format(name, weapon, money, health);
+        return String.format("Name: %s \nWeapon: %s \nMoney: %d \nHealth: %d",
+                name, weapon, money, health);
     }
 }
