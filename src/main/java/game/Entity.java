@@ -15,7 +15,6 @@ public class Entity {
     private Vector2d dimensions;
     private Vector2d scale;
 
-
     public Entity(String image, Vector2d position) {
         this(image, position, new Vector2d(1, 1));
     }
@@ -25,14 +24,11 @@ public class Entity {
         setPosition(position);
         setScale(scale);
 
-
         GameManager.spawnEntity(this);
     }
 
-
     // Overwritten in child classes
-    public void update(double dt) {
-    }
+    public void update(double dt) { }
 
     public final void physicsUpdate(double dt) {
         // position = position + velocity * dt
@@ -42,7 +38,6 @@ public class Entity {
         update(dt);
     }
 
-
     public Rectangle2D getBoundary() {
         return new Rectangle2D(position.getX(), position.getY(),
                 dimensions.getX(), dimensions.getY());
@@ -51,7 +46,6 @@ public class Entity {
     public boolean intersects(Entity s) {
         return s.getBoundary().intersects(this.getBoundary());
     }
-
 
     public ImageView getImage() {
         return imageView;
@@ -63,7 +57,6 @@ public class Entity {
         imageView = new ImageView(image);
         dimensions = new Vector2d(image.getWidth(), image.getHeight());
     }
-
 
     public Vector2d getPosition() {
         return position;

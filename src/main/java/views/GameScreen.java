@@ -12,10 +12,8 @@ public class GameScreen {
     @FXML
     private Pane drawPane;
 
-
     public void initialize() {
         MainPlayer.setUiInfoText(uiInfoText);
-
 
         GameManager.setDrawPane(drawPane);
         GameManager.start();
