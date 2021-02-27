@@ -17,7 +17,7 @@ public final class GameManager {
     private static Pane drawPane;
 
 
-    // No instances of GameManager
+    // No instances
     private GameManager() {
     }
 
@@ -50,7 +50,7 @@ public final class GameManager {
      * @param dt Time change since last frame in seconds
      */
     public static void update(double dt) {
-        entities.forEach(e -> e.update(dt));
+        entities.forEach(e -> e.physicsUpdate(dt));
     }
 
 

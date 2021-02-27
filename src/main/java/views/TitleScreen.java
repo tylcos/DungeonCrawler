@@ -1,6 +1,6 @@
 package views;
 
-import core.SceneLoader;
+import core.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -60,7 +60,7 @@ public class TitleScreen {
 
     public void onStartClick(MouseEvent mouseEvent) {
         System.out.println("Load config scene");
-        SceneLoader.loadScene(SceneLoader.CONFIG);
+        SceneManager.loadScene(SceneManager.CONFIG);
     }
 
     public void onExitClick(MouseEvent mouseEvent) {
