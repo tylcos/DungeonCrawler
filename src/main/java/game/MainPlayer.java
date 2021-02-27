@@ -1,9 +1,8 @@
 package game;
 
 import core.InputManager;
+import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
-
-import javax.vecmath.Vector2d;
 
 public class MainPlayer extends Entity {
     private String name;
@@ -17,7 +16,7 @@ public class MainPlayer extends Entity {
 
     // todo: fix weapon damage and price
     public MainPlayer(String name, String weapon, String difficulty) {
-        super("/images/Player.png", new Vector2d(500, 500), new Vector2d(5, 5));
+        super("/images/Player.png", new Point2D(500, 500), new Point2D(5, 5));
 
         this.name = name;
         this.weapon = new Weapon(weapon, 0, 0);
@@ -38,29 +37,29 @@ public class MainPlayer extends Entity {
         }
 
         InputManager.addKeyListener(key -> {
-            Vector2d input;
+            Point2D input;
             switch (key.getCode()) {
             case W:
             case UP:
-                input = new Vector2d(0, -1);
+                input = new Point2D(0, -1);
                 break;
             case D:
             case RIGHT:
-                input = new Vector2d(1, 0);
+                input = new Point2D(1, 0);
                 break;
             case S:
             case DOWN:
-                input = new Vector2d(0, 1);
+                input = new Point2D(0, 1);
                 break;
             case A:
             case LEFT:
-                input = new Vector2d(-1, 0);
+                input = new Point2D(-1, 0);
                 break;
             default:
-                input = new Vector2d(0, 0);
+                input = new Point2D(0, 0);
             }
 
-            input.scale(speed);
+            input = input.multiply(speed);
             this.setVelocity(input);
         });
     }
