@@ -1,26 +1,71 @@
 package game;
 
-public class MainPlayer {
+import core.InputManager;
+import javafx.scene.control.TextArea;
+
+import javax.vecmath.Vector2d;
+
+public class MainPlayer extends Entity {
     private String name;
     private Weapon weapon;
     private int money;
     private int health;
 
 
+    private final double speed = 500d;
+
+
+    private static TextArea uiInfoText;
+
+
     // todo: fix weapon damage and price
     public MainPlayer(String name, String weapon, String difficulty) {
+        super("/images/Player.png", new Vector2d(500, 500), new Vector2d(5, 5));
+
+
         this.name = name;
         this.weapon = new Weapon(weapon, 0, 0);
+        this.health = 100;
 
         this.money = switch (difficulty) {
         case "Boring" -> 100;
         case "Normal" -> 75;
-            case "Hard" -> 50;
-            default -> throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
+        case "Hard" -> 50;
+        default -> throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         };
 
-        this.health = 100;
+
+        InputManager.addKeyListener(key -> {
+            // Cant use switch expression because of Checkstyle bug
+            // https://github.com/checkstyle/checkstyle/issues/9302
+            Vector2d input;
+            switch (key.getCode()) {
+            case W, UP:
+                input = new Vector2d(0, -1);
+                break;
+            case D, RIGHT:
+                input = new Vector2d(1, 0);
+                break;
+            case S, DOWN:
+                input = new Vector2d(0, 1);
+                break;
+            case A, LEFT:
+                input = new Vector2d(-1, 0);
+                break;
+            default:
+                input = new Vector2d(0, 0);
+            }
+
+            input.scale(speed);
+            this.setVelocity(input);
+        });
     }
+
+    @Override
+    public void update(double dt) {
+        uiInfoText.setText(toStringFormatted());
+    }
+
 
     public String getName() {
         return name;
@@ -52,6 +97,11 @@ public class MainPlayer {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+
+    public static void setUiInfoText(TextArea uiInfoText) {
+        MainPlayer.uiInfoText = uiInfoText;
     }
 
 

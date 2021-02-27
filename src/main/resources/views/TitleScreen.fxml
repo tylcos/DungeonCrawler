@@ -11,61 +11,61 @@
 <Stage fx:id="stage" maximized="true" minHeight="720.0" minWidth="1280.0" title="Dungeon Crawler" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TitleScreen">
     <scene>
         <Scene fx:id="scene" stylesheets="@../styles/TitleStyle.css">
-         <StackPane fx:id="scalePane" prefWidth="1486.0">
-            <children>
-                     <VBox maxHeight="-Infinity" maxWidth="-Infinity" StackPane.alignment="BOTTOM_LEFT">
-                         <Label onMouseClicked="#onStartClick" styleClass="buttonText" text="Start">
-                             <font>
-                                 <Font name="Javanese Text" size="55.0" />
-                             </font>
-                         </Label>
-                         <Label layoutX="10.0" layoutY="10.0" styleClass="buttonText" text="Options">
-                             <font>
-                                 <Font name="Javanese Text" size="55.0" />
-                             </font>
-                         </Label>
-                         <Label layoutX="10.0" layoutY="161.0" onMouseClicked="#onExitClick" styleClass="buttonText" text="Exit">
-                             <font>
-                                 <Font name="Javanese Text" size="55.0" />
-                             </font>
-                         </Label>
-                  <StackPane.margin>
-                     <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-                  </StackPane.margin>
-                     </VBox>
-                     <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="215.0" prefWidth="705.0" StackPane.alignment="BOTTOM_RIGHT">
-                         <children>
-                             <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" layoutX="527.0" layoutY="188.0" prefHeight="40" prefWidth="400" text="Team Azula - Team 03">
-                                 <font>
-                                     <Font name="Consolas" size="18.0" />
-                                 </font>
-                             </Label>
-                             <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" text="version 0.2">
-                                 <font>
-                                     <Font name="Consolas" size="18.0"/>
-                                 </font>
-                             </Label>
-                         </children>
-                  <StackPane.margin>
-                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                  </StackPane.margin>
-                     </VBox>
-               <StackPane mouseTransparent="true">
-                  <children>
+            <StackPane fx:id="scalePane">
+                <children>
+                    <VBox maxHeight="-Infinity" maxWidth="-Infinity" StackPane.alignment="BOTTOM_LEFT">
+                        <Label onMouseClicked="#onStartClick" styleClass="buttonText" text="Start">
+                            <font>
+                                <Font name="Javanese Text" size="55.0"/>
+                            </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="10.0" styleClass="buttonText" text="Options">
+                            <font>
+                                <Font name="Javanese Text" size="55.0"/>
+                            </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="161.0" onMouseClicked="#onExitClick" styleClass="buttonText" text="Exit">
+                            <font>
+                                <Font name="Javanese Text" size="55.0"/>
+                            </font>
+                        </Label>
+                        <StackPane.margin>
+                            <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
+                        </StackPane.margin>
+                    </VBox>
+                    <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="215.0" prefWidth="705.0" StackPane.alignment="BOTTOM_RIGHT">
+                        <children>
+                            <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" layoutX="527.0" layoutY="188.0" prefHeight="40" prefWidth="400" text="Team Azula - Team 03">
+                                <font>
+                                    <Font name="Consolas" size="18.0"/>
+                                </font>
+                            </Label>
+                            <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" text="version 0.21">
+                                <font>
+                                    <Font name="Consolas" size="18.0"/>
+                                </font>
+                            </Label>
+                        </children>
+                        <StackPane.margin>
+                            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                        </StackPane.margin>
+                    </VBox>
+                    <StackPane mouseTransparent="true">
+                        <children>
                             <ImageView fx:id="titleImage" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
                                 <image>
-                                    <Image url="@../images/Title.gif" />
+                                    <Image url="@../images/Title.gif"/>
                                 </image>
                             </ImageView>
                             <ImageView fx:id="image1" fitHeight="1080.0" fitWidth="1920.0" mouseTransparent="true" pickOnBounds="true" StackPane.alignment="CENTER">
                                 <image>
-                                    <Image url="@../images/IntroPage.gif" />
+                                    <Image url="@../images/IntroPage.gif"/>
                                 </image>
                             </ImageView>
-                  </children>
-               </StackPane>
-            </children>
-         </StackPane>
+                        </children>
+                    </StackPane>
+                </children>
+            </StackPane>
         </Scene>
     </scene>
 </Stage>

@@ -1,7 +1,7 @@
 package views;
 
 import core.GameManager;
-import game.Entity;
+import game.MainPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
@@ -14,19 +14,10 @@ public class GameScreen {
 
 
     public void initialize() {
-        if (GameManager.isPaused()) {
-            throw new IllegalStateException("Loading GameScreen while GameManager paused");
-        }
+        MainPlayer.setUiInfoText(uiInfoText);
 
 
         GameManager.setDrawPane(drawPane);
         GameManager.start();
-
-
-        uiInfoText.setText(GameManager.getPlayer().toString());
-
-
-        Entity player = new Entity("/images/Player.png", 500, 500, 5, 5);
-        player.setVel(10, 10);
     }
 }

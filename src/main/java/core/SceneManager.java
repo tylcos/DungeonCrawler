@@ -7,13 +7,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class SceneLoader {
-    private static Stage window;
+public class SceneManager {
+    private static Stage stage;
 
 
-    public static final String TITLE  = "/views/TitleScreen.fxml";
+    public static final String TITLE = "/views/TitleScreen.fxml";
     public static final String CONFIG = "/views/ConfigScreen.fxml";
-    public static final String GAME   = "/views/GameScreen.fxml";
+    public static final String GAME = "/views/GameScreen.fxml";
 
 
     /**
@@ -23,9 +23,9 @@ public class SceneLoader {
      */
     public static void loadScene(String fxmlPath) {
         try {
-            Parent newParent = FXMLLoader.load(SceneLoader.class.getResource(fxmlPath));
-            window.setScene(new Scene(newParent));
-            window.show();
+            Parent newParent = FXMLLoader.load(SceneManager.class.getResource(fxmlPath));
+            stage.setScene(new Scene(newParent));
+            stage.show();
         } catch (IOException e) {
             System.err.println("Error loading fxml scene: " + fxmlPath);
             e.printStackTrace();
@@ -35,21 +35,22 @@ public class SceneLoader {
     /**
      * Loads "view.TitleScreen.fxml" which contains the program stage as the root
      */
-    public static void loadWindow() {
+    public static void loadStage() {
         try {
-            window = FXMLLoader.load(DungeonCrawlerDriver.class.getResource(TITLE));
-            window.show();
+            stage = FXMLLoader.load(DungeonCrawlerDriver.class.getResource(TITLE));
+            stage.show();
         } catch (IOException e) {
             System.err.println("Error loading fxml scene: " + TITLE);
             e.printStackTrace();
         }
     }
 
-    public static Stage getWindow() {
-        return window;
+
+    public static Stage getStage() {
+        return stage;
     }
 
-    public static void setWindow(Stage window) {
-        SceneLoader.window = window;
+    public static void setStage(Stage window) {
+        SceneManager.stage = window;
     }
 }
