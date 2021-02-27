@@ -21,7 +21,6 @@ public class DungeonCrawlerTest extends ApplicationTest {
         new DungeonCrawlerDriver().start(primaryStage);
     }
 
-
     @Test
     public void testConfigFieldsExist() {
         clickOn("Start");
