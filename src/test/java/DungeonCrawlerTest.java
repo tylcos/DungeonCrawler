@@ -1,75 +1,61 @@
+import core.DungeonCrawlerDriver;
+import core.GameManager;
+import core.SceneManager;
+import data.RandomNames;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 import org.junit.Test;
-import driver.DungeonCrawlerDriver;
-import org.testfx.api.FxAssert;
-import org.testfx.api.FxRobot;
-import org.testfx.api.FxRobotException;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 import org.testfx.matcher.base.WindowMatchers;
-import org.testfx.matcher.control.ButtonMatchers;
 import org.testfx.matcher.control.ComboBoxMatchers;
-import org.testfx.matcher.control.LabeledMatchers;
-
-import static org.testfx.api.FxAssert.assertContext;
-import static org.testfx.api.FxAssert.verifyThat;
-
-import org.testfx.matcher.control.TextMatchers;
 
 import static org.junit.Assert.*;
-
-
-import javafx.stage.Stage;
-import view.ConfigScreen;
+import static org.testfx.api.FxAssert.verifyThat;
 
 public class DungeonCrawlerTest extends ApplicationTest {
-
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        DungeonCrawlerDriver dcd = new DungeonCrawlerDriver();
-        dcd.start(primaryStage);
+    public void start(Stage primaryStage) {
+        new DungeonCrawlerDriver().start(primaryStage);
+    }
+
+
+    @Test
+    public void testConfigFieldsExist() {
+        clickOn("Start");
+        verifyThat("Name:", NodeMatchers.isNotNull());
+        verifyThat("Difficulty:", NodeMatchers.isNotNull());
+        verifyThat("Weapon:", NodeMatchers.isNotNull());
     }
 
     @Test
-    public void testStartNameFieldExists() {
-        clickOn("Start");
-        verifyThat("Name", NodeMatchers.isNotNull());
-    }
-
-    @Test
-    public void testStartDifficultyFieldExists() {
-        clickOn("Start");
-        verifyThat("Difficulty", NodeMatchers.isNotNull());
-    }
-
-    @Test
-    public void testStartWeaponFieldExists() {
-        clickOn("Start");
-        verifyThat("Weapon", NodeMatchers.isNotNull());
-    }
-
-    //throws this exception when node is not found
-    @Test(expected = FxRobotException.class)
     public void testEmptyName() {
         clickOn("Start");
-        clickOn("Go to first room");
-        clickOn("Shop");
+        moveTo("#inputTextName").press(KeyCode.BACK_SPACE);
+        clickOn("Start Adventure");
+
+        assertEquals(SceneManager.getSceneName(), SceneManager.CONFIG);
     }
 
-    @Test(expected = FxRobotException.class)
+    @Test()
     public void testWhitespaceName() {
         clickOn("Start");
-        clickOn(".text").write(" ");
-        clickOn("Go to first room");
-        clickOn("Shop");
+        moveTo("#inputTextName").write(" ");
+        clickOn("Start Adventure");
+
+        assertEquals(SceneManager.getSceneName(), SceneManager.CONFIG);
     }
 
     @Test
-    public void testPlayerNamePopulation() {
+    public void testValidName() {
         clickOn("Start");
-        clickOn(".text").write("Azula");
-        clickOn("Go to first room");
-        verifyThat(".label", LabeledMatchers.hasText("Name: Azula"));
+        moveTo("#inputTextName").write("Azula");
+        clickOn("Start Adventure");
+
+        assertEquals(SceneManager.getSceneName(), SceneManager.GAME);
+        assertTrue(lookup("#uiInfoText").<TextArea>query().getText().contains("Name: Azula"));
     }
 
     @Test
@@ -79,34 +65,72 @@ public class DungeonCrawlerTest extends ApplicationTest {
 
     @Test
     public void testInitialButtonVisible() {
-        verifyThat(".button", NodeMatchers.isVisible());
+        verifyThat("Start", NodeMatchers.isVisible());
     }
 
     @Test
-    public void testCongifScreenObejectVisible() {
+    public void testConfigScreenObjectVisible() {
         clickOn("Start");
-        verifyThat(".text", NodeMatchers.isVisible());
-        verifyThat("Difficulty", NodeMatchers.isVisible());
-        verifyThat("Weapon", NodeMatchers.isVisible());
+        verifyThat("Name:", NodeMatchers.isVisible());
+        verifyThat("Difficulty:", NodeMatchers.isVisible());
+        verifyThat("Weapon:", NodeMatchers.isVisible());
     }
 
     @Test
     public void testWeaponContains() {
-        int WIDTH = 750;
-        int HEIGHT = 550;
-        ConfigScreen dcd = new ConfigScreen(WIDTH, HEIGHT);
-        ComboBox<String> weaponTest = dcd.getWeaponOptions();
-        assertThat(weaponTest, ComboBoxMatchers.containsItems("Knife", "Axe", "Sword"));
+        clickOn("Start");
+        ComboBox<String> weaponTest = lookup("#inputWeapon").queryComboBox();
+
+        verifyThat(weaponTest, ComboBoxMatchers.containsItems("Knife", "Axe", "Sword", "Bow", "Staff"));
     }
 
     @Test
     public void testDifficultyContains() {
-        int WIDTH = 750;
-        int HEIGHT = 550;
-        ConfigScreen dcd = new ConfigScreen(WIDTH, HEIGHT);
-        ComboBox<String> difficultyTest = dcd.getDifficultyOptions();
-        assertThat(difficultyTest, ComboBoxMatchers.containsItems("Easy","Medium","Hard"));
+        clickOn("Start");
+        ComboBox<String> weaponTest = lookup("#inputDifficulty").queryComboBox();
+
+        verifyThat(weaponTest, ComboBoxMatchers.containsItems("Boring", "Normal", "Hard"));
     }
 
+    /**
+     * Tests if the SceneManager can load every scene in the game
+     */
+    @Test
+    public void testSceneManager() {
+        assertEquals(SceneManager.getSceneName(), SceneManager.TITLE);
+        clickOn("Start");
 
+        assertEquals(SceneManager.getSceneName(), SceneManager.CONFIG);
+        moveTo("#inputTextName").write("Azula");
+        clickOn("Start Adventure");
+
+        assertEquals(SceneManager.getSceneName(), SceneManager.GAME);
+    }
+
+    /**
+     * Tests if all necessary resources can be loaded
+     */
+    @Test
+    public void testLoadResources() {
+        assertNotNull(GameManager.class.getResource(SceneManager.TITLE));
+        assertNotNull(GameManager.class.getResource(SceneManager.CONFIG));
+        assertNotNull(GameManager.class.getResource(SceneManager.GAME));
+
+        assertNotNull(GameManager.class.getResource("/images/IntroPage.gif"));
+        assertNotNull(GameManager.class.getResource("/images/Player.png"));
+        assertNotNull(GameManager.class.getResource("/images/Title.gif"));
+        assertNotNull(GameManager.class.getResource("/images/Title with background.gif"));
+
+        assertNotNull(GameManager.class.getResource("/styles/ConfigStyle.css"));
+        assertNotNull(GameManager.class.getResource("/styles/TitleStyle.css"));
+        assertNotNull(GameManager.class.getResource("/styles/GameStyle.css"));
+    }
+
+    /**
+     * Tests all the current random utilities in the game
+     */
+    @Test
+    public void testRandomUtil() {
+        assertTrue(RandomNames.getRandomName().length() > 2);
+    }
 }
