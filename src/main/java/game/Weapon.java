@@ -60,7 +60,6 @@ public class Weapon {
     }
 
     public String toStringFormatted() {
-        return "%s, %d damage"
-                .formatted(name, damage);
+        return "%s, %d damage".format(name, damage);
     }
 }
