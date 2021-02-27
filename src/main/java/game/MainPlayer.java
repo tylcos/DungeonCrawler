@@ -11,17 +11,13 @@ public class MainPlayer extends Entity {
     private int money;
     private int health;
 
-
     private final double speed = 750d;
 
-
     private static TextArea uiInfoText;
-
 
     // todo: fix weapon damage and price
     public MainPlayer(String name, String weapon, String difficulty) {
         super("/images/Player.png", new Vector2d(500, 500), new Vector2d(5, 5));
-
 
         this.name = name;
         this.weapon = new Weapon(weapon, 0, 0);
@@ -40,7 +36,6 @@ public class MainPlayer extends Entity {
         default:
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
-
 
         InputManager.addKeyListener(key -> {
             Vector2d input;
@@ -75,7 +70,6 @@ public class MainPlayer extends Entity {
         uiInfoText.setText(toStringFormatted());
     }
 
-
     public String getName() {
         return name;
     }
@@ -108,11 +102,9 @@ public class MainPlayer extends Entity {
         this.health = health;
     }
 
-
     public static void setUiInfoText(TextArea uiInfoText) {
         MainPlayer.uiInfoText = uiInfoText;
     }
-
 
     @Override
     public String toString() {

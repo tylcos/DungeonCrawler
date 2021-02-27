@@ -11,11 +11,9 @@ public class SceneManager {
     private static Stage stage;
     private static String sceneName;
 
-
     public static final String TITLE = "/views/TitleScreen.fxml";
     public static final String CONFIG = "/views/ConfigScreen.fxml";
     public static final String GAME = "/views/GameScreen.fxml";
-
 
     /**
      * Loads normal scenes and shows them
@@ -49,7 +47,6 @@ public class SceneManager {
             e.printStackTrace();
         }
     }
-
 
     public static Stage getStage() {
         return stage;

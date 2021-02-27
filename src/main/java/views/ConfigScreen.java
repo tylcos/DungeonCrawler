@@ -18,12 +18,10 @@ public class ConfigScreen {
     @FXML
     private ComboBox<String> inputDifficulty;
 
-
     public void initialize() {
         inputTextName.setText(RandomNames.getRandomName());
         inputTextName.selectAll();
     }
-
 
     public void onNameChange(KeyEvent keyEvent) {
         isNameInvalid();
@@ -34,13 +32,11 @@ public class ConfigScreen {
             return;
         }
 
-
         SceneManager.loadScene(SceneManager.GAME);
 
         GameManager.setPlayer(new MainPlayer(inputTextName.getText(),
                 inputWeapon.getValue(), inputDifficulty.getValue()));
     }
-
 
     /**
      * Checks if name is valid and updates TextField color
