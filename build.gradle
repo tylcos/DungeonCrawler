@@ -3,11 +3,9 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.9'
 }
 
-
 version '0.21'
 apply plugin:'application'
 mainClassName = "src/main/java/core/DungeonCrawlerDriver.java"
-
 
 repositories {
     mavenCentral()
