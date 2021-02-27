@@ -53,7 +53,6 @@ public class Weapon {
         this.price = price;
     }
 
-
     @Override
     public String toString() {
         return toStringFormatted();

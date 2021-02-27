@@ -26,7 +26,6 @@ public class RandomNames {
         "Xonem Lord Of Ice"
     };
 
-
     public static String getRandomName() {
         return USER_NAMES[RAND.nextInt(USER_NAMES.length)];
     }

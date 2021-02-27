@@ -12,14 +12,11 @@ public final class GameManager {
     private static boolean paused;
     private static List<Entity> entities;
 
-
     private static MainPlayer player;
     private static Pane drawPane;
 
-
     // No instances
-    private GameManager() {
-    }
+    private GameManager() { }
 
     /**
      * Initializes GameManager and starts game loop
@@ -27,7 +24,6 @@ public final class GameManager {
     public static void start() {
         paused = false;
         entities = new ArrayList<>();
-
 
         AnimationTimer timer = new AnimationTimer() {
             private long lastNanoTime = System.nanoTime();
@@ -43,7 +39,6 @@ public final class GameManager {
         timer.start();
     }
 
-
     /**
      * Updates position of all entities
      *
@@ -52,7 +47,6 @@ public final class GameManager {
     public static void update(double dt) {
         entities.forEach(e -> e.physicsUpdate(dt));
     }
-
 
     public static void spawnEntity(Entity entity) {
         entities.add(entity);
@@ -63,7 +57,6 @@ public final class GameManager {
     public static boolean isPaused() {
         return paused;
     }
-
 
     public static MainPlayer getPlayer() {
         return player;

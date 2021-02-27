@@ -5,9 +5,7 @@ import javafx.scene.input.KeyEvent;
 
 public class InputManager {
     // No instances
-    private InputManager() {
-    }
-
+    private InputManager() { }
 
     // Could move this into GameManager
     public static void addKeyListener(EventHandler<KeyEvent> eventHandler) {
