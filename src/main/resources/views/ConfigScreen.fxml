@@ -45,6 +45,8 @@
                             <String fx:value="Knife"/>
                             <String fx:value="Axe"/>
                             <String fx:value="Sword"/>
+                            <String fx:value="Bow"/>
+                            <String fx:value="Staff"/>
                         </FXCollections>
                     </items>
                 </ComboBox>

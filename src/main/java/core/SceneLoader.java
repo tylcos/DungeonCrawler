@@ -1,4 +1,4 @@
-package driver;
+package core;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -28,6 +28,7 @@ public class SceneLoader {
             window.show();
         } catch (IOException e) {
             System.err.println("Error loading fxml scene: " + fxmlPath);
+            e.printStackTrace();
         }
     }
 
@@ -40,6 +41,7 @@ public class SceneLoader {
             window.show();
         } catch (IOException e) {
             System.err.println("Error loading fxml scene: " + TITLE);
+            e.printStackTrace();
         }
     }
 

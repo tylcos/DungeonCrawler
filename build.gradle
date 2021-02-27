@@ -6,7 +6,7 @@ plugins {
 
 version '1.0-SNAPSHOT'
 apply plugin:'application'
-mainClassName = "src/main/java/driver/DungeonCrawlerDriver.java"
+mainClassName = "src/main/java/core/DungeonCrawlerDriver.java"
 
 
 repositories {
