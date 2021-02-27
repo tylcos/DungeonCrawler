@@ -12,7 +12,7 @@ public class MainPlayer extends Entity {
     private int health;
 
 
-    private final double speed = 500d;
+    private final double speed = 750d;
 
 
     private static TextArea uiInfoText;
@@ -27,12 +27,19 @@ public class MainPlayer extends Entity {
         this.weapon = new Weapon(weapon, 0, 0);
         this.health = 100;
 
-        this.money = switch (difficulty) {
-        case "Boring" -> 100;
-        case "Normal" -> 75;
-        case "Hard" -> 50;
-        default -> throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
-        };
+        switch (difficulty) {
+        case "Boring":
+            this.money = 100;
+            break;
+        case "Normal":
+            this.money = 75;
+            break;
+        case "Hard":
+            this.money = 50;
+            break;
+        default:
+            throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
+        }
 
 
         InputManager.addKeyListener(key -> {

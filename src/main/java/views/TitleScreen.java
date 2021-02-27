@@ -59,7 +59,6 @@ public class TitleScreen {
 
 
     public void onStartClick(MouseEvent mouseEvent) {
-        System.out.println("Load config scene");
         SceneManager.loadScene(SceneManager.CONFIG);
     }
 
