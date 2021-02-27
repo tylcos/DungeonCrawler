@@ -1,25 +1,24 @@
 package game;
 
 import core.GameManager;
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import javax.vecmath.Vector2d;
-
 public class Entity {
     private ImageView imageView;
 
-    private Vector2d position;
-    private Vector2d velocity = new Vector2d(0, 0);
-    private Vector2d dimensions;
-    private Vector2d scale;
+    private Point2D position;
+    private Point2D velocity = new Point2D(0, 0);
+    private Point2D dimensions;
+    private Point2D scale;
 
-    public Entity(String image, Vector2d position) {
-        this(image, position, new Vector2d(1, 1));
+    public Entity(String image, Point2D position) {
+        this(image, position, new Point2D(1, 1));
     }
 
-    public Entity(String image, Vector2d position, Vector2d scale) {
+    public Entity(String image, Point2D position, Point2D scale) {
         setImage(image);
         setPosition(position);
         setScale(scale);
@@ -32,7 +31,7 @@ public class Entity {
 
     public final void physicsUpdate(double dt) {
         // position = position + velocity * dt
-        position.scaleAdd(dt, velocity, position);
+        position = position.add(velocity.multiply(dt));
         setPosition(position);
 
         update(dt);
@@ -55,41 +54,41 @@ public class Entity {
         Image image = new Image(getClass().getResource(imagePath).toString());
 
         imageView = new ImageView(image);
-        dimensions = new Vector2d(image.getWidth(), image.getHeight());
+        dimensions = new Point2D(image.getWidth(), image.getHeight());
     }
 
-    public Vector2d getPosition() {
+    public Point2D getPosition() {
         return position;
     }
 
-    public void setPosition(Vector2d position) {
+    public void setPosition(Point2D position) {
         this.position = position;
 
         imageView.setX(position.getX());
         imageView.setY(position.getY());
     }
 
-    public Vector2d getVelocity() {
+    public Point2D getVelocity() {
         return velocity;
     }
 
-    public void setVelocity(Vector2d velocity) {
+    public void setVelocity(Point2D velocity) {
         this.velocity = velocity;
     }
 
-    public Vector2d getDimensions() {
+    public Point2D getDimensions() {
         return dimensions;
     }
 
-    public void setDimensions(Vector2d dimensions) {
+    public void setDimensions(Point2D dimensions) {
         this.dimensions = dimensions;
     }
 
-    public Vector2d getScale() {
+    public Point2D getScale() {
         return scale;
     }
 
-    public void setScale(Vector2d scale) {
+    public void setScale(Point2D scale) {
         this.scale = scale;
 
         imageView.setScaleX(scale.getX());
