@@ -1,4 +1,4 @@
-package driver;
+package game;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -51,5 +51,16 @@ public class Weapon {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+
+    @Override
+    public String toString() {
+        return toStringFormatted();
+    }
+
+    public String toStringFormatted() {
+        return "%s, %d damage"
+                .formatted(name, damage);
     }
 }
