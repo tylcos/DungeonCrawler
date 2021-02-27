@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class SceneManager {
     private static Stage stage;
+    private static String sceneName;
 
 
     public static final String TITLE = "/views/TitleScreen.fxml";
@@ -26,6 +27,8 @@ public class SceneManager {
             Parent newParent = FXMLLoader.load(SceneManager.class.getResource(fxmlPath));
             stage.setScene(new Scene(newParent));
             stage.show();
+
+            sceneName = fxmlPath;
         } catch (IOException e) {
             System.err.println("Error loading fxml scene: " + fxmlPath);
             e.printStackTrace();
@@ -39,6 +42,8 @@ public class SceneManager {
         try {
             stage = FXMLLoader.load(DungeonCrawlerDriver.class.getResource(TITLE));
             stage.show();
+
+            sceneName = TITLE;
         } catch (IOException e) {
             System.err.println("Error loading fxml scene: " + TITLE);
             e.printStackTrace();
@@ -52,5 +57,9 @@ public class SceneManager {
 
     public static void setStage(Stage window) {
         SceneManager.stage = window;
+    }
+
+    public static String getSceneName() {
+        return sceneName;
     }
 }
