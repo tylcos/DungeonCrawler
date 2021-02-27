@@ -8,7 +8,8 @@
 <?import javafx.scene.Scene?>
 <?import javafx.scene.text.*?>
 <?import javafx.stage.Stage?>
-<Stage fx:id="stage" maximized="true" minHeight="720.0" minWidth="1280.0" title="Dungeon Crawler" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TitleScreen">
+<Stage fx:id="stage" maximized="true" minHeight="720.0" minWidth="1280.0" title="Dungeon Crawler" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+       fx:controller="views.TitleScreen">
     <scene>
         <Scene fx:id="scene" stylesheets="@../styles/TitleStyle.css">
             <StackPane fx:id="scalePane">
@@ -40,7 +41,7 @@
                                     <Font name="Consolas" size="18.0"/>
                                 </font>
                             </Label>
-                            <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" text="version 0.21">
+                            <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" text="version 0.22">
                                 <font>
                                     <Font name="Consolas" size="18.0"/>
                                 </font>

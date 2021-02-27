@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="dungeon-crawler:test" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="" external.system.module.type="sourceSet" external.system.module.version="0.21" type="JAVA_MODULE" version="4">
-  <component name="CheckStyle-IDEA-Module">
-    <option name="configuration">
-      <map />
-    </option>
-  </component>
-  <component name="ExternalSystem" externalSystem="GRADLE" externalSystemModuleGroup="" externalSystemModuleType="sourceSet" externalSystemModuleVersion="0.21" linkedProjectId="dungeon-crawler:test" linkedProjectPath="$MODULE_DIR$/../.." rootProjectPath="$MODULE_DIR$/../.." />
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_13">
+<module external.linked.project.id="dungeon-crawler:test" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="" external.system.module.type="sourceSet" external.system.module.version="0.22" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager">
     <output-test url="file://$MODULE_DIR$/../../build/classes/java/test" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../../src/test/resources" type="java-test-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="dungeon-crawler.main" />
     <orderEntry type="library" name="Gradle: javax.vecmath:vecmath:1.5.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-fxml:mac:15.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-fxml:win:15.0.1" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:15.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:mac:15.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:win:15.0.1" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:15.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:mac:15.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:win:15.0.1" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:15.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:mac:15.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:win:15.0.1" level="project" />
     <orderEntry type="library" name="Gradle: org.testfx:testfx-junit:4.0.15-alpha" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Gradle: org.testfx:testfx-core:4.0.16-alpha" level="project" />

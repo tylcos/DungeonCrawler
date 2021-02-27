@@ -10,6 +10,6 @@ public class DungeonCrawlerDriver extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        SceneManager.loadStage();
+        core.SceneManager.loadStage();
     }
 }
