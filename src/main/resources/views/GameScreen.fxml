@@ -5,22 +5,22 @@
 <?import javafx.scene.shape.Box?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<StackPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../styles/GameStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GameScreen">
-   <children>
-      <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="uiInfoText" StackPane.alignment="TOP_LEFT">
-         <children>
-            <TextArea fx:id="uiInfoText" editable="false" mouseTransparent="true" text="Player Info&#10;Test&#10;Test&#10;">
-               <font>
-                  <Font name="Sylfaen" size="30.0"/>
-               </font>
-            </TextArea>
-            <Box depth="100" height="100" width="100"/>
-         </children>
-      </StackPane>
-      <Pane fx:id="drawPane" StackPane.alignment="CENTER">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="300.0" layoutX="-37.0" layoutY="440.0" stroke="BLACK" strokeType="INSIDE" width="200.0"/>
-         </children>
-      </Pane>
-   </children>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../styles/GameStyle.css" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="views.GameScreen">
+    <children>
+        <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="uiInfoText" StackPane.alignment="TOP_LEFT">
+            <children>
+                <TextArea fx:id="uiInfoText" editable="false" mouseTransparent="true" text="Player Info&#10;Test&#10;Test&#10;">
+                    <font>
+                        <Font name="Sylfaen" size="30.0"/>
+                    </font>
+                </TextArea>
+                <Box depth="100" height="100" width="100"/>
+            </children>
+        </StackPane>
+        <Pane fx:id="drawPane" StackPane.alignment="CENTER">
+            <children>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="300.0" layoutX="-37.0" layoutY="440.0" stroke="BLACK" strokeType="INSIDE" width="200.0"/>
+            </children>
+        </Pane>
+    </children>
 </StackPane>

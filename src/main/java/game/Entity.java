@@ -5,42 +5,47 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import javax.vecmath.Vector2d;
+
 public class Entity {
     private ImageView imageView;
 
-    private double posX;
-    private double posY;
-
-    private double velX = 0;
-    private double velY = 0;
-
-    private double width;
-    private double height;
-    private double scaleX;
-    private double scaleY;
+    private Vector2d position;
+    private Vector2d velocity = new Vector2d(0, 0);
+    private Vector2d dimensions;
+    private Vector2d scale;
 
 
-    public Entity(String image, double posX, double posY) {
-        this(image, posX, posY, 1, 1);
+    public Entity(String image, Vector2d position) {
+        this(image, position, new Vector2d(1, 1));
     }
 
-    public Entity(String image, double posX, double posY, double scaleX, double scaleY) {
+    public Entity(String image, Vector2d position, Vector2d scale) {
         setImage(image);
-        setPos(posX, posY);
-        setScale(scaleX, scaleY);
+        setPosition(position);
+        setScale(scale);
 
 
         GameManager.spawnEntity(this);
     }
 
 
+    // Overwritten in child classes
     public void update(double dt) {
-        setPos(posX + velX * dt, posY + velY * dt);
+    }
+
+    public final void physicsUpdate(double dt) {
+        // position = position + velocity * dt
+        position.scaleAdd(dt, velocity, position);
+        setPosition(position);
+
+        update(dt);
     }
 
 
     public Rectangle2D getBoundary() {
-        return new Rectangle2D(posX, posY, width, height);
+        return new Rectangle2D(position.getX(), position.getY(),
+                dimensions.getX(), dimensions.getY());
     }
 
     public boolean intersects(Entity s) {
@@ -56,55 +61,45 @@ public class Entity {
         Image image = new Image(getClass().getResource(imagePath).toString());
 
         imageView = new ImageView(image);
-
-        width = image.getWidth();
-        height = image.getHeight();
+        dimensions = new Vector2d(image.getWidth(), image.getHeight());
     }
 
 
-    public double getPosX() {
-        return posX;
+    public Vector2d getPosition() {
+        return position;
     }
 
-    public double getPosY() {
-        return posY;
+    public void setPosition(Vector2d position) {
+        this.position = position;
+
+        imageView.setX(position.getX());
+        imageView.setY(position.getY());
     }
 
-    public double getVelX() {
-        return velX;
+    public Vector2d getVelocity() {
+        return velocity;
     }
 
-    public double getVelY() {
-        return velY;
+    public void setVelocity(Vector2d velocity) {
+        this.velocity = velocity;
     }
 
-    public void setPos(double x, double y) {
-        this.posX = x;
-        this.posY = y;
-
-        imageView.setX(x);
-        imageView.setY(y);
+    public Vector2d getDimensions() {
+        return dimensions;
     }
 
-    public void setVel(double x, double y) {
-        this.velX = x;
-        this.velY = y;
+    public void setDimensions(Vector2d dimensions) {
+        this.dimensions = dimensions;
     }
 
-
-    public double getScaleX() {
-        return scaleX;
+    public Vector2d getScale() {
+        return scale;
     }
 
-    public double getScaleY() {
-        return scaleY;
-    }
+    public void setScale(Vector2d scale) {
+        this.scale = scale;
 
-    public void setScale(double x, double y) {
-        this.scaleX = x;
-        this.scaleY = y;
-
-        imageView.setScaleX(x);
-        imageView.setScaleY(y);
+        imageView.setScaleX(scale.getX());
+        imageView.setScaleY(scale.getY());
     }
 }

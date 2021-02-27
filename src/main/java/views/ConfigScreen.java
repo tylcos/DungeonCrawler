@@ -1,7 +1,7 @@
 package views;
 
 import core.GameManager;
-import core.SceneLoader;
+import core.SceneManager;
 import data.RandomNames;
 import game.MainPlayer;
 import javafx.fxml.FXML;
@@ -11,7 +11,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 public class ConfigScreen {
-
     @FXML
     private TextField inputTextName;
     @FXML
@@ -36,10 +35,10 @@ public class ConfigScreen {
         }
 
 
+        SceneManager.loadScene(SceneManager.GAME);
+
         GameManager.setPlayer(new MainPlayer(inputTextName.getText(),
                 inputWeapon.getValue(), inputDifficulty.getValue()));
-
-        SceneLoader.loadScene(SceneLoader.GAME);
     }
 
 
