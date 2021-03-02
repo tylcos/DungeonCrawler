@@ -1,3 +1,7 @@
 .uiInfoText {
     -fx-font: 30px "Sylfaen";
 }
+
+.text-area, .text-area .viewport, .text-area .content {
+    -fx-background-color: transparent ;
+}
