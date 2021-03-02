@@ -2,10 +2,13 @@ package data;
 
 import java.util.Random;
 
-public class RandomNames {
+/**
+ * Provides utility for generating random values need by the game
+ */
+public final class RandomNames {
     private static final Random RAND = new Random();
 
-    private static final String[] USER_NAMES = new String[] {
+    private static final String[] USER_NAMES = {
         "Bishop Walt",
         "Cardinal Guntard",
         "Chancellor Solomon",
@@ -25,6 +28,8 @@ public class RandomNames {
         "Viscount Audemar",
         "Xonem Lord Of Ice"
     };
+
+    private RandomNames() { }
 
     public static String getRandomName() {
         return USER_NAMES[RAND.nextInt(USER_NAMES.length)];

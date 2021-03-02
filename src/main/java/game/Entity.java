@@ -2,10 +2,10 @@ package game;
 
 import core.GameManager;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
+/**
+ * Game entity that will update every frame
+ */
 public class Entity extends Collidable {
 
     private Point2D position;

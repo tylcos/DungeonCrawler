@@ -9,8 +9,11 @@ import javafx.scene.layout.Pane;
 import java.util.ArrayList;
 import java.util.List;
 
-
-// TODO Changing the window resolution breaks a lot of things right now. We gotta fix that.
+/**
+ * Manages all entities and runs game loop
+ *
+ * todo Changing the window resolution breaks a lot of things right now. We gotta fix that.
+ */
 public final class GameManager {
     private static boolean paused;
     private static List<Entity> entities;
@@ -27,15 +30,14 @@ public final class GameManager {
      */
     public static void start() {
         paused = false;
-        entities = new ArrayList<>();
+        entities = new ArrayList<>(16);
 
         AnimationTimer timer = new AnimationTimer() {
             private long lastNanoTime = System.nanoTime();
 
-            public void handle(long currentNanoTime) {
-                double dt = (currentNanoTime - lastNanoTime) * 1e-9d;
-                lastNanoTime = currentNanoTime;
-
+            public void handle(long now) {
+                double dt = (now - lastNanoTime) * 1e-9d;
+                lastNanoTime = now;
 
                 GameManager.update(dt);
             }
@@ -49,6 +51,7 @@ public final class GameManager {
      * @param dt Time change since last frame in seconds
      */
     public static void update(double dt) {
+        // Purposefully runs physics update separate from collision checks
         entities.forEach(e -> e.physicsUpdate(dt));
         entities.forEach(e -> level.runCollisionCheck(e));
     }
@@ -77,7 +80,9 @@ public final class GameManager {
     public static void setDrawPane(Pane drawPane) {
         GameManager.drawPane = drawPane;
         level = new Level();
-        drawPane.getChildren().add(0, level); // We must place level on the bottom so that the UI renders on top of it.
-                                              // level should be the only thing in drawPane at all, but I'm specifying to be safe.
+
+        // We must place level on the bottom so that the UI renders on top of it.
+        // level should be the only thing in drawPane at all, but I'm specifying to be safe.
+        drawPane.getChildren().add(0, level);
     }
 }
