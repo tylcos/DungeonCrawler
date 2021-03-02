@@ -36,6 +36,7 @@ public class MainPlayer extends Entity {
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
 
+        // TODO: fix movement when not pressing button
         InputManager.addKeyListener(key -> {
             Point2D input;
             switch (key.getCode()) {

@@ -1,6 +1,7 @@
 package core;
 
 import game.Entity;
+import game.Level;
 import game.MainPlayer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
@@ -8,11 +9,14 @@ import javafx.scene.layout.Pane;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// TODO Changing the window resolution breaks a lot of things right now. We gotta fix that.
 public final class GameManager {
     private static boolean paused;
     private static List<Entity> entities;
 
     private static MainPlayer player;
+    private static Level level;
     private static Pane drawPane;
 
     // No instances
@@ -46,12 +50,12 @@ public final class GameManager {
      */
     public static void update(double dt) {
         entities.forEach(e -> e.physicsUpdate(dt));
+        entities.forEach(e -> level.runCollisionCheck(e));
     }
 
     public static void spawnEntity(Entity entity) {
         entities.add(entity);
-
-        drawPane.getChildren().add(entity.getImage());
+        level.addEntity(Level.ENTITY, entity);
     }
 
     public static boolean isPaused() {
@@ -72,5 +76,8 @@ public final class GameManager {
 
     public static void setDrawPane(Pane drawPane) {
         GameManager.drawPane = drawPane;
+        level = new Level();
+        drawPane.getChildren().add(0, level); // We must place level on the bottom so that the UI renders on top of it.
+                                              // level should be the only thing in drawPane at all, but I'm specifying to be safe.
     }
 }
