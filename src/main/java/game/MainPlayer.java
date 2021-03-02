@@ -4,39 +4,42 @@ import core.InputManager;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 
+/**
+ * Controller for the player
+ */
 public class MainPlayer extends Entity {
     private String name;
     private Weapon weapon;
     private int money;
     private int health;
 
-    private final double speed = 750d;
+    private double speed = 750d;
 
     private static TextArea uiInfoText;
 
     // todo: fix weapon damage and price
-    public MainPlayer(String name, String weapon, String difficulty) {
+    public MainPlayer(String image, String weaponName, String difficulty) {
         super("/images/Player.png", new Point2D(500, 500), new Point2D(5, 5));
 
-        this.name = name;
-        this.weapon = new Weapon(weapon, 0, 0);
-        this.health = 100;
+        name = image;
+        weapon = new Weapon(weaponName, 0, 0);
+        health = 100;
 
         switch (difficulty) {
         case "Boring":
-            this.money = 100;
+            money = 100;
             break;
         case "Normal":
-            this.money = 75;
+            money = 75;
             break;
         case "Hard":
-            this.money = 50;
+            money = 50;
             break;
         default:
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
 
-        // TODO: fix movement when not pressing button
+        // todo: fix movement when not pressing button
         InputManager.addKeyListener(key -> {
             Point2D input;
             switch (key.getCode()) {
@@ -61,7 +64,7 @@ public class MainPlayer extends Entity {
             }
 
             input = input.multiply(speed);
-            this.setVelocity(input);
+            setVelocity(input);
         });
     }
 

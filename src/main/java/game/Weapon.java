@@ -6,6 +6,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * Stores weapon info and utility methods
+ */
 public class Weapon {
     private String name;
     private int damage;

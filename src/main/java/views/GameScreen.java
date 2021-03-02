@@ -6,6 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 
+/**
+ * FXML controller for main game screen
+ */
 public class GameScreen {
     @FXML
     private TextArea uiInfoText;

@@ -7,7 +7,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class SceneManager {
+/**
+ * Loads initial window and subsequent scenes
+ */
+public final class SceneManager {
     private static Stage stage;
     private static String sceneName;
 
@@ -15,9 +18,12 @@ public class SceneManager {
     public static final String CONFIG = "/views/ConfigScreen.fxml";
     public static final String GAME = "/views/GameScreen.fxml";
 
+    private SceneManager() { }
+
     /**
      * Loads normal scenes and shows them
      * The FXML file needs to have a Scene container as the root
+     *
      * @param fxmlPath Scene to load
      */
     public static void loadScene(String fxmlPath) {
