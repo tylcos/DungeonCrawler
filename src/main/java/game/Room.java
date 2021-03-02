@@ -35,12 +35,7 @@ public class Room extends GridPane {
 
     // A cache for all rooms that have been loaded before so that we don't have to
     // read from disk every time.
-    // I have not tested this at all and I don't even know if the performance is
-    // worth the memory or if this even
-    // takes up a lot of memory, but its an idea anyway. Actually, this thing isn't
-    // even implemented soooo
-    // TODO implement or remove room cache
-    private static Hashtable<String, GridPane> roomCache = new Hashtable<String, GridPane>();
+    private static Hashtable<String, ArrayList<String>> roomCache = new Hashtable<String, ArrayList<String>>();
 
     // A list of all collidable bodies making up this room
     private ArrayList<Collidable> bodies = new ArrayList<Collidable>();
@@ -60,25 +55,26 @@ public class Room extends GridPane {
         // By default GridPanes are aligned to the top-left, which we don't want
         setAlignment(Pos.CENTER);
 
-        GridPane cache = roomCache.get(template);
-        if (cache != null) {
-            // Pull up room from cache
-        }
-
-        // Read the file
-        InputStream is = Room.class.getResourceAsStream(template);
-        if (is == null) {
-            System.err.println("Tried to open file " + template + ", but it does not exist!");
-        }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         ArrayList<String> lines = new ArrayList<String>();
-        try {
-            while (reader.ready()) {
-                lines.add(reader.readLine());
+        ArrayList<String> cache = roomCache.get(template);
+        if (cache != null) {
+            lines = cache;
+        } else {
+            // Read the file
+            InputStream is = Room.class.getResourceAsStream(template);
+            if (is == null) {
+                System.err.println("Tried to open file " + template + ", but it does not exist!");
             }
-        } catch (IOException e) {
-            System.err.println("Error occurred trying to read from " + template);
-            e.printStackTrace();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            try {
+                while (reader.ready()) {
+                    lines.add(reader.readLine());
+                }
+            } catch (IOException e) {
+                System.err.println("Error occurred trying to read from " + template);
+                e.printStackTrace();
+            }
+            roomCache.put(template, lines);
         }
 
         // Place the tiles
@@ -113,11 +109,6 @@ public class Room extends GridPane {
                 }
                 add(cell, col, row);
             }
-        }
-        if (cache != null) {
-            // This would probably be better if we cloned it instead of copying a
-            // reference...
-            roomCache.put(template, (GridPane) this);
         }
     }
 
