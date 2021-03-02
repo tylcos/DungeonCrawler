@@ -82,7 +82,8 @@ public final class GameManager {
         level = new Level();
 
         // We must place level on the bottom so that the UI renders on top of it.
-        // level should be the only thing in drawPane at all, but I'm specifying to be safe.
+        // level should be the only thing in drawPane at all, but I'm specifying to be
+        // safe.
         drawPane.getChildren().add(0, level);
     }
 }
