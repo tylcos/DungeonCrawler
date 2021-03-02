@@ -3,7 +3,10 @@ package core;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 
-public class InputManager {
+/**
+ * Provides utility for acting on user input
+ */
+public final class InputManager {
     // No instances
     private InputManager() { }
 

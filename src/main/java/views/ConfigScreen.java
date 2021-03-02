@@ -10,6 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * FXML controller for player creation screen
+ */
 public class ConfigScreen {
     @FXML
     private TextField inputTextName;
@@ -46,7 +49,7 @@ public class ConfigScreen {
      */
     private boolean isNameInvalid() {
         String name = inputTextName.getText();
-        boolean isInvalid = name.trim().length() == 0 || name.length() > 28;
+        boolean isInvalid = name.trim().isEmpty() || name.length() > 28;
 
         if (isInvalid) {
             inputTextName.setStyle("-fx-background-color: #ff6868;");

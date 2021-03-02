@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 
 import java.util.function.Supplier;
 
+/**
+ * FXML controller for main title screen
+ */
 public class TitleScreen {
     @FXML
     private Stage stage;

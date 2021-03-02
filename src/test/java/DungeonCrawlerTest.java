@@ -17,8 +17,8 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 public class DungeonCrawlerTest extends ApplicationTest {
     @Override
-    public void start(Stage primaryStage) {
-        new DungeonCrawlerDriver().start(primaryStage);
+    public void start(Stage stage) {
+        new DungeonCrawlerDriver().start(stage);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class DungeonCrawlerTest extends ApplicationTest {
         assertEquals(SceneManager.getSceneName(), SceneManager.CONFIG);
     }
 
-    @Test()
+    @Test
     public void testWhitespaceName() {
         clickOn("Start");
         moveTo("#inputTextName").write(" ");
