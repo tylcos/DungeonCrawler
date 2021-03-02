@@ -25,7 +25,8 @@ public class Entity extends Collidable {
     }
 
     // Overwritten in child classes
-    public void update(double dt) { }
+    public void update(double dt) {
+    }
 
     public final void physicsUpdate(double dt) {
         // position = position + velocity * dt
