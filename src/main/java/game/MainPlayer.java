@@ -3,6 +3,10 @@ package game;
 import core.InputManager;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+
+import java.util.EnumMap;
 
 /**
  * Controller for the player
@@ -14,6 +18,9 @@ public class MainPlayer extends Entity {
     private int health;
 
     private double speed = 750d;
+    // Smooths input over around 15 frames
+    // https://www.desmos.com/calculator/x9dexcgwnr
+    private double inputSmooth = .2d;
 
     private static TextArea uiInfoText;
 
@@ -39,38 +46,36 @@ public class MainPlayer extends Entity {
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
 
-        // todo: fix movement when not pressing button
-        InputManager.addKeyListener(key -> {
-            Point2D input;
-            switch (key.getCode()) {
-            case W:
-            case UP:
-                input = new Point2D(0, -1);
-                break;
-            case D:
-            case RIGHT:
-                input = new Point2D(1, 0);
-                break;
-            case S:
-            case DOWN:
-                input = new Point2D(0, 1);
-                break;
-            case A:
-            case LEFT:
-                input = new Point2D(-1, 0);
-                break;
-            default:
-                input = new Point2D(0, 0);
-            }
-
-            input = input.multiply(speed);
-            setVelocity(input);
-        });
+        InputManager.addMouseClickListener(this::mouseClickEvent);
     }
 
     @Override
     public void update(double dt) {
         uiInfoText.setText(toStringFormatted());
+
+        // User input logic
+        EnumMap<KeyCode, Boolean> inputState = InputManager.getInputState();
+
+        Point2D velocity = Point2D.ZERO;
+        if (inputState.get(KeyCode.W) || inputState.get(KeyCode.UP)) {
+            velocity = velocity.add(0, -1);
+        }
+        if (inputState.get(KeyCode.D) || inputState.get(KeyCode.RIGHT)) {
+            velocity = velocity.add(1, 0);
+        }
+        if (inputState.get(KeyCode.S) || inputState.get(KeyCode.DOWN)) {
+            velocity = velocity.add(0, 1);
+        }
+        if (inputState.get(KeyCode.A) || inputState.get(KeyCode.LEFT)) {
+            velocity = velocity.add(-1, 0);
+        }
+
+        velocity = velocity.normalize().multiply(speed);
+        setVelocity(getVelocity().interpolate(velocity, inputSmooth));
+    }
+
+    private void mouseClickEvent(MouseEvent event) {
+
     }
 
     public String getName() {
