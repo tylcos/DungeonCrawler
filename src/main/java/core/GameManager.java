@@ -86,4 +86,8 @@ public final class GameManager {
         // safe.
         drawPane.getChildren().add(0, level);
     }
+    
+    public static Level getLevel() {
+        return level;
+    }
 }
