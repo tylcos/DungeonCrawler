@@ -68,6 +68,6 @@ public class Entity extends Collidable {
 
     @Override
     public void onCollision(Collidable other) {
-        System.out.println("An entity hit something!");
+        //System.out.println("An entity hit something!");
     }
 }
