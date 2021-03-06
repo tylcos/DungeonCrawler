@@ -9,6 +9,8 @@ import javafx.scene.image.ImageView;
  * 
  * Collidables with the isStatic variable set cannot collide with other static
  * Collidables which is useful for level geometry and other stationary objects.
+ * 
+ * Generally, objects that don't move should be set as static.
  *
  */
 public abstract class Collidable extends ImageView {
