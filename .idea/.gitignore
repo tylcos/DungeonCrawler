@@ -6,3 +6,7 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+
+# Inspection settings
+/inspectionProfiles/profiles_settings.xml
+/inspectionProfiles/Project_Default.xml
