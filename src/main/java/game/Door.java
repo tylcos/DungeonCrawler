@@ -19,7 +19,6 @@ public class Door extends CollidableTile {
 
     @Override
     public void onCollision(Collidable other) {
-        System.out.println("Entered Door.");
         GameManager.getLevel().setRoom(destination);
     }
 
