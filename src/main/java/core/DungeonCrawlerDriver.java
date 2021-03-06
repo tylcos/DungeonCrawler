@@ -18,19 +18,20 @@ public class DungeonCrawlerDriver extends Application {
     public void start(Stage primaryStage) {
         Map<String, String> parameters = getParameters().getNamed();
 
-        String requestedScene = parameters.getOrDefault("scene", "");
-        if (!requestedScene.isEmpty()) {
-            System.out.println("Loading scene: " + requestedScene);
+        // Implements "--scene=GAME" parameter
+        String sceneArgument = parameters.getOrDefault("scene", "");
+        if (!sceneArgument.isEmpty()) {
             try {
-                String scene = SceneManager.class.getField(requestedScene).get(null).toString();
+                System.out.println("Loading scene: " + sceneArgument);
+                String scene = SceneManager.class.getField(sceneArgument).get(null).toString();
 
                 SceneManager.loadStage();
                 SceneManager.loadScene(scene);
-                GameManager.setPlayer(new MainPlayer("Azula", "Weapon", "Normal"));
+                GameManager.setPlayer(new MainPlayer("Team Azula", "Weapon", "Normal"));
                 return;
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                System.err.println("Could not load scene: " + requestedScene + " requested by "
-                                           + "parameter --scene");
+                System.err.println("Could not load scene: " + sceneArgument
+                                           + " requested by parameter --scene");
                 e.printStackTrace();
             }
         }

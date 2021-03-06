@@ -25,32 +25,23 @@ public class TitleScreen {
     @FXML
     private ImageView image1;
 
-    private double titleImageWidth;
-    private double image1Width;
-
-    private final double windowWidth = 1920d;
-    private final double aspectRatio = 9d / 16d;
+    private double windowWidth = 1920d;
     private final Supplier<Double> scaleFactor = () -> scene.getWidth() / windowWidth;
 
     public void initialize() {
-        titleImageWidth = titleImage.getFitWidth();
-        image1Width = image1.getFitWidth();
-
-        // Maintains window aspect ratio
-        stage.widthProperty().addListener(observable -> {
-            stage.setMinHeight(stage.getWidth() * aspectRatio);
-            stage.setMaxHeight(stage.getWidth() * aspectRatio);
-        });
+        double titleImageWidth = titleImage.getFitWidth();
+        double titleImageHeight = titleImage.getFitHeight();
+        double image1Width = image1.getFitWidth();
+        double image1Height = image1.getFitHeight();
 
         // Maintains image scales
-        scene.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
-            titleImage.setFitWidth(scaleFactor.get() * titleImageWidth);
-            image1.setFitWidth(scaleFactor.get() * image1Width);
-            image1.setFitHeight(scaleFactor.get() * image1Width * aspectRatio);
-        });
+        scene.widthProperty().addListener(observable -> {
+            titleImage.setFitWidth(titleImageWidth * scaleFactor.get());
+            titleImage.setFitHeight(titleImageHeight * scaleFactor.get());
 
-        // Sets windows initial size
-        stage.setWidth(windowWidth);
+            image1.setFitWidth(image1Width * scaleFactor.get());
+            image1.setFitHeight(image1Height * scaleFactor.get());
+        });
     }
     
     public void onStartClick(MouseEvent mouseEvent) {
