@@ -1,11 +1,10 @@
 plugins {
     id 'java'
+    id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.9'
 }
 
 version '0.22'
-apply plugin:'application'
-mainClassName = "src/main/java/core/DungeonCrawlerDriver.java"
 
 repositories {
     mavenCentral()
@@ -16,6 +15,10 @@ dependencies {
     testImplementation "org.testfx:testfx-core:4.0.+"
     testImplementation "org.testfx:testfx-junit:4.0.+"
     testImplementation group: 'org.testfx', name: 'testfx-core', version: '4.0.16-alpha'
+}
+
+application {
+    mainClassName = 'src/main/java/core/DungeonCrawlerDriver.java'
 }
 
 javafx {
