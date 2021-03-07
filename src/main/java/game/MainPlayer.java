@@ -7,8 +7,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
-import java.util.EnumMap;
-
 /**
  * Controller for the player
  */
@@ -20,6 +18,7 @@ public class MainPlayer extends Entity {
 
     private double speed = 750d;
     // Smooths input over around 15 frames
+    // inputSmooth = 1d would remove smoothing
     // https://www.desmos.com/calculator/x9dexcgwnr
     private double inputSmooth = .2d;
 
@@ -28,7 +27,9 @@ public class MainPlayer extends Entity {
 
     // todo: fix weapon damage and price
     public MainPlayer(String image, String weaponName, String difficulty) {
-        super("/images/Player.png", new Point2D(500, 700), new Point2D(5, 5));
+
+        super("/images/Player.png", new Point2D(1000, 1000), new Point2D(5, 5));
+
 
         name = image;
         weapon = new Weapon(weaponName, 0, 0);
@@ -56,32 +57,30 @@ public class MainPlayer extends Entity {
         uiInfoText.setText(toStringFormatted());
 
         // User input logic
-        EnumMap<KeyCode, Boolean> inputState = InputManager.getInputState();
-
-        Point2D velocity = Point2D.ZERO;
-        if (inputState.get(KeyCode.W) || inputState.get(KeyCode.UP)) {
-            velocity = velocity.add(0, -1);
+        Point2D input = Point2D.ZERO;
+        if (InputManager.get(KeyCode.W) || InputManager.get(KeyCode.UP)) {
+            input = input.add(0, -1);
         }
-        if (inputState.get(KeyCode.D) || inputState.get(KeyCode.RIGHT)) {
-            velocity = velocity.add(1, 0);
+        if (InputManager.get(KeyCode.D) || InputManager.get(KeyCode.RIGHT)) {
+            input = input.add(1, 0);
         }
-        if (inputState.get(KeyCode.S) || inputState.get(KeyCode.DOWN)) {
-            velocity = velocity.add(0, 1);
+        if (InputManager.get(KeyCode.S) || InputManager.get(KeyCode.DOWN)) {
+            input = input.add(0, 1);
         }
-        if (inputState.get(KeyCode.A) || inputState.get(KeyCode.LEFT)) {
-            velocity = velocity.add(-1, 0);
+        if (InputManager.get(KeyCode.A) || InputManager.get(KeyCode.LEFT)) {
+            input = input.add(-1, 0);
         }
         //player attack enemy
-        if (inputState.get(KeyCode.SPACE)) {
+        if (InputManager.get(KeyCode.SPACE)) {
             onAttackMode = true;
         }
 
-        velocity = velocity.normalize().multiply(speed);
-        setVelocity(getVelocity().interpolate(velocity, inputSmooth));
+        input = input.normalize().multiply(speed);
+        setVelocity(getVelocity().interpolate(input, inputSmooth));
     }
 
     private void mouseClickEvent(MouseEvent event) {
-
+        // Attack
     }
 
     public String getName() {

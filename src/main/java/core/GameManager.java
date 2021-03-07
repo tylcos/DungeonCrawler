@@ -45,6 +45,13 @@ public final class GameManager {
             }
         };
         timer.start();
+
+        // Start level spawning
+        level = new Level();
+        // We must place level on the bottom so that the UI renders on top of it.
+        // level should be the only thing in drawPane at all, but I'm specifying to be
+        // safe.
+        drawPane.getChildren().add(0, level);
     }
 
     /**
@@ -53,6 +60,10 @@ public final class GameManager {
      * @param dt Time change since last frame in seconds
      */
     public static void update(double dt) {
+        if (paused) {
+            return;
+        }
+
         // Purposefully runs physics update separate from collision checks
         entities.forEach(e -> e.physicsUpdate(dt));
         entities.forEach(e -> level.runCollisionCheck(e));
@@ -94,12 +105,6 @@ public final class GameManager {
 
     public static void setDrawPane(Pane drawPane) {
         GameManager.drawPane = drawPane;
-        level = new Level();
-
-        // We must place level on the bottom so that the UI renders on top of it.
-        // level should be the only thing in drawPane at all, but I'm specifying to be
-        // safe.
-        drawPane.getChildren().add(0, level);
     }
 
     public static Level getLevel() {
