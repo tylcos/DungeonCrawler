@@ -1,13 +1,13 @@
 package game;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
-
 import core.GameManager;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * Level is a StackPane that renders all game objects in a room. Level should
@@ -118,8 +118,11 @@ public class Level extends StackPane {
                 dynamicBodies.add(c);
             }
         }
-        if (GameManager.getPlayer() != null) {
-            GameManager.getPlayer().setPosition(new Point2D(750, 500));
+
+        MainPlayer player = GameManager.getPlayer();
+        if (player != null) {
+            player.setPosition(new Point2D(750, 500));
+            player.setVelocity(Point2D.ZERO);
         }
     }
 

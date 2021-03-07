@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import java.util.EnumMap;
 
@@ -19,33 +20,18 @@ public final class InputManager {
             inputState.put(keyCode, false);
         }
 
-        addKeyUpListener(InputManager::keyUpEvent);
-        addKeyDownListener(InputManager::keyDownEvent);
+        Stage stage = SceneManager.getStage();
+        stage.addEventFilter(KeyEvent.KEY_PRESSED, key -> inputState.put(key.getCode(), true));
+        stage.addEventFilter(KeyEvent.KEY_RELEASED, key -> inputState.put(key.getCode(), false));
     }
 
     private InputManager() { }
-
-    public static void addKeyUpListener(EventHandler<KeyEvent> eventHandler) {
-        SceneManager.getStage().addEventFilter(KeyEvent.KEY_RELEASED, eventHandler);
-    }
-
-    public static void addKeyDownListener(EventHandler<KeyEvent> eventHandler) {
-        SceneManager.getStage().addEventFilter(KeyEvent.KEY_PRESSED, eventHandler);
-    }
 
     public static void addMouseClickListener(EventHandler<MouseEvent> eventHandler) {
         SceneManager.getStage().addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
     }
 
-    private static void keyDownEvent(KeyEvent key) {
-        inputState.put(key.getCode(), true);
-    }
-
-    private static void keyUpEvent(KeyEvent key) {
-        inputState.put(key.getCode(), false);
-    }
-
-    public static EnumMap<KeyCode, Boolean> getInputState() {
-        return inputState;
+    public static boolean get(KeyCode keyCode) {
+        return inputState.get(keyCode);
     }
 }
