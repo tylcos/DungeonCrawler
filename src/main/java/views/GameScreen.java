@@ -1,6 +1,7 @@
 package views;
 
 import core.GameManager;
+import game.Enemy;
 import game.MainPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -20,5 +21,6 @@ public class GameScreen {
 
         GameManager.setDrawPane(drawPane);
         GameManager.start();
+
     }
 }

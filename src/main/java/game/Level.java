@@ -131,7 +131,7 @@ public class Level extends StackPane {
      */
     public void addEntity(int layer, Entity e) {
         renderingLayers[layer].getChildren().add(e);
-        e.setPosition(new Point2D(700, 500));
+
     }
 
     /**
