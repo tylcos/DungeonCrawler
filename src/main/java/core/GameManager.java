@@ -1,8 +1,6 @@
 package core;
 
-import game.Entity;
-import game.Level;
-import game.MainPlayer;
+import game.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 
@@ -11,7 +9,7 @@ import java.util.List;
 
 /**
  * Manages all entities and runs game loop
- *
+ * <p>
  * todo Changing the window resolution breaks a lot of things right now. We gotta fix that.
  */
 public final class GameManager {
@@ -19,11 +17,15 @@ public final class GameManager {
     private static List<Entity> entities;
 
     private static MainPlayer player;
+    private static Enemy enemy;
+    private static Coin coin;
+    private static Item item;
     private static Level level;
     private static Pane drawPane;
 
     // No instances
-    private GameManager() { }
+    private GameManager() {
+    }
 
     /**
      * Initializes GameManager and starts game loop
@@ -73,6 +75,19 @@ public final class GameManager {
         GameManager.player = player;
     }
 
+    public static void setEnemy(Enemy enemy) {
+        GameManager.enemy = enemy;
+    }
+
+    public static void setCoin(Coin coin) {
+        GameManager.coin = coin;
+    }
+
+    public static void setItem(Item item) {
+        GameManager.item = item;
+    }
+
+
     public static Pane getDrawPane() {
         return drawPane;
     }
@@ -86,8 +101,9 @@ public final class GameManager {
         // safe.
         drawPane.getChildren().add(0, level);
     }
-    
+
     public static Level getLevel() {
         return level;
     }
+
 }

@@ -3,6 +3,7 @@ package game;
 import core.InputManager;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
@@ -23,27 +24,28 @@ public class MainPlayer extends Entity {
     private double inputSmooth = .2d;
 
     private static TextArea uiInfoText;
+    private boolean onAttackMode;
 
     // todo: fix weapon damage and price
     public MainPlayer(String image, String weaponName, String difficulty) {
-        super("/images/Player.png", new Point2D(500, 500), new Point2D(5, 5));
+        super("/images/Player.png", new Point2D(500, 700), new Point2D(5, 5));
 
         name = image;
         weapon = new Weapon(weaponName, 0, 0);
         health = 100;
 
         switch (difficulty) {
-        case "Boring":
-            money = 100;
-            break;
-        case "Normal":
-            money = 75;
-            break;
-        case "Hard":
-            money = 50;
-            break;
-        default:
-            throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
+            case "Boring":
+                money = 100;
+                break;
+            case "Normal":
+                money = 75;
+                break;
+            case "Hard":
+                money = 50;
+                break;
+            default:
+                throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
 
         InputManager.addMouseClickListener(this::mouseClickEvent);
@@ -68,6 +70,10 @@ public class MainPlayer extends Entity {
         }
         if (inputState.get(KeyCode.A) || inputState.get(KeyCode.LEFT)) {
             velocity = velocity.add(-1, 0);
+        }
+        //player attack enemy
+        if (inputState.get(KeyCode.SPACE)) {
+            onAttackMode = true;
         }
 
         velocity = velocity.normalize().multiply(speed);
@@ -96,6 +102,10 @@ public class MainPlayer extends Entity {
 
     public int getMoney() {
         return money;
+    }
+
+    public boolean getIsOnAttack() {
+        return onAttackMode;
     }
 
     public void setMoney(int money) {

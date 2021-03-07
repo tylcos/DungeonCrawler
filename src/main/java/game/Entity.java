@@ -3,6 +3,8 @@ package game;
 import core.GameManager;
 import javafx.geometry.Point2D;
 
+import java.awt.image.PixelInterleavedSampleModel;
+
 /**
  * Game entity that will update every frame
  */
@@ -20,6 +22,7 @@ public class Entity extends Collidable {
         super(image, false);
         setPosition(position);
         setScale(scale);
+
 
         GameManager.spawnEntity(this);
     }
