@@ -2,13 +2,19 @@ package views;
 
 import core.GameManager;
 import core.SceneManager;
+import data.RandomCoins;
 import data.RandomNames;
+import game.Coin;
+import game.Item;
 import game.MainPlayer;
+import game.Enemy;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+
 
 /**
  * FXML controller for player creation screen
@@ -39,6 +45,13 @@ public class ConfigScreen {
 
         GameManager.setPlayer(new MainPlayer(inputTextName.getText(),
                 inputWeapon.getValue(), inputDifficulty.getValue()));
+        GameManager.setEnemy(new Enemy(3,5));
+        GameManager.setCoin(new Coin(true));
+
+        GameManager.setItem(new Item(true));
+
+
+
     }
 
     /**
