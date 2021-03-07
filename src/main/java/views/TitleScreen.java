@@ -29,12 +29,12 @@ public class TitleScreen {
     private final Supplier<Double> scaleFactor = () -> scene.getWidth() / windowWidth;
 
     public void initialize() {
+        // Maintains image scales
         double titleImageWidth = titleImage.getFitWidth();
         double titleImageHeight = titleImage.getFitHeight();
         double image1Width = image1.getFitWidth();
         double image1Height = image1.getFitHeight();
 
-        // Maintains image scales
         scene.widthProperty().addListener(observable -> {
             titleImage.setFitWidth(titleImageWidth * scaleFactor.get());
             titleImage.setFitHeight(titleImageHeight * scaleFactor.get());
