@@ -83,18 +83,18 @@ public class Level extends StackPane {
                 true);
         dequeueAndLinkRooms();
         setRoom(map[mapOffset][mapOffset]);
-        for (int j = MAX_DIAMETER - 1; j >= 0; --j) {
-            for (int i = 0; i < MAX_DIAMETER; ++i) {
-                if (map[i][j] != null) {
-                    if (map[i][j].isExit()) {
-                        System.out.print("X");
-                    } else if (map[i][j].isEntrance()) {
-                        System.out.print("E");
-                    } else {
-                        System.out.print(map[i][j].getDistanceFromEntrance());
-                    }
-                } else {
+        for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
+            for (int x = 0; x < MAX_DIAMETER; ++x) {
+                if (map[x][y] == null) {
                     System.out.print(".");
+                } else {
+                    if (map[x][y].isEntrance()) {
+                        System.out.print("E");
+                    } else if (map[x][y].isExit()) {
+                        System.out.print("X");
+                    } else {
+                        System.out.print("O");
+                    }
                 }
             }
             System.out.println();
