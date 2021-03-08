@@ -114,24 +114,13 @@ public class Room extends GridPane {
      * @param creator  the room that triggered the creation of this one
      */
     public Room(String template, Point2D position, Level level, boolean start, Room creator) {
-        this(template, position, level, start);
-        distanceFromEntrance = creator.distanceFromEntrance + 1;
-        if (distanceFromEntrance >= Level.MIN_END_DISTANCE && !level.hasExit()) {
-            this.exit = true;
-        }
-    }
-
-    /**
-     * Constructs a room from a .room file at the given position in the specified
-     * level.
-     * 
-     * @param template the file to load the room from
-     * @param position the position to make the room at
-     * @param level    the level this room was created in
-     * @param start    if this is the start room and all doors should be active
-     */
-    public Room(String template, Point2D position, Level level, boolean start) {
         super();
+        if (creator != null) {
+            distanceFromEntrance = creator.distanceFromEntrance + 1;
+            if (distanceFromEntrance >= Level.MIN_END_DISTANCE && !level.hasExit()) {
+                this.exit = true;
+            }
+        }
         this.position = position;
         this.level = level;
         if (start) {
@@ -185,25 +174,45 @@ public class Room extends GridPane {
             }
         }
 
-        // TODO exit doesn't always spawn
+        if (creator != null) {
+            Direction creatorDirection = Direction
+                    .vectorToDirection(creator.position.subtract(position));
+            activeDoors[creatorDirection.toValue()] = true;
+            testedDoors[creatorDirection.toValue()] = false;
+            ++branches;
+        }
+
+        int numberOfDoors = 0;
         for (int i = 0; i < testedDoors.length; ++i) {
             if (testedDoors[i]) {
-                boolean build = (!level.hasExit() && branches == 0)
-                        || Math.random() < (BRANCH_CHANCE * Math.pow(BRANCH_TAX, branches)
-                                * ((Level.MIN_END_DISTANCE < distanceFromEntrance)
-                                        ? Math.pow(DISTANCE_TAX,
-                                                distanceFromEntrance - Level.MIN_END_DISTANCE)
-                                        : 1)); // i love you too checkstyle <3
-                if (build) {
-                    int choice;
-                    // TODO this isn't very smart but its late and i can't be bothered right now
-                    do {
-                        Random rand = new Random();
-                        choice = rand.nextInt(4);
-                    } while (!(testedDoors[choice] && !activeDoors[choice]));
-                    activeDoors[choice] = true;
-                    ++branches;
+                ++numberOfDoors;
+            }
+        }
+
+        boolean branched = false;
+        while (numberOfDoors > 0) {
+            boolean build = (!level.hasExit() && !branched) || Math.random() < (BRANCH_CHANCE
+                    * Math.pow(BRANCH_TAX, branches)
+                    * ((Level.MIN_END_DISTANCE < distanceFromEntrance)
+                            ? Math.pow(DISTANCE_TAX, distanceFromEntrance - Level.MIN_END_DISTANCE)
+                            : 1)); // i love you too checkstyle <3
+            Random random = new Random();
+            int randomInt = random.nextInt(numberOfDoors);
+            int counter = 0;
+            while (randomInt > 0 || !testedDoors[counter]) {
+                ++counter;
+                if (testedDoors[counter]) {
+                    --randomInt;
                 }
+            }
+            testedDoors[counter] = false;
+            --numberOfDoors;
+            if (!build) {
+                activeDoors[counter] = false;
+            } else {
+                activeDoors[counter] = true;
+                ++branches;
+                branched = true;
             }
         }
 
@@ -248,6 +257,19 @@ public class Room extends GridPane {
     }
 
     /**
+     * Constructs a room from a .room file at the given position in the specified
+     * level.
+     * 
+     * @param template the file to load the room from
+     * @param position the position to make the room at
+     * @param level    the level this room was created in
+     * @param start    if this is the start room and all doors should be active
+     */
+    public Room(String template, Point2D position, Level level, boolean start) {
+        this(template, position, level, start, null);
+    }
+
+    /**
      * Generates a door.
      *
      * @param image     the image of the door
@@ -258,7 +280,7 @@ public class Room extends GridPane {
         if (entrance) {
             Room room = level.getRoomIfExists(this, direction);
             addDoor(image, cell, direction, room);
-        } else if (exit) { // TODO for some reason rooms generate past the exit
+        } else if (exit) {
             addWall(spriteTable.get("x"), cell);
         } else {
             boolean valid = level.getRoomExistsOrAvailable(this, direction);

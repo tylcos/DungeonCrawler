@@ -23,6 +23,20 @@ public enum Direction {
     public Point2D vector() {
         return vector;
     }
+    
+    /**
+     * Converts this Point2D unit vector to a Direction
+     * @param vec the vector to convert
+     * @return the Direction of this vector
+     */
+    public static Direction vectorToDirection(Point2D vec) {
+        for (Direction d : Direction.values()) {
+            if (d.vector().equals(vec)) {
+                return d;
+            }
+        }
+        return null;
+    }
 
     /**
      * Describes this Direction as a single letter.
