@@ -17,7 +17,7 @@ public abstract class Collidable extends ImageView {
     /**
      * Constructor taking an Image.
      *
-     * @param image    the Image to use
+     * @param image the Image to use
      * @param isStatic if the body is static or not
      */
     public Collidable(Image image, boolean isStatic) {
@@ -28,7 +28,7 @@ public abstract class Collidable extends ImageView {
     /**
      * Constructor taking a path to an image.
      *
-     * @param image    the path to the image to use
+     * @param image the path to the image to use
      * @param isStatic if the body is static or not
      */
     public Collidable(String image, boolean isStatic) {
@@ -63,6 +63,4 @@ public abstract class Collidable extends ImageView {
     public boolean intersects(Collidable target) {
         return getBoundsInParent().intersects(target.getBoundsInParent());
     }
-
-
 }

@@ -9,14 +9,32 @@ import javafx.scene.image.Image;
  */
 public abstract class CollidableTile extends Collidable {
 
+    /**
+     * Constructor taking an image of a CollidableTile.
+     *
+     * @param image the Image to use
+     * @param isStatic if the body is static or not
+     */
     public CollidableTile(Image image, boolean isStatic) {
         super(image, isStatic);
     }
 
+    /**
+     * Constructor taking a path to an image of a CollidableTile.
+     *
+     * @param image the path to the image to use
+     * @param isStatic if the body is static or not
+     */
     public CollidableTile(String image, boolean isStatic) {
         super(image, isStatic);
     }
 
+    /**
+     * Detects if the given Collidable is touching this CollidableTile.
+     *
+     * @param target the CollidableTile to check for collision
+     * @return true if collision is occurring; false otherwise
+     */
     @Override
     public boolean intersects(Collidable target) {
         return getParent().getBoundsInParent().intersects(target.getBoundsInParent());
