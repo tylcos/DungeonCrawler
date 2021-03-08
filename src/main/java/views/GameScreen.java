@@ -1,7 +1,6 @@
 package views;
 
 import core.GameManager;
-import game.Enemy;
 import game.MainPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -16,6 +15,9 @@ public class GameScreen {
     @FXML
     private Pane drawPane;
 
+    /**
+     * Initializes the game screen
+     */
     public void initialize() {
         MainPlayer.setUiInfoText(uiInfoText);
 

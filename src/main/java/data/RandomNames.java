@@ -3,7 +3,7 @@ package data;
 import java.util.Random;
 
 /**
- * Provides utility for generating random values need by the game
+ * Provides utility for generating random values need by the game.
  */
 public final class RandomNames {
     private static final Random RAND = new Random();
@@ -31,6 +31,11 @@ public final class RandomNames {
 
     private RandomNames() { }
 
+    /**
+     * Returns a random name from the String of names.
+     *
+     * @return a random name from the String of names
+     */
     public static String getRandomName() {
         return USER_NAMES[RAND.nextInt(USER_NAMES.length)];
     }

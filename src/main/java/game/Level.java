@@ -14,7 +14,6 @@ import java.util.concurrent.ArrayBlockingQueue;
  * always be rendered underneath the game HUD!
  */
 public class Level extends StackPane {
-
     // TODO Something is *definitely* happening when generating a room, but its
     // really hard to see what.
     // We need a map we can pull up that shows all the rooms and the connections
@@ -28,12 +27,14 @@ public class Level extends StackPane {
     // stuff on layer 3 and so on
     private Pane[] renderingLayers;
     static final int RENDERING_LAYERS = 4; // Size of renderingLayers array
+
     // Constants for all the render layers so we don't go insane
     public static final int ROOM = 0;
     public static final int ITEM = 1;
     public static final int ENTITY = 2;
     public static final int VFX = 3;
-    // Using a similar, 2D array, we could also create a collision matrix
+
+    // todo Using a similar, 2D array, we could also create a collision matrix
 
     private Room[][] map; // 2D array of all the rooms making up the level
     private final int mapOffset; // Offset used for calculating array indicies from positions
@@ -44,12 +45,13 @@ public class Level extends StackPane {
 
     // A list of all static Collidables that need to be collision checked. This
     // includes stationary things like walls and doors.
-    private ArrayBlockingQueue<Collidable> staticBodies = new ArrayBlockingQueue<Collidable>(100);
+    private ArrayBlockingQueue<Collidable> staticBodies = new ArrayBlockingQueue<>(100);
+
     // A list of all dynamic (non-static) Collidables that need to be collision
     // checked. This includes moving things like enemies.
     // I haven't done anything with dynamic bodies yet, so this is really just a
     // placeholder
-    private ArrayBlockingQueue<Collidable> dynamicBodies = new ArrayBlockingQueue<Collidable>(100);
+    private ArrayBlockingQueue<Collidable> dynamicBodies = new ArrayBlockingQueue<>(100);
 
     // Queue of rooms and their doors that need a connection to an adjacent room
     private Queue<QueueLink> roomLinkQueue = new LinkedList<QueueLink>();
@@ -77,10 +79,10 @@ public class Level extends StackPane {
      */
     private void generateMap() {
         // Rooms need to be set in the map, THEN linked with doors
-        map[0 + mapOffset][0 + mapOffset] = new Room("/rooms/test.room", new Point2D(0, 0), this,
+        map[mapOffset][mapOffset] = new Room("/rooms/test.room", new Point2D(0, 0), this,
                 true);
         dequeueAndLinkRooms();
-        setRoom(map[0 + mapOffset][0 + mapOffset]);
+        setRoom(map[mapOffset][mapOffset]);
         for (int j = MAX_DIAMETER - 1; j >= 0; --j) {
             for (int i = 0; i < MAX_DIAMETER; ++i) {
                 if (map[i][j] != null) {
@@ -264,5 +266,4 @@ public class Level extends StackPane {
             this.door = door;
         }
     }
-
 }

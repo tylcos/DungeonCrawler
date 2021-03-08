@@ -28,6 +28,9 @@ public class TitleScreen {
     private double windowWidth = 1920d;
     private final Supplier<Double> scaleFactor = () -> scene.getWidth() / windowWidth;
 
+    /**
+     * Initializes the title screen
+     */
     public void initialize() {
         // Maintains image scales
         double titleImageWidth = titleImage.getFitWidth();
@@ -43,11 +46,21 @@ public class TitleScreen {
             image1.setFitHeight(image1Height * scaleFactor.get());
         });
     }
-    
+
+    /**
+     * Event listener for mouse click to start button.
+     *
+     * @param mouseEvent the event inputted by the mouse
+     */
     public void onStartClick(MouseEvent mouseEvent) {
         SceneManager.loadScene(SceneManager.CONFIG);
     }
 
+    /**
+     * Event listener for mouse click on exit button.
+     *
+     * @param mouseEvent the event inputted by the mouse
+     */
     public void onExitClick(MouseEvent mouseEvent) {
         System.exit(0);
     }
