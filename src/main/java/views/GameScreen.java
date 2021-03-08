@@ -23,6 +23,5 @@ public class GameScreen {
 
         GameManager.setDrawPane(drawPane);
         GameManager.start();
-
     }
 }

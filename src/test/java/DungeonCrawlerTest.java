@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.testfx.api.FxAssert.verifyThat;
 
 public class DungeonCrawlerTest extends ApplicationTest {
+
     @Override
     public void start(Stage stage) {
         new DungeonCrawlerDriver().start(stage);
