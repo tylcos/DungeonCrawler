@@ -18,6 +18,9 @@ public final class SceneManager {
     public static final String CONFIG = "/views/ConfigScreen.fxml";
     public static final String GAME = "/views/GameScreen.fxml";
 
+    /**
+     * Private constructor so no instances of SceneManagers can be created.
+     */
     private SceneManager() { }
 
     /**
@@ -40,7 +43,7 @@ public final class SceneManager {
     }
 
     /**
-     * Loads "view.TitleScreen.fxml" which contains the program stage as the root
+     * Loads "view.TitleScreen.fxml" which contains the program stage as the root.
      */
     public static void loadStage() {
         try {
@@ -54,14 +57,29 @@ public final class SceneManager {
         }
     }
 
+    /**
+     * Returns the current stage.
+     *
+     * @return the current stage
+     */
     public static Stage getStage() {
         return stage;
     }
 
+    /**
+     * Sets the stage shown to a new stage.
+     *
+     * @param window the new stage
+     */
     public static void setStage(Stage window) {
         SceneManager.stage = window;
     }
 
+    /**
+     * Returns the name of the current scene.
+     *
+     * @return the name of the current scene
+     */
     public static String getSceneName() {
         return sceneName;
     }

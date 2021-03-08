@@ -2,8 +2,6 @@
 
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Box?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../styles/GameStyle.css" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="views.GameScreen">
     <children>

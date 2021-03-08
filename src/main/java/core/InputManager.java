@@ -25,12 +25,26 @@ public final class InputManager {
         stage.addEventFilter(KeyEvent.KEY_RELEASED, key -> inputState.put(key.getCode(), false));
     }
 
+    /**
+     * Private constructor so no instances of InputManager can be created.
+     */
     private InputManager() { }
 
+    /**
+     * Adds a mouse clicked listener.
+     *
+     * @param eventHandler the event handler that handles the mouse clicked event
+     */
     public static void addMouseClickListener(EventHandler<MouseEvent> eventHandler) {
         SceneManager.getStage().addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
     }
 
+    /**
+     * Returns the key that was pressed.
+     *
+     * @param keyCode the current key code inputted
+     * @return the key that was pressed
+     */
     public static boolean get(KeyCode keyCode) {
         return inputState.get(keyCode);
     }

@@ -26,7 +26,6 @@ import javafx.scene.layout.StackPane;
  * NON-RECTANGULAR ROOMS !!!
  */
 public class Room extends GridPane {
-
     /*
      * The chance of connecting a doorway to another room is BRANCH_CHANCE *
      * (BRANCH_TAX ^ branches) * (DISTANCE_TAX ^ (distanceFromEntrance -
@@ -139,6 +138,7 @@ public class Room extends GridPane {
             distanceFromEntrance = 0;
             entrance = true;
         }
+
         // By default GridPanes are aligned to the top-left, which we don't want
         setAlignment(Pos.CENTER);
 
@@ -247,6 +247,13 @@ public class Room extends GridPane {
         }
     }
 
+    /**
+     * Generates a door.
+     *
+     * @param image     the image of the door
+     * @param cell      the cell of where to put the door
+     * @param direction the direction of the door
+     */
     private void generateDoor(Image image, StackPane cell, Direction direction) {
         if (entrance) {
             Room room = level.getRoomIfExists(this, direction);
@@ -269,12 +276,26 @@ public class Room extends GridPane {
         doors.get(direction).add(cell);
     }
 
+    /**
+     * Adds a wall.
+     *
+     * @param image the image of the wall
+     * @param cell  the cell where to place the wall
+     */
     private void addWall(Image image, StackPane cell) {
         Wall w = new Wall(image, true);
         bodies.add(w);
         cell.getChildren().add(w);
     }
 
+    /**
+     * Adds the door to the room.
+     *
+     * @param image       the image of the door
+     * @param cell        the cell where to put the door
+     * @param direction   the direction of the door
+     * @param destination the room the door leads to
+     */
     private void addDoor(Image image, StackPane cell, Direction direction, Room destination) {
         if (exit) {
             addWall(spriteTable.get("x"), cell);
