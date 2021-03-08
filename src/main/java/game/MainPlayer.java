@@ -34,7 +34,7 @@ public class MainPlayer extends Entity {
      * @param difficulty the difficulty of the game
      */
     public MainPlayer(String image, String weaponName, String difficulty) {
-        super("/images/Player.png", new Point2D(1000, 1000), new Point2D(5, 5));
+        super("/images/Player.png", new Point2D(960, 540), new Point2D(5, 5));
 
         name = image;
         weapon = new Weapon(weaponName, 0, 0);
