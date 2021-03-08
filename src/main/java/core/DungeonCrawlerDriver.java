@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,7 +21,8 @@ public class DungeonCrawlerDriver extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Map<String, String> parameters = getParameters().getNamed();
+        Parameters params = getParameters();
+        Map<String, String> parameters = params == null ? new HashMap<>() : params.getNamed();
         ArrayList<Coin> coins = new ArrayList<Coin>();
 
         // Implements "--scene=GAME" parameter
