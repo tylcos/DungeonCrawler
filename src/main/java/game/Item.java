@@ -16,7 +16,7 @@ public class Item extends Entity {
      * @param isItemExist true if the item exists; false otherwise
      */
     public Item(boolean isItemExist) {
-        super("resources/images/item.gif", new Point2D(((Math.random() * (500 - 300)) + 300), ((Math.random() * (500 - 300)) + 300)), new Point2D(3, 3));
+        super("images/item.gif", new Point2D(((Math.random() * (500 - 300)) + 300), ((Math.random() * (500 - 300)) + 300)), new Point2D(3, 3));
 
         if (!isItemExist) {
             this.setImage(new Image("images/Invisible.gif"));
