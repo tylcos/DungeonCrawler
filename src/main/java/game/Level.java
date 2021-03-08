@@ -79,8 +79,7 @@ public class Level extends StackPane {
      */
     private void generateMap() {
         // Rooms need to be set in the map, THEN linked with doors
-        map[mapOffset][mapOffset] = new Room("/rooms/test.room", new Point2D(0, 0), this,
-                true);
+        map[mapOffset][mapOffset] = new Room("/rooms/test.room", new Point2D(0, 0), this, true);
         dequeueAndLinkRooms();
         setRoom(map[mapOffset][mapOffset]);
         for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
@@ -123,7 +122,7 @@ public class Level extends StackPane {
 
         MainPlayer player = GameManager.getPlayer();
         if (player != null) {
-            player.setPosition(new Point2D(750, 500));
+            player.setPosition(new Point2D(960, 540));
             player.setVelocity(Point2D.ZERO);
         }
     }
@@ -182,8 +181,7 @@ public class Level extends StackPane {
      */
     public Room getRoomIfExists(Room from, Direction direction) {
         Point2D testRoomPos = from.getPosition().add(direction.vector());
-        return map[(int) (testRoomPos.getX() + mapOffset)][(int) (testRoomPos.getY()
-                + mapOffset)];
+        return map[(int) (testRoomPos.getX() + mapOffset)][(int) (testRoomPos.getY() + mapOffset)];
     }
 
     /**
