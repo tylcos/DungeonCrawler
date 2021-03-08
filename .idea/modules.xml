@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/javafx/dungeon-crawler.javafx.iml" filepath="$PROJECT_DIR$/.idea/modules/javafx/dungeon-crawler.javafx.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/dungeon-crawler.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dungeon-crawler.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/dungeon-crawler.test.iml" filepath="$PROJECT_DIR$/.idea/modules/dungeon-crawler.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/javafx/idea-projects.dungeon-crawler.javafx.iml" filepath="$PROJECT_DIR$/.idea/modules/javafx/idea-projects.dungeon-crawler.javafx.iml" />
     </modules>
   </component>
 </project>
