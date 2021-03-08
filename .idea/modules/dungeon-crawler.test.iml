@@ -5,17 +5,18 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/test/resources" type="java-test-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="dungeon-crawler.main" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-fxml:win:15.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-fxml:mac:15.0.1" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:15.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:win:15.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:mac:15.0.1" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:15.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:win:15.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:mac:15.0.1" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:15.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:win:15.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:mac:15.0.1" level="project" />
     <orderEntry type="library" name="Gradle: org.testfx:testfx-junit:4.0.15-alpha" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Gradle: org.testfx:testfx-core:4.0.16-alpha" level="project" />
