@@ -29,7 +29,8 @@ public class Item extends Entity {
     @Override
     public void update(double dt) {
         Point2D distance = this.getPosition().subtract(GameManager.getPlayer().getPosition());
-        if (distance.getX() < 20 && distance.getY() < 20 && distance.getX() > -20 && distance.getY() > -20 && !isItemUsed) {
+        if (distance.getX() < 20 && distance.getY() < 20 && distance.getX() > -20
+                    && distance.getY() > -20 && !isItemUsed) {
             //update once we have more item
             /*
             if(...)
