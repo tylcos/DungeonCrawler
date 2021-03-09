@@ -8,20 +8,30 @@ import javafx.scene.image.Image;
  */
 public class Coin extends Entity {
     private boolean isCoinUsed = false;
+    private static final int VALUE = 10;
 
     /**
      * Creates an instance of a coin placed randomly within the map.
      *
-     * @param isCoinExist if the coin exists
+     * @param isCoinUsed true if coin used, false otherwise
      */
-    public Coin(boolean isCoinExist) {
+    public Coin(boolean isCoinUsed) {
         super("/images/coin.gif",
                 new Point2D(((Math.random() * (500 - 200)) + 200),
                         ((Math.random() * (500 - 200)) + 200)), new Point2D(2, 2));
-        if (!isCoinExist) {
+        if (!isCoinUsed) {
             this.setImage(new Image("images/Invisible.gif"));
             isCoinUsed = true;
         }
+    }
+
+    /**
+     * Getter for value field
+     *
+     * @return value the value of the coin
+     */
+    public int getValue() {
+        return VALUE;
     }
 
     /**
