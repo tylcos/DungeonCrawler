@@ -39,7 +39,7 @@ public class ConfigScreen {
     }
 
     /**
-     * Event listener for mouse click.
+     * Event listener for mouse click on the start adventure button.
      *
      * @param mouseEvent the event inputted by the mouse
      */
