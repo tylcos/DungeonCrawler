@@ -4,8 +4,8 @@ import core.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.function.Supplier;
@@ -45,23 +45,28 @@ public class TitleScreen {
             image1.setFitWidth(image1Width * scaleFactor.get());
             image1.setFitHeight(image1Height * scaleFactor.get());
         });
+
+        System.out.println("Debug Screen Scaling");
+        System.out.println("dpi: " + Screen.getPrimary().getDpi());
+        System.out.println("Screen Scale: " + Screen.getPrimary().getOutputScaleX()
+                                   + ", " + Screen.getPrimary().getOutputScaleY());
+        System.out.println("Output Scale: " + stage.getOutputScaleX()
+                                   + ", " + stage.getOutputScaleY());
+        System.out.println("Render Scale: " + stage.getRenderScaleX()
+                                   + ", " + stage.getRenderScaleY());
     }
 
     /**
      * Event listener for mouse click to start button.
-     *
-     * @param mouseEvent the event inputted by the mouse
      */
-    public void onStartClick(MouseEvent mouseEvent) {
+    public void onStartClick() {
         SceneManager.loadScene(SceneManager.CONFIG);
     }
 
     /**
      * Event listener for mouse click on exit button.
-     *
-     * @param mouseEvent the event inputted by the mouse
      */
-    public void onExitClick(MouseEvent mouseEvent) {
+    public void onExitClick() {
         System.exit(0);
     }
 }
