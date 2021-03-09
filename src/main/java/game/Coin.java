@@ -1,5 +1,6 @@
 package game;
 import core.GameManager;
+import data.RandomUtil;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
@@ -7,22 +8,22 @@ import javafx.scene.image.Image;
  * A coin that contributes to the player's money
  */
 public class Coin extends Entity {
-    private boolean isCoinUsed = false;
+    private boolean isCollected;
     private static final int VALUE = 10;
 
     /**
      * Creates an instance of a coin placed randomly within the map.
      *
-     * @param isCoinUsed true if coin used, false otherwise
+     * @param isCollected true if coin used, false otherwise
      */
-    public Coin(boolean isCoinUsed) {
+    public Coin(boolean isCollected) {
         super("/images/coin.gif",
                 new Point2D(((Math.random() * (500 - 200)) + 200),
                         ((Math.random() * (500 - 200)) + 200)), new Point2D(2, 2));
-        if (!isCoinUsed) {
+        if (isCollected) {
             this.setImage(new Image("images/Invisible.gif"));
-            isCoinUsed = true;
         }
+        this.isCollected = isCollected;
     }
 
     /**
@@ -45,28 +46,13 @@ public class Coin extends Entity {
         Point2D distance = this.getPosition().subtract(GameManager.getPlayer().getPosition());
 
         if (distance.getX() < 20
-                && distance.getY() < 20
-                && distance.getX() > -20
-                && distance.getY() > -20
-                && !isCoinUsed) {
-            GameManager.getPlayer().setMoney(GameManager.getPlayer().getMoney()
-                    + getRandomNumber(1, 25));
-            isCoinUsed = true;
+                    && distance.getY() < 20
+                    && distance.getX() > -20
+                    && distance.getY() > -20
+                    && !isCollected) {
+            GameManager.getPlayer().addMoney(RandomUtil.getInt(1, 25));
+            isCollected = true;
             this.setImage(new Image("images/Invisible.gif"));
         }
-    }
-
-    /**
-     * Generates a random number within [min, max).
-     *
-     * @param min the minimum bound
-     * @param max the maximum bound
-     * @return a random number between minimum, inclusive, and maximum, exclusive
-     */
-    public int getRandomNumber(int min, int max) {
-        if (min < 0 || max < 0) {
-            throw new IllegalArgumentException("Minimum and maximum bounds should be positive.");
-        }
-        return (int) ((Math.random() * (max - min)) + min);
     }
 }

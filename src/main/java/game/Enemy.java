@@ -8,12 +8,13 @@ import javafx.scene.image.Image;
  * The enemy/monster in the dungeon.
  */
 public class Enemy extends Entity {
+    private static final String IMAGE = "resources/images/enemy1.gif";
+
     private MainPlayer mainPlayer;
     private int health;
     private int money;
-    private final String IMAGE = "resources/images/enemy1.gif";
 
-    // Since this variable identify whether play is attacking enemy,
+    // Since this variable identify whether player is attacking enemy,
     // the variable will be declare in MainPlayer Class.
     // Once "attack" motion implemented in mainPlayer Class, move it.
     private boolean isPlayerAttackEnemy;
@@ -26,15 +27,14 @@ public class Enemy extends Entity {
     private boolean isDead;
     private double speed = 200d;
 
-    // Smooths input over around 15 frames
-    // https://www.desmos.com/calculator/x9dexcgwnr
-    private double inputSmooth = .2d;
+    // Smooths movement over around 15 frames
+    private double inputSmooth = .01d;
 
     /**
      * Creates an instance of an enemy.
      *
      * @param health the amount of health the enemy has
-     * @param money the amount of money the enemy holds
+     * @param money  the amount of money the enemy holds
      */
     public Enemy(int health, int money) {
         super("/images/enemy1.gif", new Point2D(300, 300), new Point2D(5, 5));
@@ -56,15 +56,20 @@ public class Enemy extends Entity {
      */
     @Override
     public void update(double dt) {
+        mainPlayer = GameManager.getPlayer();
+        if (mainPlayer == null) {
+            return;
+        }
+
         if (health < 0) {
             isDead = true;
         }
 
-        if (!GameManager.getPlayer().getIsOnAttack() && isDead == false) {
+        if (!GameManager.getPlayer().getIsOnAttack() && !isDead) {
             enemyMovement();
         }
 
-        if (isPlayerAttackEnemy && isDead == false) {
+        if (isPlayerAttackEnemy && !isDead) {
             playerAttackEnemy(mainPlayer);
         }
     }
@@ -73,14 +78,17 @@ public class Enemy extends Entity {
      * This method moves enemy towards the player.
      */
     public void enemyMovement() {
-        Point2D enemyPosition = this.getPosition();
-        Point2D mainPlayerPosition = this.mainPlayer.getPosition();
+        Point2D enemyPosition = getPosition();
+        Point2D mainPlayerPosition = mainPlayer.getPosition();
+
         Point2D difference = mainPlayerPosition.subtract(enemyPosition);
         difference = difference.normalize().multiply(speed);
+
         setVelocity(getVelocity().interpolate(difference, inputSmooth));
     }
 
     // todo Once attack method from MainPlayer fully implemented, update this method.
+
     /**
      * Enemy retreat one step after mainPlayer attack enemy.
      *
@@ -92,7 +100,7 @@ public class Enemy extends Entity {
 
         Point2D difference = enemyPosition.subtract(mainPlayerPosition);
         // if enemy was attacked by the player
-        if (difference.equals(new Point2D(1,1)) && GameManager.getPlayer().getIsOnAttack()) {
+        if (difference.equals(new Point2D(1, 1)) && GameManager.getPlayer().getIsOnAttack()) {
             difference = difference.normalize().multiply(speed);
             setVelocity(getVelocity().interpolate(difference, inputSmooth));
         }

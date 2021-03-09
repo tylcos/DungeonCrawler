@@ -9,14 +9,16 @@ import javafx.scene.image.Image;
  */
 public class Item extends Entity {
     private MainPlayer mainPlayer;
-    private boolean isItemUsed = false;
+    private boolean isItemUsed;
 
     /**
      * Creates an instance of an item
+     *
      * @param isItemExist true if the item exists; false otherwise
      */
     public Item(boolean isItemExist) {
-        super("images/item.gif", new Point2D(((Math.random() * (500 - 300)) + 300), ((Math.random() * (500 - 300)) + 300)), new Point2D(3, 3));
+        super("images/item.gif", new Point2D(((Math.random() * (500 - 300)) + 300),
+                ((Math.random() * (500 - 300)) + 300)), new Point2D(3, 3));
 
         if (!isItemExist) {
             this.setImage(new Image("images/Invisible.gif"));
@@ -36,22 +38,8 @@ public class Item extends Entity {
              GameManager.getPlayer().setWeapon(////);
              */
             isItemUsed = true;
-            this.setImage(new Image("images/Invisible.gif"));
+            setImage(new Image("images/Invisible.gif"));
         }
-    }
-
-    /**
-     * Generates a random number within [min, max).
-     *
-     * @param min the minimum bound
-     * @param max the maximum bound
-     * @return a random number between minimum, inclusive, and maximum, exclusive
-     */
-    public int getRandomNumber(int min, int max) {
-        if (min < 0 || max < 0) {
-            throw new IllegalArgumentException("Put positive number only");
-        }
-        return (int) ((Math.random() * (max - min)) + min);
     }
 
     // todo obtain weapon etc .. later implementations.
