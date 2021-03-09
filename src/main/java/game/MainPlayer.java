@@ -23,7 +23,7 @@ public class MainPlayer extends Entity {
 
     // Smooths input over around 15 frames
     // inputSmooth = 1d would remove smoothing
-    // https://www.desmos.com/calculator/x9dexcgwnr
+    // https://www.desmos.com/calculator/ggbzfhy3qo
     private double inputSmooth = .2d;
 
     private boolean onAttackMode;

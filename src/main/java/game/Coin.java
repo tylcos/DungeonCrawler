@@ -43,6 +43,10 @@ public class Coin extends Entity {
      */
     @Override
     public void update(double dt) {
+        if (GameManager.getPlayer() == null) {
+            return;
+        }
+
         Point2D distance = this.getPosition().subtract(GameManager.getPlayer().getPosition());
 
         if (distance.getX() < 20

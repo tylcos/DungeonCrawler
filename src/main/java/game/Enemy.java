@@ -25,10 +25,10 @@ public class Enemy extends Entity {
     // CHANGE ABOVE LINE LATER INTO MainPlayer class
 
     private boolean isDead;
-    private double speed = 200d;
+    private double speed = 300d;
 
-    // Smooths movement over around 15 frames
-    private double inputSmooth = .01d;
+    // Smooths movement over around 150 frames
+    private double inputSmooth = .02d;
 
     /**
      * Creates an instance of an enemy.
