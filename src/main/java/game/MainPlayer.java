@@ -1,6 +1,7 @@
 package game;
 
 import core.InputManager;
+import core.GameManager;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -55,6 +56,60 @@ public class MainPlayer extends Entity {
         }
 
         InputManager.addMouseClickListener(this::mouseClickEvent);
+    }
+
+    /**
+     * Updates players health or money based on item collected
+     *
+     * @param item the item collected
+     */
+    public void collect(Collectable item) {
+        //todo: fix when coin and item are made Collectables
+    }
+
+    @Override
+    public void onCollision(Collidable other) {
+        //todo: add collectable to collidable bodies in Room
+        if (other instanceof Collectable) {
+            other.setImage(new Image("images/Invisible.gif"));
+            ((Collectable) other).setCollected();
+            collect((Collectable) other);
+        }
+        //moved this from Door class to prevent more typechecking
+        if (other instanceof Door) {
+            GameManager.getLevel().setRoom(((Door) other).getDestination());
+        }
+        if (other instanceof Wall) {
+            bounceBack(other, 75);
+        }
+        //todo: add enemy to collidable bodies in Room
+        if (other instanceof Enemy) {
+            bounceBack(other, 100);
+        }
+    }
+    //sysouts for testing
+    /**
+     * makes player bounce back from wall or enemy
+     * @param other the wall or enemy
+     * @param bounceDistance the distance to bounce
+     */
+    private void bounceBack(Collidable other, int bounceDistance) {
+        int dx = -bounceDistance;
+        int dy = -bounceDistance;
+        if (this.getX() > other.getParent().getBoundsInParent().getCenterX()) {
+            //System.out.println("Entity at position: " + this.getX()
+            // + " Collided with something to its left at "
+            // + other.getParent().getBoundsInParent().getCenterX());
+            dx = -1 * dx;
+        }
+        if (this.getY() > other.getParent().getBoundsInParent().getCenterY()) {
+            //System.out.println("Entity at position: " + this.getY()
+            // + " Collided with something above it at "
+            // + other.getParent().getBoundsInParent().getCenterY());
+            dy = -1 * dy;
+        }
+        Point2D position = new Point2D(getPosition().getX() + dx, getPosition().getY() + dy);
+        setPosition(position);
     }
 
     @Override
