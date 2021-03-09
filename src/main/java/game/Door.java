@@ -47,4 +47,13 @@ public class Door extends CollidableTile {
     public void setDestination(Room destination) {
         this.destination = destination;
     }
+
+    /**
+     * Getter for the destination field
+     *
+     * @return destination the room next in the queue
+     */
+    public Room getDestination() {
+        return destination;
+    }
 }
