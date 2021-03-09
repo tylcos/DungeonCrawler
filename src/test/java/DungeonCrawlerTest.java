@@ -1,7 +1,7 @@
 import core.DungeonCrawlerDriver;
 import core.GameManager;
 import core.SceneManager;
-import data.RandomNames;
+import data.RandomUtil;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -132,6 +132,6 @@ public class DungeonCrawlerTest extends ApplicationTest {
      */
     @Test
     public void testRandomUtil() {
-        assertTrue(RandomNames.getRandomName().length() > 2);
+        assertTrue(RandomUtil.getRandomName().length() > 2);
     }
 }

@@ -1,13 +1,9 @@
 package core;
 
-import data.RandomCoins;
-import game.Coin;
-import game.Enemy;
 import game.MainPlayer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +18,8 @@ public class DungeonCrawlerDriver extends Application {
     @Override
     public void start(Stage primaryStage) {
         Parameters params = getParameters();
+        // getParameters() should never return null as we are outside of init() per javadocs
         Map<String, String> parameters = params == null ? new HashMap<>() : params.getNamed();
-        ArrayList<Coin> coins = new ArrayList<Coin>();
 
         // Implements "--scene=GAME" parameter
         String sceneArgument = parameters.getOrDefault("scene", "");
@@ -35,36 +31,16 @@ public class DungeonCrawlerDriver extends Application {
                 SceneManager.loadStage();
                 SceneManager.loadScene(scene);
                 GameManager.setPlayer(new MainPlayer("Team Azula", "Weapon", "Normal"));
-                GameManager.setEnemy(new Enemy(3, 5));
-                //maximum 6 coin
-                GameManager.setCoin(new Coin(RandomCoins.getCoin()));
-                GameManager.setCoin(new Coin(RandomCoins.getCoin()));
-                GameManager.setCoin(new Coin(RandomCoins.getCoin()));
-                GameManager.setCoin(new Coin(RandomCoins.getCoin()));
-                GameManager.setCoin(new Coin(RandomCoins.getCoin()));
-                GameManager.setCoin(new Coin(RandomCoins.getCoin()));
 
                 return;
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 System.err.println("Could not load scene: " + sceneArgument
-                        + " requested by parameter --scene");
+                                           + " requested by parameter --scene");
                 e.printStackTrace();
             }
         }
 
+        // Default scene
         SceneManager.loadStage();
-    }
-
-    /**
-     * Gets a random number within the bounds of minimum and maximum [min, max).
-     * @param min the minimum number
-     * @param max the maximum number
-     * @return a random number between minimum, inclusive, and maximum, exclusive
-     */
-    public int getRandomNumber(int min, int max) {
-        if (min < 0 || max < 0) {
-            throw new IllegalArgumentException("Put positive number only");
-        }
-        return (int) ((Math.random() * (max - min)) + min);
     }
 }
