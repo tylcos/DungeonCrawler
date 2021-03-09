@@ -1,6 +1,8 @@
 package core;
 
-import game.*;
+import game.Entity;
+import game.Level;
+import game.MainPlayer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 
@@ -9,7 +11,7 @@ import java.util.List;
 
 /**
  * Manages all entities and runs game loop
- * <p>
+ *
  * todo Changing the window resolution breaks a lot of things right now. We gotta fix that.
  */
 public final class GameManager {
@@ -17,9 +19,6 @@ public final class GameManager {
     private static List<Entity> entities;
 
     private static MainPlayer player;
-    private static Enemy enemy;
-    private static Coin coin;
-    private static Item item;
     private static Level level;
     private static Pane drawPane;
 
@@ -30,8 +29,11 @@ public final class GameManager {
 
     /**
      * Initializes GameManager and starts game loop.
+     *
+     * @param drawPane Pane used to render all entities
      */
-    public static void start() {
+    public static void start(Pane drawPane) {
+        GameManager.drawPane = drawPane;
         paused = false;
         entities = new ArrayList<>(16);
 
@@ -48,11 +50,12 @@ public final class GameManager {
         timer.start();
 
         // Start level spawning
-        level = new Level();
-        // We must place level on the bottom so that the UI renders on top of it.
-        // level should be the only thing in drawPane at all, but I'm specifying to be
-        // safe.
-        drawPane.getChildren().add(0, level);
+        // Trying to minimize what code has access to the drawPane by only passsing the
+        // drawPane in constructors
+        level = new Level(drawPane);
+        // Separating to prevent enemies spawned in the level from referencing level before its
+        // returned from the constructor
+        level.generateMap();
     }
 
     /**
@@ -66,8 +69,14 @@ public final class GameManager {
         }
 
         // Purposefully runs physics update separate from collision checks
-        entities.forEach(e -> e.physicsUpdate(dt));
-        entities.forEach(e -> level.runCollisionCheck(e));
+        // Copies entities to avoid concurrent modification errors
+        Entity[] currentEntities = entities.toArray(Entity[]::new);
+        for (Entity entity : currentEntities) {
+            entity.physicsUpdate(dt);
+        }
+        for (Entity entity : currentEntities) {
+            level.runCollisionCheck(entity);
+        }
     }
 
     /**
@@ -105,51 +114,6 @@ public final class GameManager {
      */
     public static void setPlayer(MainPlayer player) {
         GameManager.player = player;
-    }
-
-    /**
-     * Sets the enemy to a new enemy.
-     *
-     * @param enemy the new enemy
-     */
-    public static void setEnemy(Enemy enemy) {
-        GameManager.enemy = enemy;
-    }
-
-    /**
-     * Sets the coin to a new coin.
-     *
-     * @param coin the new coin
-     */
-    public static void setCoin(Coin coin) {
-        GameManager.coin = coin;
-    }
-
-    /**
-     * Sets the item to a new item.
-     *
-     * @param item the new item
-     */
-    public static void setItem(Item item) {
-        GameManager.item = item;
-    }
-
-    /**
-     * Returns the draw pane.
-     *
-     * @return the draw pane
-     */
-    public static Pane getDrawPane() {
-        return drawPane;
-    }
-
-    /**
-     * Sets the draw pane to a new draw pane.
-     *
-     * @param drawPane the new draw pane
-     */
-    public static void setDrawPane(Pane drawPane) {
-        GameManager.drawPane = drawPane;
     }
 
     /**

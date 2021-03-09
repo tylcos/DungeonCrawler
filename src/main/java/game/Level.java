@@ -58,8 +58,10 @@ public class Level extends StackPane {
 
     /**
      * Create a new level with a random layout.
+     *
+     * @param drawPane Pane used to render all entities
      */
-    public Level() {
+    public Level(Pane drawPane) {
         super();
 
         map = new Room[MAX_DIAMETER][MAX_DIAMETER];
@@ -71,13 +73,16 @@ public class Level extends StackPane {
             getChildren().add(renderingLayers[i]);
         }
 
-        generateMap();
+        // We must place level on the bottom so that the UI renders on top of it.
+        // level should be the only thing in drawPane at all, but I'm specifying to be
+        // safe.
+        drawPane.getChildren().add(0, this);
     }
 
     /**
      * Generates a random map for this level.
      */
-    private void generateMap() {
+    public void generateMap() {
         // Rooms need to be set in the map, THEN linked with doors
         map[mapOffset][mapOffset] = new Room("/rooms/test.room", new Point2D(0, 0), this, true);
         dequeueAndLinkRooms();
@@ -125,6 +130,10 @@ public class Level extends StackPane {
             player.setPosition(new Point2D(960, 540));
             player.setVelocity(Point2D.ZERO);
         }
+
+        // Placeholder for spawning enemies and collectables
+        new Enemy(100, 0);
+        new Coin(false);
     }
 
     /**

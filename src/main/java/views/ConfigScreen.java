@@ -2,11 +2,8 @@ package views;
 
 import core.GameManager;
 import core.SceneManager;
-import data.RandomNames;
-import game.Coin;
-import game.Item;
+import data.RandomUtil;
 import game.MainPlayer;
-import game.Enemy;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -28,7 +25,7 @@ public class ConfigScreen {
      * Initializes the configuration screen
      */
     public void initialize() {
-        inputTextName.setText(RandomNames.getRandomName());
+        inputTextName.setText(RandomUtil.getRandomName());
         inputTextName.selectAll();
     }
 
@@ -55,10 +52,6 @@ public class ConfigScreen {
 
         GameManager.setPlayer(new MainPlayer(inputTextName.getText(),
                 inputWeapon.getValue(), inputDifficulty.getValue()));
-        GameManager.setEnemy(new Enemy(3, 5));
-        GameManager.setCoin(new Coin(true));
-
-        GameManager.setItem(new Item(true));
     }
 
     /**

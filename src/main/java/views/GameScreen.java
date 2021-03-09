@@ -21,7 +21,6 @@ public class GameScreen {
     public void initialize() {
         MainPlayer.setUiInfoText(uiInfoText);
 
-        GameManager.setDrawPane(drawPane);
-        GameManager.start();
+        GameManager.start(drawPane);
     }
 }

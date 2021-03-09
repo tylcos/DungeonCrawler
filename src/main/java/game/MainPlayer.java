@@ -1,7 +1,7 @@
 package game;
 
-import core.InputManager;
 import core.GameManager;
+import core.InputManager;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -12,6 +12,8 @@ import javafx.scene.input.MouseEvent;
  * Controller for the player
  */
 public class MainPlayer extends Entity {
+    private static TextArea uiInfoText;
+
     private String name;
     private Weapon weapon;
     private int money;
@@ -24,13 +26,14 @@ public class MainPlayer extends Entity {
     // https://www.desmos.com/calculator/x9dexcgwnr
     private double inputSmooth = .2d;
 
-    private static TextArea uiInfoText;
     private boolean onAttackMode;
 
     // todo: fix weapon damage and price
+
     /**
      * Creates an instance of the MainPlayer
-     * @param image the path of the image of a main player
+     *
+     * @param image      the path of the image of a main player
      * @param weaponName the name of the weapon the player has
      * @param difficulty the difficulty of the game
      */
@@ -87,22 +90,23 @@ public class MainPlayer extends Entity {
             bounceBack(other, 100);
         }
     }
-    //sysouts for testing
+
     /**
      * makes player bounce back from wall or enemy
-     * @param other the wall or enemy
+     *
+     * @param other          the wall or enemy
      * @param bounceDistance the distance to bounce
      */
     private void bounceBack(Collidable other, int bounceDistance) {
         int dx = -bounceDistance;
         int dy = -bounceDistance;
-        if (this.getX() > other.getParent().getBoundsInParent().getCenterX()) {
+        if (getX() > other.getParent().getBoundsInParent().getCenterX()) {
             //System.out.println("Entity at position: " + this.getX()
             // + " Collided with something to its left at "
             // + other.getParent().getBoundsInParent().getCenterX());
             dx = -1 * dx;
         }
-        if (this.getY() > other.getParent().getBoundsInParent().getCenterY()) {
+        if (getY() > other.getParent().getBoundsInParent().getCenterY()) {
             //System.out.println("Entity at position: " + this.getY()
             // + " Collided with something above it at "
             // + other.getParent().getBoundsInParent().getCenterY());
@@ -189,21 +193,30 @@ public class MainPlayer extends Entity {
     }
 
     /**
-     * Returns the amount of money the player has.
+     * Returns the player's balance
      *
-     * @return the amount of money the player has
+     * @return the player's balance
      */
     public int getMoney() {
         return money;
     }
 
     /**
-     * Sets the amount of money the player has to a new amount.
+     * Sets the player's balance
      *
-     * @param money the new amount of money the player has
+     * @param money the new balance
      */
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    /**
+     * Adds money to the player's balance
+     *
+     * @param money the amount of money to add
+     */
+    public void addMoney(int money) {
+        this.money += money;
     }
 
     /**
