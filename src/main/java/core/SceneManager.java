@@ -17,6 +17,7 @@ public final class SceneManager {
     public static final String TITLE = "/views/TitleScreen.fxml";
     public static final String CONFIG = "/views/ConfigScreen.fxml";
     public static final String GAME = "/views/GameScreen.fxml";
+    public static final String WIN_SCREEN = "/views/WinGameScreen.fxml";
 
     /**
      * Private constructor so no instances of SceneManagers can be created.
