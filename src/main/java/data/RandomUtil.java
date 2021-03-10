@@ -28,6 +28,13 @@ public final class RandomUtil {
         "Viscount Audemar",
         "Xonem Lord Of Ice"
     };
+    
+    private static final String[] ROOM_BLUEPRINTS = {
+        "/rooms/rectangle.room",
+        "/rooms/cross.room",
+        "/rooms/vertical.room",
+        "/rooms/horizontal.room"
+    };
 
     private RandomUtil() { }
 
@@ -38,6 +45,10 @@ public final class RandomUtil {
      */
     public static String getRandomName() {
         return USER_NAMES[RAND.nextInt(USER_NAMES.length)];
+    }
+    
+    public static String getRandomRoomBlueprint() {
+        return ROOM_BLUEPRINTS[RAND.nextInt(ROOM_BLUEPRINTS.length)];
     }
 
     /**

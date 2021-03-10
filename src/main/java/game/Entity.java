@@ -1,6 +1,5 @@
 package game;
 
-import core.GameManager;
 import javafx.geometry.Point2D;
 
 
@@ -34,7 +33,10 @@ public class Entity extends Collidable {
         setPosition(position);
         setScale(scale);
 
-        GameManager.spawnEntity(this);
+        // This just puts something straight into the level. For some things that extend Entity,
+        // like coins, we don't want to do this. If you need to do this, do it in the child class
+        // constructor
+        //GameManager.spawnEntity(this);
     }
 
     /**
