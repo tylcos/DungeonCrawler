@@ -59,4 +59,9 @@ public class Coin extends Entity {
             this.setImage(new Image("images/Invisible.gif"));
         }
     }
+    
+    @Override
+    public void onCollision(Collidable other) {
+        System.out.println("Hit coin");
+    }
 }
