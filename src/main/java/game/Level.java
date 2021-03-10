@@ -1,45 +1,57 @@
 package game;
 
 import core.GameManager;
+import data.RandomUtil;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
- * Level is a StackPane that renders all game objects in a room. Level should
- * always be rendered underneath the game HUD!
+ * Level is a StackPane that renders all game objects in a room. Level should always be rendered
+ * underneath the game HUD!
  */
 public class Level extends StackPane {
-    // TODO Something is *definitely* happening when generating a room, but its
-    // really hard to see what.
-    // We need a map we can pull up that shows all the rooms and the connections
-    // between them.
-    // Will do this later, but for now, this appears to be working (kind of)
+    // TODO An in-game map that shows the layout of the rooms (very optional) (also very dependent
+    // on how i'm feeling during that one week where we have a day off)
 
-    public static final int MAX_DIAMETER = 15; // Width/height of map. ODD NUMBERS ONLY
-    public static final int MIN_END_DISTANCE = 6; // Minimum distance away the exit must be
+    public static final int MAX_DIAMETER     = 15; // Width/height of map. ODD NUMBERS ONLY
+    public static final int MIN_END_DISTANCE = 6;  // Minimum distance away the exit must be
 
-    // Layers are rendered from the bottom up, so stuff on layer 4 appears above
-    // stuff on layer 3 and so on
-    private Pane[] renderingLayers;
+    // Layers are rendered from the bottom up, so stuff on layer 2 appears above
+    // stuff on layer 1 and so on
+    private Pane[]   renderingLayers;
     static final int RENDERING_LAYERS = 4; // Size of renderingLayers array
 
     // Constants for all the render layers so we don't go insane
-    public static final int ROOM = 0;
-    public static final int ITEM = 1;
+    public static final int ROOM   = 0;
+    public static final int ITEM   = 1;
     public static final int ENTITY = 2;
-    public static final int VFX = 3;
+    public static final int VFX    = 3;
 
-    // todo Using a similar, 2D array, we could also create a collision matrix
+    // TODO Using a similar, 2D array, we could also create a collision matrix if necessary
 
-    private Room[][] map; // 2D array of all the rooms making up the level
-    private final int mapOffset; // Offset used for calculating array indicies from positions
-    private Room currentRoom;
-    private Room exit;
+    /*
+     * Quick explanation of map coordinates for those concerned: map can be thought of as a 2D grid
+     * with an origin of (0,0) that spans the space between (-MAX_DIAMETER / 2, -MAX_DIAMETER / 2)
+     * in the top left corner of the grid and (MAX_DIAMETER / 2, MAX_DIAMETER / 2) in the bottom
+     * right corner of the grid. Any Point2D between those two points is a valid position in the
+     * grid.
+     * 
+     * Now, remember map is actually an array of arrays underneath its grid-like visage so we can't
+     * directly access the Room at (-2, -2) with map[-2][-2]. Instead, we add mapOffset to our x and
+     * y coordinates to convert from the coordinate grid to indicies of the array. So for (-2, -2)
+     * we would use map[-2 + mapOffset][-2 + mapOffset].
+     */
+    private Room[][]  map;        // 2D array of all the rooms making up the level
+    private final int mapOffset;  // Offset used for calculating array indicies from positions
+    private Room      currentRoom;
+    private Room      exit;
 
     // We use ArrayBlockingQueues here to avoid threading issues
 
@@ -49,15 +61,13 @@ public class Level extends StackPane {
 
     // A list of all dynamic (non-static) Collidables that need to be collision
     // checked. This includes moving things like enemies.
-    // I haven't done anything with dynamic bodies yet, so this is really just a
-    // placeholder
     private ArrayBlockingQueue<Collidable> dynamicBodies = new ArrayBlockingQueue<>(100);
 
     // Queue of rooms and their doors that need a connection to an adjacent room
     private Queue<QueueLink> roomLinkQueue = new LinkedList<QueueLink>();
 
     /**
-     * Create a new level with a random layout.
+     * Create a new level without anything inside it.
      *
      * @param drawPane Pane used to render all entities
      */
@@ -73,20 +83,40 @@ public class Level extends StackPane {
             getChildren().add(renderingLayers[i]);
         }
 
-        // We must place level on the bottom so that the UI renders on top of it.
-        // level should be the only thing in drawPane at all, but I'm specifying to be
-        // safe.
+        // We must place level on the bottom so that the UI renders on top of it. level should be
+        // the only thing in drawPane at all, but I'm specifying to be safe.
         drawPane.getChildren().add(0, this);
+    }
+
+    // TODO implement adding stuff to rooms
+    /**
+     * Use this method to add stuff like items and entities to the rooms
+     */
+    private void addStuffToRooms() {
+        for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
+            for (int x = 0; x < MAX_DIAMETER; ++x) {
+                if (map[x][y] != null) {
+                    map[x][y].addItem(new Coin(false));
+                    /* PUT STUFF IN HERE */
+                }
+            }
+        }
     }
 
     /**
      * Generates a random map for this level.
      */
     public void generateMap() {
-        // Rooms need to be set in the map, THEN linked with doors
-        map[mapOffset][mapOffset] = new Room("/rooms/test.room", new Point2D(0, 0), this, true);
+        // Generate the entrance room
+        map[mapOffset][mapOffset] =
+                new Room("/rooms/rectangle.room", new Point2D(0, 0), this, true);
+        // Generate the rest of the rooms
         dequeueAndLinkRooms();
+        // Adds stuff to rooms
+        addStuffToRooms();
+        // Sets the active room to the entrance
         setRoom(map[mapOffset][mapOffset]);
+        // Print out map for debugging
         for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
             for (int x = 0; x < MAX_DIAMETER; ++x) {
                 if (map[x][y] == null) {
@@ -106,34 +136,101 @@ public class Level extends StackPane {
     }
 
     /**
-     * Change the room this level has loaded.
+     * Loads the specified room into the level.
      * 
      * @param newRoom the room to switch to
      */
     public void setRoom(Room newRoom) {
+        if (currentRoom != null) {
+            // Unload the old room
+            removeFromLayer(ITEM, currentRoom.getItems());
+            removeFromPhysics(currentRoom.getItems());
+            removeFromLayer(ENTITY, currentRoom.getEntities());
+            removeFromPhysics(currentRoom.getEntities());
+            removeFromPhysics(currentRoom.getBodies());
+        }
         currentRoom = newRoom;
-        renderingLayers[ROOM] = currentRoom;
-        getChildren().remove(ROOM);
-        getChildren().add(ROOM, renderingLayers[ROOM]);
-        staticBodies.clear();
-        dynamicBodies.clear();
-        for (Collidable c : newRoom.getBodies()) {
+        // Load the new room
+        setRenderLayer(ROOM, currentRoom);
+        addToLayer(ITEM, currentRoom.getItems());
+        addToPhysics(currentRoom.getItems());
+        addToLayer(ENTITY, currentRoom.getEntities());
+        addToPhysics(currentRoom.getEntities());
+        addToPhysics(currentRoom.getBodies());
+
+        // Put the player in the "center" of the room
+        MainPlayer player = GameManager.getPlayer();
+        if (player != null) {
+            player.setPosition(new Point2D(960, 540));
+            player.setVelocity(Point2D.ZERO);
+        }
+    }
+
+    /**
+     * Replace the current pane on the given render layer with a new pane.
+     * 
+     * @param layer   the render layer to set
+     * @param newPane the pane the render layer is being set to
+     */
+    private void setRenderLayer(final int layer, Pane newPane) {
+        renderingLayers[layer] = newPane;
+        getChildren().remove(layer);
+        getChildren().add(layer, renderingLayers[layer]);
+    }
+
+    /**
+     * Removes all given objects from the render layer.
+     * 
+     * @param <T>     any type that extends Node
+     * @param layer   the render layer to remove from
+     * @param objects the objects to remove
+     */
+    private <T> void removeFromLayer(final int layer, ArrayList<T> objects) {
+        renderingLayers[layer].getChildren().removeAll(objects);
+    }
+
+    /**
+     * Removes all given objects from the physics update system.
+     * 
+     * @param <T>     any type that extends Collidable
+     * @param objects the objects to remove
+     */
+    private <T extends Collidable> void removeFromPhysics(ArrayList<T> objects) {
+        for (Collidable c : objects) {
+            if (c.isStatic()) {
+                staticBodies.remove(c);
+            } else {
+                dynamicBodies.remove(c);
+            }
+        }
+    }
+
+    /**
+     * Adds all given objects to the render layer.
+     * 
+     * @param <T>     any type that extends Node
+     * @param layer   the render layer to add to
+     * @param objects the objects to add
+     */
+    private <T> void addToLayer(final int layer, ArrayList<T> objects) {
+        Node[] n = new Node[objects.size()];
+        renderingLayers[layer].getChildren().addAll(objects.toArray(n));
+    }
+
+    /**
+     * Adds all given objects to the physics update system.
+     * 
+     * @param <T>     any type that extends Collidable
+     * @param objects the objects to add
+     */
+    private <T extends Collidable> void addToPhysics(ArrayList<T> objects) {
+        for (Collidable c : objects) {
             if (c.isStatic()) {
                 staticBodies.add(c);
             } else {
                 dynamicBodies.add(c);
             }
         }
-
-        MainPlayer player = GameManager.getPlayer();
-        if (player != null) {
-            player.setPosition(new Point2D(960, 540));
-            player.setVelocity(Point2D.ZERO);
-        }
-
-        // Placeholder for spawning enemies and collectables
-        new Enemy(100, 0);
-        new Coin(false);
     }
 
     /**
@@ -154,6 +251,18 @@ public class Level extends StackPane {
      */
     public void runCollisionCheck(Collidable target) {
         for (Collidable c : staticBodies) {
+            if (c == target) { // We don't want to accidentally collide with ourselves
+                continue;
+            }
+            if (c.intersects(target)) {
+                c.onCollision(target);
+                target.onCollision(c);
+            }
+        }
+        for (Collidable c : dynamicBodies) {
+            if (c == target) {
+                continue;
+            }
             if (c.intersects(target)) {
                 c.onCollision(target);
                 target.onCollision(c);
@@ -162,13 +271,12 @@ public class Level extends StackPane {
     }
 
     /**
-     * Checks if a room that can be linked to exists in the given direction from the
-     * room. If not, checks if a room could be created there.
+     * Checks if a room that can be linked to exists in the given direction from the room. If not,
+     * checks if a room could be created there.
      * 
      * @param from      the room we're checking from
      * @param direction the direction we're checking in
-     * @return if a doorway connection can be made from the given room in the
-     *         specified direction
+     * @return if a doorway connection can be made from the given room in the specified direction
      */
     public boolean getRoomExistsOrAvailable(Room from, Direction direction) {
         int x = (int) (from.getPosition().getX() + direction.vector().getX());
@@ -206,8 +314,8 @@ public class Level extends StackPane {
     }
 
     /**
-     * Dequeues and links rooms until an exit room has been made and the queue has
-     * been emptied.
+     * Dequeues and links rooms that have requested creation of an adjacent room until an exit room
+     * has been made and the queue has been emptied.
      */
     private void dequeueAndLinkRooms() {
         while (!roomLinkQueue.isEmpty()) {
@@ -215,9 +323,10 @@ public class Level extends StackPane {
             Room existing = getRoomIfExists(next.from, next.dir);
             if (existing == null) {
                 Point2D newRoomPos = next.from.getPosition().add(next.dir.vector());
-                Room newRoom = new Room("/rooms/test.room", newRoomPos, this, false, next.from);
-                map[(int) (newRoomPos.getX() + mapOffset)][(int) (newRoomPos.getY()
-                        + mapOffset)] = newRoom;
+                Room newRoom = new Room(RandomUtil.getRandomRoomBlueprint(), newRoomPos, this,
+                        false, next.from);
+                map[(int) (newRoomPos.getX() + mapOffset)][(int) (newRoomPos.getY() + mapOffset)] =
+                        newRoom;
                 next.door.setDestination(newRoom);
                 newRoom.createDoor(next.dir.opposite(), next.from);
                 if (newRoom.isExit()) {
@@ -240,12 +349,30 @@ public class Level extends StackPane {
     }
 
     /**
-     * Data class containing information needed to create doors between rooms
+     * Returns the exit room of this level.
+     * 
+     * @return the exit room
+     */
+    public Room getExit() {
+        return exit;
+    }
+
+    /**
+     * Returns the entrance room of this level.
+     * 
+     * @return the entrance room
+     */
+    public Room getEntrance() {
+        return map[mapOffset][mapOffset];
+    }
+
+    /**
+     * Data class containing information needed to create doors between rooms.
      */
     private class QueueLink {
-        private Room from;
+        private Room      from;
         private Direction dir;
-        private Door door;
+        private Door      door;
 
         public Room getFrom() {
             return from;

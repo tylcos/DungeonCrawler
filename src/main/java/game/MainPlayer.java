@@ -39,6 +39,7 @@ public class MainPlayer extends Entity {
      */
     public MainPlayer(String image, String weaponName, String difficulty) {
         super("/images/Player.png", new Point2D(960, 540), new Point2D(5, 5));
+        GameManager.spawnEntity(this);
 
         name = image;
         weapon = new Weapon(weaponName, 0, 0);
