@@ -17,6 +17,7 @@
 .idea/**/vcs.xml
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/inspectionProfiles/Project_Default.xml
+.idea/codeStyles/codeStyleConfig.xml
 
 # Generated files
 .idea/**/contentModel.xml

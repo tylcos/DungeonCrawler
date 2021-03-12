@@ -21,7 +21,7 @@ public class Coin extends Entity {
                 new Point2D(((Math.random() * (500 - 200)) + 200),
                         ((Math.random() * (500 - 200)) + 200)), new Point2D(2, 2));
         if (isCollected) {
-            this.setImage(new Image("images/Invisible.gif"));
+            setImage(new Image("images/Invisible.gif"));
         }
         this.isCollected = isCollected;
     }
@@ -43,25 +43,13 @@ public class Coin extends Entity {
      */
     @Override
     public void update(double dt) {
-        if (GameManager.getPlayer() == null) {
-            return;
-        }
-
-        Point2D distance = this.getPosition().subtract(GameManager.getPlayer().getPosition());
-
-        if (distance.getX() < 20
-                    && distance.getY() < 20
-                    && distance.getX() > -20
-                    && distance.getY() > -20
-                    && !isCollected) {
-            GameManager.getPlayer().addMoney(RandomUtil.getInt(1, 25));
-            isCollected = true;
-            this.setImage(new Image("images/Invisible.gif"));
-        }
     }
     
     @Override
     public void onCollision(Collidable other) {
-        System.out.println("Hit coin");
+        GameManager.getPlayer().addMoney(RandomUtil.getInt(1, 25));
+
+        isCollected = true;
+        setImage(new Image("images/Invisible.gif"));
     }
 }

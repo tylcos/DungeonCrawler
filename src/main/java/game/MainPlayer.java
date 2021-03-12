@@ -16,8 +16,8 @@ public class MainPlayer extends Entity {
 
     private String name;
     private Weapon weapon;
-    private int money;
-    private int health;
+    private int    money;
+    private int    health;
 
     private double speed = 750d;
 
@@ -41,7 +41,7 @@ public class MainPlayer extends Entity {
         super("/images/Player.png", new Point2D(960, 540), new Point2D(5, 5));
         GameManager.spawnEntity(this);
 
-        name = image;
+        name   = image;
         weapon = new Weapon(weaponName, 0, 0);
         health = 100;
 
@@ -62,34 +62,70 @@ public class MainPlayer extends Entity {
         InputManager.addMouseClickListener(this::mouseClickEvent);
     }
 
+    @Override
+    public void update(double dt) {
+        uiInfoText.setText(toStringFormatted());
+
+        // User input logic
+        Point2D input = Point2D.ZERO;
+        if (InputManager.get(KeyCode.W) || InputManager.get(KeyCode.UP)) {
+            input = input.add(0, -1);
+        }
+
+        if (InputManager.get(KeyCode.A) || InputManager.get(KeyCode.LEFT)) {
+            input = input.add(-1, 0);
+        }
+
+        if (InputManager.get(KeyCode.S) || InputManager.get(KeyCode.DOWN)) {
+            input = input.add(0, 1);
+        }
+
+        if (InputManager.get(KeyCode.D) || InputManager.get(KeyCode.RIGHT)) {
+            input = input.add(1, 0);
+        }
+
+        // Player attacks
+        if (InputManager.get(KeyCode.SPACE)) {
+            onAttackMode = true;
+        }
+
+        input = input.normalize().multiply(speed);
+        setVelocity(getVelocity().interpolate(input, inputSmooth));
+    }
+
+    @Override
+    public void onCollision(Collidable other) {
+        // todo: add collectable to collidable bodies in Room
+        if (other instanceof Collectable) {
+            Collectable collectable = (Collectable) other;
+
+            collectable.setImage(new Image("images/Invisible.gif"));
+            collectable.setCollected();
+            collect(collectable);
+        }
+
+        // Moved this from Door class to prevent more type checking
+        if (other instanceof Door) {
+            GameManager.getLevel().setRoom(((Door) other).getDestination());
+        }
+
+        if (other instanceof Wall) {
+            bounceBack(other, 75);
+        }
+
+        // todo: add enemy to collidable bodies in Room
+        if (other instanceof Enemy) {
+            bounceBack(other, 100);
+        }
+    }
+
     /**
      * Updates players health or money based on item collected
      *
      * @param item the item collected
      */
     public void collect(Collectable item) {
-        //todo: fix when coin and item are made Collectables
-    }
-
-    @Override
-    public void onCollision(Collidable other) {
-        //todo: add collectable to collidable bodies in Room
-        if (other instanceof Collectable) {
-            other.setImage(new Image("images/Invisible.gif"));
-            ((Collectable) other).setCollected();
-            collect((Collectable) other);
-        }
-        //moved this from Door class to prevent more typechecking
-        if (other instanceof Door) {
-            GameManager.getLevel().setRoom(((Door) other).getDestination());
-        }
-        if (other instanceof Wall) {
-            bounceBack(other, 75);
-        }
-        //todo: add enemy to collidable bodies in Room
-        if (other instanceof Enemy) {
-            bounceBack(other, 100);
-        }
+        // todo: fix when coin and item are made Collectables
     }
 
     /**
@@ -115,37 +151,6 @@ public class MainPlayer extends Entity {
         }
         Point2D position = new Point2D(getPosition().getX() + dx, getPosition().getY() + dy);
         setPosition(position);
-    }
-
-    @Override
-    public void update(double dt) {
-        uiInfoText.setText(toStringFormatted());
-
-        // User input logic
-        Point2D input = Point2D.ZERO;
-        if (InputManager.get(KeyCode.W) || InputManager.get(KeyCode.UP)) {
-            input = input.add(0, -1);
-        }
-
-        if (InputManager.get(KeyCode.A) || InputManager.get(KeyCode.LEFT)) {
-            input = input.add(-1, 0);
-        }
-
-        if (InputManager.get(KeyCode.S) || InputManager.get(KeyCode.DOWN)) {
-            input = input.add(0, 1);
-        }
-
-        if (InputManager.get(KeyCode.D) || InputManager.get(KeyCode.RIGHT)) {
-            input = input.add(1, 0);
-        }
-
-        // player attacks enemy
-        if (InputManager.get(KeyCode.SPACE)) {
-            onAttackMode = true;
-        }
-
-        input = input.normalize().multiply(speed);
-        setVelocity(getVelocity().interpolate(input, inputSmooth));
     }
 
     /**
@@ -263,7 +268,7 @@ public class MainPlayer extends Entity {
      */
     public String toStringFormatted() {
         return String.format("Name: %s \nWeapon: %s \nMoney: %d \nHealth: %d",
-                name, weapon, money, health);
+                             name, weapon, money, health);
     }
 
     @Override

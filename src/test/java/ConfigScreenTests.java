@@ -19,7 +19,8 @@ public class ConfigScreenTests extends ApplicationTest {
     @Before
     public void start() throws Exception {
         launch(DungeonCrawlerDriver.class, "--scene=CONFIG", "--NoDebug");
-        assertEquals(SceneManager.getSceneName(), SceneManager.CONFIG);
+        assertEquals("Failed to load config screen.",
+                     SceneManager.CONFIG, SceneManager.getSceneName());
     }
 
     @Test
@@ -31,10 +32,10 @@ public class ConfigScreenTests extends ApplicationTest {
 
     @Test
     public void testEmptyName() {
-        moveTo("#inputTextName").press(KeyCode.BACK_SPACE);
+        moveTo("#inputTextName").push(KeyCode.BACK_SPACE);
         clickOn("Start Adventure");
 
-        assertEquals(SceneManager.getSceneName(), SceneManager.CONFIG);
+        assertEquals(SceneManager.CONFIG, SceneManager.getSceneName());
     }
 
     @Test
@@ -42,7 +43,7 @@ public class ConfigScreenTests extends ApplicationTest {
         moveTo("#inputTextName").write(" ");
         clickOn("Start Adventure");
 
-        assertEquals(SceneManager.getSceneName(), SceneManager.CONFIG);
+        assertEquals(SceneManager.CONFIG, SceneManager.getSceneName());
     }
 
     @Test
@@ -50,7 +51,7 @@ public class ConfigScreenTests extends ApplicationTest {
         moveTo("#inputTextName").write("Team Azula");
         clickOn("Start Adventure");
 
-        assertEquals(SceneManager.getSceneName(), SceneManager.GAME);
+        assertEquals(SceneManager.GAME, SceneManager.getSceneName());
         assertTrue(lookup("#uiInfoText").<TextArea>query().getText().contains("Name: Team Azula"));
     }
 

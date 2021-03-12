@@ -16,7 +16,9 @@ public class GeneralTests extends ApplicationTest {
 
     @Before
     public void start() throws Exception {
-        launch(DungeonCrawlerDriver.class, "");
+        launch(DungeonCrawlerDriver.class, "--NoDebug");
+        assertEquals("Failed to load title screen.",
+                SceneManager.TITLE, SceneManager.getSceneName());
     }
 
     @Test
@@ -34,14 +36,14 @@ public class GeneralTests extends ApplicationTest {
      */
     @Test
     public void testSceneManager() {
-        assertEquals(SceneManager.getSceneName(), SceneManager.TITLE);
+        assertEquals(SceneManager.TITLE, SceneManager.getSceneName());
         clickOn("Start");
 
-        assertEquals(SceneManager.getSceneName(), SceneManager.CONFIG);
+        assertEquals(SceneManager.CONFIG, SceneManager.getSceneName());
         moveTo("#inputTextName").write("Team Azula");
         clickOn("Start Adventure");
 
-        assertEquals(SceneManager.getSceneName(), SceneManager.GAME);
+        assertEquals(SceneManager.GAME, SceneManager.getSceneName());
     }
 
     /**
