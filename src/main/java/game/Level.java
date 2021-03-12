@@ -117,21 +117,23 @@ public class Level extends StackPane {
         // Sets the active room to the entrance
         setRoom(map[mapOffset][mapOffset]);
         // Print out map for debugging
-        for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
-            for (int x = 0; x < MAX_DIAMETER; ++x) {
-                if (map[x][y] == null) {
-                    System.out.print(".");
-                } else {
-                    if (map[x][y].isEntrance()) {
-                        System.out.print("E");
-                    } else if (map[x][y].isExit()) {
-                        System.out.print("X");
+        if (DungeonCrawlerDriver.isDebug()) {
+            for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
+                for (int x = 0; x < MAX_DIAMETER; ++x) {
+                    if (map[x][y] == null) {
+                        System.out.print(".");
                     } else {
-                        System.out.print("O");
+                        if (map[x][y].isEntrance()) {
+                            System.out.print("E");
+                        } else if (map[x][y].isExit()) {
+                            System.out.print("X");
+                        } else {
+                            System.out.print("O");
+                        }
                     }
                 }
+                System.out.println();
             }
-            System.out.println();
         }
     }
 
