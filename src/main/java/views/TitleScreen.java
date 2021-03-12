@@ -26,10 +26,10 @@ public class TitleScreen {
      */
     public void initialize() {
         // Maintains image scales
-        double titleImageWidth = titleImage.getFitWidth();
+        double titleImageWidth  = titleImage.getFitWidth();
         double titleImageHeight = titleImage.getFitHeight();
-        double image1Width = image1.getFitWidth();
-        double image1Height = image1.getFitHeight();
+        double image1Width      = image1.getFitWidth();
+        double image1Height     = image1.getFitHeight();
 
         Supplier<Double> scaleFactor = () -> scalePane.getWidth() / DungeonCrawlerDriver.WIDTH;
         scalePane.widthProperty().addListener(observable -> {
@@ -40,15 +40,17 @@ public class TitleScreen {
             image1.setFitHeight(image1Height * scaleFactor.get());
         });
 
-        Stage stage = SceneManager.getStage();
-        System.out.println("Debug Screen Scaling");
-        System.out.println("dpi: " + Screen.getPrimary().getDpi());
-        System.out.println("Screen Scale: " + Screen.getPrimary().getOutputScaleX()
-                                   + ", " + Screen.getPrimary().getOutputScaleY());
-        System.out.println("Output Scale: " + stage.getOutputScaleX()
-                                   + ", " + stage.getOutputScaleY());
-        System.out.println("Render Scale: " + stage.getRenderScaleX()
-                                   + ", " + stage.getRenderScaleY());
+        if (DungeonCrawlerDriver.isDebug()) {
+            Stage stage = SceneManager.getStage();
+            System.out.println("Debug Screen Scaling");
+            System.out.println("dpi: " + Screen.getPrimary().getDpi());
+            System.out.println("Screen Scale: " + Screen.getPrimary().getOutputScaleX()
+                               + ", " + Screen.getPrimary().getOutputScaleY());
+            System.out.println("Output Scale: " + stage.getOutputScaleX()
+                               + ", " + stage.getOutputScaleY());
+            System.out.println("Render Scale: " + stage.getRenderScaleX()
+                               + ", " + stage.getRenderScaleY());
+        }
     }
 
     /**
