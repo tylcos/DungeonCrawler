@@ -25,3 +25,7 @@ javafx {
     version = "15.0.1"
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.media' ]
 }
+
+test {
+    systemProperty "testfx.robot.write_sleep", "0"
+}

@@ -1,12 +1,5 @@
 package game;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Hashtable;
-
 import data.RandomUtil;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -15,6 +8,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
 
 /**
  * Room is a GridPane that displays a given room as a grid of Labels.
@@ -49,8 +50,7 @@ public class Room extends GridPane {
     public static final float DISTANCE_TAX  = 0.9f;
 
     // A table to translate between letters in .room files and sprites in game
-    @SuppressWarnings("serial")
-    private static Hashtable<String, Image> spriteTable = new Hashtable<String, Image>() {
+    private static HashMap<String, Image> spriteTable = new HashMap<>() {
         {
             put(".", new Image(Room.class.getResource("/images/debug square.png").toString()));
             put("x", new Image(Room.class.getResource("/images/debug wall.png").toString()));
@@ -65,8 +65,7 @@ public class Room extends GridPane {
      * A cache for the contents of room files we have read before. With this, we don't have to make
      * read requests to a file more than once! Disks are slow and flash storage is fast :)
      */
-    private static Hashtable<String, ArrayList<String>> fileCache =
-            new Hashtable<String, ArrayList<String>>();
+    private static HashMap<String, ArrayList<String>> fileCache = new HashMap<>();
 
     private Level   level;                        // The level this room belongs to
     private Point2D position;                     // The position of this room in the level
@@ -76,26 +75,23 @@ public class Room extends GridPane {
     //                                               entrance
 
     // A list of all collidable bodies making up this room
-    private ArrayList<Collidable> bodies = new ArrayList<Collidable>();
+    private ArrayList<Collidable> bodies = new ArrayList<>();
 
     // Objects in this room. Names correspond to render layers in Level
     // WARNING: IF YOU GET ERRORS ABOUT CONCURRENCY, THERE'S A DECENT CHANCE THESE TWO ARRAYLISTS
     // NEED TO BE TURNED INTO ARRAYBLOCKINGQUEUES
-    private ArrayList<Entity> items    = new ArrayList<Entity>();
-    private ArrayList<Entity> entities = new ArrayList<Entity>();
+    private ArrayList<Entity> items    = new ArrayList<>();
+    private ArrayList<Entity> entities = new ArrayList<>();
 
     // Contains valid door tiles for each direction.
     // Used by createDoor() to add doors to rooms that are already generated.
-    @SuppressWarnings("serial")
-    private Hashtable<Direction, ArrayList<StackPane>> doors =
-            new Hashtable<Direction, ArrayList<StackPane>>() {
-                {
-                    put(Direction.NORTH, new ArrayList<StackPane>());
-                    put(Direction.SOUTH, new ArrayList<StackPane>());
-                    put(Direction.EAST, new ArrayList<StackPane>());
-                    put(Direction.WEST, new ArrayList<StackPane>());
-                }
-            };
+    private EnumMap<Direction, ArrayList<StackPane>> doors = new EnumMap<>(Direction.class);
+
+    {
+        for (Direction direction : Direction.values()) {
+            doors.put(direction, new ArrayList<>());
+        }
+    }
 
     // Holds which doors have been activated
     // A door which is active leads to another room.
@@ -103,7 +99,7 @@ public class Room extends GridPane {
 
     /**
      * Constructs a room from a .room file at the given position in the specified level.
-     * <p>
+     *
      * {@code creator} will have a doorway into this room.
      * 
      * @param template the file to load the room from
@@ -113,7 +109,6 @@ public class Room extends GridPane {
      * @param creator  the room that triggered the creation of this one
      */
     public Room(String template, Point2D position, Level level, boolean start, Room creator) {
-        super();
         // Initialize our distance from the entrance room
         if (creator != null) {
             distanceFromEntrance = creator.distanceFromEntrance + 1;
@@ -158,7 +153,7 @@ public class Room extends GridPane {
      * @return an ArrayList where each index {@code n} is the {@code n}th line of the file
      */
     private ArrayList<String> readFile(String name) {
-        ArrayList<String> lines = new ArrayList<String>();
+        ArrayList<String> lines = new ArrayList<>();
         ArrayList<String> cache = fileCache.get(name);
         if (cache != null) {
             // File is cached. Load from cache.
