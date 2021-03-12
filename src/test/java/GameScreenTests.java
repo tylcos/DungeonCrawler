@@ -2,13 +2,20 @@ import core.DungeonCrawlerDriver;
 import core.GameManager;
 import core.SceneManager;
 import core.ScreenManager;
+import game.Direction;
+import game.Room;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
 
 public class GameScreenTests extends ApplicationTest {
 
@@ -76,6 +83,31 @@ public class GameScreenTests extends ApplicationTest {
 
         // Current corner of the room is only 800 pixels from center
         assertTrue(distance < 1200d);
+    }
+    
+    @Test
+    public void testExit() {
+        Room end = GameManager.getLevel().getExit();
+        assertTrue(end != null);
+        int distance = end.getDistanceFromEntrance();
+        assertTrue(distance >= 6);
+    }
+    
+    @Test
+    public void testEntrance() {
+        Room entrance = GameManager.getLevel().getEntrance();
+        assertTrue(entrance != null);
+        int distance = entrance.getDistanceFromEntrance();
+        assertTrue(distance == 0);
+        EnumMap<Direction, ArrayList<StackPane>> doors = entrance.getDoors();
+        assertTrue(doors.get(Direction.NORTH).size() > 0);
+        assertTrue(doors.get(Direction.EAST).size() > 0);
+        assertTrue(doors.get(Direction.SOUTH).size() > 0);
+        assertTrue(doors.get(Direction.WEST).size() > 0);
+        boolean[] active = entrance.getActiveDoors();
+        for (boolean b : active) {
+            assertTrue(b);
+        }
     }
 }
 
