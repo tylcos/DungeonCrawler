@@ -1,6 +1,5 @@
 package game;
 
-import core.GameManager;
 import javafx.scene.image.Image;
 
 /**
@@ -12,7 +11,7 @@ public class Door extends CollidableTile {
     /**
      * Constructor taking an Image of a door.
      *
-     * @param image the Image to use for the door
+     * @param image    the Image to use for the door
      * @param isStatic if the body is static or not
      */
     public Door(Image image, boolean isStatic) {
@@ -22,8 +21,8 @@ public class Door extends CollidableTile {
     /**
      * Constructor taking an Image of a door that links the door to another room.
      *
-     * @param image the Image to use for the door
-     * @param isStatic if the body is static or not
+     * @param image       the Image to use for the door
+     * @param isStatic    if the body is static or not
      * @param destination the room that the door leads to
      */
     public Door(Image image, boolean isStatic, Room destination) {
@@ -34,9 +33,7 @@ public class Door extends CollidableTile {
 
     @Override
     public void onCollision(Collidable other) {
-        if (other instanceof MainPlayer) {
-            GameManager.getLevel().setRoom(destination);
-        }
+        // Moved to MainPlayer
     }
 
     /**
