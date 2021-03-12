@@ -25,12 +25,16 @@ public final class SceneManager {
     private SceneManager() { }
 
     /**
-     * Loads normal scenes and shows them
-     * The FXML file needs to have a Scene container as the root
+     * Loads normal scenes and displays them
      *
      * @param fxmlPath Scene to load
      */
     public static void loadScene(String fxmlPath) {
+        // Exiting Game scene
+        if (GAME.equals(sceneName)) {
+            GameManager.setPaused(true);
+        }
+
         try {
             Parent newParent = FXMLLoader.load(SceneManager.class.getResource(fxmlPath));
             stage.setScene(new Scene(newParent));
@@ -39,21 +43,6 @@ public final class SceneManager {
             sceneName = fxmlPath;
         } catch (IOException e) {
             System.err.println("Error loading fxml scene: " + fxmlPath);
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Loads "view.TitleScreen.fxml" which contains the program stage as the root.
-     */
-    public static void loadStage() {
-        try {
-            stage = FXMLLoader.load(DungeonCrawlerDriver.class.getResource(TITLE));
-            stage.show();
-
-            sceneName = TITLE;
-        } catch (IOException e) {
-            System.err.println("Error loading fxml scene: " + TITLE);
             e.printStackTrace();
         }
     }
@@ -68,12 +57,12 @@ public final class SceneManager {
     }
 
     /**
-     * Sets the stage shown to a new stage.
+     * Sets the current stage.
      *
-     * @param window the new stage
+     * @param stage the current stage
      */
-    public static void setStage(Stage window) {
-        SceneManager.stage = window;
+    public static void setStage(Stage stage) {
+        SceneManager.stage = stage;
     }
 
     /**

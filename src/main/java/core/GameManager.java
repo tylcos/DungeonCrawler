@@ -15,12 +15,14 @@ import java.util.List;
  * todo Changing the window resolution breaks a lot of things right now. We gotta fix that.
  */
 public final class GameManager {
-    private static boolean paused;
     private static List<Entity> entities;
 
     private static MainPlayer player;
     private static Level level;
     private static Pane drawPane;
+
+    private static boolean paused = true;
+    private static AnimationTimer frameTimer;
 
     /**
      * Private constructor so no instances of GameManager can be created.
@@ -34,10 +36,9 @@ public final class GameManager {
      */
     public static void start(Pane drawPane) {
         GameManager.drawPane = drawPane;
-        paused = false;
         entities = new ArrayList<>(16);
 
-        AnimationTimer timer = new AnimationTimer() {
+        frameTimer = new AnimationTimer() {
             private long lastNanoTime = System.nanoTime();
 
             public void handle(long now) {
@@ -47,7 +48,7 @@ public final class GameManager {
                 GameManager.update(dt);
             }
         };
-        timer.start();
+        setPaused(false);
 
         // Start level spawning
         // Trying to minimize what code has access to the drawPane by only passsing the
@@ -96,6 +97,21 @@ public final class GameManager {
      */
     public static boolean isPaused() {
         return paused;
+    }
+
+    /**
+     * Pauses the game manager and update methods on all entities
+     *
+     * @param paused if GameManager is paused
+     */
+    public static void setPaused(boolean paused) {
+        if (paused) {
+            frameTimer.stop();
+        } else {
+            frameTimer.start();
+        }
+
+        GameManager.paused = paused;
     }
 
     /**

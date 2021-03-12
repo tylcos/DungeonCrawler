@@ -1,10 +1,10 @@
 package views;
 
+import core.DungeonCrawlerDriver;
 import core.SceneManager;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -15,18 +15,11 @@ import java.util.function.Supplier;
  */
 public class TitleScreen {
     @FXML
-    private Stage stage;
-    @FXML
-    private Scene scene;
-    @FXML
-    private Pane scalePane;
+    private StackPane scalePane;
     @FXML
     private ImageView titleImage;
     @FXML
     private ImageView image1;
-
-    private double windowWidth = 1920d;
-    private final Supplier<Double> scaleFactor = () -> scene.getWidth() / windowWidth;
 
     /**
      * Initializes the title screen
@@ -38,7 +31,8 @@ public class TitleScreen {
         double image1Width = image1.getFitWidth();
         double image1Height = image1.getFitHeight();
 
-        scene.widthProperty().addListener(observable -> {
+        Supplier<Double> scaleFactor = () -> scalePane.getWidth() / DungeonCrawlerDriver.WIDTH;
+        scalePane.widthProperty().addListener(observable -> {
             titleImage.setFitWidth(titleImageWidth * scaleFactor.get());
             titleImage.setFitHeight(titleImageHeight * scaleFactor.get());
 
@@ -46,6 +40,7 @@ public class TitleScreen {
             image1.setFitHeight(image1Height * scaleFactor.get());
         });
 
+        Stage stage = SceneManager.getStage();
         System.out.println("Debug Screen Scaling");
         System.out.println("dpi: " + Screen.getPrimary().getDpi());
         System.out.println("Screen Scale: " + Screen.getPrimary().getOutputScaleX()
@@ -57,7 +52,7 @@ public class TitleScreen {
     }
 
     /**
-     * Event listener for mouse click to start button.
+     * Event listener for mouse click on start button.
      */
     public void onStartClick() {
         SceneManager.loadScene(SceneManager.CONFIG);
