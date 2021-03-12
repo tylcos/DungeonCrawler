@@ -499,4 +499,18 @@ public class Room extends GridPane {
     public int getDistanceFromEntrance() {
         return distanceFromEntrance;
     }
+
+    /**
+     * @return the doors
+     */
+    public EnumMap<Direction, ArrayList<StackPane>> getDoors() {
+        return doors;
+    }
+
+    /**
+     * @return the activeDoors
+     */
+    public boolean[] getActiveDoors() {
+        return activeDoors;
+    }
 }
