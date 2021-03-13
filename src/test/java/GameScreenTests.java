@@ -6,16 +6,14 @@ import game.Direction;
 import game.Room;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.EnumMap;
+
+import static org.junit.Assert.*;
 
 public class GameScreenTests extends ApplicationTest {
 
@@ -66,47 +64,45 @@ public class GameScreenTests extends ApplicationTest {
     /**
      * Tests if wall collisions works
      * Only works if there is no doors in the corner
-     *
-     * @throws InterruptedException InterruptedException
      */
     @Test
-    public void testWallCollision() throws InterruptedException {
-        // Needed to prevent IllegalMonitorStateException
-        synchronized (this) {
-            press(KeyCode.UP, KeyCode.LEFT);
-            wait(2000);
-            release(KeyCode.UP, KeyCode.LEFT);
-        }
+    public void testWallCollision() {
+        press(KeyCode.UP, KeyCode.LEFT);
+        sleep(2000);
+        release(KeyCode.UP, KeyCode.LEFT);
 
         double distance = GameManager.getPlayer().getPosition()
-                                  .subtract(ScreenManager.getScreenCenter()).magnitude();
+                                  .subtract(ScreenManager.getScreenCenter())
+                                  .magnitude();
 
         // Current corner of the room is only 800 pixels from center
         assertTrue(distance < 1200d);
     }
-    
+
     @Test
     public void testExit() {
         Room end = GameManager.getLevel().getExit();
-        assertTrue(end != null);
+        assertNotNull(end);
         int distance = end.getDistanceFromEntrance();
         assertTrue(distance >= 6);
     }
-    
+
     @Test
     public void testEntrance() {
         Room entrance = GameManager.getLevel().getEntrance();
-        assertTrue(entrance != null);
+        assertNotNull(entrance);
         int distance = entrance.getDistanceFromEntrance();
-        assertTrue(distance == 0);
+        assertEquals(0, distance);
+
         EnumMap<Direction, ArrayList<StackPane>> doors = entrance.getDoors();
-        assertTrue(doors.get(Direction.NORTH).size() > 0);
-        assertTrue(doors.get(Direction.EAST).size() > 0);
-        assertTrue(doors.get(Direction.SOUTH).size() > 0);
-        assertTrue(doors.get(Direction.WEST).size() > 0);
-        boolean[] active = entrance.getActiveDoors();
-        for (boolean b : active) {
-            assertTrue(b);
+        assertFalse("Missing north door", doors.get(Direction.NORTH).isEmpty());
+        assertFalse("Missing east door", doors.get(Direction.EAST).isEmpty());
+        assertFalse("Missing south door", doors.get(Direction.SOUTH).isEmpty());
+        assertFalse("Missing west door", doors.get(Direction.WEST).isEmpty());
+
+        boolean[] activeDoors = entrance.getActiveDoors();
+        for (boolean door : activeDoors) {
+            assertTrue(door);
         }
     }
 }
