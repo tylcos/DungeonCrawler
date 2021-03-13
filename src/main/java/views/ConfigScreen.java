@@ -2,32 +2,42 @@ package views;
 
 import core.GameManager;
 import core.SceneManager;
-import data.RandomNames;
+import data.RandomUtil;
 import game.MainPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
+/**
+ * FXML controller for player creation screen
+ */
 public class ConfigScreen {
     @FXML
-    private TextField inputTextName;
+    private TextField        inputTextName;
     @FXML
     private ComboBox<String> inputWeapon;
     @FXML
     private ComboBox<String> inputDifficulty;
 
+    /**
+     * Initializes the configuration screen
+     */
     public void initialize() {
-        inputTextName.setText(RandomNames.getRandomName());
+        inputTextName.setText(RandomUtil.getRandomName());
         inputTextName.selectAll();
     }
 
-    public void onNameChange(KeyEvent keyEvent) {
+    /**
+     * Checks if the name of the player is valid.
+     */
+    public void onNameChange() {
         isNameInvalid();
     }
 
-    public void onStartClick(MouseEvent mouseEvent) {
+    /**
+     * Event listener for mouse click on the start adventure button.
+     */
+    public void onStartClick() {
         if (isNameInvalid()) {
             return;
         }
@@ -35,7 +45,8 @@ public class ConfigScreen {
         SceneManager.loadScene(SceneManager.GAME);
 
         GameManager.setPlayer(new MainPlayer(inputTextName.getText(),
-                inputWeapon.getValue(), inputDifficulty.getValue()));
+                                             inputWeapon.getValue(),
+                                             inputDifficulty.getValue()));
     }
 
     /**
@@ -45,8 +56,8 @@ public class ConfigScreen {
      * @return If user name is invalid
      */
     private boolean isNameInvalid() {
-        String name = inputTextName.getText();
-        boolean isInvalid = name.trim().length() == 0 || name.length() > 28;
+        String  name      = inputTextName.getText();
+        boolean isInvalid = name.trim().isEmpty() || name.length() > 28;
 
         if (isInvalid) {
             inputTextName.setStyle("-fx-background-color: #ff6868;");

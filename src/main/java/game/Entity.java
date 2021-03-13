@@ -1,98 +1,127 @@
 package game;
 
-import core.GameManager;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.geometry.Point2D;
 
-import javax.vecmath.Vector2d;
 
-public class Entity {
-    private ImageView imageView;
+/**
+ * Game entity that will update every frame
+ */
+public class Entity extends Collidable {
+    private Point2D position;
+    private Point2D velocity = new Point2D(0, 0);
+    private Point2D scale;
 
-    private Vector2d position;
-    private Vector2d velocity = new Vector2d(0, 0);
-    private Vector2d dimensions;
-    private Vector2d scale;
-
-    public Entity(String image, Vector2d position) {
-        this(image, position, new Vector2d(1, 1));
+    /**
+     * Creates an instance of an entity from an image and places it at a specific position.
+     *
+     * @param image the path to the image of the entity
+     * @param position the position to create the entity at
+     */
+    public Entity(String image, Point2D position) {
+        this(image, position, new Point2D(1, 1));
     }
 
-    public Entity(String image, Vector2d position, Vector2d scale) {
-        setImage(image);
+    /**
+     * Creates an instance of an entity based on.
+     *
+     * @param image the path to the image of the entity
+     * @param position the position to create the entity at
+     * @param scale how much to scale the entity by
+     */
+    public Entity(String image, Point2D position, Point2D scale) {
+        super(image, false);
         setPosition(position);
         setScale(scale);
 
-        GameManager.spawnEntity(this);
+        // This just puts something straight into the level. For some things that extend Entity,
+        // like coins, we don't want to do this. If you need to do this, do it in the child class
+        // constructor
+        //GameManager.spawnEntity(this);
     }
 
-    // Overwritten in child classes
+    /**
+     * Updates the entity.
+     * NOTE: Overwritten in child classes
+     *
+     * @param dt the time
+     */
     public void update(double dt) { }
 
+    /**
+     * Sets the entity to a new position.
+     *
+     * @param dt the amount of time
+     */
     public final void physicsUpdate(double dt) {
         // position = position + velocity * dt
-        position.scaleAdd(dt, velocity, position);
+        position = position.add(velocity.multiply(dt));
         setPosition(position);
 
         update(dt);
     }
 
-    public Rectangle2D getBoundary() {
-        return new Rectangle2D(position.getX(), position.getY(),
-                dimensions.getX(), dimensions.getY());
-    }
-
-    public boolean intersects(Entity s) {
-        return s.getBoundary().intersects(this.getBoundary());
-    }
-
-    public ImageView getImage() {
-        return imageView;
-    }
-
-    public void setImage(String imagePath) {
-        Image image = new Image(getClass().getResource(imagePath).toString());
-
-        imageView = new ImageView(image);
-        dimensions = new Vector2d(image.getWidth(), image.getHeight());
-    }
-
-    public Vector2d getPosition() {
+    /**
+     * Returns the position of the entity.
+     *
+     * @return the position of the entity
+     */
+    public Point2D getPosition() {
         return position;
     }
 
-    public void setPosition(Vector2d position) {
+    /**
+     * Sets the position of the entity to a new position
+     *
+     * @param position the new point to put the entity at
+     */
+    public void setPosition(Point2D position) {
         this.position = position;
 
-        imageView.setX(position.getX());
-        imageView.setY(position.getY());
+        setX(position.getX());
+        setY(position.getY());
     }
 
-    public Vector2d getVelocity() {
+    /**
+     * Returns the current velocity of the entity.
+     *
+     * @return the current velocity of the entity
+     */
+    public Point2D getVelocity() {
         return velocity;
     }
 
-    public void setVelocity(Vector2d velocity) {
+    /**
+     * Sets the velocity of the entity to a new velocity.
+     *
+     * @param velocity the new velocity
+     */
+    public void setVelocity(Point2D velocity) {
         this.velocity = velocity;
     }
 
-    public Vector2d getDimensions() {
-        return dimensions;
-    }
-
-    public void setDimensions(Vector2d dimensions) {
-        this.dimensions = dimensions;
-    }
-
-    public Vector2d getScale() {
+    /**
+     * Gets the scaling of the entity.
+     *
+     * @return the scale of the entity
+     */
+    public Point2D getScale() {
         return scale;
     }
 
-    public void setScale(Vector2d scale) {
+    /**
+     * Sets the scaling of the entity to a new scale.
+     *
+     * @param scale the new scale
+     */
+    public void setScale(Point2D scale) {
         this.scale = scale;
 
-        imageView.setScaleX(scale.getX());
-        imageView.setScaleY(scale.getY());
+        setScaleX(scale.getX());
+        setScaleY(scale.getY());
+    }
+
+    @Override
+    public void onCollision(Collidable other) {
+        // System.out.println("An entity hit something!");
     }
 }
