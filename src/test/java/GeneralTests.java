@@ -37,6 +37,7 @@ public class GeneralTests extends ApplicationTest {
 
     /**
      * Tests if the SceneManager can load every scene in the game
+     * todo implement win/end game screen test
      */
     @Test
     public void testSceneManager() {
