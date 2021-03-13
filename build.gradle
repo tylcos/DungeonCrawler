@@ -28,4 +28,10 @@ javafx {
 
 test {
     systemProperty "testfx.robot.write_sleep", "0"
+    systemProperty "glass.win.uiScale", "100%"
+}
+
+run {
+    // Try to convert this from a system property to code
+    systemProperty "glass.win.uiScale", "100%"
 }
