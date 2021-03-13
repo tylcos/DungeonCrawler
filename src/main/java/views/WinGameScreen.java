@@ -8,6 +8,7 @@ import core.SceneManager;
 public class WinGameScreen {
     /**
      * Event listener for mouse click on the 'Play Again' button.
+     * todo reset all aspects of the game
      */
     public void onPlayAgainClicked() {
         SceneManager.loadScene(SceneManager.CONFIG);
