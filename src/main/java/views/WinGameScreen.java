@@ -1,27 +1,29 @@
 package views;
 
 import core.SceneManager;
-import javafx.scene.input.MouseEvent;
 
 /**
  * The screen that is displayed upon defeating the last monster and escaping the dungeon.
  */
 public class WinGameScreen {
     /**
-     * Event listener for mouse click on the Play Again button.
-     *
-     * @param mouseEvent the event inputted by the mouse
+     * Event listener for mouse click on the 'Play Again' button.
      */
-    public void onPlayAgainClicked(MouseEvent mouseEvent) {
+    public void onPlayAgainClicked() {
         SceneManager.loadScene(SceneManager.CONFIG);
     }
 
     /**
-     * Event listener for mouse click on exit button.
-     *
-     * @param mouseEvent the event inputted by the mouse
+     * Event listener for mouse click on the 'Main Menu' button.
      */
-    public void onExitClick(MouseEvent mouseEvent) {
+    public void onMainMenuClicked() {
+        SceneManager.loadScene(SceneManager.TITLE);
+    }
+
+    /**
+     * Event listener for mouse click on the 'Exit' button.
+     */
+    public void onExitClick() {
         System.exit(0);
     }
 }

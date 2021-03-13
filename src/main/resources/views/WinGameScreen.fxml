@@ -3,44 +3,21 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 <StackPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../styles/WinStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.WinGameScreen">
     <children>
-        <GridPane alignment="CENTER" hgap="50.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="990.0" vgap="30.0" StackPane.alignment="CENTER">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="40.0" prefWidth="394.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="60.0" prefWidth="360.0"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            </rowConstraints>
+        <VBox alignment="CENTER" StackPane.alignment="CENTER">
             <StackPane.margin>
-                <Insets bottom="100.0" left="100.0" right="100.0" top="100.0"/>
+                <Insets/>
             </StackPane.margin>
             <children>
-                <Label alignment="CENTER" prefHeight="89.0" prefWidth="992.0" text="You Escaped the Dungeon!" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                    <font>
-                        <Font name="Javanese Text" size="72.0"/>
-                    </font>
-                </Label>
-                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="413.0" onMouseClicked="#onPlayAgainClicked" prefWidth="345.0" styleClass="buttonText" text="Play Again?"
-                       textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                    <font>
-                        <Font name="Javanese Text" size="59.0"/>
-                    </font>
-                </Label>
+                <Label alignment="CENTER" styleClass="titleText" text="You Escaped the Dungeon!"/>
+                <Label alignment="CENTER" onMouseClicked="#onPlayAgainClicked" styleClass="buttonText" text="Play Again" textAlignment="CENTER"/>
+                <Label alignment="CENTER" onMouseClicked="#onMainMenuClicked" styleClass="buttonText" text="Main Menu" textAlignment="CENTER"/>
             </children>
-        </GridPane>
-        <HBox alignment="BOTTOM_RIGHT" prefHeight="955.0" prefWidth="1468.0" stylesheets="@../styles/WinStyle.css">
+        </VBox>
+        <HBox alignment="BOTTOM_RIGHT" maxHeight="200.0" maxWidth="600.0" StackPane.alignment="BOTTOM_RIGHT">
             <children>
-                <Label alignment="CENTER" onMouseClicked="#onExitClick" prefHeight="67.0" prefWidth="197.0" styleClass="buttonText" stylesheets="@../styles/WinStyle.css" text="Exit"
-                       textAlignment="CENTER">
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                </Label>
+                <Label alignment="CENTER" onMouseClicked="#onExitClick" styleClass="buttonText" text="Exit" textAlignment="RIGHT"/>
             </children>
             <opaqueInsets>
                 <Insets/>
