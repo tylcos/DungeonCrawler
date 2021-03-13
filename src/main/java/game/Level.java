@@ -2,6 +2,7 @@ package game;
 
 import core.DungeonCrawlerDriver;
 import core.GameManager;
+import core.SceneManager;
 import data.RandomUtil;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -153,6 +154,12 @@ public class Level extends StackPane {
             removeFromPhysics(currentRoom.getBodies());
         }
         currentRoom = newRoom;
+
+        if (newRoom.isExit()) {
+            SceneManager.loadScene(SceneManager.WIN_SCREEN);
+            return;
+        }
+
         // Load the new room
         setRenderLayer(ROOM, currentRoom);
         addToLayer(ITEM, currentRoom.getItems());
@@ -171,7 +178,7 @@ public class Level extends StackPane {
 
     /**
      * Replace the current pane on the given render layer with a new pane.
-     * 
+     *
      * @param layer   the render layer to set
      * @param newPane the pane the render layer is being set to
      */
