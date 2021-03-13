@@ -7,15 +7,13 @@ import game.MainPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
 /**
  * FXML controller for player creation screen
  */
 public class ConfigScreen {
     @FXML
-    private TextField inputTextName;
+    private TextField        inputTextName;
     @FXML
     private ComboBox<String> inputWeapon;
     @FXML
@@ -31,19 +29,15 @@ public class ConfigScreen {
 
     /**
      * Checks if the name of the player is valid.
-     *
-     * @param keyEvent the key inputted by the keyboard
      */
-    public void onNameChange(KeyEvent keyEvent) {
+    public void onNameChange() {
         isNameInvalid();
     }
 
     /**
      * Event listener for mouse click on the start adventure button.
-     *
-     * @param mouseEvent the event inputted by the mouse
      */
-    public void onStartClick(MouseEvent mouseEvent) {
+    public void onStartClick() {
         if (isNameInvalid()) {
             return;
         }
@@ -51,7 +45,8 @@ public class ConfigScreen {
         SceneManager.loadScene(SceneManager.GAME);
 
         GameManager.setPlayer(new MainPlayer(inputTextName.getText(),
-                inputWeapon.getValue(), inputDifficulty.getValue()));
+                                             inputWeapon.getValue(),
+                                             inputDifficulty.getValue()));
     }
 
     /**
@@ -61,7 +56,7 @@ public class ConfigScreen {
      * @return If user name is invalid
      */
     private boolean isNameInvalid() {
-        String name = inputTextName.getText();
+        String  name      = inputTextName.getText();
         boolean isInvalid = name.trim().isEmpty() || name.length() > 28;
 
         if (isInvalid) {

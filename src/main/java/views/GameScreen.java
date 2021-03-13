@@ -8,7 +8,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 
 /**
- * FXML controller for main game screen
+ * FXML controller for the main game screen
  */
 public class GameScreen {
     @FXML
