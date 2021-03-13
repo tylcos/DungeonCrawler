@@ -1,60 +1,69 @@
 package views;
 
+import core.DungeonCrawlerDriver;
 import core.SceneManager;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.function.Supplier;
 
+/**
+ * FXML controller for main title screen
+ */
 public class TitleScreen {
     @FXML
-    private Stage stage;
-    @FXML
-    private Scene scene;
-    @FXML
-    private Pane scalePane;
+    private StackPane scalePane;
     @FXML
     private ImageView titleImage;
     @FXML
     private ImageView image1;
 
-    private double titleImageWidth;
-    private double image1Width;
-
-    private final double windowWidth = 1920d;
-    private final double aspectRatio = 9d / 16d;
-    private final Supplier<Double> scaleFactor = () -> scene.getWidth() / windowWidth;
-
+    /**
+     * Initializes the title screen
+     */
     public void initialize() {
-        titleImageWidth = titleImage.getFitWidth();
-        image1Width = image1.getFitWidth();
-
-        // Maintains window aspect ratio
-        stage.widthProperty().addListener(observable -> {
-            stage.setMinHeight(stage.getWidth() * aspectRatio);
-            stage.setMaxHeight(stage.getWidth() * aspectRatio);
-        });
-
         // Maintains image scales
-        scene.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
-            titleImage.setFitWidth(scaleFactor.get() * titleImageWidth);
-            image1.setFitWidth(scaleFactor.get() * image1Width);
-            image1.setFitHeight(scaleFactor.get() * image1Width * aspectRatio);
+        double titleImageWidth  = titleImage.getFitWidth();
+        double titleImageHeight = titleImage.getFitHeight();
+        double image1Width      = image1.getFitWidth();
+        double image1Height     = image1.getFitHeight();
+
+        Supplier<Double> scaleFactor = () -> scalePane.getWidth() / DungeonCrawlerDriver.WIDTH;
+        scalePane.widthProperty().addListener(observable -> {
+            titleImage.setFitWidth(titleImageWidth * scaleFactor.get());
+            titleImage.setFitHeight(titleImageHeight * scaleFactor.get());
+
+            image1.setFitWidth(image1Width * scaleFactor.get());
+            image1.setFitHeight(image1Height * scaleFactor.get());
         });
 
-        // Sets windows initial size
-        stage.setWidth(windowWidth);
+        if (DungeonCrawlerDriver.isDebug()) {
+            Stage stage = SceneManager.getStage();
+            System.out.println("Debug Screen Scaling");
+            System.out.println("dpi: " + Screen.getPrimary().getDpi());
+            System.out.println("Screen Scale: " + Screen.getPrimary().getOutputScaleX()
+                               + ", " + Screen.getPrimary().getOutputScaleY());
+            System.out.println("Output Scale: " + stage.getOutputScaleX()
+                               + ", " + stage.getOutputScaleY());
+            System.out.println("Render Scale: " + stage.getRenderScaleX()
+                               + ", " + stage.getRenderScaleY());
+        }
     }
-    
-    public void onStartClick(MouseEvent mouseEvent) {
+
+    /**
+     * Event listener for mouse click on start button.
+     */
+    public void onStartClick() {
         SceneManager.loadScene(SceneManager.CONFIG);
     }
 
-    public void onExitClick(MouseEvent mouseEvent) {
+    /**
+     * Event listener for mouse click on exit button.
+     */
+    public void onExitClick() {
         System.exit(0);
     }
 }
