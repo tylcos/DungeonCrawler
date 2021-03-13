@@ -1,12 +1,16 @@
 import core.DungeonCrawlerDriver;
 import core.GameManager;
+import core.InputManager;
 import core.SceneManager;
 import data.RandomUtil;
+import javafx.scene.input.KeyCode;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 import org.testfx.matcher.base.WindowMatchers;
+
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -18,7 +22,7 @@ public class GeneralTests extends ApplicationTest {
     public void start() throws Exception {
         launch(DungeonCrawlerDriver.class, "--NoDebug");
         assertEquals("Failed to load title screen.",
-                SceneManager.TITLE, SceneManager.getSceneName());
+                     SceneManager.TITLE, SceneManager.getSceneName());
     }
 
     @Test
@@ -75,5 +79,19 @@ public class GeneralTests extends ApplicationTest {
     public void testRandomUtil() {
         assertTrue(RandomUtil.getRandomName().length() > 2);
         assertTrue(RandomUtil.getRandomRoomBlueprint().length() > 2);
+    }
+
+    /**
+     * Tests the InputManager
+     */
+    @Test
+    public void testInputManager() {
+        Stream.of(KeyCode.values()).forEach(keyCode -> assertFalse(InputManager.get(keyCode)));
+
+        press(KeyCode.W);
+        assertTrue(InputManager.get(KeyCode.W));
+
+        release(KeyCode.W);
+        assertFalse(InputManager.get(KeyCode.W));
     }
 }
