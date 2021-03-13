@@ -52,7 +52,7 @@ public class DungeonCrawlerDriver extends Application {
             debug = false;
         }
 
-        // "--scene=GAME" parameter
+        // "--scene=ANY_SCENE" parameter
         String sceneArgument = named.getOrDefault("scene", "");
         if (!sceneArgument.isEmpty()) {
             try {
