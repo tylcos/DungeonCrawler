@@ -47,6 +47,11 @@ public class Coin extends Entity {
     
     @Override
     public void onCollision(Collidable other) {
+        if (isCollected) {
+            // Might want to delete entity instead
+            return;
+        }
+
         GameManager.getPlayer().addMoney(RandomUtil.getInt(1, 25));
 
         isCollected = true;

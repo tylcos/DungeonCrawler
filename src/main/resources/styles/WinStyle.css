@@ -1,3 +1,8 @@
+.titleText {
+    -fx-font: 72px "Javanese Text";
+    -fx-padding: 100 100 100 100;
+}
+
 Label.buttonText {
     -fx-font: 50px "Javanese Text";
     -fx-padding: 0 50 0 50;
