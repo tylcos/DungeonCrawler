@@ -25,7 +25,7 @@ public class WinScreenTests extends ApplicationTest {
 
     @Test
     public void testPlayAgainVisible() {
-        verifyThat("Play Again?", NodeMatchers.isVisible());
+        verifyThat("Play Again", NodeMatchers.isVisible());
     }
 
     @Test
