@@ -1,6 +1,5 @@
 package game;
 
-import core.DungeonCrawlerDriver;
 import core.GameManager;
 import core.SceneManager;
 import data.RandomUtil;
@@ -27,8 +26,8 @@ public class Level extends StackPane {
 
     // Layers are rendered from the bottom up, so stuff on layer 2 appears above
     // stuff on layer 1 and so on
-    private Pane[]   renderingLayers;
-    static final int RENDERING_LAYERS = 4; // Size of renderingLayers array
+    private      Pane[] renderingLayers;
+    static final int    RENDERING_LAYERS = 4; // Size of renderingLayers array
 
     // Constants for all the render layers so we don't go insane
     public static final int ROOM   = 0;
@@ -44,16 +43,16 @@ public class Level extends StackPane {
      * in the top left corner of the grid and (MAX_DIAMETER / 2, MAX_DIAMETER / 2) in the bottom
      * right corner of the grid. Any Point2D between those two points is a valid position in the
      * grid.
-     * 
+     *
      * Now, remember map is actually an array of arrays underneath its grid-like visage so we can't
      * directly access the Room at (-2, -2) with map[-2][-2]. Instead, we add mapOffset to our x and
      * y coordinates to convert from the coordinate grid to indicies of the array. So for (-2, -2)
      * we would use map[-2 + mapOffset][-2 + mapOffset].
      */
-    private Room[][]  map;        // 2D array of all the rooms making up the level
-    private final int mapOffset;  // Offset used for calculating array indicies from positions
-    private Room      currentRoom;
-    private Room      exit;
+    private       Room[][] map;        // 2D array of all the rooms making up the level
+    private final int      mapOffset;  // Offset used for calculating array indicies from positions
+    private       Room     currentRoom;
+    private       Room     exit;
 
     // We use ArrayBlockingQueues here to avoid threading issues
 
@@ -66,7 +65,7 @@ public class Level extends StackPane {
     private ArrayBlockingQueue<Collidable> dynamicBodies = new ArrayBlockingQueue<>(100);
 
     // Queue of rooms and their doors that need a connection to an adjacent room
-    private Queue<QueueLink> roomLinkQueue = new LinkedList<QueueLink>();
+    private Queue<QueueLink> roomLinkQueue = new LinkedList<>();
 
     /**
      * Create a new level without anything inside it.
@@ -74,9 +73,7 @@ public class Level extends StackPane {
      * @param drawPane Pane used to render all entities
      */
     public Level(Pane drawPane) {
-        super();
-
-        map = new Room[MAX_DIAMETER][MAX_DIAMETER];
+        map       = new Room[MAX_DIAMETER][MAX_DIAMETER];
         mapOffset = MAX_DIAMETER / 2;
 
         renderingLayers = new Pane[RENDERING_LAYERS];
@@ -91,6 +88,7 @@ public class Level extends StackPane {
     }
 
     // TODO implement adding stuff to rooms
+
     /**
      * Use this method to add stuff like items and entities to the rooms
      */
@@ -118,30 +116,11 @@ public class Level extends StackPane {
         addStuffToRooms();
         // Sets the active room to the entrance
         setRoom(map[mapOffset][mapOffset]);
-        // Print out map for debugging
-        if (DungeonCrawlerDriver.isDebug()) {
-            for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
-                for (int x = 0; x < MAX_DIAMETER; ++x) {
-                    if (map[x][y] == null) {
-                        System.out.print(".");
-                    } else {
-                        if (map[x][y].isEntrance()) {
-                            System.out.print("E");
-                        } else if (map[x][y].isExit()) {
-                            System.out.print("X");
-                        } else {
-                            System.out.print("O");
-                        }
-                    }
-                }
-                System.out.println();
-            }
-        }
     }
 
     /**
      * Loads the specified room into the level.
-     * 
+     *
      * @param newRoom the room to switch to
      */
     public void setRoom(Room newRoom) {
@@ -182,7 +161,7 @@ public class Level extends StackPane {
      * @param layer   the render layer to set
      * @param newPane the pane the render layer is being set to
      */
-    private void setRenderLayer(final int layer, Pane newPane) {
+    private void setRenderLayer(int layer, Pane newPane) {
         renderingLayers[layer] = newPane;
         getChildren().remove(layer);
         getChildren().add(layer, renderingLayers[layer]);
@@ -190,62 +169,61 @@ public class Level extends StackPane {
 
     /**
      * Removes all given objects from the render layer.
-     * 
+     *
      * @param <T>     any type that extends Node
      * @param layer   the render layer to remove from
      * @param objects the objects to remove
      */
-    private <T> void removeFromLayer(final int layer, ArrayList<T> objects) {
+    private <T> void removeFromLayer(int layer, ArrayList<T> objects) {
         renderingLayers[layer].getChildren().removeAll(objects);
     }
 
     /**
      * Removes all given objects from the physics update system.
-     * 
+     *
      * @param <T>     any type that extends Collidable
      * @param objects the objects to remove
      */
     private <T extends Collidable> void removeFromPhysics(ArrayList<T> objects) {
-        for (Collidable c : objects) {
-            if (c.isStatic()) {
-                staticBodies.remove(c);
+        for (Collidable collidable : objects) {
+            if (collidable.isStatic()) {
+                staticBodies.remove(collidable);
             } else {
-                dynamicBodies.remove(c);
+                dynamicBodies.remove(collidable);
             }
         }
     }
 
     /**
      * Adds all given objects to the render layer.
-     * 
+     *
      * @param <T>     any type that extends Node
      * @param layer   the render layer to add to
      * @param objects the objects to add
      */
-    private <T> void addToLayer(final int layer, ArrayList<T> objects) {
-        Node[] n = new Node[objects.size()];
-        renderingLayers[layer].getChildren().addAll(objects.toArray(n));
+    private <T extends Node> void addToLayer(int layer, ArrayList<T> objects) {
+        renderingLayers[layer].getChildren().addAll(objects.toArray(new Node[0]));
     }
 
     /**
      * Adds all given objects to the physics update system.
-     * 
+     *
      * @param <T>     any type that extends Collidable
      * @param objects the objects to add
      */
     private <T extends Collidable> void addToPhysics(ArrayList<T> objects) {
-        for (Collidable c : objects) {
-            if (c.isStatic()) {
-                staticBodies.add(c);
+        for (Collidable collidable : objects) {
+            if (collidable.isStatic()) {
+                staticBodies.add(collidable);
             } else {
-                dynamicBodies.add(c);
+                dynamicBodies.add(collidable);
             }
         }
     }
 
     /**
      * Adds an entity on the given layer.
-     * 
+     *
      * @param layer the layer this entity will be displayed on
      * @param e     the entity to add
      */
@@ -256,26 +234,26 @@ public class Level extends StackPane {
 
     /**
      * Checks and handles collisions on the target collidable.
-     * 
+     *
      * @param target the collidable to check for collisions on
      */
     public void runCollisionCheck(Collidable target) {
-        for (Collidable c : staticBodies) {
-            if (c == target) { // We don't want to accidentally collide with ourselves
+        for (Collidable collidable : staticBodies) {
+            if (collidable == target) { // We don't want to accidentally collide with ourselves
                 continue;
             }
-            if (c.intersects(target)) {
-                c.onCollision(target);
-                target.onCollision(c);
+            if (collidable.intersects(target)) {
+                collidable.onCollision(target);
+                target.onCollision(collidable);
             }
         }
-        for (Collidable c : dynamicBodies) {
-            if (c == target) {
+        for (Collidable collidable : dynamicBodies) {
+            if (collidable == target) {
                 continue;
             }
-            if (c.intersects(target)) {
-                c.onCollision(target);
-                target.onCollision(c);
+            if (collidable.intersects(target)) {
+                collidable.onCollision(target);
+                target.onCollision(collidable);
             }
         }
     }
@@ -283,7 +261,7 @@ public class Level extends StackPane {
     /**
      * Checks if a room that can be linked to exists in the given direction from the room. If not,
      * checks if a room could be created there.
-     * 
+     *
      * @param from      the room we're checking from
      * @param direction the direction we're checking in
      * @return if a doorway connection can be made from the given room in the specified direction
@@ -292,7 +270,7 @@ public class Level extends StackPane {
         int x = (int) (from.getPosition().getX() + direction.vector().getX());
         int y = (int) (from.getPosition().getY() + direction.vector().getY());
         boolean valid = x + mapOffset < MAX_DIAMETER && y + mapOffset < MAX_DIAMETER
-                && x + mapOffset >= 0 && y + mapOffset >= 0;
+                        && x + mapOffset >= 0 && y + mapOffset >= 0;
         if (valid && exit != null && map[x + mapOffset][y + mapOffset] == exit) {
             return false;
         }
@@ -301,7 +279,7 @@ public class Level extends StackPane {
 
     /**
      * Returns the room adjacent to the given room in the specified direction.
-     * 
+     *
      * @param from      the room we're checking from
      * @param direction the direction we're checking in
      * @return the room there, if it exists, or {@code null} if it doesn't
@@ -313,7 +291,7 @@ public class Level extends StackPane {
 
     /**
      * Queues a room's door to be linked in a specified direction.
-     * 
+     *
      * @param from      the room we're linking from
      * @param direction the direction we're linking in
      * @param d         the door we're linking from
@@ -329,12 +307,12 @@ public class Level extends StackPane {
      */
     private void dequeueAndLinkRooms() {
         while (!roomLinkQueue.isEmpty()) {
-            QueueLink next = roomLinkQueue.remove();
-            Room existing = getRoomIfExists(next.from, next.dir);
+            QueueLink next     = roomLinkQueue.remove();
+            Room      existing = getRoomIfExists(next.from, next.dir);
             if (existing == null) {
                 Point2D newRoomPos = next.from.getPosition().add(next.dir.vector());
                 Room newRoom = new Room(RandomUtil.getRandomRoomBlueprint(), newRoomPos, this,
-                        false, next.from);
+                                        false, next.from);
                 map[(int) (newRoomPos.getX() + mapOffset)][(int) (newRoomPos.getY() + mapOffset)] =
                         newRoom;
                 next.door.setDestination(newRoom);
@@ -350,8 +328,83 @@ public class Level extends StackPane {
     }
 
     /**
+     * Returns a basic text minimap
+     *
+     * @return text minimap
+     */
+    public String getMinimapString() {
+        // Find bounds of generated rooms
+        int leftBound   = MAX_DIAMETER;
+        int rightBound  = 0;
+        int bottomBound = MAX_DIAMETER;
+        int topBound    = 0;
+        for (int y = 0; y < MAX_DIAMETER; y++) {
+            for (int x = 0; x < MAX_DIAMETER; x++) {
+                if (map[x][y] == null) {
+                    continue;
+                }
+
+                if (leftBound > x) {
+                    leftBound = x;
+                }
+                if (rightBound < x) {
+                    rightBound = x;
+                }
+                if (bottomBound > y) {
+                    bottomBound = y;
+                }
+                if (topBound < y) {
+                    topBound = y;
+                }
+            }
+        }
+
+        rightBound += 1;
+        topBound += 1;
+        int xRange = rightBound - leftBound;
+        int yRange = topBound - bottomBound;
+
+        StringBuilder minimap = new StringBuilder(xRange * yRange * 4);
+        for (int y = topBound - 1; y >= bottomBound; y--) {
+            StringBuilder line2 = new StringBuilder(MAX_DIAMETER * 2);
+            StringBuilder line1 = new StringBuilder(MAX_DIAMETER * 2);
+
+            for (int x = leftBound; x < rightBound; x++) {
+                Room room = map[x][y];
+                line2.append("  ");
+
+                if (room == null) {
+                    line1.append("  ");
+                    continue;
+                } else if (room.isEntrance()) {
+                    line1.append("E ");
+                } else if (room.isExit()) {
+                    line1.append("X ");
+                } else {
+                    line1.append("O ");
+                }
+
+                boolean[] info = room.getActiveDoors();
+                if (info[Direction.NORTH.toValue()]) {
+                    line2.setCharAt((x - leftBound) * 2, '|');
+                }
+                if (info[Direction.EAST.toValue()]) {
+                    line1.setCharAt((x - leftBound) * 2 + 1, '\u2015');
+                }
+            }
+
+            minimap.append(line2.substring(0, xRange * 2));
+            minimap.append('\n');
+            minimap.append(line1.substring(0, xRange * 2));
+            minimap.append('\n');
+        }
+
+        return minimap.toString();
+    }
+
+    /**
      * Checks if this level has an exit room.
-     * 
+     *
      * @return {@code true} if this level has an exit
      */
     public boolean hasExit() {
@@ -360,7 +413,7 @@ public class Level extends StackPane {
 
     /**
      * Returns the exit room of this level.
-     * 
+     *
      * @return the exit room
      */
     public Room getExit() {
@@ -369,7 +422,7 @@ public class Level extends StackPane {
 
     /**
      * Returns the entrance room of this level.
-     * 
+     *
      * @return the entrance room
      */
     public Room getEntrance() {
@@ -379,7 +432,7 @@ public class Level extends StackPane {
     /**
      * Data class containing information needed to create doors between rooms.
      */
-    private class QueueLink {
+    private static final class QueueLink {
         private Room      from;
         private Direction dir;
         private Door      door;
@@ -398,15 +451,14 @@ public class Level extends StackPane {
 
         /**
          * Creates a new QueueLink with given data.
-         * 
+         *
          * @param from room we're connecting from
          * @param dir  direction the connection is going
          * @param door door we're connecting from
          */
-        public QueueLink(Room from, Direction dir, Door door) {
-            super();
+        private QueueLink(Room from, Direction dir, Door door) {
             this.from = from;
-            this.dir = dir;
+            this.dir  = dir;
             this.door = door;
         }
     }

@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../styles/GameStyle.css" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="views.GameScreen">
+<StackPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../styles/GameStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GameScreen">
     <children>
         <StackPane fx:id="drawPane" StackPane.alignment="CENTER"/>
-        <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="uiInfoText" StackPane.alignment="TOP_LEFT">
+        <AnchorPane StackPane.alignment="CENTER">
             <children>
-                <TextArea fx:id="uiInfoText" editable="false" mouseTransparent="true" text="Player Info&#10;Test&#10;Test&#10;">
-                    <font>
-                        <Font name="Sylfaen" size="30.0"/>
-                    </font>
+                <TextArea fx:id="uiInfoText" editable="false" layoutX="0.15625" mouseTransparent="true" styleClass="uiInfoText" text="Player Info&#10;Test&#10;Test&#10;">
+                </TextArea>
+                <TextArea fx:id="uiMinimap" editable="false" mouseTransparent="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="1080.0" prefWidth="1920.0" styleClass="minimap" text="minimap&#10;"
+                          AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0.0">
+                    <padding>
+                        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
+                    </padding>
                 </TextArea>
             </children>
-        </StackPane>
+        </AnchorPane>
     </children>
 </StackPane>
