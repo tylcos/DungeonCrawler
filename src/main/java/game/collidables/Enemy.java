@@ -37,16 +37,19 @@ public class Enemy extends Entity {
      * @param money  the amount of money the enemy holds
      */
     public Enemy(int health, int money) {
-        super("/images/enemy1.gif", new Point2D(300, 300), new Point2D(5, 5));
-        this.mainPlayer = GameManager.getPlayer();
+        super("/images/enemy1.gif", new Point2D(-200, 0), new Point2D(5, 5));
+
         this.health = health;
         this.money = money;
 
         // todo change this later
-        this.isPlayerAttackEnemy = false;
+        isPlayerAttackEnemy = false;
 
         // todo change this later
-        this.isDead = false;
+        isDead = false;
+
+
+        GameManager.spawnEntity(this);
     }
 
     /**
@@ -56,7 +59,7 @@ public class Enemy extends Entity {
      */
     @Override
     public void update(double dt) {
-        mainPlayer = GameManager.getPlayer();
+        mainPlayer = MainPlayer.getPlayer();
         if (mainPlayer == null) {
             return;
         }
@@ -65,7 +68,7 @@ public class Enemy extends Entity {
             isDead = true;
         }
 
-        if (!GameManager.getPlayer().getIsOnAttack() && !isDead) {
+        if (!MainPlayer.getPlayer().getIsOnAttack() && !isDead) {
             enemyMovement();
         }
 
@@ -95,12 +98,12 @@ public class Enemy extends Entity {
      * @param mainPlayer the main player
      */
     public void playerAttackEnemy(MainPlayer mainPlayer) {
-        Point2D enemyPosition = this.getPosition();
+        Point2D enemyPosition = getPosition();
         Point2D mainPlayerPosition = this.mainPlayer.getPosition();
 
         Point2D difference = enemyPosition.subtract(mainPlayerPosition);
         // if enemy was attacked by the player
-        if (difference.equals(new Point2D(1, 1)) && GameManager.getPlayer().getIsOnAttack()) {
+        if (difference.equals(new Point2D(1, 1)) && MainPlayer.getPlayer().getIsOnAttack()) {
             difference = difference.normalize().multiply(speed);
             setVelocity(getVelocity().interpolate(difference, inputSmooth));
         }
@@ -108,7 +111,7 @@ public class Enemy extends Entity {
 
         if (health <= 0) {
             isDead = true;
-            this.setImage(new Image("images/enemyDead.gif"));
+            setImage(new Image("images/enemyDead.gif"));
         }
     }
 

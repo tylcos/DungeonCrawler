@@ -1,5 +1,5 @@
 package game.collidables;
-import core.GameManager;
+
 import data.RandomUtil;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -34,16 +34,6 @@ public class Coin extends Entity {
     public int getValue() {
         return VALUE;
     }
-
-    /**
-     * Updates the player's distance from the coin and makes it disappear
-     * when the player collects it.
-     *
-     * @param dt the time
-     */
-    @Override
-    public void update(double dt) {
-    }
     
     @Override
     public void onCollision(Collidable other) {
@@ -52,7 +42,7 @@ public class Coin extends Entity {
             return;
         }
 
-        GameManager.getPlayer().addMoney(RandomUtil.getInt(1, 25));
+        MainPlayer.getPlayer().addMoney(RandomUtil.getInt(1, 25));
 
         isCollected = true;
         setImage(new Image("images/Invisible.gif"));
