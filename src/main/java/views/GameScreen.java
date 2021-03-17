@@ -2,7 +2,6 @@ package views;
 
 import core.GameManager;
 import core.SceneManager;
-import game.collidables.Enemy;
 import game.collidables.MainPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -17,24 +16,21 @@ public class GameScreen {
     @FXML
     private TextArea uiInfoText;
     @FXML
-    private Pane drawPane;
+    private Pane     drawPane;
 
     /**
      * Initializes the game screen
      */
     public void initialize() {
-        MainPlayer.setUiInfoText(uiInfoText);
-
         GameManager.start(drawPane);
 
         // Loaded the GameScreen without going through the config screen
         if (!SceneManager.CONFIG.equals(SceneManager.getSceneName())) {
-            GameManager.setPlayer(new MainPlayer("Team Azula", "Weapon", "Normal"));
+            MainPlayer.setPlayer("Team Azula", "Weapon", "Normal");
         }
 
-        // Display the minimap
+        // Update UI
+        MainPlayer.setUiInfoText(uiInfoText);
         uiMinimap.setText(GameManager.getLevel().getMinimapString());
-
-        new Enemy(100, 0);
     }
 }

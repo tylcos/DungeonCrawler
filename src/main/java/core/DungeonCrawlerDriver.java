@@ -36,6 +36,7 @@ public class DungeonCrawlerDriver extends Application {
         primaryStage.setRenderScaleY(1d);
         primaryStage.setMaximized(true);
         primaryStage.setTitle(GAME_TITLE);
+        primaryStage.widthProperty().addListener(observable -> ScreenManager.updateScreen());
 
         SceneManager.setStage(primaryStage);
 

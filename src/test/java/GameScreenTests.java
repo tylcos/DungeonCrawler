@@ -2,6 +2,7 @@ import core.DungeonCrawlerDriver;
 import core.GameManager;
 import core.SceneManager;
 import core.ScreenManager;
+import game.collidables.MainPlayer;
 import game.level.Direction;
 import game.level.Room;
 import javafx.scene.input.KeyCode;
@@ -27,36 +28,36 @@ public class GameScreenTests extends ApplicationTest {
 
     @Test
     public void testMoveLeft() {
-        double initialX = GameManager.getPlayer().getX();
+        double initialX = MainPlayer.getPlayer().getX();
         push(KeyCode.LEFT);
-        double finalX = GameManager.getPlayer().getX();
+        double finalX = MainPlayer.getPlayer().getX();
 
         assertTrue(finalX < initialX);
     }
 
     @Test
     public void testMoveRight() {
-        double initialX = GameManager.getPlayer().getX();
+        double initialX = MainPlayer.getPlayer().getX();
         push(KeyCode.RIGHT);
-        double finalX = GameManager.getPlayer().getX();
+        double finalX = MainPlayer.getPlayer().getX();
 
         assertTrue(initialX < finalX);
     }
 
     @Test
     public void testMoveUp() {
-        double initialY = GameManager.getPlayer().getY();
+        double initialY = MainPlayer.getPlayer().getY();
         push(KeyCode.UP);
-        double finalY = GameManager.getPlayer().getY();
+        double finalY = MainPlayer.getPlayer().getY();
 
         assertTrue(initialY > finalY);
     }
 
     @Test
     public void testMoveDown() {
-        double initialY = GameManager.getPlayer().getY();
+        double initialY = MainPlayer.getPlayer().getY();
         push(KeyCode.DOWN);
-        double finalY = GameManager.getPlayer().getY();
+        double finalY = MainPlayer.getPlayer().getY();
 
         assertTrue(initialY < finalY);
     }
@@ -71,7 +72,7 @@ public class GameScreenTests extends ApplicationTest {
         sleep(2000);
         release(KeyCode.UP, KeyCode.LEFT);
 
-        double distance = GameManager.getPlayer().getPosition()
+        double distance = MainPlayer.getPlayer().getPosition()
                                   .subtract(ScreenManager.getScreenCenter())
                                   .magnitude();
 

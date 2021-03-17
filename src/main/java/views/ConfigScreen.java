@@ -1,6 +1,5 @@
 package views;
 
-import core.GameManager;
 import core.SceneManager;
 import data.RandomUtil;
 import game.collidables.MainPlayer;
@@ -43,10 +42,9 @@ public class ConfigScreen {
         }
 
         SceneManager.loadScene(SceneManager.GAME);
-
-        GameManager.setPlayer(new MainPlayer(inputTextName.getText(),
-                                             inputWeapon.getValue(),
-                                             inputDifficulty.getValue()));
+        MainPlayer.setPlayer(inputTextName.getText(),
+                             inputWeapon.getValue(),
+                             inputDifficulty.getValue());
     }
 
     /**

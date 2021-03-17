@@ -11,13 +11,31 @@ public final class ScreenManager {
      */
     private ScreenManager() { }
 
+    private static Point2D screenDimensions = new Point2D(SceneManager.getStage().getWidth(),
+                                                          SceneManager.getStage().getHeight());
+    private static Point2D screenCenter     = new Point2D(SceneManager.getStage().getWidth() * .5d,
+                                                         SceneManager.getStage().getHeight() * .5d);
+
     public static Point2D getScreenDimensions() {
-        return new Point2D(SceneManager.getStage().getWidth(),
-                           SceneManager.getStage().getHeight());
+        return screenDimensions;
     }
 
     public static Point2D getScreenCenter() {
-        return new Point2D(SceneManager.getStage().getWidth()  * .5d,
-                           SceneManager.getStage().getHeight() * .5d);
+        return screenCenter;
+    }
+
+    public static Point2D gameToScreen(Point2D gameCoordinates) {
+        return gameCoordinates.add(screenCenter);
+    }
+
+    public static Point2D screenToGame(Point2D screenCoordinates) {
+        return screenCoordinates.subtract(screenCenter);
+    }
+
+    public static void updateScreen() {
+        screenDimensions = new Point2D(SceneManager.getStage().getWidth(),
+                                       SceneManager.getStage().getHeight());
+        screenCenter = new Point2D(SceneManager.getStage().getWidth() * .5d,
+                                   SceneManager.getStage().getHeight() * .5d);
     }
 }

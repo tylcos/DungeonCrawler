@@ -1,7 +1,7 @@
 package game.level;
 
-import core.GameManager;
 import core.SceneManager;
+import core.ScreenManager;
 import data.RandomUtil;
 import game.collidables.*;
 import javafx.geometry.Point2D;
@@ -149,9 +149,9 @@ public class Level extends StackPane {
         addToPhysics(currentRoom.getBodies());
 
         // Put the player in the "center" of the room
-        MainPlayer player = GameManager.getPlayer();
+        MainPlayer player = MainPlayer.getPlayer();
         if (player != null) {
-            player.setPosition(new Point2D(960, 540));
+            player.setPosition(ScreenManager.getScreenCenter().add(0, 160));
             player.setVelocity(Point2D.ZERO);
         }
     }
@@ -367,8 +367,8 @@ public class Level extends StackPane {
 
         StringBuilder minimap = new StringBuilder(xRange * yRange * 4);
         for (int y = topBound - 1; y >= bottomBound; y--) {
-            StringBuilder line2 = new StringBuilder(MAX_DIAMETER * 2);
-            StringBuilder line1 = new StringBuilder(MAX_DIAMETER * 2);
+            StringBuilder line2 = new StringBuilder(xRange * 2);
+            StringBuilder line1 = new StringBuilder(xRange * 2);
 
             for (int x = leftBound; x < rightBound; x++) {
                 Room room = map[x][y];
@@ -378,7 +378,7 @@ public class Level extends StackPane {
                     line1.append("  ");
                     continue;
                 } else if (room.isEntrance()) {
-                    line1.append("E ");
+                    line1.append("S ");
                 } else if (room.isExit()) {
                     line1.append("X ");
                 } else {
@@ -394,9 +394,9 @@ public class Level extends StackPane {
                 }
             }
 
-            minimap.append(line2.substring(0, xRange * 2));
+            minimap.append(line2);
             minimap.append('\n');
-            minimap.append(line1.substring(0, xRange * 2));
+            minimap.append(line1);
             minimap.append('\n');
         }
 
