@@ -1,8 +1,7 @@
-package game;
-
-import javafx.scene.image.Image;
+package game.collidables;
 
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 
 public class Collectable extends Collidable {
 

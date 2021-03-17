@@ -1,7 +1,8 @@
-package game;
+package game.collidables;
 
 import core.GameManager;
 import core.InputManager;
+import game.Weapon;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;

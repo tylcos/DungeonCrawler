@@ -2,8 +2,8 @@ package views;
 
 import core.GameManager;
 import core.SceneManager;
-import game.Enemy;
-import game.MainPlayer;
+import game.collidables.Enemy;
+import game.collidables.MainPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;

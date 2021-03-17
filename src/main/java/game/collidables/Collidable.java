@@ -1,4 +1,4 @@
-package game;
+package game.collidables;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
