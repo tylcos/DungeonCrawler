@@ -1,8 +1,9 @@
-package game;
+package game.level;
 
 import core.GameManager;
 import core.SceneManager;
 import data.RandomUtil;
+import game.collidables.*;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;

@@ -1,5 +1,6 @@
-package game;
+package game.collidables;
 
+import game.level.Room;
 import javafx.scene.image.Image;
 
 /**

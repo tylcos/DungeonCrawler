@@ -1,4 +1,4 @@
-package game;
+package game.collidables;
 import core.GameManager;
 import data.RandomUtil;
 import javafx.geometry.Point2D;

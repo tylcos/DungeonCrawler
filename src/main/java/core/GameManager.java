@@ -1,8 +1,8 @@
 package core;
 
-import game.Entity;
-import game.Level;
-import game.MainPlayer;
+import game.collidables.Entity;
+import game.collidables.MainPlayer;
+import game.level.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 
