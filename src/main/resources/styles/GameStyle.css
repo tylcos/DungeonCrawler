@@ -2,6 +2,19 @@
     -fx-font: 30px "Sylfaen";
 }
 
+.minimap {
+     -fx-font: 20px "Consolas";
+}
+
+.minimap .text {
+     -fx-line-spacing: -10px;
+}
+
+.minimap .scroll-pane {
+        -fx-vbar-policy: never;
+        -fx-hbar-policy: never;
+}
+
 .text-area, .text-area .viewport, .text-area .content {
-    -fx-background-color: transparent ;
+    -fx-background-color: transparent;
 }
