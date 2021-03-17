@@ -1,6 +1,10 @@
-package game;
+package game.level;
 
 import data.RandomUtil;
+import game.collidables.Collidable;
+import game.collidables.Door;
+import game.collidables.Entity;
+import game.collidables.Wall;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;

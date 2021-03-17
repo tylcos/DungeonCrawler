@@ -1,4 +1,4 @@
-package game;
+package game.collidables;
 
 import javafx.geometry.Point2D;
 
