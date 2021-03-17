@@ -115,24 +115,6 @@ public final class GameManager {
     }
 
     /**
-     * Returns the player.
-     *
-     * @return the player
-     */
-    public static MainPlayer getPlayer() {
-        return player;
-    }
-
-    /**
-     * Sets the player to a new player.
-     *
-     * @param player the player for the MainPlayer to be set to
-     */
-    public static void setPlayer(MainPlayer player) {
-        GameManager.player = player;
-    }
-
-    /**
      * Returns the current level.
      *
      * @return the current level

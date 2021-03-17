@@ -1,6 +1,5 @@
 package game.collidables;
 
-import core.GameManager;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
@@ -21,22 +20,22 @@ public class Item extends Entity {
                 ((Math.random() * (500 - 300)) + 300)), new Point2D(3, 3));
 
         if (!isItemExist) {
-            this.setImage(new Image("images/Invisible.gif"));
+            setImage(new Image("images/Invisible.gif"));
             isItemExist = true;
         }
     }
 
     @Override
     public void update(double dt) {
-        Point2D distance = this.getPosition().subtract(GameManager.getPlayer().getPosition());
+        Point2D distance = getPosition().subtract(MainPlayer.getPlayer().getPosition());
         if (distance.getX() < 20 && distance.getY() < 20 && distance.getX() > -20
                     && distance.getY() > -20 && !isItemUsed) {
             //update once we have more item
             /*
             if(...)
-            GameManager.getPlayer().setWeapon(////);
+            MainPlayer.getPlayer().setWeapon(////);
             else if(...)
-             GameManager.getPlayer().setWeapon(////);
+             MainPlayer.getPlayer().setWeapon(////);
              */
             isItemUsed = true;
             setImage(new Image("images/Invisible.gif"));

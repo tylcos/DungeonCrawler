@@ -1,9 +1,11 @@
 .uiInfoText {
     -fx-font: 30px "Sylfaen";
+    -fx-padding: 50 50 50 50;
 }
 
 .minimap {
      -fx-font: 20px "Consolas";
+    -fx-padding: 50 50 50 50;
 }
 
 .minimap .text {

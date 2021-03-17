@@ -2,6 +2,7 @@ package game.collidables;
 
 import core.GameManager;
 import core.InputManager;
+import core.ScreenManager;
 import game.Weapon;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
@@ -10,9 +11,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
 /**
- * Controller for the player
+ * Singleton controller for the player
  */
-public class MainPlayer extends Entity {
+public final class MainPlayer extends Entity {
+    private static MainPlayer player;
+
     private static TextArea uiInfoText;
 
     private String name;
@@ -29,19 +32,21 @@ public class MainPlayer extends Entity {
 
     private boolean onAttackMode;
 
-    // todo: fix weapon damage and price
-
     /**
-     * Creates an instance of the MainPlayer
+     * Initializes the MainPlayer singleton
      *
      * @param image      the path of the image of a main player
      * @param weaponName the name of the weapon the player has
      * @param difficulty the difficulty of the game
      */
-    public MainPlayer(String image, String weaponName, String difficulty) {
-        super("/images/Player.png", new Point2D(960, 540), new Point2D(5, 5));
-        GameManager.spawnEntity(this);
+    public static void setPlayer(String image, String weaponName, String difficulty) {
+        player = new MainPlayer(image, weaponName, difficulty);
+    }
 
+    private MainPlayer(String image, String weaponName, String difficulty) {
+        super("/images/Player.png", ScreenManager.getScreenCenter(), new Point2D(5, 5));
+
+        // todo: fix weapon damage and price
         name   = image;
         weapon = new Weapon(weaponName, 0, 0);
         health = 100;
@@ -61,6 +66,8 @@ public class MainPlayer extends Entity {
         }
 
         InputManager.addMouseClickListener(this::mouseClickEvent);
+
+        GameManager.spawnEntity(this);
     }
 
     @Override
@@ -139,15 +146,9 @@ public class MainPlayer extends Entity {
         int dx = -bounceDistance;
         int dy = -bounceDistance;
         if (getX() > other.getParent().getBoundsInParent().getCenterX()) {
-            //System.out.println("Entity at position: " + this.getX()
-            // + " Collided with something to its left at "
-            // + other.getParent().getBoundsInParent().getCenterX());
             dx = -1 * dx;
         }
         if (getY() > other.getParent().getBoundsInParent().getCenterY()) {
-            //System.out.println("Entity at position: " + this.getY()
-            // + " Collided with something above it at "
-            // + other.getParent().getBoundsInParent().getCenterY());
             dy = -1 * dy;
         }
         Point2D position = new Point2D(getPosition().getX() + dx, getPosition().getY() + dy);
@@ -260,6 +261,15 @@ public class MainPlayer extends Entity {
      */
     public static void setUiInfoText(TextArea uiInfoText) {
         MainPlayer.uiInfoText = uiInfoText;
+    }
+
+    /**
+     * Gets the main player.
+     *
+     * @return the main player
+     */
+    public static MainPlayer getPlayer() {
+        return player;
     }
 
     /**
