@@ -26,6 +26,15 @@ public final class ScreenManager {
         return screenCenter;
     }
 
+    /**
+     * Converts game coordinates, where (0,0) is the center of the screen, to screen coordinates,
+     * where (0,0) is the top left of the screen.
+     *
+     * Not sure if this will ever be needed
+     *
+     * @param gameCoordinates game coordinates
+     * @return screen coordinates
+     */
     public static Point2D gameToScreen(Point2D gameCoordinates) {
         return gameCoordinates.add(screenCenter);
     }
