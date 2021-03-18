@@ -1,28 +1,31 @@
 package views;
 
-import core.GameManager;
+import core.GameEngine;
 import core.SceneManager;
 import game.collidables.MainPlayer;
+import game.levels.Level;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 /**
  * FXML controller for the main game screen
  */
 public class GameScreen {
     @FXML
-    private TextArea uiMinimap;
+    private TextArea  uiMinimap;
     @FXML
-    private TextArea uiInfoText;
+    private TextArea  uiInfoText;
     @FXML
-    private Pane     drawPane;
+    private StackPane renderPane;
+
+    private static Level level;
 
     /**
      * Initializes the game screen
      */
     public void initialize() {
-        GameManager.start(drawPane);
+        GameEngine.start(renderPane);
 
         // Loaded the GameScreen without going through the config screen
         if (!SceneManager.CONFIG.equals(SceneManager.getSceneName())) {
@@ -31,6 +34,14 @@ public class GameScreen {
 
         // Update UI
         MainPlayer.setUiInfoText(uiInfoText);
-        uiMinimap.setText(GameManager.getLevel().getMinimapString());
+        Level.addUiEventHandler(event -> uiMinimap.setText(level.getMinimapString()));
+
+        // Start level spawning
+        level = new Level(renderPane);
+        level.generateMap();
+    }
+
+    public static Level getLevel() {
+        return level;
     }
 }

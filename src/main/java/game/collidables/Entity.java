@@ -1,7 +1,7 @@
 package game.collidables;
 
+import core.ScreenManager;
 import javafx.geometry.Point2D;
-
 
 /**
  * Game entity that will update every frame
@@ -14,7 +14,7 @@ public class Entity extends Collidable {
     /**
      * Creates an instance of an entity from an image and places it at a specific position.
      *
-     * @param image the path to the image of the entity
+     * @param image    the path to the image of the entity
      * @param position the position to create the entity at
      */
     public Entity(String image, Point2D position) {
@@ -24,24 +24,19 @@ public class Entity extends Collidable {
     /**
      * Creates an instance of an entity based on.
      *
-     * @param image the path to the image of the entity
+     * @param image    the path to the image of the entity
      * @param position the position to create the entity at
-     * @param scale how much to scale the entity by
+     * @param scale    how much to scale the entity by
      */
     public Entity(String image, Point2D position, Point2D scale) {
         super(image, false);
         setPosition(position);
         setScale(scale);
-
-        // This just puts something straight into the level. For some things that extend Entity,
-        // like coins, we don't want to do this. If you need to do this, do it in the child class
-        // constructor
-        //GameManager.spawnEntity(this);
     }
 
     /**
      * Updates the entity.
-     * NOTE: Overwritten in child classes
+     * Overwritten in child classes.
      *
      * @param dt the time
      */
@@ -77,8 +72,9 @@ public class Entity extends Collidable {
     public void setPosition(Point2D position) {
         this.position = position;
 
-        setX(position.getX());
-        setY(position.getY());
+        Point2D screenPosition = ScreenManager.gameToScreen(position);
+        setTranslateX(screenPosition.getX());
+        setTranslateY(screenPosition.getY());
     }
 
     /**

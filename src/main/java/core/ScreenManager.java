@@ -11,10 +11,12 @@ public final class ScreenManager {
      */
     private ScreenManager() { }
 
-    private static Point2D screenDimensions = new Point2D(SceneManager.getStage().getWidth(),
-                                                          SceneManager.getStage().getHeight());
-    private static Point2D screenCenter     = new Point2D(SceneManager.getStage().getWidth() * .5d,
-                                                         SceneManager.getStage().getHeight() * .5d);
+    static {
+        updateScreen();
+    }
+
+    private static Point2D screenDimensions;
+    private static Point2D screenCenter;
 
     public static Point2D getScreenDimensions() {
         return screenDimensions;

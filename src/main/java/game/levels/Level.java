@@ -1,18 +1,16 @@
-package game.level;
+package game.levels;
 
-import core.SceneManager;
-import core.ScreenManager;
+import core.*;
 import data.RandomUtil;
 import game.collidables.*;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * Level is a StackPane that renders all game objects in a room. Level should always be rendered
@@ -24,19 +22,6 @@ public class Level extends StackPane {
 
     public static final int MAX_DIAMETER     = 15; // Width/height of map. ODD NUMBERS ONLY
     public static final int MIN_END_DISTANCE = 6;  // Minimum distance away the exit must be
-
-    // Layers are rendered from the bottom up, so stuff on layer 2 appears above
-    // stuff on layer 1 and so on
-    private      Pane[] renderingLayers;
-    static final int    RENDERING_LAYERS = 4; // Size of renderingLayers array
-
-    // Constants for all the render layers so we don't go insane
-    public static final int ROOM   = 0;
-    public static final int ITEM   = 1;
-    public static final int ENTITY = 2;
-    public static final int VFX    = 3;
-
-    // TODO Using a similar, 2D array, we could also create a collision matrix if necessary
 
     /*
      * Quick explanation of map coordinates for those concerned: map can be thought of as a 2D grid
@@ -55,37 +40,18 @@ public class Level extends StackPane {
     private       Room     currentRoom;
     private       Room     exit;
 
-    // We use ArrayBlockingQueues here to avoid threading issues
-
-    // A list of all static Collidables that need to be collision checked. This
-    // includes stationary things like walls and doors.
-    private ArrayBlockingQueue<Collidable> staticBodies = new ArrayBlockingQueue<>(100);
-
-    // A list of all dynamic (non-static) Collidables that need to be collision
-    // checked. This includes moving things like enemies.
-    private ArrayBlockingQueue<Collidable> dynamicBodies = new ArrayBlockingQueue<>(100);
-
     // Queue of rooms and their doors that need a connection to an adjacent room
-    private Queue<QueueLink> roomLinkQueue = new LinkedList<>();
+    private        Queue<QueueLink>              roomLinkQueue = new LinkedList<>();
+    private static EventHandler<? extends Event> uiEventHandler;
 
     /**
      * Create a new level without anything inside it.
      *
-     * @param drawPane Pane used to render all entities
+     * @param renderPane Pane used to render all entities
      */
-    public Level(Pane drawPane) {
+    public Level(Pane renderPane) {
         map       = new Room[MAX_DIAMETER][MAX_DIAMETER];
         mapOffset = MAX_DIAMETER / 2;
-
-        renderingLayers = new Pane[RENDERING_LAYERS];
-        for (int i = 0; i < RENDERING_LAYERS; ++i) {
-            renderingLayers[i] = new Pane();
-            getChildren().add(renderingLayers[i]);
-        }
-
-        // We must place level on the bottom so that the UI renders on top of it. level should be
-        // the only thing in drawPane at all, but I'm specifying to be safe.
-        drawPane.getChildren().add(0, this);
     }
 
     // TODO implement adding stuff to rooms
@@ -96,9 +62,11 @@ public class Level extends StackPane {
     private void addStuffToRooms() {
         for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
             for (int x = 0; x < MAX_DIAMETER; ++x) {
-                if (map[x][y] != null) {
-                    map[x][y].addItem(new Coin(false));
-                    /* PUT STUFF IN HERE */
+                Room room = map[x][y];
+
+                if (room != null) {
+                    room.addItem(new Coin(false));
+                    room.addItem(new Enemy(100, 0));
                 }
             }
         }
@@ -106,6 +74,9 @@ public class Level extends StackPane {
 
     /**
      * Generates a random map for this level.
+     *
+     * Separating from the constructor to prevent objects spawned in the level from referencing
+     * level before its returned from the constructor
      */
     public void generateMap() {
         // Generate the entrance room
@@ -117,6 +88,28 @@ public class Level extends StackPane {
         addStuffToRooms();
         // Sets the active room to the entrance
         setRoom(map[mapOffset][mapOffset]);
+        // Spawn the player
+        GameEngine.instantiate(GameEngine.ENTITY, MainPlayer.getPlayer());
+
+        // Print out map for debugging
+        if (DungeonCrawlerDriver.isDebug()) {
+            for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
+                for (int x = 0; x < MAX_DIAMETER; ++x) {
+                    if (map[x][y] == null) {
+                        System.out.print(".");
+                    } else {
+                        if (map[x][y].isEntrance()) {
+                            System.out.print("E");
+                        } else if (map[x][y].isExit()) {
+                            System.out.print("X");
+                        } else {
+                            System.out.print("O");
+                        }
+                    }
+                }
+                System.out.println();
+            }
+        }
     }
 
     /**
@@ -127,11 +120,9 @@ public class Level extends StackPane {
     public void setRoom(Room newRoom) {
         if (currentRoom != null) {
             // Unload the old room
-            removeFromLayer(ITEM, currentRoom.getItems());
-            removeFromPhysics(currentRoom.getItems());
-            removeFromLayer(ENTITY, currentRoom.getEntities());
-            removeFromPhysics(currentRoom.getEntities());
-            removeFromPhysics(currentRoom.getBodies());
+            GameEngine.destroy(GameEngine.ITEM, currentRoom.getItems());
+            GameEngine.destroy(GameEngine.ENTITY, currentRoom.getEntities());
+            GameEngine.removeFromPhysics(currentRoom.getBodies());
         }
         currentRoom = newRoom;
 
@@ -141,121 +132,20 @@ public class Level extends StackPane {
         }
 
         // Load the new room
-        setRenderLayer(ROOM, currentRoom);
-        addToLayer(ITEM, currentRoom.getItems());
-        addToPhysics(currentRoom.getItems());
-        addToLayer(ENTITY, currentRoom.getEntities());
-        addToPhysics(currentRoom.getEntities());
-        addToPhysics(currentRoom.getBodies());
+        GameEngine.setRenderLayer(GameEngine.ROOM, currentRoom);
+        GameEngine.instantiate(GameEngine.ITEM, currentRoom.getItems());
+        GameEngine.instantiate(GameEngine.ITEM, currentRoom.getEntities());
+        GameEngine.addToPhysics(currentRoom.getBodies());
 
         // Put the player in the "center" of the room
         MainPlayer player = MainPlayer.getPlayer();
         if (player != null) {
-            player.setPosition(ScreenManager.getScreenCenter().add(0, 160));
+            player.setPosition(new Point2D(0, 160));
             player.setVelocity(Point2D.ZERO);
         }
-    }
 
-    /**
-     * Replace the current pane on the given render layer with a new pane.
-     *
-     * @param layer   the render layer to set
-     * @param newPane the pane the render layer is being set to
-     */
-    private void setRenderLayer(int layer, Pane newPane) {
-        renderingLayers[layer] = newPane;
-        getChildren().remove(layer);
-        getChildren().add(layer, renderingLayers[layer]);
-    }
-
-    /**
-     * Removes all given objects from the render layer.
-     *
-     * @param <T>     any type that extends Node
-     * @param layer   the render layer to remove from
-     * @param objects the objects to remove
-     */
-    private <T> void removeFromLayer(int layer, ArrayList<T> objects) {
-        renderingLayers[layer].getChildren().removeAll(objects);
-    }
-
-    /**
-     * Removes all given objects from the physics update system.
-     *
-     * @param <T>     any type that extends Collidable
-     * @param objects the objects to remove
-     */
-    private <T extends Collidable> void removeFromPhysics(ArrayList<T> objects) {
-        for (Collidable collidable : objects) {
-            if (collidable.isStatic()) {
-                staticBodies.remove(collidable);
-            } else {
-                dynamicBodies.remove(collidable);
-            }
-        }
-    }
-
-    /**
-     * Adds all given objects to the render layer.
-     *
-     * @param <T>     any type that extends Node
-     * @param layer   the render layer to add to
-     * @param objects the objects to add
-     */
-    private <T extends Node> void addToLayer(int layer, ArrayList<T> objects) {
-        renderingLayers[layer].getChildren().addAll(objects.toArray(new Node[0]));
-    }
-
-    /**
-     * Adds all given objects to the physics update system.
-     *
-     * @param <T>     any type that extends Collidable
-     * @param objects the objects to add
-     */
-    private <T extends Collidable> void addToPhysics(ArrayList<T> objects) {
-        for (Collidable collidable : objects) {
-            if (collidable.isStatic()) {
-                staticBodies.add(collidable);
-            } else {
-                dynamicBodies.add(collidable);
-            }
-        }
-    }
-
-    /**
-     * Adds an entity on the given layer.
-     *
-     * @param layer the layer this entity will be displayed on
-     * @param e     the entity to add
-     */
-    public void addEntity(int layer, Entity e) {
-        renderingLayers[layer].getChildren().add(e);
-
-    }
-
-    /**
-     * Checks and handles collisions on the target collidable.
-     *
-     * @param target the collidable to check for collisions on
-     */
-    public void runCollisionCheck(Collidable target) {
-        for (Collidable collidable : staticBodies) {
-            if (collidable == target) { // We don't want to accidentally collide with ourselves
-                continue;
-            }
-            if (collidable.intersects(target)) {
-                collidable.onCollision(target);
-                target.onCollision(collidable);
-            }
-        }
-        for (Collidable collidable : dynamicBodies) {
-            if (collidable == target) {
-                continue;
-            }
-            if (collidable.intersects(target)) {
-                collidable.onCollision(target);
-                target.onCollision(collidable);
-            }
+        if (uiEventHandler != null) {
+            uiEventHandler.handle(null);
         }
     }
 
@@ -328,6 +218,10 @@ public class Level extends StackPane {
         }
     }
 
+    public static <T extends Event> void addUiEventHandler(EventHandler<T> handler) {
+        uiEventHandler = handler;
+    }
+
     /**
      * Returns a basic text minimap
      *
@@ -377,6 +271,8 @@ public class Level extends StackPane {
                 if (room == null) {
                     line1.append("  ");
                     continue;
+                } else if (room == currentRoom) {
+                    line1.append("C ");
                 } else if (room.isEntrance()) {
                     line1.append("S ");
                 } else if (room.isExit()) {
