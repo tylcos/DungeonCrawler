@@ -1,6 +1,5 @@
 package game.collidables;
 
-import core.ScreenManager;
 import javafx.geometry.Point2D;
 
 /**
@@ -72,9 +71,8 @@ public class Entity extends Collidable {
     public void setPosition(Point2D position) {
         this.position = position;
 
-        Point2D screenPosition = ScreenManager.gameToScreen(position);
-        setTranslateX(screenPosition.getX());
-        setTranslateY(screenPosition.getY());
+        setTranslateX(position.getX());
+        setTranslateY(position.getY());
     }
 
     /**

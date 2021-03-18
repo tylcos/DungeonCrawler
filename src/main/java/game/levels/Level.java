@@ -42,6 +42,8 @@ public class Level extends StackPane {
 
     // Queue of rooms and their doors that need a connection to an adjacent room
     private        Queue<QueueLink>              roomLinkQueue = new LinkedList<>();
+
+    // Used to update the ui minimap when a new room is loaded
     private static EventHandler<? extends Event> uiEventHandler;
 
     /**
@@ -80,8 +82,7 @@ public class Level extends StackPane {
      */
     public void generateMap() {
         // Generate the entrance room
-        map[mapOffset][mapOffset] =
-                new Room("/rooms/rectangle.room", new Point2D(0, 0), this, true);
+        map[mapOffset][mapOffset] = new Room("/rooms/rectangle.room", Point2D.ZERO, this, true);
         // Generate the rest of the rooms
         dequeueAndLinkRooms();
         // Adds stuff to rooms

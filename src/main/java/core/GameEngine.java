@@ -66,7 +66,7 @@ public final class GameEngine {
         // Setup rendering layers
         ObservableList<Node> children = renderPane.getChildren();
         for (int i = 0; i < RENDER_LAYERS; ++i) {
-            renderLayers[i] = new Pane();
+            renderLayers[i] = new StackPane();
             children.add(renderLayers[i]);
         }
     }
