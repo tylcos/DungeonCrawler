@@ -1,4 +1,4 @@
-package game.level;
+package game.levels;
 
 import javafx.geometry.Point2D;
 
@@ -12,7 +12,7 @@ public enum Direction {
     private final Point2D vector;
 
     Direction(int x, int y) {
-        this.vector = new Point2D(x, y);
+        vector = new Point2D(x, y);
     }
 
     /**

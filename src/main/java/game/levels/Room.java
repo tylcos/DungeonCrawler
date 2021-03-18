@@ -1,10 +1,7 @@
-package game.level;
+package game.levels;
 
 import data.RandomUtil;
-import game.collidables.Collidable;
-import game.collidables.Door;
-import game.collidables.Entity;
-import game.collidables.Wall;
+import game.collidables.*;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -13,13 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
 /**
  * Room is a GridPane that displays a given room as a grid of Labels.
@@ -409,8 +401,8 @@ public class Room extends GridPane {
      */
     public void createDoor(Direction direction, Room to) {
         ArrayList<StackPane> doorList = doors.get(direction);
-        if (to.distanceFromEntrance + 1 < this.distanceFromEntrance) {
-            this.distanceFromEntrance = to.distanceFromEntrance + 1;
+        if (to.distanceFromEntrance + 1 < distanceFromEntrance) {
+            distanceFromEntrance = to.distanceFromEntrance + 1;
         }
         for (StackPane p : doorList) {
             for (Node child : p.getChildren()) {
