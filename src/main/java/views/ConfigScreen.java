@@ -30,39 +30,37 @@ public class ConfigScreen {
      * Checks if the name of the player is valid.
      */
     public void onNameChange() {
-        isNameInvalid();
+        isNameValid();
     }
 
     /**
      * Event listener for mouse click on the start adventure button.
      */
     public void onStartClick() {
-        if (isNameInvalid()) {
-            return;
+        if (isNameValid()) {
+            MainPlayer.setPlayer(inputTextName.getText(),
+                                 inputWeapon.getValue(),
+                                 inputDifficulty.getValue());
+            SceneManager.loadScene(SceneManager.GAME);
         }
-
-        MainPlayer.setPlayer(inputTextName.getText(),
-                             inputWeapon.getValue(),
-                             inputDifficulty.getValue());
-        SceneManager.loadScene(SceneManager.GAME);
     }
 
     /**
-     * Checks if name is valid and updates TextField color
-     * Not sure if setting the style should be in this method
+     * Checks if name is valid and updates TextField color.
+     * Not sure if setting the style should be in this method.
      *
      * @return If user name is invalid
      */
-    private boolean isNameInvalid() {
+    private boolean isNameValid() {
         String  name      = inputTextName.getText();
-        boolean isInvalid = name.trim().isEmpty() || name.length() > 28;
+        boolean isValid = !name.trim().isEmpty() && name.length() <= 28;
 
-        if (isInvalid) {
-            inputTextName.setStyle("-fx-background-color: #ff6868;");
-        } else {
+        if (isValid) {
             inputTextName.setStyle("-fx-background-color: white;");
+        } else {
+            inputTextName.setStyle("-fx-background-color: #ff6868;");
         }
 
-        return isInvalid;
+        return isValid;
     }
 }
