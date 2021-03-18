@@ -1,6 +1,5 @@
 package game.collidables;
 
-import core.GameManager;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
@@ -11,8 +10,8 @@ public class Enemy extends Entity {
     private static final String IMAGE = "resources/images/enemy1.gif";
 
     private MainPlayer mainPlayer;
-    private int health;
-    private int money;
+    private int        health;
+    private int        money;
 
     // Since this variable identify whether player is attacking enemy,
     // the variable will be declare in MainPlayer Class.
@@ -25,7 +24,7 @@ public class Enemy extends Entity {
     // CHANGE ABOVE LINE LATER INTO MainPlayer class
 
     private boolean isDead;
-    private double speed = 300d;
+    private double  speed = 300d;
 
     // Smooths movement over around 150 frames
     private double inputSmooth = .02d;
@@ -37,19 +36,16 @@ public class Enemy extends Entity {
      * @param money  the amount of money the enemy holds
      */
     public Enemy(int health, int money) {
-        super("/images/enemy1.gif", new Point2D(-200, 0), new Point2D(5, 5));
+        super("/images/enemy1.gif", new Point2D(0, 0), new Point2D(5, 5));
 
         this.health = health;
-        this.money = money;
+        this.money  = money;
 
         // todo change this later
         isPlayerAttackEnemy = false;
 
         // todo change this later
         isDead = false;
-
-
-        GameManager.spawnEntity(this);
     }
 
     /**
@@ -81,7 +77,7 @@ public class Enemy extends Entity {
      * This method moves enemy towards the player.
      */
     public void enemyMovement() {
-        Point2D enemyPosition = getPosition();
+        Point2D enemyPosition      = getPosition();
         Point2D mainPlayerPosition = mainPlayer.getPosition();
 
         Point2D difference = mainPlayerPosition.subtract(enemyPosition);
@@ -98,7 +94,7 @@ public class Enemy extends Entity {
      * @param mainPlayer the main player
      */
     public void playerAttackEnemy(MainPlayer mainPlayer) {
-        Point2D enemyPosition = getPosition();
+        Point2D enemyPosition      = getPosition();
         Point2D mainPlayerPosition = this.mainPlayer.getPosition();
 
         Point2D difference = enemyPosition.subtract(mainPlayerPosition);

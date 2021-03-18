@@ -42,8 +42,7 @@ public class TitleScreen {
 
         if (DungeonCrawlerDriver.isDebug()) {
             Stage stage = SceneManager.getStage();
-            System.out.println("Debug Screen Scaling");
-            System.out.println("dpi: " + Screen.getPrimary().getDpi());
+            System.out.println("\nDebug Screen Scaling");
             System.out.println("Screen Scale: " + Screen.getPrimary().getOutputScaleX()
                                + ", " + Screen.getPrimary().getOutputScaleY());
             System.out.println("Output Scale: " + stage.getOutputScaleX()
