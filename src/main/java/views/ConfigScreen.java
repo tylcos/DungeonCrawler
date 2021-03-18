@@ -41,10 +41,10 @@ public class ConfigScreen {
             return;
         }
 
-        SceneManager.loadScene(SceneManager.GAME);
         MainPlayer.setPlayer(inputTextName.getText(),
                              inputWeapon.getValue(),
                              inputDifficulty.getValue());
+        SceneManager.loadScene(SceneManager.GAME);
     }
 
     /**

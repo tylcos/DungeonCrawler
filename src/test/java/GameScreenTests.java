@@ -1,4 +1,5 @@
-import core.*;
+import core.DungeonCrawlerDriver;
+import core.SceneManager;
 import game.collidables.MainPlayer;
 import game.levels.Direction;
 import game.levels.Room;
@@ -70,9 +71,7 @@ public class GameScreenTests extends ApplicationTest {
         sleep(2000);
         release(KeyCode.UP, KeyCode.LEFT);
 
-        double distance = MainPlayer.getPlayer().getPosition()
-                                  .subtract(ScreenManager.getScreenCenter())
-                                  .magnitude();
+        double distance = MainPlayer.getPlayer().getPosition().magnitude();
 
         // Current corner of the room is only 800 pixels from center
         assertTrue(distance < 1200d);
