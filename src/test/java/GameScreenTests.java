@@ -1,15 +1,14 @@
 import core.DungeonCrawlerDriver;
-import core.GameManager;
 import core.SceneManager;
-import core.ScreenManager;
 import game.collidables.MainPlayer;
-import game.level.Direction;
-import game.level.Room;
+import game.levels.Direction;
+import game.levels.Room;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
+import views.GameScreen;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -28,36 +27,36 @@ public class GameScreenTests extends ApplicationTest {
 
     @Test
     public void testMoveLeft() {
-        double initialX = MainPlayer.getPlayer().getX();
+        double initialX = MainPlayer.getPlayer().getPosition().getX();
         push(KeyCode.LEFT);
-        double finalX = MainPlayer.getPlayer().getX();
+        double finalX = MainPlayer.getPlayer().getPosition().getX();
 
         assertTrue(finalX < initialX);
     }
 
     @Test
     public void testMoveRight() {
-        double initialX = MainPlayer.getPlayer().getX();
+        double initialX = MainPlayer.getPlayer().getPosition().getX();
         push(KeyCode.RIGHT);
-        double finalX = MainPlayer.getPlayer().getX();
+        double finalX = MainPlayer.getPlayer().getPosition().getX();
 
         assertTrue(initialX < finalX);
     }
 
     @Test
     public void testMoveUp() {
-        double initialY = MainPlayer.getPlayer().getY();
+        double initialY = MainPlayer.getPlayer().getPosition().getY();
         push(KeyCode.UP);
-        double finalY = MainPlayer.getPlayer().getY();
+        double finalY = MainPlayer.getPlayer().getPosition().getY();
 
         assertTrue(initialY > finalY);
     }
 
     @Test
     public void testMoveDown() {
-        double initialY = MainPlayer.getPlayer().getY();
+        double initialY = MainPlayer.getPlayer().getPosition().getY();
         push(KeyCode.DOWN);
-        double finalY = MainPlayer.getPlayer().getY();
+        double finalY = MainPlayer.getPlayer().getPosition().getY();
 
         assertTrue(initialY < finalY);
     }
@@ -72,9 +71,7 @@ public class GameScreenTests extends ApplicationTest {
         sleep(2000);
         release(KeyCode.UP, KeyCode.LEFT);
 
-        double distance = MainPlayer.getPlayer().getPosition()
-                                  .subtract(ScreenManager.getScreenCenter())
-                                  .magnitude();
+        double distance = MainPlayer.getPlayer().getPosition().magnitude();
 
         // Current corner of the room is only 800 pixels from center
         assertTrue(distance < 1200d);
@@ -82,15 +79,16 @@ public class GameScreenTests extends ApplicationTest {
 
     @Test
     public void testExit() {
-        Room end = GameManager.getLevel().getExit();
+        Room end = GameScreen.getLevel().getExit();
         assertNotNull(end);
         int distance = end.getDistanceFromEntrance();
+
         assertTrue(distance >= 6);
     }
 
     @Test
     public void testEntrance() {
-        Room entrance = GameManager.getLevel().getEntrance();
+        Room entrance = GameScreen.getLevel().getEntrance();
         assertNotNull(entrance);
         int distance = entrance.getDistanceFromEntrance();
         assertEquals(0, distance);
