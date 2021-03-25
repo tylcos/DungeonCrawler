@@ -1,7 +1,4 @@
-import core.DungeonCrawlerDriver;
-import core.GameManager;
-import core.InputManager;
-import core.SceneManager;
+import core.*;
 import data.RandomUtil;
 import javafx.scene.input.KeyCode;
 import org.junit.Before;
@@ -56,7 +53,7 @@ public class GeneralTests extends ApplicationTest {
      */
     @Test
     public void testLoadResources() {
-        Class<GameManager> gameManagerClass = GameManager.class;
+        Class<GameEngine> gameManagerClass = GameEngine.class;
 
         assertNotNull(gameManagerClass.getResource(SceneManager.TITLE));
         assertNotNull(gameManagerClass.getResource(SceneManager.CONFIG));

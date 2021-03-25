@@ -1,14 +1,13 @@
 package game.collidables;
 
-import core.GameManager;
 import core.InputManager;
-import core.ScreenManager;
 import game.Weapon;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import views.GameScreen;
 
 /**
  * Singleton controller for the player
@@ -44,7 +43,7 @@ public final class MainPlayer extends Entity {
     }
 
     private MainPlayer(String image, String weaponName, String difficulty) {
-        super("/images/Player.png", ScreenManager.getScreenCenter(), new Point2D(5, 5));
+        super("/images/Player.png", new Point2D(0, 160), new Point2D(5, 5));
 
         // todo: fix weapon damage and price
         name   = image;
@@ -66,8 +65,6 @@ public final class MainPlayer extends Entity {
         }
 
         InputManager.addMouseClickListener(this::mouseClickEvent);
-
-        GameManager.spawnEntity(this);
     }
 
     @Override
@@ -114,7 +111,7 @@ public final class MainPlayer extends Entity {
 
         // Moved this from Door class to prevent more type checking
         if (other instanceof Door) {
-            GameManager.getLevel().setRoom(((Door) other).getDestination());
+            GameScreen.getLevel().setRoom(((Door) other).getDestination());
         }
 
         if (other instanceof Wall) {
@@ -122,9 +119,9 @@ public final class MainPlayer extends Entity {
         }
 
         // todo: add enemy to collidable bodies in Room
-        if (other instanceof Enemy) {
-            bounceBack(other, 100);
-        }
+        /*if (other instanceof Enemy) {
+            bounceBack(other, 1);
+        }*/
     }
 
     /**
@@ -145,14 +142,14 @@ public final class MainPlayer extends Entity {
     private void bounceBack(Collidable other, int bounceDistance) {
         int dx = -bounceDistance;
         int dy = -bounceDistance;
-        if (getX() > other.getParent().getBoundsInParent().getCenterX()) {
-            dx = -1 * dx;
+        if (getTranslateX() > other.getParent().getBoundsInParent().getCenterX()) {
+            dx *= -1;
         }
-        if (getY() > other.getParent().getBoundsInParent().getCenterY()) {
-            dy = -1 * dy;
+        if (getTranslateY() > other.getParent().getBoundsInParent().getCenterY()) {
+            dy *= -1;
         }
-        Point2D position = new Point2D(getPosition().getX() + dx, getPosition().getY() + dy);
-        setPosition(position);
+
+        setPosition(getPosition().add(new Point2D(dx, dy)));
     }
 
     /**
