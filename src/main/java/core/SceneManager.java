@@ -32,7 +32,7 @@ public final class SceneManager {
     public static void loadScene(String fxmlPath) {
         // Exiting Game scene
         if (GAME.equals(sceneName)) {
-            GameManager.setPaused(true);
+            GameEngine.setPaused(true);
         }
 
         try {

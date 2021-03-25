@@ -1,10 +1,7 @@
-package game.level;
+package game.levels;
 
 import data.RandomUtil;
-import game.collidables.Collidable;
-import game.collidables.Door;
-import game.collidables.Entity;
-import game.collidables.Wall;
+import game.collidables.*;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -13,17 +10,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
 /**
  * Room is a GridPane that displays a given room as a grid of Labels.
- * 
+ *
  * Room also contains all data relevant to a room, like the items and enemies inside of it.
  */
 public class Room extends GridPane {
@@ -33,17 +25,17 @@ public class Room extends GridPane {
     /*
      * The chance of connecting a doorway to another room is BRANCH_CHANCE * (BRANCH_TAX ^ branches)
      * * (DISTANCE_TAX ^ (distanceFromEntrance - level.MIN_END_DISTANCE)).
-     * 
+     *
      * BRANCH_CHANCE is the base chance of branching.
-     * 
+     *
      * BRANCH_TAX is multiplied onto the base chance for every existing branch.
-     * 
+     *
      * DISTANCE_TAX is multiplied onto the base chance for every additional doorway separating this
      * room from the entrance past level.MIN_END_DISTANCE.
-     * 
+     *
      * Higher numbers mean higher chance of branching. All chances must be between 0.0 (exclusive)
      * and 1.0 (exclusive).
-     * 
+     *
      * At least one branch will always be created if an exit does not exist in this level yet. If
      * another room caused the creation of this one (in dequeueAndLinkRooms) then the door leading
      * to that room will always be created IN ADDITION to at least one other door if the exit
@@ -73,8 +65,8 @@ public class Room extends GridPane {
 
     private Level   level;                        // The level this room belongs to
     private Point2D position;                     // The position of this room in the level
-    private boolean exit                 = false; // Whether this room is the exit
-    private boolean entrance             = false; // Whether this room is the entrance
+    private boolean exit; // Whether this room is the exit
+    private boolean entrance; // Whether this room is the entrance
     private int     distanceFromEntrance = 999;   // # of doorways separating this room from the
     //                                               entrance
 
@@ -105,7 +97,7 @@ public class Room extends GridPane {
      * Constructs a room from a .room file at the given position in the specified level.
      *
      * {@code creator} will have a doorway into this room.
-     * 
+     *
      * @param template the file to load the room from
      * @param position the position to make the room at
      * @param level    the level this room was created in
@@ -139,7 +131,7 @@ public class Room extends GridPane {
 
     /**
      * Constructs a room from a .room file at the given position in the specified level.
-     * 
+     *
      * @param template the file to load the room from
      * @param position the position to make the room at
      * @param level    the level this room was created in
@@ -152,7 +144,7 @@ public class Room extends GridPane {
     /**
      * Reads the specified file and extracts the blueprint text within. The file's contents are
      * automatically cached in memory for future access.
-     * 
+     *
      * @param name the path to the file to open
      * @return an ArrayList where each index {@code n} is the {@code n}th line of the file
      */
@@ -195,7 +187,7 @@ public class Room extends GridPane {
      * Chooses random doors in this room to activate. If {@code creator} is set, the door leading to
      * {@code creator} will always be set active. If the level containing this room does not yet
      * have an exit, at least one door in addition to {@code creator}'s door will be activated.
-     * 
+     *
      * @param blueprint the blueprint of this room
      * @param creator   the room that created this room
      */
@@ -248,16 +240,16 @@ public class Room extends GridPane {
         while (numberOfDoors > 0) {
             // Decide if we should activate a door. Exits never activate; entrances always activate
             /* @formatter:off */
-            boolean build = 
-                exit ? false : (entrance || (!level.hasExit() && !branched)
+            boolean build =
+                !exit && (entrance || (!level.hasExit() && !branched)
                 || Math.random() < (BRANCH_CHANCE * Math.pow(BRANCH_TAX, branches)
-                * ((Level.MIN_END_DISTANCE < distanceFromEntrance) 
+                * ((Level.MIN_END_DISTANCE < distanceFromEntrance)
                 ? Math.pow(DISTANCE_TAX, distanceFromEntrance - Level.MIN_END_DISTANCE) : 1)));
             /* @formatter:on */
             // The magic below will randomly choose a door to make active/inactive
             // Beginning of magic
             int randomInt = RandomUtil.getInt(0, numberOfDoors);
-            int counter = 0;
+            int counter   = 0;
             while (randomInt > 0 || !testedDoors[counter]) {
                 ++counter;
                 if (testedDoors[counter]) {
@@ -283,7 +275,7 @@ public class Room extends GridPane {
     /**
      * Constructs this room based on the blueprint in the given file and ensures that it will have a
      * door leading to the room that triggered the creation of this one.
-     * 
+     *
      * @param fileName the file holding the blueprint
      * @param creator  the room that requested the creation of this one
      */
@@ -295,7 +287,7 @@ public class Room extends GridPane {
         // Read the blueprint character by character and add the appropriate tiles to the room
         for (int row = 0; row < blueprint.size(); ++row) {
             for (int col = 0; col < blueprint.get(row).length(); ++col) {
-                Image img = spriteTable.get("" + blueprint.get(row).charAt(col));
+                Image     img  = spriteTable.get("" + blueprint.get(row).charAt(col));
                 StackPane cell = new StackPane();
                 // By setting min and max size to the same thing, the StackPane will always take
                 // up the same amount of space in the GridPane
@@ -325,7 +317,7 @@ public class Room extends GridPane {
                     break;
                 default:
                     System.err.println("Detected an invalid character in room " + fileName
-                            + "! Please check file for errors!");
+                                       + "! Please check file for errors!");
                 }
                 add(cell, col, row);
             }
@@ -403,14 +395,14 @@ public class Room extends GridPane {
     /**
      * Creates a door from this room to the given room on the side of this room specified by
      * {@code direction}.
-     * 
+     *
      * @param direction the side of the room to generate the door on
      * @param to        the room the door will lead to
      */
     public void createDoor(Direction direction, Room to) {
         ArrayList<StackPane> doorList = doors.get(direction);
-        if (to.distanceFromEntrance + 1 < this.distanceFromEntrance) {
-            this.distanceFromEntrance = to.distanceFromEntrance + 1;
+        if (to.distanceFromEntrance + 1 < distanceFromEntrance) {
+            distanceFromEntrance = to.distanceFromEntrance + 1;
         }
         for (StackPane p : doorList) {
             for (Node child : p.getChildren()) {
@@ -425,7 +417,7 @@ public class Room extends GridPane {
 
     /**
      * Returns a list of all collidables contained in this room.
-     * 
+     *
      * @return ArrayList of Collidables making up this room
      */
     public ArrayList<Collidable> getBodies() {
@@ -434,7 +426,7 @@ public class Room extends GridPane {
 
     /**
      * Returns a list of all items in this room.
-     * 
+     *
      * @return the items in this room
      */
     public ArrayList<Entity> getItems() {
@@ -443,7 +435,7 @@ public class Room extends GridPane {
 
     /**
      * Adds an item to this room.
-     * 
+     *
      * @param item the item to add
      */
     public void addItem(Entity item) {
@@ -452,7 +444,7 @@ public class Room extends GridPane {
 
     /**
      * Returns a list of all entities in this room.
-     * 
+     *
      * @return the entities in this room
      */
     public ArrayList<Entity> getEntities() {
@@ -461,7 +453,7 @@ public class Room extends GridPane {
 
     /**
      * Adds an entity to this room.
-     * 
+     *
      * @param entity the entity to add
      */
     public void addEntity(Entity entity) {
@@ -470,7 +462,7 @@ public class Room extends GridPane {
 
     /**
      * Returns position of this room in the level containing it.
-     * 
+     *
      * @return Point2D representing the position of this room in the level
      */
     public Point2D getPosition() {
@@ -479,7 +471,7 @@ public class Room extends GridPane {
 
     /**
      * Checks if this room is the exit for its level.
-     * 
+     *
      * @return true if this room is the exit
      */
     public boolean isExit() {
@@ -488,7 +480,7 @@ public class Room extends GridPane {
 
     /**
      * Checks if this room is the entrance for its level.
-     * 
+     *
      * @return true if this room is the entrance
      */
     public boolean isEntrance() {
@@ -497,7 +489,7 @@ public class Room extends GridPane {
 
     /**
      * Returns the number of doors separating this room from the entrance room.
-     * 
+     *
      * @return number of doors between this room and the entrance
      */
     public int getDistanceFromEntrance() {
