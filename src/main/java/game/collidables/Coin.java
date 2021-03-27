@@ -18,12 +18,13 @@ public class Coin extends Entity {
      */
     public Coin(boolean isCollected) {
         super("/images/coin.gif",
-                new Point2D(((Math.random() * (500 - 200)) + 200),
-                        ((Math.random() * (500 - 200)) + 200)), new Point2D(2, 2));
+              new Point2D(((Math.random() * (500 - 200)) + 200),
+                          ((Math.random() * (500 - 200)) + 200)), new Point2D(2, 2));
+        this.isCollected = isCollected;
+
         if (isCollected) {
             setImage(new Image("images/Invisible.gif"));
         }
-        this.isCollected = isCollected;
     }
 
     /**

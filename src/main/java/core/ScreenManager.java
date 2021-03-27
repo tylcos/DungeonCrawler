@@ -39,6 +39,13 @@ public final class ScreenManager {
         return gameCoordinates.add(screenCenter);
     }
 
+    /**
+     * Converts screen coordinates, where (0,0) is the top left of the screen, to game coordinates,
+     * where (0,0) is the center of the screen.
+     *
+     * @param screenCoordinates screen coordinates
+     * @return game coordinates
+     */
     public static Point2D screenToGame(Point2D screenCoordinates) {
         return screenCoordinates.subtract(screenCenter);
     }
@@ -46,7 +53,7 @@ public final class ScreenManager {
     public static void updateScreen() {
         screenDimensions = new Point2D(SceneManager.getStage().getWidth(),
                                        SceneManager.getStage().getHeight());
-        screenCenter = new Point2D(SceneManager.getStage().getWidth() * .5d,
-                                   SceneManager.getStage().getHeight() * .5d);
+        screenCenter     = new Point2D(SceneManager.getStage().getWidth() * .5d,
+                                       SceneManager.getStage().getHeight() * .5d);
     }
 }
