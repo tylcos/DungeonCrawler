@@ -1,5 +1,6 @@
 package game.collidables;
 
+import data.RandomUtil;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
@@ -36,7 +37,8 @@ public class Enemy extends Entity {
      * @param money  the amount of money the enemy holds
      */
     public Enemy(int health, int money) {
-        super("/images/enemy1.gif", new Point2D(0, 0), new Point2D(5, 5));
+
+        super(RandomUtil.getRandomEnemy(), new Point2D(RandomUtil.getInt(-300,300), RandomUtil.getInt(-300,300)), new Point2D(5, 5));
 
         this.health = health;
         this.money  = money;
@@ -47,6 +49,7 @@ public class Enemy extends Entity {
         // todo change this later
         isDead = false;
     }
+
 
     /**
      * Updates the enemy health and alive state.
