@@ -50,11 +50,9 @@ public class Enemy extends Entity {
 
     /**
      * Updates the enemy health and alive state.
-     *
-     * @param dt the time
      */
     @Override
-    public void update(double dt) {
+    public void update() {
         mainPlayer = MainPlayer.getPlayer();
         if (mainPlayer == null) {
             return;

@@ -1,6 +1,6 @@
 package game.collidables;
 
-import core.InputManager;
+import core.*;
 import game.Weapon;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
@@ -24,10 +24,11 @@ public final class MainPlayer extends Entity {
 
     private double speed = 750d;
 
-    // Smooths input over around 15 frames
+    // Smooths input over around 125ms
     // inputSmooth = 1d would remove smoothing
-    // https://www.desmos.com/calculator/ggbzfhy3qo
-    private double inputSmooth = .2d;
+    // https://www.desmos.com/calculator/xjyyi5sndo
+    private double  inputSmooth = .3d;
+    private Point2D lastVelocity;
 
     private boolean onAttackMode;
 
@@ -43,7 +44,8 @@ public final class MainPlayer extends Entity {
     }
 
     private MainPlayer(String image, String weaponName, String difficulty) {
-        super("/images/Player.png", new Point2D(0, 160), new Point2D(5, 5));
+        // Position is overwritten when a new room is loaded
+        super("/images/Player.png", Point2D.ZERO, new Point2D(5, 5));
 
         // todo: fix weapon damage and price
         name   = image;
@@ -68,7 +70,7 @@ public final class MainPlayer extends Entity {
     }
 
     @Override
-    public void update(double dt) {
+    public void update() {
         uiInfoText.setText(toStringFormatted());
 
         // User input logic
@@ -94,8 +96,16 @@ public final class MainPlayer extends Entity {
             onAttackMode = true;
         }
 
-        input = input.normalize().multiply(speed);
-        setVelocity(getVelocity().interpolate(input, inputSmooth));
+        lastVelocity = getVelocity();
+
+        // TODO 3/24/2021 Use a better frame independent way of smoothing input
+        double  dt          = GameEngine.getDt();
+        Point2D rawVelocity = input.normalize().multiply(speed);
+        Point2D velocity = getVelocity().interpolate(rawVelocity,
+                                                     inputSmooth * (60d * dt + .0007d / dt));
+
+        double dVelocity = velocity.subtract(getVelocity()).magnitude() / speed;
+        setVelocity(dVelocity < .01 ? rawVelocity : velocity);
     }
 
     @Override
@@ -115,7 +125,7 @@ public final class MainPlayer extends Entity {
         }
 
         if (other instanceof Wall) {
-            bounceBack(other, 75);
+            bounceBack(other, 30);
         }
 
         // todo: add enemy to collidable bodies in Room

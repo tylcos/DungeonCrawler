@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
  */
 public class Item extends Entity {
     private MainPlayer mainPlayer;
-    private boolean isItemUsed;
+    private boolean    isItemUsed;
 
     /**
      * Creates an instance of an item
@@ -17,7 +17,8 @@ public class Item extends Entity {
      */
     public Item(boolean isItemExist) {
         super("images/item.gif", new Point2D(((Math.random() * (500 - 300)) + 300),
-                ((Math.random() * (500 - 300)) + 300)), new Point2D(3, 3));
+                                             ((Math.random() * (500 - 300)) + 300)),
+              new Point2D(3, 3));
 
         if (!isItemExist) {
             setImage(new Image("images/Invisible.gif"));
@@ -26,10 +27,10 @@ public class Item extends Entity {
     }
 
     @Override
-    public void update(double dt) {
+    public void update() {
         Point2D distance = getPosition().subtract(MainPlayer.getPlayer().getPosition());
         if (distance.getX() < 20 && distance.getY() < 20 && distance.getX() > -20
-                    && distance.getY() > -20 && !isItemUsed) {
+            && distance.getY() > -20 && !isItemUsed) {
             //update once we have more item
             /*
             if(...)

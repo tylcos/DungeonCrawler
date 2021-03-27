@@ -36,10 +36,8 @@ public class Entity extends Collidable {
     /**
      * Updates the entity.
      * Overwritten in child classes.
-     *
-     * @param dt the time
      */
-    public void update(double dt) { }
+    public void update() { }
 
     /**
      * Sets the entity to a new position.
@@ -50,8 +48,6 @@ public class Entity extends Collidable {
         // position = position + velocity * dt
         position = position.add(velocity.multiply(dt));
         setPosition(position);
-
-        update(dt);
     }
 
     /**
