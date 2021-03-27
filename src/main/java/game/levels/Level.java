@@ -69,6 +69,14 @@ public class Level extends StackPane {
                 if (room != null) {
                     room.addItem(new Coin(false));
                     room.addItem(new Enemy(100, 0));
+                    room.addItem(new Enemy(100, 0));
+                    room.addItem(new Enemy(100, 0));
+                    room.addItem(new Enemy(100, 0));
+
+
+
+
+
                 }
             }
         }
