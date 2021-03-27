@@ -141,7 +141,7 @@ public class Level extends StackPane {
         // Put the player in the "center" of the room
         MainPlayer player = MainPlayer.getPlayer();
         if (player != null) {
-            player.setPosition(new Point2D(0, 160));
+            player.setPosition(Point2D.ZERO);
             player.setVelocity(Point2D.ZERO);
         }
 

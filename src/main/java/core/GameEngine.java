@@ -24,6 +24,7 @@ public final class GameEngine {
     // Timing utilities used for the game loop
     private static boolean        paused = true;
     private static AnimationTimer frameTimer;
+    private static double         dt;
 
     // Layers are rendered from the bottom up, so layer 2 appears above layer 1
     private static final int       RENDER_LAYERS = 4;
@@ -55,10 +56,10 @@ public final class GameEngine {
             private long lastNanoTime = System.nanoTime();
 
             public void handle(long now) {
-                double dt = (now - lastNanoTime) * 1e-9d;
+                dt           = (now - lastNanoTime) * 1e-9d;
                 lastNanoTime = now;
 
-                GameEngine.update(dt);
+                GameEngine.update();
             }
         };
         setPaused(false);
@@ -72,11 +73,9 @@ public final class GameEngine {
     }
 
     /**
-     * Updates position of all entities.
-     *
-     * @param dt Time change since last frame in seconds
+     * Updates position of all entities and checks for collisions.
      */
-    public static void update(double dt) {
+    public static void update() {
         // Copies entities to avoid concurrent modification errors
         // TODO 3/17/2021 convert to swapping between two lists to avoid allocating every frame
         Entity[]     currentDynamicBodies = dynamicBodies.toArray(Entity[]::new);
@@ -84,6 +83,7 @@ public final class GameEngine {
 
         for (Entity entity : currentDynamicBodies) {
             entity.physicsUpdate(dt);
+            entity.update();
         }
 
         // Purposefully runs physics update before collision checks
@@ -114,6 +114,15 @@ public final class GameEngine {
         }
 
         GameEngine.paused = paused;
+    }
+
+    /**
+     * Time change since last frame in seconds
+     *
+     * @return dt
+     */
+    public static double getDt() {
+        return dt;
     }
 
     /*
