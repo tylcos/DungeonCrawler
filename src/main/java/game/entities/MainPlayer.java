@@ -66,9 +66,9 @@ public final class MainPlayer extends Entity {
     public void update() {
         uiInfoText.setText(toStringFormatted());
         if (isDead) {
-            setOpacity(getOpacity() - .1d * GameEngine.getDt());
+            // Used for fading out when you die
+            setOpacity(getOpacity() - .2d * GameEngine.getDt());
             if (getOpacity() <= 0) {
-                // todo: go to game over screen instead
                 SceneManager.loadScene(SceneManager.END);
             }
 
@@ -256,8 +256,9 @@ public final class MainPlayer extends Entity {
     }
 
     public String toStringFormatted() {
-        return String.format("Name: %s \nWeapon: %s \nMoney: %d \nHealth: %d",
-                             name, weapon, money, health);
+        String formattedHealth = isDead ? "DEAD" : String.valueOf(health);
+        return String.format("Name: %s \nWeapon: %s \nMoney: %d \nHealth: %s",
+                             name, weapon, money, formattedHealth);
     }
 
     @Override
