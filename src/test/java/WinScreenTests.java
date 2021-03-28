@@ -15,7 +15,7 @@ public class WinScreenTests extends ApplicationTest {
     public void start() throws Exception {
         launch(DungeonCrawlerDriver.class, "--scene=WIN_SCREEN", "--NoDebug");
         assertEquals("Failed to load win screen.",
-                SceneManager.WIN_SCREEN, SceneManager.getSceneName());
+                     SceneManager.END, SceneManager.getSceneName());
     }
 
     @Test
