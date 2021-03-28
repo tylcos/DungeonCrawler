@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TextArea?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <StackPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@../styles/GameStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GameScreen">
     <children>
-        <StackPane fx:id="renderPane" />
+        <StackPane fx:id="renderPane"/>
         <AnchorPane mouseTransparent="true" StackPane.alignment="CENTER">
             <children>
-                <TextArea fx:id="uiInfoText" editable="false" minHeight="500.0" minWidth="500.0" styleClass="uiInfoText" text="Player Info&#10;Test&#10;Test&#10;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <TextArea fx:id="uiInfoText" editable="false" minHeight="500.0" minWidth="500.0" styleClass="uiInfoText" text="Player Info&#10;Test&#10;Test&#10;" AnchorPane.leftAnchor="0.0"
+                          AnchorPane.topAnchor="0.0">
                 </TextArea>
-                <TextArea fx:id="uiMinimap" editable="false" minHeight="500.0" minWidth="500.0" nodeOrientation="RIGHT_TO_LEFT" styleClass="minimap" text="minimap&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <TextArea fx:id="uiMinimap" editable="false" minHeight="500.0" minWidth="500.0" nodeOrientation="RIGHT_TO_LEFT" styleClass="minimap" text="minimap&#10;" AnchorPane.bottomAnchor="0.0"
+                          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 </TextArea>
             </children>
         </AnchorPane>
+        <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" prefHeight="215.0" prefWidth="705.0" stylesheets="@../styles/Global.css"
+              StackPane.alignment="BOTTOM_RIGHT">
+            <children>
+                <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" layoutX="527.0" layoutY="188.0" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Team Azula - Team 03"/>
+                <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="version 0.30"/>
+            </children>
+            <StackPane.margin>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            </StackPane.margin>
+        </VBox>
     </children>
 </StackPane>
