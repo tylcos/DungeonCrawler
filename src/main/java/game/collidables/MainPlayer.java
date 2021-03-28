@@ -1,5 +1,6 @@
 package game.collidables;
 
+import com.sun.tools.javac.Main;
 import core.*;
 import game.Weapon;
 import javafx.geometry.Point2D;
@@ -8,6 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import views.GameScreen;
+
+import java.awt.*;
 
 /**
  * Singleton controller for the player
@@ -19,18 +22,20 @@ public final class MainPlayer extends Entity {
 
     private String name;
     private Weapon weapon;
-    private int    money;
-    private int    health;
+    private int money;
+    private int health;
 
     private double speed = 750d;
 
     // Smooths input over around 125ms
     // inputSmooth = 1d would remove smoothing
     // https://www.desmos.com/calculator/xjyyi5sndo
-    private double  inputSmooth = .3d;
+    private double inputSmooth = .3d;
     private Point2D lastVelocity;
 
     private boolean onAttackMode;
+    private String difficulty;
+    private int attackTime = 0;
 
     /**
      * Initializes the MainPlayer singleton
@@ -48,22 +53,25 @@ public final class MainPlayer extends Entity {
         super("/images/Player.png", Point2D.ZERO, new Point2D(5, 5));
 
         // todo: fix weapon damage and price
-        name   = image;
+        name = image;
         weapon = new Weapon(weaponName, 0, 0);
         health = 100;
 
         switch (difficulty) {
-        case "Boring":
-            money = 100;
-            break;
-        case "Normal":
-            money = 75;
-            break;
-        case "Hard":
-            money = 50;
-            break;
-        default:
-            throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
+            case "Boring":
+                money = 100;
+                difficulty = "Boring";
+                break;
+            case "Normal":
+                money = 75;
+                difficulty = "Normal";
+                break;
+            case "Hard":
+                money = 50;
+                difficulty = "Hard";
+                break;
+            default:
+                throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
 
         InputManager.addMouseClickListener(this::mouseClickEvent);
@@ -72,11 +80,24 @@ public final class MainPlayer extends Entity {
     @Override
     public void update() {
         uiInfoText.setText(toStringFormatted());
-
+        if(attackTime > 200){
+            String currentWeapon = MainPlayer.getPlayer().getWeapon().getName();
+            if(currentWeapon == "Bow"){
+                swapToBow();
+            }
+            if(currentWeapon == "Sword"){
+                swapToSword();
+            }
+            if(currentWeapon == "Axe"){
+                swapToAxe();
+            }
+            attackTime = 0;
+        }
         // User input logic
         Point2D input = Point2D.ZERO;
         if (InputManager.get(KeyCode.W) || InputManager.get(KeyCode.UP)) {
             input = input.add(0, -1);
+
         }
 
         if (InputManager.get(KeyCode.A) || InputManager.get(KeyCode.LEFT)) {
@@ -90,22 +111,37 @@ public final class MainPlayer extends Entity {
         if (InputManager.get(KeyCode.D) || InputManager.get(KeyCode.RIGHT)) {
             input = input.add(1, 0);
         }
+        if(InputManager.get(KeyCode.DIGIT1)){
+            swapToBow();
+        }
+        if(InputManager.get(KeyCode.DIGIT2)){
+            swapToAxe();
+        }
+        if(InputManager.get(KeyCode.DIGIT3)){
+            swapToSword();
+        }
+        if(InputManager.get(KeyCode.R)){
+            switchToNoWeapon();
+        }
 
         // Player attacks
         if (InputManager.get(KeyCode.SPACE)) {
             onAttackMode = true;
+            attackMotion();
+
         }
 
         lastVelocity = getVelocity();
 
         // TODO 3/24/2021 Use a better frame independent way of smoothing input
-        double  dt          = GameEngine.getDt();
+        double dt = GameEngine.getDt();
         Point2D rawVelocity = input.normalize().multiply(speed);
         Point2D velocity = getVelocity().interpolate(rawVelocity,
-                                                     inputSmooth * (60d * dt + .0007d / dt));
+                inputSmooth * (60d * dt + .0007d / dt));
 
         double dVelocity = velocity.subtract(getVelocity()).magnitude() / speed;
         setVelocity(dVelocity < .01 ? rawVelocity : velocity);
+        attackTime++;
     }
 
     @Override
@@ -279,18 +315,82 @@ public final class MainPlayer extends Entity {
         return player;
     }
 
-    /**
-     * Formats the information of the player.
-     *
-     * @return the information of the player
-     */
     public String toStringFormatted() {
         return String.format("Name: %s \nWeapon: %s \nMoney: %d \nHealth: %d",
-                             name, weapon, money, health);
+                name, weapon, money, health);
     }
 
     @Override
     public String toString() {
         return toStringFormatted();
     }
+
+    /**
+     * change weapon to Bow
+     */
+    public void swapToBow(){
+
+        Image Bow = new Image("images/PlayerBow2.gif");
+        MainPlayer.getPlayer().setNewImage(Bow);
+        //change dmaage and price later
+        Weapon newBow = new Weapon("Bow",0,0); //TODO fix damage and price later
+        MainPlayer.getPlayer().setWeapon(newBow);
+    }
+
+    /**
+     * change weapon to Axe
+     */
+    public void swapToAxe(){
+        Image Axe = new Image("images/PlayerAxe.gif");
+        MainPlayer.getPlayer().setNewImage(Axe);
+        //change dmaage and price later
+        Weapon newBow = new Weapon("Axe",0,0); //ToDO fix damage and price later
+        MainPlayer.getPlayer().setWeapon(newBow);
+
+    }
+
+    /**
+     * change to weapon to sword
+     */
+    public void swapToSword(){
+        Image Sword = new Image("images/PlayerSword.gif");
+        MainPlayer.getPlayer().setNewImage(Sword);
+        //change dmaage and price later
+        Weapon newBow = new Weapon("Sword",0,0); //ToDo fix damge and Price later
+        MainPlayer.getPlayer().setWeapon(newBow);
+    }
+
+    /*
+    * Active AttackMotion
+     */
+    public void attackMotion(){
+        Weapon currentWeapon = MainPlayer.getPlayer().getWeapon();
+        switch (currentWeapon.getName()){
+            case "Bow":
+                Image BowAttack = new Image("images/PlayerBowAttack.gif");
+                MainPlayer.getPlayer().setNewImage(BowAttack);
+                break;
+            case "Axe":
+                Image swordAttack = new Image("images/PlayerAxeAttack.gif");
+                MainPlayer.getPlayer().setNewImage(swordAttack);
+                break;
+            case "Sword":
+                Image AxeAttack = new Image("images/PlayerSwordAttack.gif");
+                MainPlayer.getPlayer().setNewImage(AxeAttack);
+                break;
+
+        }
+
+    }
+    public void switchToNoWeapon(){
+        Image png = new Image("images/Player.png");
+        MainPlayer.getPlayer().setNewImage(png);
+        weapon = new Weapon("weaponName", 0, 0);
+
+
+    }
+
+
+
+
 }
