@@ -1,9 +1,7 @@
 package core;
 
-import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.util.EnumMap;
@@ -29,15 +27,6 @@ public final class InputManager {
      * Private constructor so no instances of InputManager can be created.
      */
     private InputManager() { }
-
-    /**
-     * Adds a mouse clicked listener.
-     *
-     * @param eventHandler the event handler that handles the mouse clicked event
-     */
-    public static void addMouseClickListener(EventHandler<MouseEvent> eventHandler) {
-        SceneManager.getStage().addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
-    }
 
     /**
      * Returns the key that was pressed.

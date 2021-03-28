@@ -5,7 +5,7 @@ import game.entities.MainPlayer;
 import javafx.geometry.Point2D;
 
 /**
- * An item in the dungeon crawler.
+ * An item the player can collect for an effect.
  */
 public class Item extends Collectable {
     /**
