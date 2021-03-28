@@ -16,7 +16,6 @@ public abstract class Collidable extends ImageView {
 
     private boolean isStatic;
 
-
     /**
      * Constructor taking an Image.
      *
@@ -26,7 +25,6 @@ public abstract class Collidable extends ImageView {
     public Collidable(Image image, boolean isStatic) {
         super(image);
         this.isStatic = isStatic;
-
     }
 
     /**
@@ -68,10 +66,10 @@ public abstract class Collidable extends ImageView {
 
     /**
      * Set image to New Image
+     *
      * @param newImage new Image
      */
-    public void setNewImage (Image newImage){
-        super.setImage(newImage);
+    public void setNewImage(Image newImage) {
+        setImage(newImage);
     }
-
 }

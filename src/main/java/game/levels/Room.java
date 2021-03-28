@@ -124,6 +124,7 @@ public class Room extends GridPane {
         // By default GridPanes are aligned to the top-left, but we want the room's
         // tiles centered
         setAlignment(Pos.CENTER);
+        setMouseTransparent(true);
 
         // Create the walls, floors, and doors that compose this room
         constructRoomFromBlueprint(template, creator);
