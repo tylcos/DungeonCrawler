@@ -31,12 +31,12 @@ public class DungeonCrawlerDriver extends Application {
         primaryStage.setHeight(HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
         primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.widthProperty().addListener(observable -> ScreenManager.updateScreen());
 
         primaryStage.setRenderScaleX(1d);
         primaryStage.setRenderScaleY(1d);
         primaryStage.setMaximized(true);
         primaryStage.setTitle(GAME_TITLE);
-        primaryStage.widthProperty().addListener(observable -> ScreenManager.updateScreen());
 
         SceneManager.setStage(primaryStage);
 
@@ -47,8 +47,8 @@ public class DungeonCrawlerDriver extends Application {
                                        .map(String::toLowerCase)
                                        .collect(Collectors.toList());
 
-        // "--NoDebug" parameter
-        if (unnamed.contains("--nodebug")) {
+        // "-NoDebug" parameter
+        if (unnamed.contains("-nodebug")) {
             debug = false;
         }
 

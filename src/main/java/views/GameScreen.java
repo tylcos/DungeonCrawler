@@ -37,7 +37,7 @@ public class GameScreen {
         Level.addUiEventHandler(event -> uiMinimap.setText(level.getMinimapString()));
 
         // Start level spawning
-        level = new Level(renderPane);
+        level = new Level();
         level.generateMap();
     }
 
