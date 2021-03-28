@@ -3,6 +3,9 @@ package game.collidables;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
+/**
+ * Used for Collidables that are collected once by the player
+ */
 public abstract class Collectable extends Collidable {
     protected boolean isCollected;
     protected Point2D position;

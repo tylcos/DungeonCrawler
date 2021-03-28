@@ -5,6 +5,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Basic slime enemy
+ */
 public class Slime extends Entity {
     /**
      * Creates an instance of Slime.
@@ -39,16 +42,27 @@ public class Slime extends Entity {
      * @param event Mouse click event
      */
     public void attackedByPlayer(MouseEvent event) {
-        if (isDead || mainPlayer.isDead()) {
+        if (isDead || MainPlayer.getPlayer().isDead()) {
             return;
         }
 
         //todo: find a better way of doing this
         if (RandomUtil.get() < .2d) {
-            mainPlayer.setHealth(mainPlayer.getHealth() - 1);
+            MainPlayer.getPlayer().changeHealth(-1);
         }
 
-        health--;
+        setHealth(health - 1);
+    }
+
+    /**
+     * Sets the player's health to a new amount.
+     *
+     * @param health the new amount of health the player has
+     */
+    @Override
+    public void setHealth(int health) {
+        this.health = health;
+
         if (health == 0) {
             isDead = true;
 

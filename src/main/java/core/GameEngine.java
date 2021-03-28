@@ -4,6 +4,7 @@ import game.collidables.Collidable;
 import game.entities.Entity;
 import javafx.animation.AnimationTimer;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -19,7 +20,7 @@ public final class GameEngine {
     // All static Collidables including stationary things like Tiles and Collectables.
     private static List<Collidable> staticBodies  = new ArrayList<>(256);
     // All dynamic Collidables including moving things like Entities.
-    private static List<Entity>     dynamicBodies = new ArrayList<Entity>(32);
+    private static List<Entity>     dynamicBodies = new ArrayList<>(32);
 
     // Timing utilities used for the game loop
     private static boolean        paused = true;
@@ -230,6 +231,7 @@ public final class GameEngine {
             if (collidable.isStatic()) {
                 staticBodies.remove(collidable);
             } else {
+                ((Entity) collidable).setVelocity(Point2D.ZERO);
                 dynamicBodies.remove(collidable);
             }
         }
