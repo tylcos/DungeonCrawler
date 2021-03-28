@@ -33,6 +33,7 @@ public final class MainPlayer extends Entity {
     private boolean onAttackMode;
     private String  difficulty;
     private int     attackTime;
+    private boolean isDead;
 
     /**
      * Initializes the MainPlayer singleton
@@ -52,7 +53,7 @@ public final class MainPlayer extends Entity {
         // todo: fix weapon damage and price
         name   = image;
         weapon = new Weapon(weaponName, 0, 0);
-        health = 100;
+        health = 5;
 
         switch (difficulty) {
         case "Boring":
@@ -71,6 +72,11 @@ public final class MainPlayer extends Entity {
 
     @Override
     public void update() {
+        if (health == 0){
+            isDead = true;
+            setImage(new Image("/images/PlayerDead.png"));
+            //todo: go to game over screen
+        }
         uiInfoText.setText(toStringFormatted());
         if (attackTime > 200) {
             String currentWeapon = weapon.getName();
@@ -112,6 +118,7 @@ public final class MainPlayer extends Entity {
         if (InputManager.get(KeyCode.R)) {
             switchToNoWeapon();
         }
+
 
         // Player attacks
         if (InputManager.get(KeyCode.SPACE)) {
@@ -208,7 +215,7 @@ public final class MainPlayer extends Entity {
 
         Image Bow = new Image("images/PlayerBow2.gif");
         setNewImage(Bow);
-        //change dmaage and price later
+        //change damage and price later
         Weapon newBow = new Weapon("Bow", 0, 0); //TODO fix damage and price later
         weapon = newBow;
     }
@@ -219,7 +226,7 @@ public final class MainPlayer extends Entity {
     public void swapToAxe() {
         Image Axe = new Image("images/PlayerAxe.gif");
         setNewImage(Axe);
-        //change dmaage and price later
+        //change damage and price later
         Weapon newBow = new Weapon("Axe", 0, 0); //ToDO fix damage and price later
         weapon = newBow;
     }
@@ -228,9 +235,9 @@ public final class MainPlayer extends Entity {
      * change to weapon to sword
      */
     public void swapToSword() {
-        Image Sword = new Image("images/PlayerSword.gif");
+        Image Sword = new Image("images/PlayerSwordAttack.png");
         setNewImage(Sword);
-        //change dmaage and price later
+        //change damage and price later
         Weapon newBow = new Weapon("Sword", 0, 0); //ToDo fix damge and Price later
         weapon = newBow;
     }
@@ -256,7 +263,7 @@ public final class MainPlayer extends Entity {
             MainPlayer.getPlayer().setNewImage(swordAttack);
             break;
         case "Sword":
-            Image AxeAttack = new Image("images/PlayerSwordAttack.gif");
+            Image AxeAttack = new Image("images/PlayerSwordAttack.png");
             MainPlayer.getPlayer().setNewImage(AxeAttack);
             break;
         }
