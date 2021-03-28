@@ -73,10 +73,6 @@ public class Level extends StackPane {
                     room.addItem(new Enemy(100, 0));
                     room.addItem(new Enemy(100, 0));
 
-
-
-
-
                 }
             }
         }

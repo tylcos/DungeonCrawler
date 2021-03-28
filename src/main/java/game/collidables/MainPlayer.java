@@ -80,7 +80,7 @@ public final class MainPlayer extends Entity {
     @Override
     public void update() {
         uiInfoText.setText(toStringFormatted());
-        if(attackTime > 100){
+        if(attackTime > 200){
             String currentWeapon = MainPlayer.getPlayer().getWeapon().getName();
             if(currentWeapon == "Bow"){
                 swapToBow();
@@ -120,6 +120,10 @@ public final class MainPlayer extends Entity {
         if(InputManager.get(KeyCode.DIGIT3)){
             swapToSword();
         }
+        if(InputManager.get(KeyCode.R)){
+            switchToNoWeapon();
+        }
+
         // Player attacks
         if (InputManager.get(KeyCode.SPACE)) {
             onAttackMode = true;
@@ -326,10 +330,10 @@ public final class MainPlayer extends Entity {
      */
     public void swapToBow(){
 
-        Image Bow = new Image("images/PlayerBow.gif");
+        Image Bow = new Image("images/PlayerBow2.gif");
         MainPlayer.getPlayer().setNewImage(Bow);
         //change dmaage and price later
-        Weapon newBow = new Weapon("Bow",0,0);
+        Weapon newBow = new Weapon("Bow",0,0); //TODO fix damage and price later
         MainPlayer.getPlayer().setWeapon(newBow);
     }
 
@@ -340,7 +344,7 @@ public final class MainPlayer extends Entity {
         Image Axe = new Image("images/PlayerAxe.gif");
         MainPlayer.getPlayer().setNewImage(Axe);
         //change dmaage and price later
-        Weapon newBow = new Weapon("Axe",0,0);
+        Weapon newBow = new Weapon("Axe",0,0); //ToDO fix damage and price later
         MainPlayer.getPlayer().setWeapon(newBow);
 
     }
@@ -352,7 +356,7 @@ public final class MainPlayer extends Entity {
         Image Sword = new Image("images/PlayerSword.gif");
         MainPlayer.getPlayer().setNewImage(Sword);
         //change dmaage and price later
-        Weapon newBow = new Weapon("Sword",0,0);
+        Weapon newBow = new Weapon("Sword",0,0); //ToDo fix damge and Price later
         MainPlayer.getPlayer().setWeapon(newBow);
     }
 
@@ -378,6 +382,14 @@ public final class MainPlayer extends Entity {
         }
 
     }
+    public void switchToNoWeapon(){
+        Image png = new Image("images/Player.png");
+        MainPlayer.getPlayer().setNewImage(png);
+        weapon = new Weapon("weaponName", 0, 0);
+
+
+    }
+
 
 
 
