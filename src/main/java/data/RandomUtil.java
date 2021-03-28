@@ -95,10 +95,11 @@ public final class RandomUtil {
                 enemyType = "/images/enemy2.gif";
                 break;
             case 3:
-                enemyType = "/images/Invisible.gif";
+                enemyType = "images/enemy3.gif";
                 break;
             case 4:
-                enemyType = "images/enemy3.gif";
+                enemyType = "images/invisible.gif";
+                break;
 
         }
         return enemyType;
