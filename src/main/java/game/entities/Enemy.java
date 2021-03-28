@@ -6,8 +6,9 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 
 /**
- * The enemy/monster in the dungeon.
+ * The enemy/monster in the dungeon no longer used.
  */
+@Deprecated
 public class Enemy extends Entity {
     // Since this variable identify whether player is attacking enemy,
     // the variable will be declare in MainPlayer Class.
@@ -46,11 +47,6 @@ public class Enemy extends Entity {
      */
     @Override
     public void update() {
-        mainPlayer = MainPlayer.getPlayer();
-        if (mainPlayer == null) {
-            return;
-        }
-
         if (!isDead) {
             enemyMovement();
         }
@@ -61,7 +57,7 @@ public class Enemy extends Entity {
      */
     public void enemyMovement() {
         Point2D enemyPosition      = getPosition();
-        Point2D mainPlayerPosition = mainPlayer.getPosition();
+        Point2D mainPlayerPosition = MainPlayer.getPlayer().getPosition();
 
         Point2D difference = mainPlayerPosition.subtract(enemyPosition);
         difference = difference.normalize().multiply(speed);
@@ -78,13 +74,13 @@ public class Enemy extends Entity {
      * @param event Mouse click event
      */
     public void attackedByPlayer(MouseEvent event) {
-        if (isDead || mainPlayer.isDead()) {
+        if (isDead || MainPlayer.getPlayer().isDead()) {
             return;
         }
 
         //todo: find a better way of doing this
         if (RandomUtil.get() < .2d) {
-            mainPlayer.setHealth(mainPlayer.getHealth() - 1);
+            MainPlayer.getPlayer().changeHealth(-1);
         }
 
         health--;

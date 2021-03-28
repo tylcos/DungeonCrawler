@@ -5,6 +5,9 @@ import core.InputManager;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 
+/**
+ * MainPlayer behavior is to move and attack based on the user's input
+ */
 public class MainPlayerEntityController implements IEntityController {
     private Entity player;
 
@@ -47,5 +50,6 @@ public class MainPlayerEntityController implements IEntityController {
     @Override
     public void stop() {
         player.setVelocity(Point2D.ZERO);
+
     }
 }

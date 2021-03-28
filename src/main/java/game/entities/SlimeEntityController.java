@@ -4,6 +4,9 @@ import core.GameEngine;
 import data.RandomUtil;
 import javafx.geometry.Point2D;
 
+/**
+ * Slime behavior is to circle closely around the player while attacking periodically.
+ */
 public class SlimeEntityController implements IEntityController {
     private Entity slime;
 

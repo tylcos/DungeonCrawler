@@ -4,7 +4,7 @@ import game.collidables.Collidable;
 import javafx.geometry.Point2D;
 
 /**
- * Eventually going to combine the old entity with this once Collectables are in use
+ * Used for Collidables with complex moving and attacking behaviors
  */
 public abstract class Entity extends Collidable {
     protected Point2D position;
@@ -16,8 +16,6 @@ public abstract class Entity extends Collidable {
     protected int     money;
 
     protected IEntityController entityController;
-
-    protected MainPlayer mainPlayer = MainPlayer.getPlayer();
 
     /**
      * Creates an instance of an entity from an image and places it at a specific position.
@@ -108,6 +106,15 @@ public abstract class Entity extends Collidable {
         if (health == 0) {
             isDead = true;
         }
+    }
+
+    /**
+     * Changes the entity's health by the set amount.
+     *
+     * @param dHealth the change in the entity's health
+     */
+    public void changeHealth(int dHealth) {
+        setHealth(health + dHealth);
     }
 
     /**
