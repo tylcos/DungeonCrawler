@@ -58,7 +58,7 @@ public class GeneralTests extends ApplicationTest {
         assertNotNull(gameManagerClass.getResource(SceneManager.TITLE));
         assertNotNull(gameManagerClass.getResource(SceneManager.CONFIG));
         assertNotNull(gameManagerClass.getResource(SceneManager.GAME));
-        assertNotNull(gameManagerClass.getResource(SceneManager.WIN_SCREEN));
+        assertNotNull(gameManagerClass.getResource(SceneManager.END));
 
         assertNotNull(gameManagerClass.getResource("/images/IntroPage.gif"));
         assertNotNull(gameManagerClass.getResource("/images/Player.png"));
