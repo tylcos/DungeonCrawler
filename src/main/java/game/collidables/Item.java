@@ -22,7 +22,7 @@ public class Item extends Entity {
 
         if (!isItemExist) {
             setImage(new Image("images/Invisible.gif"));
-            isItemExist = true;
+            isItemUsed = true;
         }
     }
 

@@ -67,16 +67,15 @@ public class Level extends StackPane {
                 Room room = map[x][y];
 
                 if (room != null) {
-                    room.addItem(new Coin(false));
-                    room.addItem(new Enemy(100, 0));
-                    room.addItem(new Enemy(100, 0));
-                    room.addItem(new Enemy(100, 0));
-                    room.addItem(new Enemy(100, 0));
+                    int numberOfCoins = RandomUtil.getInt(2);
+                    for (int i = 0; i < numberOfCoins; i++) {
+                        room.addItem(new Coin());
+                    }
 
-
-
-
-
+                    int numberOfEnemies = RandomUtil.getInt(5);
+                    for (int i = 0; i < numberOfEnemies; i++) {
+                        room.addItem(new Enemy(100, 0));
+                    }
                 }
             }
         }
