@@ -2,7 +2,10 @@ package game.levels;
 
 import core.*;
 import data.RandomUtil;
-import game.collidables.*;
+import game.collidables.Coin;
+import game.collidables.Door;
+import game.entities.MainPlayer;
+import game.entities.Slime;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -132,7 +135,7 @@ public class Level extends StackPane {
         currentRoom = newRoom;
 
         if (newRoom.isExit()) {
-            SceneManager.loadScene(SceneManager.WIN_SCREEN);
+            SceneManager.loadScene(SceneManager.END);
             return;
         }
 

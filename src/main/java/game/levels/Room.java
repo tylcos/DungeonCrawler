@@ -2,6 +2,7 @@ package game.levels;
 
 import data.RandomUtil;
 import game.collidables.*;
+import game.entities.Entity;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -76,8 +77,8 @@ public class Room extends GridPane {
     // Objects in this room. Names correspond to render layers in Level
     // WARNING: IF YOU GET ERRORS ABOUT CONCURRENCY, THERE'S A DECENT CHANCE THESE TWO ARRAYLISTS
     // NEED TO BE TURNED INTO ARRAYBLOCKINGQUEUES
-    private ArrayList<Entity> items    = new ArrayList<>();
-    private ArrayList<Entity> entities = new ArrayList<>();
+    private ArrayList<Collectable> items    = new ArrayList<>();
+    private ArrayList<Entity>      entities = new ArrayList<>();
 
     // Contains valid door tiles for each direction.
     // Used by createDoor() to add doors to rooms that are already generated.
@@ -116,10 +117,10 @@ public class Room extends GridPane {
         }
         if (start) {
             distanceFromEntrance = 0;
-            entrance = true;
+            entrance             = true;
         }
         this.position = position;
-        this.level = level;
+        this.level    = level;
 
         // By default GridPanes are aligned to the top-left, but we want the room's
         // tiles centered
@@ -430,7 +431,7 @@ public class Room extends GridPane {
      *
      * @return the items in this room
      */
-    public ArrayList<Entity> getItems() {
+    public ArrayList<Collectable> getItems() {
         return items;
     }
 
@@ -439,7 +440,7 @@ public class Room extends GridPane {
      *
      * @param item the item to add
      */
-    public void addItem(Entity item) {
+    public void addItem(Collectable item) {
         items.add(item);
     }
 

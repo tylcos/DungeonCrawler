@@ -3,24 +3,10 @@ package game.collidables;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
-public class Collectable extends Collidable {
-
-    private boolean isCollected;
-    private Point2D position;
-    private Point2D scale;
-
-    /**
-     * Creates an instance of the Collectable object
-     *
-     * @param image    the image of the object
-     * @param position the position of the object
-     * @param scale    the scale of the object
-     */
-    public Collectable(Image image, Point2D position, Point2D scale) {
-        super(image, true);
-        this.position = position;
-        this.scale = scale;
-    }
+public abstract class Collectable extends Collidable {
+    protected boolean isCollected;
+    protected Point2D position;
+    protected Point2D scale;
 
     /**
      * Creates an instance of the Collectable object
@@ -31,12 +17,12 @@ public class Collectable extends Collidable {
      */
     public Collectable(String imagePath, Point2D position, Point2D scale) {
         super(imagePath, true);
-        this.position = position;
-        this.scale = scale;
+        setPosition(position);
+        setScale(scale);
     }
 
     /**
-     * Getter for isCollected field
+     * Gets the isCollected field
      *
      * @return isCollected
      */
@@ -48,16 +34,13 @@ public class Collectable extends Collidable {
      * Sets isCollected to true
      */
     public void setCollected() {
-        this.isCollected = true;
-    }
+        isCollected = true;
 
-    @Override
-    public void onCollision(Collidable other) {
-        //todo behaviour for collectables upon collision with mainplayer: make sound
+        setImage(new Image("images/Invisible.gif"));
     }
 
     /**
-     * Getter for the position field
+     * Gets the position field
      *
      * @return position
      */
@@ -66,11 +49,35 @@ public class Collectable extends Collidable {
     }
 
     /**
-     * Setter for the position field
+     * Sets the position field
      *
      * @param position the position to set to
      */
     public void setPosition(Point2D position) {
         this.position = position;
+
+        setTranslateX(position.getX());
+        setTranslateY(position.getY());
+    }
+
+    /**
+     * Gets the scaling of the Collectable.
+     *
+     * @return the current scale
+     */
+    public Point2D getScale() {
+        return scale;
+    }
+
+    /**
+     * Sets the scaling of the Collectable.
+     *
+     * @param scale the new scale
+     */
+    public void setScale(Point2D scale) {
+        this.scale = scale;
+
+        setScaleX(scale.getX());
+        setScaleY(scale.getY());
     }
 }
