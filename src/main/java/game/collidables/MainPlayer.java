@@ -72,12 +72,11 @@ public final class MainPlayer extends Entity {
 
     @Override
     public void update() {
-        if (health == 0){
-            isDead = true;
-            setImage(new Image("/images/PlayerDead.png"));
-            //todo: go to game over screen
-        }
         uiInfoText.setText(toStringFormatted());
+        if (isDead) {
+            return;
+        }
+
         if (attackTime > 200) {
             String currentWeapon = weapon.getName();
             if ("Bow".equals(currentWeapon)) {
@@ -91,6 +90,7 @@ public final class MainPlayer extends Entity {
             }
             attackTime = 0;
         }
+
         // User input logic
         Point2D input = Point2D.ZERO;
         if (InputManager.get(KeyCode.W) || InputManager.get(KeyCode.UP)) {
@@ -348,6 +348,21 @@ public final class MainPlayer extends Entity {
      */
     public void setHealth(int health) {
         this.health = health;
+
+        if (health == 0) {
+            isDead = true;
+            setRotate(90); // You can rotate the image instead of changing it to PlayerDead.png
+            // todo: go to game over screen
+        }
+    }
+
+    /**
+     * Returns if the main player is dead.
+     *
+     * @return true if the main player is dead; false otherwise
+     */
+    public boolean isDead() {
+        return isDead;
     }
 
     /**
