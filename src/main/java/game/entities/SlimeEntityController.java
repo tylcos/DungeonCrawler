@@ -47,12 +47,18 @@ public class SlimeEntityController implements IEntityController {
                        && difference.magnitude() <= strafingDistance) {
                 state = State.strafing;
 
-                if (RandomUtil.get() < .2 * GameEngine.getDt()) {
+                // Should attack every 2 seconds
+                if (RandomUtil.get() < .5 * GameEngine.getDt()) {
                     state = State.attacking;
                 }
             } else if (state == State.attacking
-                       && difference.magnitude() < .5d * strafingDistance) {
+                       && difference.magnitude() < .3d * strafingDistance) {
                 state = State.running;
+
+                // Attack player
+                if (!MainPlayer.getPlayer().isDead()) {
+                    MainPlayer.getPlayer().changeHealth(-1);
+                }
             }
 
             if (MainPlayer.getPlayer().isDead()) {

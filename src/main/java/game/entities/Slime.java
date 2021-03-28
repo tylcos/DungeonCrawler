@@ -46,12 +46,7 @@ public class Slime extends Entity {
             return;
         }
 
-        //todo: find a better way of doing this
-        if (RandomUtil.get() < .2d) {
-            MainPlayer.getPlayer().changeHealth(-1);
-        }
-
-        setHealth(health - 1);
+        changeHealth(-1);
     }
 
     /**
