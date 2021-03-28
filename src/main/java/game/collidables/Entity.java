@@ -2,6 +2,10 @@ package game.collidables;
 
 import javafx.geometry.Point2D;
 
+import java.awt.*;
+
+import javafx.scene.image.Image;
+
 /**
  * Game entity that will update every frame
  */
@@ -31,13 +35,15 @@ public class Entity extends Collidable {
         super(image, false);
         setPosition(position);
         setScale(scale);
+
     }
 
     /**
      * Updates the entity.
      * Overwritten in child classes.
      */
-    public void update() { }
+    public void update() {
+    }
 
     /**
      * Sets the entity to a new position.
@@ -114,4 +120,13 @@ public class Entity extends Collidable {
     public void onCollision(Collidable other) {
         // System.out.println("An entity hit something!");
     }
+
+    /**
+     * Set Image to new Image
+     * @param image new Image to be change
+     */
+    public void newImage(Image image) {
+        super.setNewImage(image);
+    }
+
 }
