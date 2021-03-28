@@ -6,7 +6,6 @@ import game.collidables.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 import java.util.LinkedList;
@@ -41,17 +40,15 @@ public class Level extends StackPane {
     private       Room     exit;
 
     // Queue of rooms and their doors that need a connection to an adjacent room
-    private        Queue<QueueLink>              roomLinkQueue = new LinkedList<>();
+    private Queue<QueueLink> roomLinkQueue = new LinkedList<>();
 
     // Used to update the ui minimap when a new room is loaded
     private static EventHandler<? extends Event> uiEventHandler;
 
     /**
      * Create a new level without anything inside it.
-     *
-     * @param renderPane Pane used to render all entities
      */
-    public Level(Pane renderPane) {
+    public Level() {
         map       = new Room[MAX_DIAMETER][MAX_DIAMETER];
         mapOffset = MAX_DIAMETER / 2;
     }
@@ -72,9 +69,9 @@ public class Level extends StackPane {
                         room.addItem(new Coin());
                     }
 
-                    int numberOfEnemies = RandomUtil.getInt(5);
+                    int numberOfEnemies = RandomUtil.getInt(2, 5);
                     for (int i = 0; i < numberOfEnemies; i++) {
-                        room.addItem(new Enemy(100, 0));
+                        room.addEntity(new Enemy(3, 0));
                     }
                 }
             }
@@ -142,7 +139,7 @@ public class Level extends StackPane {
         // Load the new room
         GameEngine.setRenderLayer(GameEngine.ROOM, currentRoom);
         GameEngine.instantiate(GameEngine.ITEM, currentRoom.getItems());
-        GameEngine.instantiate(GameEngine.ITEM, currentRoom.getEntities());
+        GameEngine.instantiate(GameEngine.ENTITY, currentRoom.getEntities());
         GameEngine.addToPhysics(currentRoom.getBodies());
 
         // Put the player in the "center" of the room

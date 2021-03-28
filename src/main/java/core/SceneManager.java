@@ -11,12 +11,12 @@ import java.io.IOException;
  * Loads initial window and subsequent scenes
  */
 public final class SceneManager {
-    private static Stage stage;
+    private static Stage  stage;
     private static String sceneName;
 
-    public static final String TITLE = "/views/TitleScreen.fxml";
-    public static final String CONFIG = "/views/ConfigScreen.fxml";
-    public static final String GAME = "/views/GameScreen.fxml";
+    public static final String TITLE      = "/views/TitleScreen.fxml";
+    public static final String CONFIG     = "/views/ConfigScreen.fxml";
+    public static final String GAME       = "/views/GameScreen.fxml";
     public static final String WIN_SCREEN = "/views/WinGameScreen.fxml";
 
     /**

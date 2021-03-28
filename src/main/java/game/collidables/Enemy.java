@@ -3,6 +3,7 @@ package game.collidables;
 import data.RandomUtil;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 
 /**
  * The enemy/monster in the dungeon.
@@ -14,6 +15,8 @@ public class Enemy extends Entity {
     private int        health;
     private int        money;
 
+    private boolean isDead;
+
     // Since this variable identify whether player is attacking enemy,
     // the variable will be declare in MainPlayer Class.
     // Once "attack" motion implemented in mainPlayer Class, move it.
@@ -24,9 +27,7 @@ public class Enemy extends Entity {
     private boolean isAttackRight;
     // CHANGE ABOVE LINE LATER INTO MainPlayer class
 
-    private boolean isDead;
-    private double  speed = 300d;
-
+    private double speed       = 300d;
     // Smooths movement over around 150 frames
     private double inputSmooth = .02d;
 
@@ -37,19 +38,16 @@ public class Enemy extends Entity {
      * @param money  the amount of money the enemy holds
      */
     public Enemy(int health, int money) {
-
-        super(RandomUtil.getRandomEnemy(), new Point2D(RandomUtil.getInt(-300,300), RandomUtil.getInt(-300,300)), new Point2D(5, 5));
+        super(RandomUtil.getRandomSlime(),
+              new Point2D(RandomUtil.getInt(-300, 300),
+                          RandomUtil.getInt(-300, 300)),
+              new Point2D(5, 5));
 
         this.health = health;
         this.money  = money;
 
-        // todo change this later
-        isPlayerAttackEnemy = false;
-
-        // todo change this later
-        isDead = false;
+        setOnMouseClicked(event -> attackedByPlayer(event));
     }
-
 
     /**
      * Updates the enemy health and alive state.
@@ -61,16 +59,8 @@ public class Enemy extends Entity {
             return;
         }
 
-        if (health < 0) {
-            isDead = true;
-        }
-
         if (!isDead) {
             enemyMovement();
-        }
-
-        if (isPlayerAttackEnemy && !isDead) {
-            playerAttackEnemy(mainPlayer);
         }
     }
 
@@ -92,23 +82,20 @@ public class Enemy extends Entity {
     /**
      * Enemy retreat one step after mainPlayer attack enemy.
      *
-     * @param mainPlayer the main player
+     * @param event Mouse click event
      */
-    public void playerAttackEnemy(MainPlayer mainPlayer) {
-        Point2D enemyPosition      = getPosition();
-        Point2D mainPlayerPosition = this.mainPlayer.getPosition();
+    public void attackedByPlayer(MouseEvent event) {
+        System.out.println("Clicked enemy with health: " + health);
 
-        Point2D difference = enemyPosition.subtract(mainPlayerPosition);
-        // if enemy was attacked by the player
-        if (difference.equals(new Point2D(1, 1)) && MainPlayer.getPlayer().getIsOnAttack()) {
-            difference = difference.normalize().multiply(speed);
-            setVelocity(getVelocity().interpolate(difference, inputSmooth));
+        if (isDead) {
+            return;
         }
-        health--;
 
-        if (health <= 0) {
+        health--;
+        if (health == 0) {
             isDead = true;
             setImage(new Image("images/enemyDead.gif"));
+            setMouseTransparent(true);
         }
     }
 
@@ -128,15 +115,6 @@ public class Enemy extends Entity {
      */
     public int getMoney() {
         return money;
-    }
-
-    /**
-     * Returns if the player is attacking the enemy.
-     *
-     * @return true if the player is attacking the enemy; false otherwise
-     */
-    public boolean isPlayerAttackEnemy() {
-        return isPlayerAttackEnemy;
     }
 
     /**

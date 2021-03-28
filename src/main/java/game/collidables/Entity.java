@@ -1,9 +1,6 @@
 package game.collidables;
 
 import javafx.geometry.Point2D;
-
-import java.awt.*;
-
 import javafx.scene.image.Image;
 
 /**
@@ -35,7 +32,6 @@ public class Entity extends Collidable {
         super(image, false);
         setPosition(position);
         setScale(scale);
-
     }
 
     /**
@@ -123,10 +119,11 @@ public class Entity extends Collidable {
 
     /**
      * Set Image to new Image
+     *
      * @param image new Image to be change
      */
     public void newImage(Image image) {
-        super.setNewImage(image);
+        setNewImage(image);
     }
 
 }

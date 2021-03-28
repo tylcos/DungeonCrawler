@@ -1,5 +1,7 @@
 package data;
 
+import javafx.geometry.Point2D;
+
 import java.util.Random;
 
 /**
@@ -38,7 +40,7 @@ public final class RandomUtil {
         "/rooms/horizontal.room"
     };
 
-    private static final String[] ENEMY_SPRITES = {
+    private static final String[] SLIME_SPRITES = {
         "/images/enemy1.gif",
         "/images/enemy2.gif",
         "/images/enemy3.gif"
@@ -71,8 +73,8 @@ public final class RandomUtil {
      *
      * @return a random name file path
      */
-    public static String getRandomEnemy() {
-        return ENEMY_SPRITES[RAND.nextInt(ENEMY_SPRITES.length)];
+    public static String getRandomSlime() {
+        return SLIME_SPRITES[RAND.nextInt(SLIME_SPRITES.length)];
     }
 
     /**
@@ -113,5 +115,29 @@ public final class RandomUtil {
      */
     public static boolean getBoolean(double chance) {
         return RAND.nextDouble() < chance;
+    }
+
+    /**
+     * Generates a random Point2D within <[0, xMax), [0, yMax)>
+     *
+     * @param xMax the maximum bound for x
+     * @param yMax the maximum bound for y
+     * @return a random Point2D
+     */
+    public static Point2D getPoint2D(int xMax, int yMax) {
+        return new Point2D(getInt(xMax), getInt(yMax));
+    }
+
+    /**
+     * Generates a random Point2D within <[xMin, xMax), [yMin, yMax)>
+     *
+     * @param xMin the minimum bound for x
+     * @param xMax the maximum bound for x
+     * @param yMin the minimum bound for y
+     * @param yMax the maximum bound for y
+     * @return a random Point2D
+     */
+    public static Point2D getPoint2D(int xMin, int xMax, int yMin, int yMax) {
+        return new Point2D(getInt(xMin, xMax), getInt(yMin, yMax));
     }
 }
