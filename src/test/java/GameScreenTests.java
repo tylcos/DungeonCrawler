@@ -1,6 +1,6 @@
 import core.DungeonCrawlerDriver;
 import core.SceneManager;
-import game.collidables.MainPlayer;
+import game.entities.MainPlayer;
 import game.levels.Direction;
 import game.levels.Room;
 import javafx.scene.input.KeyCode;

@@ -1,7 +1,7 @@
 package views;
 
 import core.SceneManager;
-import game.collidables.MainPlayer;
+import game.entities.MainPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 

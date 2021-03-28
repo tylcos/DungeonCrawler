@@ -2,8 +2,7 @@ package game.levels;
 
 import core.*;
 import data.RandomUtil;
-import game.collidables.Coin;
-import game.collidables.Door;
+import game.collidables.*;
 import game.entities.MainPlayer;
 import game.entities.Slime;
 import javafx.event.Event;
@@ -67,14 +66,19 @@ public class Level extends StackPane {
                 Room room = map[x][y];
 
                 if (room != null) {
-                    int numberOfCoins = RandomUtil.getInt(2);
+                    int numberOfCoins = RandomUtil.getInt(3, 5);
                     for (int i = 0; i < numberOfCoins; i++) {
-                        room.addItem(new Coin());
+                        room.addCollectable(new Coin());
+                    }
+
+                    int numberOfItems = RandomUtil.getInt(2);
+                    for (int i = 0; i < numberOfItems; i++) {
+                        room.addCollectable(new Item());
                     }
 
                     int numberOfEnemies = RandomUtil.getInt(2, 5);
                     for (int i = 0; i < numberOfEnemies; i++) {
-                        room.addEntity(new Enemy(3, 0));
+                        room.addEntity(new Slime(1, 0));
                     }
                 }
             }
@@ -128,7 +132,7 @@ public class Level extends StackPane {
     public void setRoom(Room newRoom) {
         if (currentRoom != null) {
             // Unload the old room
-            GameEngine.destroy(GameEngine.ITEM, currentRoom.getItems());
+            GameEngine.destroy(GameEngine.ITEM, currentRoom.getCollectables());
             GameEngine.destroy(GameEngine.ENTITY, currentRoom.getEntities());
             GameEngine.removeFromPhysics(currentRoom.getBodies());
         }
@@ -141,16 +145,15 @@ public class Level extends StackPane {
 
         // Load the new room
         GameEngine.setRenderLayer(GameEngine.ROOM, currentRoom);
-        GameEngine.instantiate(GameEngine.ITEM, currentRoom.getItems());
+        GameEngine.instantiate(GameEngine.ITEM, currentRoom.getCollectables());
         GameEngine.instantiate(GameEngine.ENTITY, currentRoom.getEntities());
         GameEngine.addToPhysics(currentRoom.getBodies());
 
         // Put the player in the "center" of the room
         MainPlayer player = MainPlayer.getPlayer();
-        if (player != null) {
-            player.setPosition(Point2D.ZERO);
-            player.setVelocity(Point2D.ZERO);
-        }
+        player.toFront();
+        player.setPosition(Point2D.ZERO);
+        player.setVelocity(Point2D.ZERO);
 
         if (uiEventHandler != null) {
             uiEventHandler.handle(null);

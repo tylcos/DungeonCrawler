@@ -77,8 +77,8 @@ public class Room extends GridPane {
     // Objects in this room. Names correspond to render layers in Level
     // WARNING: IF YOU GET ERRORS ABOUT CONCURRENCY, THERE'S A DECENT CHANCE THESE TWO ARRAYLISTS
     // NEED TO BE TURNED INTO ARRAYBLOCKINGQUEUES
-    private ArrayList<Collectable> items    = new ArrayList<>();
-    private ArrayList<Entity>      entities = new ArrayList<>();
+    private ArrayList<Collectable> collectables = new ArrayList<>();
+    private ArrayList<Entity>      entities     = new ArrayList<>();
 
     // Contains valid door tiles for each direction.
     // Used by createDoor() to add doors to rooms that are already generated.
@@ -422,8 +422,8 @@ public class Room extends GridPane {
      *
      * @return ArrayList of Collidables making up this room
      */
-    public ArrayList<Collidable> getBodies() {
-        return bodies;
+    public List<Collidable> getBodies() {
+        return Collections.unmodifiableList(bodies);
     }
 
     /**
@@ -431,8 +431,8 @@ public class Room extends GridPane {
      *
      * @return the items in this room
      */
-    public ArrayList<Collectable> getItems() {
-        return items;
+    public List<Collectable> getCollectables() {
+        return Collections.unmodifiableList(collectables);
     }
 
     /**
@@ -440,8 +440,8 @@ public class Room extends GridPane {
      *
      * @param item the item to add
      */
-    public void addItem(Collectable item) {
-        items.add(item);
+    public void addCollectable(Collectable item) {
+        collectables.add(item);
     }
 
     /**
@@ -449,8 +449,8 @@ public class Room extends GridPane {
      *
      * @return the entities in this room
      */
-    public ArrayList<Entity> getEntities() {
-        return entities;
+    public List<Entity> getEntities() {
+        return Collections.unmodifiableList(entities);
     }
 
     /**
