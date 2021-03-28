@@ -62,6 +62,9 @@ public class Enemy extends Entity {
         if (!isDead) {
             enemyMovement();
         }
+        else{
+            setVelocity(new Point2D(0,0));
+        }
     }
 
     /**
@@ -75,6 +78,8 @@ public class Enemy extends Entity {
         difference = difference.normalize().multiply(speed);
 
         setVelocity(getVelocity().interpolate(difference, inputSmooth));
+
+
     }
 
     // todo Once attack method from MainPlayer fully implemented, update this method.
@@ -90,6 +95,10 @@ public class Enemy extends Entity {
         if (isDead) {
             return;
         }
+        //todo: find a better way of doing this
+        if (RandomUtil.getInt(0,5) == 2) {
+            MainPlayer.getPlayer().setHealth(MainPlayer.getPlayer().getHealth() - 1);
+        };
 
         health--;
         if (health == 0) {
