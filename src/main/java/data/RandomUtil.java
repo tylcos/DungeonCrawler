@@ -78,21 +78,30 @@ public final class RandomUtil {
     }
 
     /**
-     * Generates a random number within [0, max).
+     * Generates a random double within [0, 1).
+     *
+     * @return a random double within [0, 1).
+     */
+    public static double get() {
+        return RAND.nextDouble();
+    }
+
+    /**
+     * Generates a random integer within [0, max).
      *
      * @param max the maximum bound
-     * @return a random number between 0 and maximum, exclusive
+     * @return a random integer within [0, max)
      */
     public static int getInt(int max) {
         return RAND.nextInt(max);
     }
 
     /**
-     * Generates a random number within [min, max).
+     * Generates a random integer within [min, max).
      *
      * @param min the minimum bound
      * @param max the maximum bound
-     * @return a random number between minimum, inclusive, and maximum, exclusive
+     * @return a random integer within [min, max)
      */
     public static int getInt(int min, int max) {
         return RAND.nextInt(max - min) + min;

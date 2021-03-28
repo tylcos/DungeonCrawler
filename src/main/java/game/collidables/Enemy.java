@@ -62,9 +62,6 @@ public class Enemy extends Entity {
         if (!isDead) {
             enemyMovement();
         }
-        else{
-            setVelocity(new Point2D(0,0));
-        }
     }
 
     /**
@@ -79,7 +76,6 @@ public class Enemy extends Entity {
 
         setVelocity(getVelocity().interpolate(difference, inputSmooth));
 
-
     }
 
     // todo Once attack method from MainPlayer fully implemented, update this method.
@@ -92,19 +88,21 @@ public class Enemy extends Entity {
     public void attackedByPlayer(MouseEvent event) {
         System.out.println("Clicked enemy with health: " + health);
 
-        if (isDead) {
+        if (isDead || mainPlayer.isDead()) {
             return;
         }
+
         //todo: find a better way of doing this
-        if (RandomUtil.getInt(0,5) == 2) {
-            MainPlayer.getPlayer().setHealth(MainPlayer.getPlayer().getHealth() - 1);
-        };
+        if (RandomUtil.get() < .2d) {
+            mainPlayer.setHealth(mainPlayer.getHealth() - 1);
+        }
 
         health--;
         if (health == 0) {
             isDead = true;
+            setVelocity(Point2D.ZERO);
             setImage(new Image("images/enemyDead.gif"));
-            setMouseTransparent(true);
+            setMouseTransparent(true); // So that you can kill other slimes beneath a dead one
         }
     }
 
