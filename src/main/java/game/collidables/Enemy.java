@@ -65,7 +65,7 @@ public class Enemy extends Entity {
             isDead = true;
         }
 
-        if (!MainPlayer.getPlayer().getIsOnAttack() && !isDead) {
+        if (!isDead) {
             enemyMovement();
         }
 
