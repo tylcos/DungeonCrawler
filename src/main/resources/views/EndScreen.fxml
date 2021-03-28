@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../styles/EndScreenStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.EndScreen">
+    <children>
+        <VBox alignment="CENTER" StackPane.alignment="CENTER">
+            <StackPane.margin>
+                <Insets />
+            </StackPane.margin>
+            <children>
+                <Label fx:id="endGameText" alignment="CENTER" styleClass="titleText" text="End Game Text" />
+                <Label alignment="CENTER" onMouseClicked="#onPlayAgainClicked" styleClass="buttonText" text="Play Again" textAlignment="CENTER" />
+                <Label alignment="CENTER" onMouseClicked="#onMainMenuClicked" styleClass="buttonText" text="Main Menu" textAlignment="CENTER" />
+            </children>
+        </VBox>
+        <HBox alignment="BOTTOM_RIGHT" maxHeight="200.0" maxWidth="600.0" StackPane.alignment="BOTTOM_RIGHT">
+            <children>
+                <Label alignment="CENTER" onMouseClicked="#onExitClick" styleClass="buttonText" text="Exit" textAlignment="RIGHT" />
+            </children>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+        </HBox>
+    </children>
+</StackPane>
