@@ -1,4 +1,4 @@
-package game.collidables;
+package game.entities;
 
 import data.RandomUtil;
 import javafx.geometry.Point2D;
@@ -9,14 +9,6 @@ import javafx.scene.input.MouseEvent;
  * The enemy/monster in the dungeon.
  */
 public class Enemy extends Entity {
-    private static final String IMAGE = "resources/images/enemy1.gif";
-
-    private MainPlayer mainPlayer;
-    private int        health;
-    private int        money;
-
-    private boolean isDead;
-
     // Since this variable identify whether player is attacking enemy,
     // the variable will be declare in MainPlayer Class.
     // Once "attack" motion implemented in mainPlayer Class, move it.
@@ -86,8 +78,6 @@ public class Enemy extends Entity {
      * @param event Mouse click event
      */
     public void attackedByPlayer(MouseEvent event) {
-        System.out.println("Clicked enemy with health: " + health);
-
         if (isDead || mainPlayer.isDead()) {
             return;
         }
