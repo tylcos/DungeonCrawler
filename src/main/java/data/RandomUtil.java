@@ -127,6 +127,16 @@ public final class RandomUtil {
     }
 
     /**
+     * Generates a random Point2D within <[-max, max), [-max, max)>
+     *
+     * @param max the bound for x and y
+     * @return a random Point2D
+     */
+    public static Point2D getPoint2D(int max) {
+        return new Point2D(getInt(-max, max), getInt(-max, max));
+    }
+
+    /**
      * Generates a random Point2D within <[0, xMax), [0, yMax)>
      *
      * @param xMax the maximum bound for x
