@@ -1,39 +1,27 @@
-package game.collidables;
+package game.entities;
 
-import core.GameEngine;
-import core.InputManager;
+import core.*;
 import game.Weapon;
+import game.collidables.Collidable;
+import game.collidables.Wall;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import views.GameScreen;
 
 /**
  * Singleton controller for the player
  */
 public final class MainPlayer extends Entity {
     private static MainPlayer player;
-
-    private static TextArea uiInfoText;
-
-    private String name;
-    private Weapon weapon;
-    private int    money;
-    private int    health;
-
-    private double speed = 750d;
-
-    // Smooths input over around 125ms
-    // inputSmooth = 1d would remove smoothing
-    // https://www.desmos.com/calculator/xjyyi5sndo
-    private double  inputSmooth = .3d;
-    private Point2D lastVelocity;
+    private        String     name;
+    private        Weapon     weapon;
+    private        String     difficulty;
 
     private boolean onAttackMode;
-    private String  difficulty;
     private int     attackTime;
-    private boolean isDead;
+
+    private static TextArea uiInfoText;
 
     /**
      * Initializes the MainPlayer singleton
@@ -53,29 +41,42 @@ public final class MainPlayer extends Entity {
         // todo: fix weapon damage and price
         name   = image;
         weapon = new Weapon(weaponName, 0, 0);
-        health = 5;
 
         switch (difficulty) {
         case "Boring":
             money = 100;
+            health = 5;
             break;
         case "Normal":
             money = 75;
+            health = 4;
             break;
         case "Hard":
             money = 50;
+            health = 3;
             break;
         default:
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
+
+        entityController = new MainPlayerEntityController(this);
     }
 
     @Override
     public void update() {
         uiInfoText.setText(toStringFormatted());
         if (isDead) {
+            setOpacity(getOpacity() - .1d * GameEngine.getDt());
+            if (getOpacity() <= 0) {
+                // todo: go to game over screen instead
+                SceneManager.loadScene(SceneManager.END);
+            }
+
             return;
         }
+
+        // Used for player movement and eventually attacking
+        entityController.act();
 
         if (attackTime > 200) {
             String currentWeapon = weapon.getName();
@@ -91,19 +92,12 @@ public final class MainPlayer extends Entity {
             attackTime = 0;
         }
 
-        // User input logic
-        Point2D input = Point2D.ZERO;
-        if (InputManager.get(KeyCode.W) || InputManager.get(KeyCode.UP)) {
-            input = input.add(0, -1);
-        }
-        if (InputManager.get(KeyCode.A) || InputManager.get(KeyCode.LEFT)) {
-            input = input.add(-1, 0);
-        }
-        if (InputManager.get(KeyCode.S) || InputManager.get(KeyCode.DOWN)) {
-            input = input.add(0, 1);
-        }
-        if (InputManager.get(KeyCode.D) || InputManager.get(KeyCode.RIGHT)) {
-            input = input.add(1, 0);
+        // Player attacks
+        if (InputManager.get(KeyCode.SPACE)) {
+            onAttackMode = true;
+            attackMotion();
+        } else {
+            onAttackMode = false;
         }
 
         if (InputManager.get(KeyCode.DIGIT1)) {
@@ -119,61 +113,14 @@ public final class MainPlayer extends Entity {
             switchToNoWeapon();
         }
 
-
-        // Player attacks
-        if (InputManager.get(KeyCode.SPACE)) {
-            onAttackMode = true;
-            attackMotion();
-        } else {
-            onAttackMode = false;
-        }
-
-        lastVelocity = getVelocity();
-
-        // TODO 3/24/2021 Use a better frame independent way of smoothing input
-        double  dt          = GameEngine.getDt();
-        Point2D rawVelocity = input.normalize().multiply(speed);
-        Point2D velocity = getVelocity().interpolate(rawVelocity,
-                                                     inputSmooth * (60d * dt + .0007d / dt));
-
-        double dVelocity = velocity.subtract(getVelocity()).magnitude() / speed;
-        setVelocity(dVelocity < .01 ? rawVelocity : velocity);
         attackTime++;
     }
 
     @Override
     public void onCollision(Collidable other) {
-        // todo: add collectable to collidable bodies in Room
-        if (other instanceof Collectable) {
-            Collectable collectable = (Collectable) other;
-
-            collectable.setImage(new Image("images/Invisible.gif"));
-            collectable.setCollected();
-            collect(collectable);
-        }
-
-        // Moved this from Door class to prevent more type checking
-        if (other instanceof Door) {
-            GameScreen.getLevel().setRoom(((Door) other).getDestination());
-        }
-
         if (other instanceof Wall) {
             bounceBack(other, 30);
         }
-
-        // todo: add enemy to collidable bodies in Room
-        /*if (other instanceof Enemy) {
-            bounceBack(other, 1);
-        }*/
-    }
-
-    /**
-     * Updates players health or money based on item collected
-     *
-     * @param item the item collected
-     */
-    public void collect(Collectable item) {
-        // todo: fix when coin and item are made Collectables
     }
 
     /**
@@ -193,6 +140,7 @@ public final class MainPlayer extends Entity {
         }
 
         setPosition(getPosition().add(new Point2D(dx, dy)));
+
         /* Tyler test
         Bounds  otherBounds   = other.localToScene(other.getBoundsInLocal());
         Point2D otherPosition = new Point2D(otherBounds.getCenterX(), otherBounds.getCenterY());
@@ -212,34 +160,27 @@ public final class MainPlayer extends Entity {
      * change weapon to Bow
      */
     public void swapToBow() {
-
-        Image Bow = new Image("images/PlayerBow2.gif");
-        setNewImage(Bow);
-        //change damage and price later
-        Weapon newBow = new Weapon("Bow", 0, 0); //TODO fix damage and price later
-        weapon = newBow;
+        Image bow = new Image("images/PlayerBow2.gif");
+        setNewImage(bow);
+        weapon = new Weapon("Bow", 0, 0);
     }
 
     /**
      * change weapon to Axe
      */
     public void swapToAxe() {
-        Image Axe = new Image("images/PlayerAxe.gif");
-        setNewImage(Axe);
-        //change damage and price later
-        Weapon newBow = new Weapon("Axe", 0, 0); //ToDO fix damage and price later
-        weapon = newBow;
+        Image axe = new Image("images/PlayerAxe.gif");
+        setNewImage(axe);
+        weapon = new Weapon("Axe", 0, 0);
     }
 
     /**
      * change to weapon to sword
      */
     public void swapToSword() {
-        Image Sword = new Image("images/PlayerSwordAttack.png");
-        setNewImage(Sword);
-        //change damage and price later
-        Weapon newBow = new Weapon("Sword", 0, 0); //ToDo fix damge and Price later
-        weapon = newBow;
+        Image sword = new Image("images/PlayerSwordAttack.png");
+        setNewImage(sword);
+        weapon = new Weapon("Sword", 0, 0);
     }
 
     public void switchToNoWeapon() {
@@ -252,93 +193,22 @@ public final class MainPlayer extends Entity {
      * Active AttackMotion
      */
     public void attackMotion() {
-        Weapon currentWeapon = weapon;
-        switch (currentWeapon.getName()) {
+        Image attack;
+        switch (weapon.getName()) {
         case "Bow":
-            Image BowAttack = new Image("images/PlayerBowAttack.gif");
-            MainPlayer.getPlayer().setNewImage(BowAttack);
+            attack = new Image("images/PlayerBowAttack.gif");
             break;
         case "Axe":
-            Image swordAttack = new Image("images/PlayerAxeAttack.gif");
-            MainPlayer.getPlayer().setNewImage(swordAttack);
+            attack = new Image("images/PlayerAxeAttack.gif");
             break;
         case "Sword":
-            Image AxeAttack = new Image("images/PlayerSwordAttack.png");
-            MainPlayer.getPlayer().setNewImage(AxeAttack);
+            attack = new Image("images/PlayerSwordAttack.png");
             break;
+        default:
+            throw new IllegalStateException("Unexpected weapon: " + weapon.getName());
         }
-    }
 
-    /**
-     * Returns the name of the player.
-     *
-     * @return the name of the player
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the name of the player to a new name.
-     *
-     * @param name the new name of the player
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Returns the weapon the player has.
-     *
-     * @return the weapon the player has
-     */
-    public Weapon getWeapon() {
-        return weapon;
-    }
-
-    /**
-     * Sets the player's weapon to a new weapon.
-     *
-     * @param weapon the new weapon for the player to have
-     */
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
-    }
-
-    /**
-     * Returns the player's balance
-     *
-     * @return the player's balance
-     */
-    public int getMoney() {
-        return money;
-    }
-
-    /**
-     * Sets the player's balance
-     *
-     * @param money the new balance
-     */
-    public void setMoney(int money) {
-        this.money = money;
-    }
-
-    /**
-     * Adds money to the player's balance
-     *
-     * @param money the amount of money to add
-     */
-    public void addMoney(int money) {
-        this.money += money;
-    }
-
-    /**
-     * Returns the health the player has.
-     *
-     * @return the player's health
-     */
-    public int getHealth() {
-        return health;
+        MainPlayer.getPlayer().setNewImage(attack);
     }
 
     /**
@@ -346,23 +216,16 @@ public final class MainPlayer extends Entity {
      *
      * @param health the new amount of health the player has
      */
+    @Override
     public void setHealth(int health) {
         this.health = health;
 
         if (health == 0) {
             isDead = true;
             setRotate(90); // You can rotate the image instead of changing it to PlayerDead.png
-            // todo: go to game over screen
-        }
-    }
 
-    /**
-     * Returns if the main player is dead.
-     *
-     * @return true if the main player is dead; false otherwise
-     */
-    public boolean isDead() {
-        return isDead;
+            entityController.stop();
+        }
     }
 
     /**

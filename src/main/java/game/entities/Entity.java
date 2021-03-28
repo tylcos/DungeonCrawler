@@ -1,15 +1,23 @@
-package game.collidables;
+package game.entities;
 
+import game.collidables.Collidable;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 
 /**
- * Game entity that will update every frame
+ * Eventually going to combine the old entity with this once Collectables are in use
  */
-public class Entity extends Collidable {
-    private Point2D position;
-    private Point2D velocity = new Point2D(0, 0);
-    private Point2D scale;
+public abstract class Entity extends Collidable {
+    protected Point2D position;
+    protected Point2D velocity = new Point2D(0, 0);
+    protected Point2D scale;
+
+    protected int     health;
+    protected boolean isDead;
+    protected int     money;
+
+    protected IEntityController entityController;
+
+    protected MainPlayer mainPlayer = MainPlayer.getPlayer();
 
     /**
      * Creates an instance of an entity from an image and places it at a specific position.
@@ -17,7 +25,7 @@ public class Entity extends Collidable {
      * @param image    the path to the image of the entity
      * @param position the position to create the entity at
      */
-    public Entity(String image, Point2D position) {
+    protected Entity(String image, Point2D position) {
         this(image, position, new Point2D(1, 1));
     }
 
@@ -28,7 +36,7 @@ public class Entity extends Collidable {
      * @param position the position to create the entity at
      * @param scale    how much to scale the entity by
      */
-    public Entity(String image, Point2D position, Point2D scale) {
+    protected Entity(String image, Point2D position, Point2D scale) {
         super(image, false);
         setPosition(position);
         setScale(scale);
@@ -38,18 +46,77 @@ public class Entity extends Collidable {
      * Updates the entity.
      * Overwritten in child classes.
      */
-    public void update() {
-    }
+    public abstract void update();
 
     /**
      * Sets the entity to a new position.
      *
-     * @param dt the amount of time
+     * @param dt the amount of time since the last frame in seconds
      */
     public final void physicsUpdate(double dt) {
-        // position = position + velocity * dt
-        position = position.add(velocity.multiply(dt));
-        setPosition(position);
+        setPosition(position.add(velocity.multiply(dt)));
+    }
+
+    @Override
+    public void onCollision(Collidable other) {
+    }
+
+    /**
+     * Returns the entity's balance
+     *
+     * @return the player's balance
+     */
+    public int getMoney() {
+        return money;
+    }
+
+    /**
+     * Sets the entity's balance
+     *
+     * @param money the new balance
+     */
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    /**
+     * Adds money to the entity's balance
+     *
+     * @param money the amount of money to add
+     */
+    public void addMoney(int money) {
+        this.money += money;
+    }
+
+    /**
+     * Gets the entity's health.
+     *
+     * @return the entity's health
+     */
+    public int getHealth() {
+        return health;
+    }
+
+    /**
+     * Sets the entity's health.
+     *
+     * @param health the entity's health
+     */
+    public void setHealth(int health) {
+        this.health = health;
+
+        if (health == 0) {
+            isDead = true;
+        }
+    }
+
+    /**
+     * Returns if the entity is dead.
+     *
+     * @return if the entity is dead
+     */
+    public boolean isDead() {
+        return isDead;
     }
 
     /**
@@ -111,19 +178,4 @@ public class Entity extends Collidable {
         setScaleX(scale.getX());
         setScaleY(scale.getY());
     }
-
-    @Override
-    public void onCollision(Collidable other) {
-        // System.out.println("An entity hit something!");
-    }
-
-    /**
-     * Set Image to new Image
-     *
-     * @param image new Image to be change
-     */
-    public void newImage(Image image) {
-        setNewImage(image);
-    }
-
 }

@@ -2,7 +2,7 @@ package views;
 
 import core.SceneManager;
 import data.RandomUtil;
-import game.collidables.MainPlayer;
+import game.entities.MainPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
