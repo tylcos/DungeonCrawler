@@ -130,30 +130,10 @@ public final class MainPlayer extends Entity {
      * @param bounceDistance the distance to bounce
      */
     private void bounceBack(Collidable other, int bounceDistance) {
-        int dx = -bounceDistance;
-        int dy = -bounceDistance;
-        if (getTranslateX() > other.getParent().getBoundsInParent().getCenterX()) {
-            dx *= -1;
-        }
-        if (getTranslateY() > other.getParent().getBoundsInParent().getCenterY()) {
-            dy *= -1;
-        }
+        Point2D dp = new Point2D(-bounceDistance * Math.signum(getPosition().getX()),
+                                 -bounceDistance * Math.signum(getPosition().getY()));
 
-        setPosition(getPosition().add(new Point2D(dx, dy)));
-
-        /* Tyler test
-        Bounds  otherBounds   = other.localToScene(other.getBoundsInLocal());
-        Point2D otherPosition = new Point2D(otherBounds.getCenterX(), otherBounds.getCenterY());
-
-        // Vector from player to other
-        Point2D playerToOther = ScreenManager.screenToGame(otherPosition).subtract(getPosition());
-        System.out.println(ScreenManager.screenToGame(otherPosition));
-        System.out.println(getPosition());
-        System.out.println(playerToOther);
-
-        Point2D dp = new Point2D(-bounceDistance * Math.signum(playerToOther.getX()),
-                                 bounceDistance * Math.signum(playerToOther.getY()));
-        setPosition(getPosition().add(dp));*/
+        setPosition(getPosition().add(dp));
     }
 
     /**

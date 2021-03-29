@@ -13,7 +13,7 @@ public class WinScreenTests extends ApplicationTest {
     // Auto starts on the win screen
     @Before
     public void start() throws Exception {
-        launch(DungeonCrawlerDriver.class, "--scene=WIN_SCREEN", "--NoDebug");
+        launch(DungeonCrawlerDriver.class, "--scene=WIN_SCREEN", "-NoDebug");
         assertEquals("Failed to load win screen.",
                      SceneManager.END, SceneManager.getSceneName());
     }

@@ -11,7 +11,7 @@
                 <TextArea fx:id="uiInfoText" editable="false" minHeight="500.0" minWidth="500.0" styleClass="uiInfoText" text="Player Info&#10;Test&#10;Test&#10;" AnchorPane.leftAnchor="0.0"
                           AnchorPane.topAnchor="0.0">
                 </TextArea>
-                <TextArea fx:id="uiMinimap" editable="false" minHeight="500.0" minWidth="500.0" nodeOrientation="RIGHT_TO_LEFT" styleClass="minimap" text="minimap&#10;" AnchorPane.bottomAnchor="0.0"
+                <TextArea fx:id="uiMinimap" editable="false" minHeight="500.0" minWidth="500.0" styleClass="minimap" text="minimap&#10;" AnchorPane.bottomAnchor="0.0"
                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 </TextArea>
             </children>
