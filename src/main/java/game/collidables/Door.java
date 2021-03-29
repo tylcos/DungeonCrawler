@@ -10,6 +10,7 @@ import views.GameScreen;
  */
 public class Door extends CollidableTile {
     private Room destination;
+    private boolean locked = false;
 
     /**
      * Constructor taking an Image of a door.
@@ -36,8 +37,12 @@ public class Door extends CollidableTile {
 
     @Override
     public void onCollision(Collidable other) {
-        if (other instanceof MainPlayer) {
-            GameScreen.getLevel().setRoom(destination);
+        if (!locked) {
+            if (other instanceof MainPlayer) {
+                GameScreen.getLevel().setRoom(destination);
+            }
+        } else {
+            // this needs door behavior
         }
     }
 
@@ -57,5 +62,19 @@ public class Door extends CollidableTile {
      */
     public Room getDestination() {
         return destination;
+    }
+    
+    /**
+     * Lock the door.
+     */
+    public void lock() {
+        locked = true;
+    }
+    
+    /**
+     * Unlock the door.
+     */
+    public void unlock() {
+        locked = false;
     }
 }
