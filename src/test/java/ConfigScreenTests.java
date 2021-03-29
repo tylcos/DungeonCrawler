@@ -18,7 +18,7 @@ public class ConfigScreenTests extends ApplicationTest {
     // Auto starts on the config screen
     @Before
     public void start() throws Exception {
-        launch(DungeonCrawlerDriver.class, "--scene=CONFIG", "--NoDebug");
+        launch(DungeonCrawlerDriver.class, "--scene=CONFIG", "-NoDebug");
         assertEquals("Failed to load config screen.",
                      SceneManager.CONFIG, SceneManager.getSceneName());
     }
