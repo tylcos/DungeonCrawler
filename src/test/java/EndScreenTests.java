@@ -8,12 +8,12 @@ import org.testfx.matcher.base.NodeMatchers;
 import static org.junit.Assert.assertEquals;
 import static org.testfx.api.FxAssert.verifyThat;
 
-public class WinScreenTests extends ApplicationTest {
+public class EndScreenTests extends ApplicationTest {
 
     // Auto starts on the win screen
     @Before
     public void start() throws Exception {
-        launch(DungeonCrawlerDriver.class, "--scene=WIN_SCREEN", "-NoDebug");
+        launch(DungeonCrawlerDriver.class, "--scene=END", "-NoDebug");
         assertEquals("Failed to load win screen.",
                      SceneManager.END, SceneManager.getSceneName());
     }

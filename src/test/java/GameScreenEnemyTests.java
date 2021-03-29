@@ -75,7 +75,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
     public void testPlayerHPWhenAttacked() {
         MainPlayer player = MainPlayer.getPlayer();
         int prevHealth = player.getHealth();
-        sleep(100000000);
+        sleep(10000);
         assertNotEquals(prevHealth, player.getHealth());
     }
 
