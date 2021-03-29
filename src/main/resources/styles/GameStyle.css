@@ -9,6 +9,7 @@
 }
 
 .minimap .text {
+     -fx-text-alignment: right;
      -fx-line-spacing: -10px;
 }
 
