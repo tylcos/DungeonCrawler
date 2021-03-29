@@ -265,4 +265,8 @@ public final class MainPlayer extends Entity {
     public String toString() {
         return "Main Player";
     }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
 }
