@@ -274,4 +274,8 @@ public final class GameEngine {
             }
         }
     }
+
+    public static List<Entity> getDynamicBodies() {
+        return dynamicBodies;
+    }
 }
