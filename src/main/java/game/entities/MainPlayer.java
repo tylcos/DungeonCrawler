@@ -3,7 +3,7 @@ package game.entities;
 import core.*;
 import game.Weapon;
 import game.collidables.Collidable;
-import game.collidables.Wall;
+import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -119,8 +119,8 @@ public final class MainPlayer extends Entity {
 
     @Override
     public void onCollision(Collidable other) {
-        if (other instanceof Wall) {
-            bounceBack(other, 30);
+        if (other instanceof CollidableTile) {
+            bounceBack(other, (int) (getVelocity().magnitude() * GameEngine.getDt()));
         }
     }
 
