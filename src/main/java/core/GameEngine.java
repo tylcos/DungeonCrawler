@@ -8,6 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import views.GameScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,10 @@ public final class GameEngine {
         // Purposefully runs physics update before collision checks
         for (Collidable entity : currentDynamicBodies) {
             runCollisionCheck(entity, currentDynamicBodies, currentStaticBodies);
+        }
+        
+        if (GameScreen.getLevel().getCurrentRoom().isClear()) {
+            GameScreen.getLevel().getCurrentRoom().unlockDoors();
         }
     }
 
