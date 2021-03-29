@@ -23,6 +23,10 @@ public class Level extends StackPane {
 
     public static final int MAX_DIAMETER     = 15; // Width/height of map. ODD NUMBERS ONLY
     public static final int MIN_END_DISTANCE = 6;  // Minimum distance away the exit must be
+    
+    /* CHEATS */
+    public static boolean spawnStuffInEntrance = false;
+    public static boolean doorsNeverLock = false;
 
     /*
      * Quick explanation of map coordinates for those concerned: map can be thought of as a 2D grid
@@ -65,7 +69,7 @@ public class Level extends StackPane {
             for (int x = 0; x < MAX_DIAMETER; ++x) {
                 Room room = map[x][y];
 
-                if (room != null) {
+                if (room != null && (spawnStuffInEntrance || !room.isEntrance())) {
                     int numberOfCoins = RandomUtil.getInt(3, 5);
                     for (int i = 0; i < numberOfCoins; i++) {
                         room.addCollectable(new Coin());
@@ -130,11 +134,13 @@ public class Level extends StackPane {
      * @param newRoom the room to switch to
      */
     public void setRoom(Room newRoom) {
+        Direction fromDir = null;
         if (currentRoom != null) {
             // Unload the old room
             GameEngine.destroy(GameEngine.ITEM, currentRoom.getCollectables());
             GameEngine.destroy(GameEngine.ENTITY, currentRoom.getEntities());
             GameEngine.removeFromPhysics(currentRoom.getBodies());
+            fromDir = Direction.vectorToDirection(currentRoom.getPosition().subtract(newRoom.getPosition()));
         }
         currentRoom = newRoom;
 
@@ -154,6 +160,17 @@ public class Level extends StackPane {
         player.toFront();
         player.setPosition(Point2D.ZERO);
         player.setVelocity(Point2D.ZERO);
+        
+        // Lock doors
+        if (fromDir != null) { // this won't run on the entrance room
+            if (!currentRoom.isClear() && !doorsNeverLock) {
+                // lock doors
+                currentRoom.lockDoors(fromDir);
+            } else {
+                // unlock doors
+                currentRoom.unlockDoors();
+            }
+        }
 
         if (uiEventHandler != null) {
             uiEventHandler.handle(null);
@@ -306,7 +323,6 @@ public class Level extends StackPane {
             minimap.append(line1);
             minimap.append('\n');
         }
-
         return minimap.toString();
     }
 
@@ -335,6 +351,14 @@ public class Level extends StackPane {
      */
     public Room getEntrance() {
         return map[mapOffset][mapOffset];
+    }
+    
+    /**
+     * Returns the currently loaded room.
+     * @return the level loaded
+     */
+    public Room getCurrentRoom() {
+        return currentRoom;
     }
 
     /**

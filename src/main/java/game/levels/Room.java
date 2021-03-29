@@ -3,6 +3,7 @@ package game.levels;
 import data.RandomUtil;
 import game.collidables.*;
 import game.entities.Entity;
+import game.entities.Slime;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -416,6 +417,43 @@ public class Room extends GridPane {
             p.getChildren().add(d);
         }
     }
+    
+    /**
+     * Lock all doors except the door in the given direction.
+     * 
+     * @param openDoor the door on this wall will be left open
+     */
+    public void lockDoors(Direction openDoor) {
+        for (Direction dir : Direction.values()) {
+            if (dir == openDoor) {
+                continue;
+            }
+            ArrayList<StackPane> doorList = doors.get(dir);
+            for (StackPane p : doorList) {
+                Node n = p.getChildren().get(0); // the only child should be a door
+                if (n instanceof Door) {
+                    Door d = (Door) n;
+                    d.lock();
+                }
+            }
+        }
+    }
+    
+    /**
+     * Unlock all doors.
+     */
+    public void unlockDoors() {
+        for (Direction dir : Direction.values()) {
+            ArrayList<StackPane> doorList = doors.get(dir);
+            for (StackPane p : doorList) {
+                Node n = p.getChildren().get(0); // the only child should be a door
+                if (n instanceof Door) {
+                    Door d = (Door) n;
+                    d.unlock();
+                }
+            }
+        }
+    }
 
     /**
      * Returns a list of all collidables contained in this room.
@@ -510,5 +548,19 @@ public class Room extends GridPane {
      */
     public boolean[] getActiveDoors() {
         return activeDoors;
+    }
+    
+    /**
+     * @return {@code true} if there are no enemies in the room
+     */
+    public boolean isClear() {
+        boolean hasEnemy = false;
+        for(Entity e : entities) {
+            if (e instanceof Slime && !e.isDead()) {
+                hasEnemy = true;
+                break;
+            }
+        }
+        return !hasEnemy;
     }
 }
