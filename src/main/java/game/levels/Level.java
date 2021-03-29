@@ -250,10 +250,6 @@ public class Level extends StackPane {
         uiEventHandler = handler;
     }
 
-    public Room getCurrentRoom() {
-        return currentRoom;
-    }
-
     /**
      * Returns a basic text minimap
      *
