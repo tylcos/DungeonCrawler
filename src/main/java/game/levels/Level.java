@@ -8,25 +8,20 @@ import game.entities.Slime;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.layout.StackPane;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Level is a StackPane that renders all game objects in a room. Level should always be rendered
- * underneath the game HUD!
+ * Level generates a random level and manages what is currently loaded on the screen
  */
-public class Level extends StackPane {
-    // TODO An in-game map that shows the layout of the rooms (very optional) (also very dependent
-    // on how i'm feeling during that one week where we have a day off)
-
+public class Level {
     public static final int MAX_DIAMETER     = 15; // Width/height of map. ODD NUMBERS ONLY
     public static final int MIN_END_DISTANCE = 6;  // Minimum distance away the exit must be
-    
+
     /* CHEATS */
-    public static boolean spawnStuffInEntrance = false;
-    public static boolean doorsNeverLock = false;
+    private static boolean spawnEnemiesInStartRoom;
+    private static boolean doorsNeverLock;
 
     /*
      * Quick explanation of map coordinates for those concerned: map can be thought of as a 2D grid
@@ -69,7 +64,7 @@ public class Level extends StackPane {
             for (int x = 0; x < MAX_DIAMETER; ++x) {
                 Room room = map[x][y];
 
-                if (room != null && (spawnStuffInEntrance || !room.isEntrance())) {
+                if (room != null && (spawnEnemiesInStartRoom || !room.isEntrance())) {
                     int numberOfCoins = RandomUtil.getInt(3, 5);
                     for (int i = 0; i < numberOfCoins; i++) {
                         room.addCollectable(new Coin());
@@ -140,7 +135,8 @@ public class Level extends StackPane {
             GameEngine.destroy(GameEngine.ITEM, currentRoom.getCollectables());
             GameEngine.destroy(GameEngine.ENTITY, currentRoom.getEntities());
             GameEngine.removeFromPhysics(currentRoom.getBodies());
-            fromDir = Direction.vectorToDirection(currentRoom.getPosition().subtract(newRoom.getPosition()));
+            fromDir = Direction.vectorToDirection(
+                    currentRoom.getPosition().subtract(newRoom.getPosition()));
         }
         currentRoom = newRoom;
 
@@ -160,7 +156,7 @@ public class Level extends StackPane {
         player.toFront();
         player.setPosition(Point2D.ZERO);
         player.setVelocity(Point2D.ZERO);
-        
+
         // Lock doors
         if (fromDir != null) { // this won't run on the entrance room
             if (!currentRoom.isClear() && !doorsNeverLock) {
@@ -327,12 +323,12 @@ public class Level extends StackPane {
     }
 
     /**
-     * Checks if this level has an exit room.
+     * Checks if this level is missing an exit room.
      *
-     * @return {@code true} if this level has an exit
+     * @return {@code true} if this level is missing an exit room
      */
-    public boolean hasExit() {
-        return exit != null;
+    public boolean missingExit() {
+        return exit == null;
     }
 
     /**
@@ -352,13 +348,22 @@ public class Level extends StackPane {
     public Room getEntrance() {
         return map[mapOffset][mapOffset];
     }
-    
+
     /**
      * Returns the currently loaded room.
+     *
      * @return the level loaded
      */
     public Room getCurrentRoom() {
         return currentRoom;
+    }
+
+    public static void setSpawnEnemiesInStartRoom(boolean spawnEnemiesInStartRoom) {
+        Level.spawnEnemiesInStartRoom = spawnEnemiesInStartRoom;
+    }
+
+    public static void setDoorsNeverLock(boolean doorsNeverLock) {
+        Level.doorsNeverLock = doorsNeverLock;
     }
 
     /**

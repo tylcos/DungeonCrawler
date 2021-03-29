@@ -20,7 +20,7 @@ public class EndScreenTests extends ApplicationTest {
 
     @Test
     public void testWinMessageVisible() {
-        verifyThat("You Escaped the Dungeon!", NodeMatchers.isVisible());
+        verifyThat("You Escaped The Dungeon!", NodeMatchers.isVisible());
     }
 
     @Test
@@ -30,6 +30,6 @@ public class EndScreenTests extends ApplicationTest {
 
     @Test
     public void testExitVisible() {
-        verifyThat("Exit", NodeMatchers.isVisible());
+        verifyThat("Exit Game", NodeMatchers.isVisible());
     }
 }

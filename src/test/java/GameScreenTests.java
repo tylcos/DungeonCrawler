@@ -1,15 +1,3 @@
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.EnumMap;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.testfx.framework.junit.ApplicationTest;
-
 import core.DungeonCrawlerDriver;
 import core.SceneManager;
 import game.entities.MainPlayer;
@@ -17,14 +5,22 @@ import game.levels.Direction;
 import game.levels.Room;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import org.junit.Before;
+import org.junit.Test;
+import org.testfx.framework.junit.ApplicationTest;
 import views.GameScreen;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+
+import static org.junit.Assert.*;
 
 public class GameScreenTests extends ApplicationTest {
 
     // Auto starts on the game screen
     @Before
     public void start() throws Exception {
-        launch(DungeonCrawlerDriver.class, "--scene=GAME", "--NoDebug");
+        launch(DungeonCrawlerDriver.class, "--scene=GAME", "-NoDebug");
         assertEquals("Failed to load game screen.", SceneManager.GAME, SceneManager.getSceneName());
     }
 
@@ -77,6 +73,20 @@ public class GameScreenTests extends ApplicationTest {
 
         // Current corner of the room is only 800 pixels from center
         assertTrue(distance < 1200d);
+    }
+
+    /**
+     * Tests if walking into a door changes the level
+     */
+    @Test
+    public void testDoorCollision() {
+        Room startRoom = GameScreen.getLevel().getCurrentRoom();
+
+        press(KeyCode.UP);
+        sleep(2000);
+        release(KeyCode.UP);
+
+        assertNotEquals(startRoom, GameScreen.getLevel().getCurrentRoom());
     }
 
     @Test

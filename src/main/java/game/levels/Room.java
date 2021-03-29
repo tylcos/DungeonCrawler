@@ -112,7 +112,7 @@ public class Room extends GridPane {
             distanceFromEntrance = creator.distanceFromEntrance + 1;
             // The first room far enough away from the entrance to be an exit will become
             // the exit
-            if (distanceFromEntrance >= Level.MIN_END_DISTANCE && !level.hasExit()) {
+            if (distanceFromEntrance >= Level.MIN_END_DISTANCE && level.missingExit()) {
                 exit = true;
             }
         }
@@ -198,9 +198,9 @@ public class Room extends GridPane {
         boolean[] testedDoors = new boolean[4]; // tracks doors that can be activated
 
         // Check which doors exist in this blueprint
-        for (int row = 0; row < blueprint.size(); ++row) {
-            for (int col = 0; col < blueprint.get(row).length(); ++col) {
-                switch (blueprint.get(row).charAt(col)) {
+        for (String row : blueprint) {
+            for (int col = 0; col < row.length(); ++col) {
+                switch (row.charAt(col)) {
                 case 'E':
                     testedDoors[Direction.EAST.toValue()] = true;
                     break;
@@ -244,7 +244,7 @@ public class Room extends GridPane {
             // Decide if we should activate a door. Exits never activate; entrances always activate
             /* @formatter:off */
             boolean build =
-                !exit && (entrance || (!level.hasExit() && !branched)
+                !exit && (entrance || (level.missingExit() && !branched)
                 || Math.random() < (BRANCH_CHANCE * Math.pow(BRANCH_TAX, branches)
                 * ((Level.MIN_END_DISTANCE < distanceFromEntrance)
                 ? Math.pow(DISTANCE_TAX, distanceFromEntrance - Level.MIN_END_DISTANCE) : 1)));
@@ -417,10 +417,10 @@ public class Room extends GridPane {
             p.getChildren().add(d);
         }
     }
-    
+
     /**
      * Lock all doors except the door in the given direction.
-     * 
+     *
      * @param openDoor the door on this wall will be left open
      */
     public void lockDoors(Direction openDoor) {
@@ -438,7 +438,7 @@ public class Room extends GridPane {
             }
         }
     }
-    
+
     /**
      * Unlock all doors.
      */
@@ -549,13 +549,13 @@ public class Room extends GridPane {
     public boolean[] getActiveDoors() {
         return activeDoors;
     }
-    
+
     /**
      * @return {@code true} if there are no enemies in the room
      */
     public boolean isClear() {
         boolean hasEnemy = false;
-        for(Entity e : entities) {
+        for (Entity e : entities) {
             if (e instanceof Slime && !e.isDead()) {
                 hasEnemy = true;
                 break;
