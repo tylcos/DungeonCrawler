@@ -65,6 +65,7 @@ public final class MainPlayer extends Entity {
     @Override
     public void update() {
         uiInfoText.setText(toStringFormatted());
+
         if (isDead) {
             // Used for fading out when you die
             setOpacity(getOpacity() - .2d * GameEngine.getDt());
@@ -217,22 +218,8 @@ public final class MainPlayer extends Entity {
         return onAttackMode;
     }
 
-    /**
-     * Sets the UI information text of the main player.
-     *
-     * @param uiInfoText the information text of the main player
-     */
-    public static void setUiInfoText(TextArea uiInfoText) {
-        MainPlayer.uiInfoText = uiInfoText;
-    }
-
-    /**
-     * Gets the main player.
-     *
-     * @return the main player
-     */
-    public static MainPlayer getPlayer() {
-        return player;
+    public Weapon getWeapon() {
+        return weapon;
     }
 
     public String toStringFormatted() {
@@ -246,7 +233,21 @@ public final class MainPlayer extends Entity {
         return "Main Player";
     }
 
-    public Weapon getWeapon() {
-        return weapon;
+    /**
+     * Sets TextArea uiInfoText so that the UI can be updated when the player is attacked
+     *
+     * @param uiInfoText TextArea that displays the information
+     */
+    public static void setUiInfoText(TextArea uiInfoText) {
+        MainPlayer.uiInfoText = uiInfoText;
+    }
+
+    /**
+     * Gets the main player instance.
+     *
+     * @return the main player
+     */
+    public static MainPlayer getPlayer() {
+        return player;
     }
 }
