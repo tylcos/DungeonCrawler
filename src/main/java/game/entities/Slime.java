@@ -9,7 +9,8 @@ import javafx.scene.input.MouseEvent;
  * Basic slime enemy
  */
 public class Slime extends Entity {
-    /**
+
+     /**
      * Creates an instance of Slime.
      *
      * @param health the amount of health the Slime has
