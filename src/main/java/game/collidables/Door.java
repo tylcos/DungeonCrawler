@@ -10,7 +10,7 @@ import views.GameScreen;
  */
 public class Door extends CollidableTile {
     private Room destination;
-    private boolean locked = false;
+    private boolean locked;
 
     /**
      * Constructor taking an Image of a door.
@@ -43,6 +43,7 @@ public class Door extends CollidableTile {
             }
         } else {
             // this needs door behavior
+            int a;
         }
     }
 
