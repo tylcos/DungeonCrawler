@@ -39,12 +39,6 @@ public final class RandomUtil {
         "/rooms/vertical.room",
         "/rooms/horizontal.room"
     };
-
-    private static final String[] SLIME_SPRITES = {
-        "/images/enemy1.gif",
-        "/images/enemy2.gif",
-        "/images/enemy3.gif"
-    };
     // @formatter:on
 
     private RandomUtil() {
@@ -66,15 +60,6 @@ public final class RandomUtil {
      */
     public static String getRandomRoomBlueprint() {
         return ROOM_BLUEPRINTS[RAND.nextInt(ROOM_BLUEPRINTS.length)];
-    }
-
-    /**
-     * Returns a random enemy file path.
-     *
-     * @return a random name file path
-     */
-    public static String getRandomSlime() {
-        return SLIME_SPRITES[RAND.nextInt(SLIME_SPRITES.length)];
     }
 
     /**

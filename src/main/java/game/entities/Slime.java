@@ -9,6 +9,21 @@ import javafx.scene.input.MouseEvent;
  * Basic slime enemy
  */
 public class Slime extends Entity {
+    private int slimeType;
+
+    // @formatter:off
+    private static final String[] SLIME_SPRITES = {
+        "/images/enemy1.gif",
+        "/images/enemy2.gif",
+        "/images/enemy3.gif"
+    };
+
+    private static final String[] SLIME_DEAD_SPRITES = {
+        "/images/enemyDead1.png",
+        "/images/enemyDead2.png",
+        "/images/enemyDead3.png"
+    };
+    // @formatter:on
 
     /**
      * Creates an instance of Slime.
@@ -17,12 +32,15 @@ public class Slime extends Entity {
      * @param money  the amount of money the Slime holds
      */
     public Slime(int health, int money) {
-        super(RandomUtil.getRandomSlime(),
+        super(SLIME_SPRITES[0],
               RandomUtil.getPoint2D(-300, 300, -300, 300),
               new Point2D(5, 5));
 
         this.health = health;
         this.money  = money;
+
+        slimeType = RandomUtil.getInt(SLIME_SPRITES.length);
+        setImage(new Image(SLIME_SPRITES[slimeType]));
 
         entityController = new SlimeEntityController(this);
 
@@ -64,7 +82,7 @@ public class Slime extends Entity {
 
             entityController.stop();
 
-            setImage(new Image("images/enemyDead.gif"));
+            setImage(new Image(SLIME_DEAD_SPRITES[slimeType]));
             setMouseTransparent(true); // So that you can kill other slimes beneath a dead one
         }
     }
