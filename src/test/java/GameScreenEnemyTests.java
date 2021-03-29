@@ -89,7 +89,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
     }
 
     @Test
-    public void changeBow() {
+    public void testChangeBow() {
         press(KeyCode.DIGIT1);
         Weapon bow = new Weapon("Bow", 0, 0);
         String bow1 = MainPlayer.getPlayer().getWeapon().getName();
@@ -97,7 +97,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
     }
 
     @Test
-    public void changeSword() {
+    public void testChangeSword() {
         press(KeyCode.DIGIT3);
         Weapon sword = new Weapon("Sword", 0, 0);
         String sword1 = MainPlayer.getPlayer().getWeapon().getName();
@@ -105,7 +105,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
     }
 
     @Test
-    public void changeAxe() {
+    public void testChangeAxe() {
         press(KeyCode.DIGIT2);
         Weapon axe = new Weapon("Axe", 0, 0);
         String axe1 = MainPlayer.getPlayer().getWeapon().getName();
