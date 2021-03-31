@@ -48,6 +48,10 @@ public class MainPlayerEntityController implements IEntityController {
     }
 
     @Override
+    public void start() {
+    }
+
+    @Override
     public void stop() {
         entity.setVelocity(Point2D.ZERO);
     }

@@ -110,6 +110,11 @@ public class SlimeEntityController implements IEntityController {
     }
 
     @Override
+    public void start() {
+        state = State.charging;
+    }
+
+    @Override
     public void stop() {
         state = State.stopped;
 

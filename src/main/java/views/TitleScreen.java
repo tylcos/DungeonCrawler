@@ -5,8 +5,6 @@ import core.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
 
 import java.util.function.Supplier;
 
@@ -40,6 +38,7 @@ public class TitleScreen {
             image1.setFitHeight(image1Height * scaleFactor.get());
         });
 
+        /*
         if (GameDriver.isDebug()) {
             Stage stage = SceneManager.getStage();
             System.out.println("\nDebug Screen Scaling");
@@ -49,7 +48,7 @@ public class TitleScreen {
                                + ", " + stage.getOutputScaleY());
             System.out.println("Render Scale: " + stage.getRenderScaleX()
                                + ", " + stage.getRenderScaleY());
-        }
+        }*/
     }
 
     /**

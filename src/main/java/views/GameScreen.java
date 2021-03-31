@@ -25,12 +25,12 @@ public class GameScreen {
      * Initializes the game screen
      */
     public void initialize() {
-        GameEngine.start(renderPane);
-
         // Loaded the GameScreen without going through the config screen
         if (!SceneManager.CONFIG.equals(SceneManager.getSceneName())) {
             Player.setPlayer("Team Azula", "Weapon", "Normal");
         }
+
+        GameEngine.start(renderPane);
 
         // Update UI
         Player.setUiInfoText(uiInfoText);
