@@ -77,7 +77,7 @@ public class Level {
 
                     int numberOfEnemies = RandomUtil.getInt(2, 5);
                     for (int i = 0; i < numberOfEnemies; i++) {
-                        room.addEntity(new Slime(1, 0));
+                        room.addEntity(new Slime());
                     }
                 }
             }

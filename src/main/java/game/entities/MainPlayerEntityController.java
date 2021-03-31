@@ -9,16 +9,16 @@ import javafx.scene.input.KeyCode;
  * MainPlayer behavior is to move and attack based on the user's input
  */
 public class MainPlayerEntityController implements IEntityController {
-    private Entity player;
+    private Entity entity;
 
-    private double speed = 750d;
+    private double speed = 600d;
     // Smooths input over around 125ms
     // inputSmooth = 1d would remove smoothing
     // https://www.desmos.com/calculator/xjyyi5sndo
     private double  inputSmooth = .3d;
 
-    public MainPlayerEntityController(Entity player) {
-        this.player = player;
+    public MainPlayerEntityController(Entity entity) {
+        this.entity = entity;
     }
 
     public void act() {
@@ -40,16 +40,15 @@ public class MainPlayerEntityController implements IEntityController {
         // TODO 3/24/2021 Use a better frame independent way of smoothing input
         double  dt          = GameEngine.getDt();
         Point2D rawVelocity = input.normalize().multiply(speed);
-        Point2D velocity = player.getVelocity().interpolate(rawVelocity,
+        Point2D velocity = entity.getVelocity().interpolate(rawVelocity,
                                                      inputSmooth * (60d * dt + .0007d / dt));
 
-        double dVelocity = velocity.subtract(player.getVelocity()).magnitude() / speed;
-        player.setVelocity(dVelocity < .01 ? rawVelocity : velocity);
+        double dVelocity = velocity.subtract(entity.getVelocity()).magnitude() / speed;
+        entity.setVelocity(dVelocity < .01 ? rawVelocity : velocity);
     }
 
     @Override
     public void stop() {
-        player.setVelocity(Point2D.ZERO);
-
+        entity.setVelocity(Point2D.ZERO);
     }
 }

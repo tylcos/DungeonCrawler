@@ -55,10 +55,7 @@ public class SlimeEntityController implements IEntityController {
                        && difference.magnitude() < .3d * strafingDistance) {
                 state = State.running;
 
-                // Attack player
-                if (!MainPlayer.getPlayer().isDead()) {
-                    MainPlayer.getPlayer().changeHealth(-1);
-                }
+                player.damage(1); // Attack player
             }
 
             if (MainPlayer.getPlayer().isDead()) {

@@ -1,7 +1,9 @@
 package game.entities;
 
 import game.collidables.Collidable;
+import game.levels.Room;
 import javafx.geometry.Point2D;
+import views.GameScreen;
 
 /**
  * Used for Collidables with complex moving and attacking behaviors
@@ -60,6 +62,51 @@ public abstract class Entity extends Collidable {
     }
 
     /**
+     * Gets the entity's health.
+     *
+     * @return the entity's health
+     */
+    public int getHealth() {
+        return health;
+    }
+
+    /**
+     * Decreases the entity's health by amount and calls onDeath() when the entity dies.
+     *
+     * If the health is non-positive then sets isDead, stops the entity controller, and unlocks
+     * doors when if all the monsters are killed.
+     *
+     * @param amount the amount to decrease entity's health by
+     */
+    public final void damage(int amount) {
+        if (isDead) {
+            return;
+        }
+
+        health -= amount;
+
+        if (health <= 0) {
+            isDead = true;
+            entityController.stop();
+
+            // So that you can kill other entities beneath a dead one
+            setMouseTransparent(true);
+
+            Room currentRoom = GameScreen.getLevel().getCurrentRoom();
+            if (currentRoom.isClear()) {
+                currentRoom.unlockDoors();
+            }
+
+            onDeath();
+        }
+    }
+
+    /**
+     * Runs once the health is non-positive
+     */
+    protected abstract void onDeath();
+
+    /**
      * Returns the entity's balance
      *
      * @return the player's balance
@@ -84,37 +131,6 @@ public abstract class Entity extends Collidable {
      */
     public void addMoney(int money) {
         this.money += money;
-    }
-
-    /**
-     * Gets the entity's health.
-     *
-     * @return the entity's health
-     */
-    public int getHealth() {
-        return health;
-    }
-
-    /**
-     * Sets the entity's health.
-     *
-     * @param health the entity's health
-     */
-    public void setHealth(int health) {
-        this.health = health;
-
-        if (health == 0) {
-            isDead = true;
-        }
-    }
-
-    /**
-     * Changes the entity's health by the set amount.
-     *
-     * @param dHealth the change in the entity's health
-     */
-    public void changeHealth(int dHealth) {
-        setHealth(health + dHealth);
     }
 
     /**
@@ -184,5 +200,9 @@ public abstract class Entity extends Collidable {
 
         setScaleX(scale.getX());
         setScaleY(scale.getY());
+    }
+
+    public boolean isMainPlayer() {
+        return this == MainPlayer.getPlayer();
     }
 }
