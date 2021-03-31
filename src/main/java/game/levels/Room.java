@@ -49,8 +49,8 @@ public class Room extends GridPane {
     // A table to translate between letters in .room files and sprites in game
     private static HashMap<String, Image> spriteTable = new HashMap<>() {
         {
-            put(".", new Image(Room.class.getResource("/images/debug square.png").toString()));
-            put("x", new Image(Room.class.getResource("/images/debug wall.png").toString()));
+            put(".", new Image(Room.class.getResource("/images/Floor.png").toString()));
+            put("x", new Image(Room.class.getResource("/images/Wall.png").toString()));
             put("N", new Image(Room.class.getResource("/images/debug door.png").toString()));
             put("E", new Image(Room.class.getResource("/images/debug door.png").toString()));
             put("S", new Image(Room.class.getResource("/images/debug door.png").toString()));
