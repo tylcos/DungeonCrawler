@@ -1,66 +1,88 @@
 package game.entities;
 
+import core.GameDriver;
 import core.GameEngine;
 import data.RandomUtil;
+import game.collidables.DebugPoint;
 import javafx.geometry.Point2D;
 
+import java.util.List;
+
 /**
- * Slime behavior is to circle closely around the player while attacking periodically.
+ * Defines the Slime AI.
+ * The behavior is to move closely around the player while attacking periodically.
  */
 public class SlimeEntityController implements IEntityController {
-    private Entity slime;
+    private Entity entity;
 
     private double speed;
     private double inputSmooth;
 
-    private double  strafingDirection;
-    private double  strafingDistance;
-    private Point2D chargingBias;
+    private double strafingDistance;
+    private double attackingDistance;
+
+    private double biasScale;
+    private double timeFactorX;
+    private double timeFactorY;
 
     private State state = State.running;
 
+    private DebugPoint debugPoint;
+
     private enum State {
-        stopped, attacking, charging, strafing, running
+        stopped, attacking, charging, running
     }
 
-    public SlimeEntityController(Entity slime) {
-        this.slime = slime;
+    /**
+     * @param entity the entity to control
+     */
+    public SlimeEntityController(Entity entity) {
+        this.entity = entity;
 
-        speed       = RandomUtil.getInt(200, 300);
-        inputSmooth = RandomUtil.get() * .01d + 0.005d;
+        speed       = RandomUtil.getInt(300, 400);
+        inputSmooth = RandomUtil.get() * .01d + 0.01d;
 
-        // 1 = clockwise, -1 = counterclockwise
-        strafingDirection = RandomUtil.getInt(2) * 2 - 1;
         strafingDistance  = RandomUtil.get() * 100 + 100;
-        chargingBias      = RandomUtil.getPoint2D(200);
+        attackingDistance = 50;
+
+        biasScale   = 200;
+        timeFactorX = RandomUtil.get() + 1d;
+        timeFactorY = RandomUtil.get() + 1d;
+
+        debugPoint = new DebugPoint();
     }
 
     public void act() {
-        Point2D enemyPosition      = slime.getPosition();
-        Point2D mainPlayerPosition = MainPlayer.getPlayer().getPosition().add(0, -50);
-        Point2D difference         = mainPlayerPosition.subtract(enemyPosition);
+        if (GameDriver.isDebug() && !debugPoint.isRendered() && state != State.stopped) {
+            GameEngine.addToLayer(GameEngine.VFX, List.of(debugPoint));
+        }
+
+        double t = GameEngine.getT();
+        Point2D bias = new Point2D(biasScale * Math.cos(t * timeFactorX),
+                                   biasScale * Math.cos(t * timeFactorY));
+
+        Player  player           = Player.getPlayer();
+        Point2D difference       = player.getPosition().subtract(entity.getPosition());
+        Point2D biasedDifference = difference.add(bias);
+        double  distance         = difference.magnitude();
+
+        difference       = difference.normalize();
+        biasedDifference = biasedDifference.normalize();
 
         if (state != State.stopped) {
-            if (difference.magnitude() > strafingDistance) {
+            if (distance >= strafingDistance) {
                 state = State.charging;
-            } else if ((state == State.charging || state == State.strafing)
-                       && difference.magnitude() <= strafingDistance) {
-                state = State.strafing;
-
-                // Should attack every 2 seconds
-                if (RandomUtil.get() < .5 * GameEngine.getDt()) {
-                    state = State.attacking;
-                }
-            } else if (state == State.attacking
-                       && difference.magnitude() < .3d * strafingDistance) {
+            } else if (state == State.charging && distance < strafingDistance) {
+                state = State.attacking;
+            } else if (state == State.attacking && distance < attackingDistance) {
                 state = State.running;
 
                 player.damage(1); // Attack player
             }
 
-            if (MainPlayer.getPlayer().isDead()) {
-                strafingDistance = 20;
-                chargingBias = Point2D.ZERO;
+            if (player.isDead()) {
+                strafingDistance = 10;
+                biasScale        = 20;
             }
         }
 
@@ -70,30 +92,29 @@ public class SlimeEntityController implements IEntityController {
             velocity = Point2D.ZERO;
             break;
         case attacking:
-            velocity = difference.normalize().multiply(speed);
+            velocity = difference.multiply(speed);
             break;
         case charging:
-            velocity = difference.magnitude() > 2d * strafingDistance
-                       ? difference.add(chargingBias).normalize().multiply(speed)
-                       : difference.normalize().multiply(speed);
-            break;
-        case strafing:
-            velocity = difference.normalize().multiply(speed);
-            velocity = new Point2D(strafingDirection * velocity.getY(),
-                                   strafingDirection * -velocity.getX());
+            velocity = biasedDifference.multiply(speed);
             break;
         case running:
-            velocity = difference.normalize().multiply(-speed);
+            velocity = biasedDifference.multiply(-speed);
             break;
         default:
             throw new IllegalStateException("Invalid state: " + state);
         }
 
-        slime.setVelocity(slime.getVelocity().interpolate(velocity, inputSmooth));
+        entity.setVelocity(entity.getVelocity().interpolate(velocity, inputSmooth));
+
+        debugPoint.setPosition(bias.add(player.getPosition()));
     }
 
     @Override
     public void stop() {
         state = State.stopped;
+
+        if (GameDriver.isDebug()) {
+            GameEngine.removeFromLayer(GameEngine.VFX, List.of(debugPoint));
+        }
     }
 }
