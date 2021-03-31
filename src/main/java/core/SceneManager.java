@@ -1,10 +1,10 @@
 package core;
 
-import game.entities.Player;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import views.GameScreen;
 
 import java.io.IOException;
 
@@ -35,7 +35,7 @@ public final class SceneManager {
         if (GAME.equals(sceneName)) {
             GameEngine.setPaused(true);
 
-            GameEngine.destroy(GameEngine.ENTITY, Player.getPlayer());
+            GameScreen.getLevel().unloadCurrentRoom();
         }
 
         try {

@@ -20,21 +20,11 @@ public abstract class Entity extends Collidable {
     protected IEntityController entityController;
 
     /**
-     * Creates an instance of an entity from an image and places it at a specific position.
+     * Initializes the Image and position of an entity.
      *
      * @param image    the path to the image of the entity
      * @param position the position to create the entity at
-     */
-    protected Entity(String image, Point2D position) {
-        this(image, position, new Point2D(1, 1));
-    }
-
-    /**
-     * Creates an instance of an entity based on.
-     *
-     * @param image    the path to the image of the entity
-     * @param position the position to create the entity at
-     * @param scale    how much to scale the entity by
+     * @param scale    the scale of the image
      */
     protected Entity(String image, Point2D position, Point2D scale) {
         super(image, false);
@@ -43,8 +33,7 @@ public abstract class Entity extends Collidable {
     }
 
     /**
-     * Updates the entity.
-     * Overwritten in child classes.
+     * Called each frame so that the entity can be updated.
      */
     public abstract void update();
 
@@ -62,11 +51,16 @@ public abstract class Entity extends Collidable {
     }
 
     /**
+     * Runs once the health is non-positive
+     */
+    protected abstract void onDeath();
+
+    /**
      * Gets the entity's health.
      *
      * @return the entity's health
      */
-    public int getHealth() {
+    public final int getHealth() {
         return health;
     }
 
@@ -102,16 +96,11 @@ public abstract class Entity extends Collidable {
     }
 
     /**
-     * Runs once the health is non-positive
-     */
-    protected abstract void onDeath();
-
-    /**
      * Returns the entity's balance
      *
      * @return the player's balance
      */
-    public int getMoney() {
+    public final int getMoney() {
         return money;
     }
 
@@ -120,7 +109,7 @@ public abstract class Entity extends Collidable {
      *
      * @param money the new balance
      */
-    public void setMoney(int money) {
+    public final void setMoney(int money) {
         this.money = money;
     }
 
@@ -129,7 +118,7 @@ public abstract class Entity extends Collidable {
      *
      * @param money the amount of money to add
      */
-    public void addMoney(int money) {
+    public final void addMoney(int money) {
         this.money += money;
     }
 
@@ -138,7 +127,7 @@ public abstract class Entity extends Collidable {
      *
      * @return if the entity is dead
      */
-    public boolean isDead() {
+    public final boolean isDead() {
         return isDead;
     }
 
@@ -147,7 +136,7 @@ public abstract class Entity extends Collidable {
      *
      * @return the position of the entity
      */
-    public Point2D getPosition() {
+    public final Point2D getPosition() {
         return position;
     }
 
@@ -156,7 +145,7 @@ public abstract class Entity extends Collidable {
      *
      * @param position the new point to put the entity at
      */
-    public void setPosition(Point2D position) {
+    public final void setPosition(Point2D position) {
         this.position = position;
 
         setTranslateX(position.getX());
@@ -168,7 +157,7 @@ public abstract class Entity extends Collidable {
      *
      * @return the current velocity of the entity
      */
-    public Point2D getVelocity() {
+    public final Point2D getVelocity() {
         return velocity;
     }
 
@@ -177,7 +166,7 @@ public abstract class Entity extends Collidable {
      *
      * @param velocity the new velocity
      */
-    public void setVelocity(Point2D velocity) {
+    public final void setVelocity(Point2D velocity) {
         this.velocity = velocity;
     }
 
@@ -186,7 +175,7 @@ public abstract class Entity extends Collidable {
      *
      * @return the scale of the entity
      */
-    public Point2D getScale() {
+    public final Point2D getScale() {
         return scale;
     }
 
@@ -195,14 +184,14 @@ public abstract class Entity extends Collidable {
      *
      * @param scale the new scale
      */
-    public void setScale(Point2D scale) {
+    public final void setScale(Point2D scale) {
         this.scale = scale;
 
         setScaleX(scale.getX());
         setScaleY(scale.getY());
     }
 
-    public boolean isMainPlayer() {
+    public final boolean isMainPlayer() {
         return this == Player.getPlayer();
     }
 }
