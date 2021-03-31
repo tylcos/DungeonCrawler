@@ -27,17 +27,14 @@ public class Slime extends Entity {
 
     /**
      * Creates an instance of Slime.
-     *
-     * @param health the amount of health the Slime has
-     * @param money  the amount of money the Slime holds
      */
-    public Slime(int health, int money) {
+    public Slime() {
         super(SLIME_SPRITES[0],
               RandomUtil.getPoint2D(-300, 300, -300, 300),
               new Point2D(5, 5));
 
-        this.health = health;
-        this.money  = money;
+        health = 3;
+        money  = 20;
 
         slimeType = RandomUtil.getInt(SLIME_SPRITES.length);
         setImage(new Image(SLIME_SPRITES[slimeType]));
@@ -47,9 +44,6 @@ public class Slime extends Entity {
         setOnMouseClicked(this::attackedByPlayer);
     }
 
-    /**
-     * Updates the enemy health and alive state.
-     */
     @Override
     public void update() {
         entityController.act();
@@ -65,25 +59,14 @@ public class Slime extends Entity {
             return;
         }
 
-        changeHealth(-1);
+        damage(1);
     }
 
     /**
-     * Sets the player's health to a new amount.
-     *
-     * @param health the new amount of health the player has
+     * Sets the image to a dead slime
      */
     @Override
-    public void setHealth(int health) {
-        this.health = health;
-
-        if (health == 0) {
-            isDead = true;
-
-            entityController.stop();
-
-            setImage(new Image(SLIME_DEAD_SPRITES[slimeType]));
-            setMouseTransparent(true); // So that you can kill other slimes beneath a dead one
-        }
+    public void onDeath() {
+        setImage(new Image(SLIME_DEAD_SPRITES[slimeType]));
     }
 }

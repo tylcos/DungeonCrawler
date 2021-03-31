@@ -8,14 +8,13 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import views.GameScreen;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Manages the spawning, removal, updating, and collision detecting of all entities and runs
- * the game loop
+ * the game loop.
  */
 public final class GameEngine {
     // All static Collidables including stationary things like Tiles and Collectables.
@@ -26,19 +25,18 @@ public final class GameEngine {
     // Timing utilities used for the game loop
     private static boolean        paused = true;
     private static AnimationTimer frameTimer;
+    private static double         t;
     private static double         dt;
 
-    // Layers are rendered from the bottom up, so layer 2 appears above layer 1
     private static final int       RENDER_LAYERS = 4;
     private static       StackPane renderPane;
     private static       Pane[]    renderLayers  = new Pane[RENDER_LAYERS];
 
-    // Constants for all the render layers so we don't go insane
+    // Layers are rendered from the bottom up, so layer 1 appears above layer 0
     public static final int ROOM   = 0;
     public static final int ITEM   = 1;
     public static final int ENTITY = 2;
     public static final int VFX    = 3;
-    // TODO Using a similar, 2D array, we could also create a collision matrix if necessary
 
     /**
      * Private constructor so no instances of GameEngine can be created.
@@ -60,6 +58,7 @@ public final class GameEngine {
             public void handle(long now) {
                 dt           = (now - lastNanoTime) * 1e-9d;
                 lastNanoTime = now;
+                t += dt;
 
                 GameEngine.update();
             }
@@ -94,10 +93,6 @@ public final class GameEngine {
         for (Collidable entity : currentDynamicBodies) {
             runCollisionCheck(entity, currentDynamicBodies, currentStaticBodies);
         }
-        
-        if (GameScreen.getLevel().getCurrentRoom().isClear()) {
-            GameScreen.getLevel().getCurrentRoom().unlockDoors();
-        }
     }
 
     /**
@@ -110,7 +105,7 @@ public final class GameEngine {
     }
 
     /**
-     * Pauses the game manager and update methods on all entities
+     * Pauses the game manager and update methods on all entities.
      *
      * @param paused if GameEngine is paused
      */
@@ -125,7 +120,16 @@ public final class GameEngine {
     }
 
     /**
-     * Time change since last frame in seconds
+     * Time since the game was started.
+     *
+     * @return t
+     */
+    public static double getT() {
+        return t;
+    }
+
+    /**
+     * Time change since last frame in seconds.
      *
      * @return dt
      */
@@ -278,9 +282,5 @@ public final class GameEngine {
                 target.onCollision(collidable);
             }
         }
-    }
-
-    public static List<Entity> getDynamicBodies() {
-        return dynamicBodies;
     }
 }

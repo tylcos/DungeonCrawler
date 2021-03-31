@@ -193,20 +193,11 @@ public final class MainPlayer extends Entity {
     }
 
     /**
-     * Sets the player's health to a new amount.
-     *
-     * @param health the new amount of health the player has
+     * Rotates the player on death.
      */
     @Override
-    public void setHealth(int health) {
-        this.health = health;
-
-        if (health == 0) {
-            isDead = true;
-            setRotate(90); // You can rotate the image instead of changing it to PlayerDead.png
-
-            entityController.stop();
-        }
+    protected void onDeath() {
+        setRotate(90); // You can rotate the image instead of changing it to PlayerDead.png
     }
 
     /**

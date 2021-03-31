@@ -3,7 +3,6 @@ package game.levels;
 import data.RandomUtil;
 import game.collidables.*;
 import game.entities.Entity;
-import game.entities.Slime;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -430,10 +429,10 @@ public class Room extends GridPane {
             }
             ArrayList<StackPane> doorList = doors.get(dir);
             for (StackPane p : doorList) {
-                Node n = p.getChildren().get(0); // the only child should be a door
-                if (n instanceof Door) {
-                    Door d = (Door) n;
-                    d.lock();
+                Node node = p.getChildren().get(0); // the only child should be a door
+                if (node instanceof Door) {
+                    Door door = (Door) node;
+                    door.lock();
                 }
             }
         }
@@ -446,10 +445,10 @@ public class Room extends GridPane {
         for (Direction dir : Direction.values()) {
             ArrayList<StackPane> doorList = doors.get(dir);
             for (StackPane p : doorList) {
-                Node n = p.getChildren().get(0); // the only child should be a door
-                if (n instanceof Door) {
-                    Door d = (Door) n;
-                    d.unlock();
+                Node node = p.getChildren().get(0); // the only child should be a door
+                if (node instanceof Door) {
+                    Door door = (Door) node;
+                    door.unlock();
                 }
             }
         }
@@ -554,13 +553,7 @@ public class Room extends GridPane {
      * @return {@code true} if there are no enemies in the room
      */
     public boolean isClear() {
-        boolean hasEnemy = false;
-        for (Entity e : entities) {
-            if (e instanceof Slime && !e.isDead()) {
-                hasEnemy = true;
-                break;
-            }
-        }
-        return !hasEnemy;
+        // Is clear when all entities are the main player or dead
+        return entities.stream().allMatch(e -> e.isMainPlayer() || e.isDead());
     }
 }

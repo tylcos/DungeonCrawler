@@ -41,8 +41,7 @@ public class DungeonCrawlerDriver extends Application {
         SceneManager.setStage(primaryStage);
 
         // Implement any program parameters
-        boolean             loadedScene = false;
-        Map<String, String> named       = getParameters().getNamed();
+        Map<String, String> named = getParameters().getNamed();
         List<String> unnamed = getParameters().getUnnamed().stream()
                                        .map(String::toLowerCase)
                                        .collect(Collectors.toList());
@@ -53,7 +52,8 @@ public class DungeonCrawlerDriver extends Application {
         }
 
         // "--scene=ANY_SCENE" parameter
-        String sceneArgument = named.getOrDefault("scene", "");
+        String  sceneArgument = named.getOrDefault("scene", "");
+        boolean loadedScene   = false;
         if (!sceneArgument.isEmpty()) {
             try {
                 if (debug) {
