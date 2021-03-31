@@ -15,7 +15,7 @@ public class MainPlayerEntityController implements IEntityController {
     // Smooths input over around 125ms
     // inputSmooth = 1d would remove smoothing
     // https://www.desmos.com/calculator/xjyyi5sndo
-    private double  inputSmooth = .3d;
+    private double  inputSmooth = .2d;
 
     public MainPlayerEntityController(Entity entity) {
         this.entity = entity;
