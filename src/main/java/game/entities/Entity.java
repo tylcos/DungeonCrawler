@@ -203,6 +203,6 @@ public abstract class Entity extends Collidable {
     }
 
     public boolean isMainPlayer() {
-        return this == MainPlayer.getPlayer();
+        return this == Player.getPlayer();
     }
 }

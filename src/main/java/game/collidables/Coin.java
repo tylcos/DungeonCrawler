@@ -1,7 +1,7 @@
 package game.collidables;
 
 import data.RandomUtil;
-import game.entities.MainPlayer;
+import game.entities.Player;
 import javafx.geometry.Point2D;
 
 /**
@@ -21,11 +21,11 @@ public class Coin extends Collectable {
 
     @Override
     public void onCollision(Collidable other) {
-        if (isCollected || !(other instanceof MainPlayer)) {
+        if (isCollected || !(other instanceof Player)) {
             return;
         }
 
-        MainPlayer.getPlayer().addMoney(value);
+        Player.getPlayer().addMoney(value);
 
         setCollected();
     }

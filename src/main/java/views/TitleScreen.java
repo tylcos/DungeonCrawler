@@ -1,6 +1,6 @@
 package views;
 
-import core.DungeonCrawlerDriver;
+import core.GameDriver;
 import core.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
@@ -31,7 +31,7 @@ public class TitleScreen {
         double image1Width      = image1.getFitWidth();
         double image1Height     = image1.getFitHeight();
 
-        Supplier<Double> scaleFactor = () -> scalePane.getWidth() / DungeonCrawlerDriver.WIDTH;
+        Supplier<Double> scaleFactor = () -> scalePane.getWidth() / GameDriver.WIDTH;
         scalePane.widthProperty().addListener(observable -> {
             titleImage.setFitWidth(titleImageWidth * scaleFactor.get());
             titleImage.setFitHeight(titleImageHeight * scaleFactor.get());
@@ -40,7 +40,7 @@ public class TitleScreen {
             image1.setFitHeight(image1Height * scaleFactor.get());
         });
 
-        if (DungeonCrawlerDriver.isDebug()) {
+        if (GameDriver.isDebug()) {
             Stage stage = SceneManager.getStage();
             System.out.println("\nDebug Screen Scaling");
             System.out.println("Screen Scale: " + Screen.getPrimary().getOutputScaleX()

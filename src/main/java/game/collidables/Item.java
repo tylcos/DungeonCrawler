@@ -1,7 +1,7 @@
 package game.collidables;
 
 import data.RandomUtil;
-import game.entities.MainPlayer;
+import game.entities.Player;
 import javafx.geometry.Point2D;
 
 /**
@@ -17,7 +17,7 @@ public class Item extends Collectable {
 
     @Override
     public void onCollision(Collidable other) {
-        if (isCollected || !(other instanceof MainPlayer)) {
+        if (isCollected || !(other instanceof Player)) {
             return;
         }
 

@@ -17,14 +17,14 @@ public class GeneralTests extends ApplicationTest {
 
     @Before
     public void start() throws Exception {
-        launch(DungeonCrawlerDriver.class, "-NoDebug");
+        launch(GameDriver.class, "-NoDebug");
         assertEquals("Failed to load title screen.",
                      SceneManager.TITLE, SceneManager.getSceneName());
     }
 
     @Test
     public void testWindowExist() {
-        verifyThat(window(DungeonCrawlerDriver.GAME_TITLE), WindowMatchers.isShowing());
+        verifyThat(window(GameDriver.GAME_TITLE), WindowMatchers.isShowing());
     }
 
     @Test

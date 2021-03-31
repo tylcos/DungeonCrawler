@@ -1,8 +1,8 @@
-import core.DungeonCrawlerDriver;
+import core.GameDriver;
 import core.SceneManager;
 import game.Weapon;
 import game.entities.Entity;
-import game.entities.MainPlayer;
+import game.entities.Player;
 import game.levels.Level;
 import javafx.event.Event;
 import javafx.scene.input.*;
@@ -25,7 +25,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
     public void start() throws Exception {
         Level.setSpawnEnemiesInStartRoom(true);
 
-        launch(DungeonCrawlerDriver.class, "--scene=GAME", "-NoDebug");
+        launch(GameDriver.class, "--scene=GAME", "-NoDebug");
         assertEquals("Failed to load game screen.", SceneManager.GAME, SceneManager.getSceneName());
     }
 
@@ -58,7 +58,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
      */
     @Test
     public void testAttackAfterPlayerDead() {
-        MainPlayer.getPlayer().setHealth(0);
+        Player.getPlayer().damage(Integer.MAX_VALUE);
 
         AtomicInteger initialHealth = new AtomicInteger(0);
 
@@ -68,8 +68,8 @@ public class GameScreenEnemyTests extends ApplicationTest {
 
     @Test
     public void testPlayerHPWhenAttacked() {
-        MainPlayer player     = MainPlayer.getPlayer();
-        int        prevHealth = player.getHealth();
+        Player player     = Player.getPlayer();
+        int    prevHealth = player.getHealth();
 
         sleep(10000);
         assertNotEquals(prevHealth, player.getHealth());
@@ -80,8 +80,8 @@ public class GameScreenEnemyTests extends ApplicationTest {
      */
     @Test
     public void testPlayerDeathWhenHp0() {
-        MainPlayer player = MainPlayer.getPlayer();
-        player.setHealth(0);
+        Player player = Player.getPlayer();
+        player.damage(Integer.MAX_VALUE);
 
         assertTrue(player.isDead());
         assertNotEquals(90, player.getRotate());
@@ -91,7 +91,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
     public void testChangeBow() {
         press(KeyCode.DIGIT1);
         Weapon bow  = new Weapon("Bow", 0, 0);
-        String bow1 = MainPlayer.getPlayer().getWeapon().getName();
+        String bow1 = Player.getPlayer().getWeapon().getName();
         assertEquals(bow1, bow.getName());
     }
 
@@ -99,7 +99,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
     public void testChangeSword() {
         press(KeyCode.DIGIT3);
         Weapon sword  = new Weapon("Sword", 0, 0);
-        String sword1 = MainPlayer.getPlayer().getWeapon().getName();
+        String sword1 = Player.getPlayer().getWeapon().getName();
         assertEquals(sword1, sword.getName());
     }
 
@@ -107,14 +107,14 @@ public class GameScreenEnemyTests extends ApplicationTest {
     public void testChangeAxe() {
         press(KeyCode.DIGIT2);
         Weapon axe  = new Weapon("Axe", 0, 0);
-        String axe1 = MainPlayer.getPlayer().getWeapon().getName();
+        String axe1 = Player.getPlayer().getWeapon().getName();
         assertEquals(axe1, axe.getName());
     }
 
     @Test
     public void testGameOverScreen() {
-        MainPlayer player = MainPlayer.getPlayer();
-        player.setHealth(0);
+        Player player = Player.getPlayer();
+        player.damage(Integer.MAX_VALUE);
         player.setOpacity(0);
         sleep(100);
 
