@@ -41,6 +41,7 @@ public class ConfigScreen {
             Player.setPlayer(inputTextName.getText(),
                              inputWeapon.getValue(),
                              inputDifficulty.getValue());
+
             SceneManager.loadScene(SceneManager.GAME);
         }
     }
@@ -52,7 +53,7 @@ public class ConfigScreen {
      * @return If user name is invalid
      */
     private boolean isNameValid() {
-        String  name      = inputTextName.getText();
+        String  name    = inputTextName.getText();
         boolean isValid = !name.trim().isEmpty() && name.length() <= 28;
 
         if (isValid) {

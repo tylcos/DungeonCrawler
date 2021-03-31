@@ -142,7 +142,7 @@ public final class Player extends Entity {
      */
     public void swapToBow() {
         Image bow = new Image("images/PlayerBow2.gif");
-        setNewImage(bow);
+        setImage(bow);
         weapon = new Weapon("Bow", 0, 0);
     }
 
@@ -151,7 +151,7 @@ public final class Player extends Entity {
      */
     public void swapToAxe() {
         Image axe = new Image("images/PlayerAxe.gif");
-        setNewImage(axe);
+        setImage(axe);
         weapon = new Weapon("Axe", 0, 0);
     }
 
@@ -160,13 +160,13 @@ public final class Player extends Entity {
      */
     public void swapToSword() {
         Image sword = new Image("images/PlayerSwordAttack.png");
-        setNewImage(sword);
+        setImage(sword);
         weapon = new Weapon("Sword", 0, 0);
     }
 
     public void switchToNoWeapon() {
         Image png = new Image("images/Player.png");
-        Player.getPlayer().setNewImage(png);
+        Player.getPlayer().setImage(png);
         weapon = new Weapon("weaponName", 0, 0);
     }
 
@@ -189,7 +189,7 @@ public final class Player extends Entity {
             throw new IllegalStateException("Unexpected weapon: " + weapon.getName());
         }
 
-        Player.getPlayer().setNewImage(attack);
+        Player.getPlayer().setImage(attack);
     }
 
     /**

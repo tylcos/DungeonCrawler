@@ -13,7 +13,6 @@ import javafx.scene.image.ImageView;
  * Generally, objects that don't move should be set as static.
  */
 public abstract class Collidable extends ImageView {
-
     private boolean isStatic;
 
     /**
@@ -39,20 +38,11 @@ public abstract class Collidable extends ImageView {
     }
 
     /**
-     * Handle collision detection and take appropriate action.
+     * Handles collision detection and takes appropriate action.
      *
      * @param other the Collidable that hit this Collidable
      */
     public abstract void onCollision(Collidable other);
-
-    /**
-     * Return whether or not this Collidable is static.
-     *
-     * @return true if the body is static, false otherwise
-     */
-    public boolean isStatic() {
-        return isStatic;
-    }
 
     /**
      * Detects if the given Collidable is touching this Collidable.
@@ -62,14 +52,27 @@ public abstract class Collidable extends ImageView {
      */
     public boolean intersects(Collidable target) {
         return getBoundsInParent().intersects(target.getBoundsInParent());
+
+        // This works for everything but runs slower
+        // localToScene(getBoundsInLocal()).intersects(
+        //              target.localToScene(target.getBoundsInLocal()));
     }
 
     /**
-     * Set image to New Image
+     * Return whether or not this Collidable is static.
      *
-     * @param newImage new Image
+     * @return true if the body is static, false otherwise
      */
-    public void setNewImage(Image newImage) {
-        setImage(newImage);
+    public final boolean isStatic() {
+        return isStatic;
+    }
+
+    /**
+     * Returns whether the collidable is being rendered.
+     *
+     * @return whether the collidable is being rendered
+     */
+    public final boolean isRendered() {
+        return getParent() != null;
     }
 }

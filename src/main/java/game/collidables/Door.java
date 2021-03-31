@@ -39,11 +39,8 @@ public class Door extends CollidableTile {
     public void onCollision(Collidable other) {
         if (!locked) {
             if (other instanceof Player) {
-                GameScreen.getLevel().setRoom(destination);
+                GameScreen.getLevel().loadRoom(destination);
             }
-        } else {
-            // this needs door behavior
-            int a;
         }
     }
 
