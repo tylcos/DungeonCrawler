@@ -55,7 +55,7 @@ public class Slime extends Entity {
      * @param event Mouse click event
      */
     public void attackedByPlayer(MouseEvent event) {
-        if (isDead || MainPlayer.getPlayer().isDead()) {
+        if (isDead || Player.getPlayer().isDead()) {
             return;
         }
 

@@ -1,4 +1,4 @@
-import core.DungeonCrawlerDriver;
+import core.GameDriver;
 import core.SceneManager;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,7 @@ public class EndScreenTests extends ApplicationTest {
     // Auto starts on the win screen
     @Before
     public void start() throws Exception {
-        launch(DungeonCrawlerDriver.class, "--scene=END", "-NoDebug");
+        launch(GameDriver.class, "--scene=END", "-NoDebug");
         assertEquals("Failed to load win screen.",
                      SceneManager.END, SceneManager.getSceneName());
     }

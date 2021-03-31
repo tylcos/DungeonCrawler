@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Launches application
  */
-public class DungeonCrawlerDriver extends Application {
+public class GameDriver extends Application {
     public static final double WIDTH      = 1920d;
     public static final double HEIGHT     = 1080d;
     public static final double MIN_WIDTH  = 1280d;

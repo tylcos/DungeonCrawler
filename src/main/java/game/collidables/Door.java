@@ -1,6 +1,6 @@
 package game.collidables;
 
-import game.entities.MainPlayer;
+import game.entities.Player;
 import game.levels.Room;
 import javafx.scene.image.Image;
 import views.GameScreen;
@@ -38,7 +38,7 @@ public class Door extends CollidableTile {
     @Override
     public void onCollision(Collidable other) {
         if (!locked) {
-            if (other instanceof MainPlayer) {
+            if (other instanceof Player) {
                 GameScreen.getLevel().setRoom(destination);
             }
         } else {

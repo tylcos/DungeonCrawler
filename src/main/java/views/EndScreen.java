@@ -1,7 +1,7 @@
 package views;
 
 import core.SceneManager;
-import game.entities.MainPlayer;
+import game.entities.Player;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -17,7 +17,7 @@ public class EndScreen {
      */
     public void initialize() {
         String msg = "You Escaped The Dungeon!";
-        if (MainPlayer.getPlayer() != null && MainPlayer.getPlayer().isDead()) {
+        if (Player.getPlayer() != null && Player.getPlayer().isDead()) {
             msg = "You Died In The Dungeon!";
         }
 

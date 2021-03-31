@@ -3,7 +3,7 @@ package game.levels;
 import core.*;
 import data.RandomUtil;
 import game.collidables.*;
-import game.entities.MainPlayer;
+import game.entities.Player;
 import game.entities.Slime;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -100,10 +100,10 @@ public class Level {
         // Sets the active room to the entrance
         setRoom(map[mapOffset][mapOffset]);
         // Spawn the player
-        GameEngine.instantiate(GameEngine.ENTITY, MainPlayer.getPlayer());
+        GameEngine.instantiate(GameEngine.ENTITY, Player.getPlayer());
 
         // Print out map for debugging
-        if (DungeonCrawlerDriver.isDebug()) {
+        if (GameDriver.isDebug()) {
             for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
                 for (int x = 0; x < MAX_DIAMETER; ++x) {
                     if (map[x][y] == null) {
@@ -152,7 +152,7 @@ public class Level {
         GameEngine.addToPhysics(currentRoom.getBodies());
 
         // Put the player in the "center" of the room
-        MainPlayer player = MainPlayer.getPlayer();
+        Player player = Player.getPlayer();
         player.toFront();
         player.setPosition(Point2D.ZERO);
         player.setVelocity(Point2D.ZERO);

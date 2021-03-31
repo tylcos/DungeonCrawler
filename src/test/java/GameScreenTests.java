@@ -1,6 +1,6 @@
-import core.DungeonCrawlerDriver;
+import core.GameDriver;
 import core.SceneManager;
-import game.entities.MainPlayer;
+import game.entities.Player;
 import game.levels.Direction;
 import game.levels.Room;
 import javafx.scene.input.KeyCode;
@@ -20,42 +20,42 @@ public class GameScreenTests extends ApplicationTest {
     // Auto starts on the game screen
     @Before
     public void start() throws Exception {
-        launch(DungeonCrawlerDriver.class, "--scene=GAME", "-NoDebug");
+        launch(GameDriver.class, "--scene=GAME", "-NoDebug");
         assertEquals("Failed to load game screen.", SceneManager.GAME, SceneManager.getSceneName());
     }
 
     @Test
     public void testMoveLeft() {
-        double initialX = MainPlayer.getPlayer().getPosition().getX();
+        double initialX = Player.getPlayer().getPosition().getX();
         push(KeyCode.LEFT);
-        double finalX = MainPlayer.getPlayer().getPosition().getX();
+        double finalX = Player.getPlayer().getPosition().getX();
 
         assertTrue(finalX < initialX);
     }
 
     @Test
     public void testMoveRight() {
-        double initialX = MainPlayer.getPlayer().getPosition().getX();
+        double initialX = Player.getPlayer().getPosition().getX();
         push(KeyCode.RIGHT);
-        double finalX = MainPlayer.getPlayer().getPosition().getX();
+        double finalX = Player.getPlayer().getPosition().getX();
 
         assertTrue(initialX < finalX);
     }
 
     @Test
     public void testMoveUp() {
-        double initialY = MainPlayer.getPlayer().getPosition().getY();
+        double initialY = Player.getPlayer().getPosition().getY();
         push(KeyCode.UP);
-        double finalY = MainPlayer.getPlayer().getPosition().getY();
+        double finalY = Player.getPlayer().getPosition().getY();
 
         assertTrue(initialY > finalY);
     }
 
     @Test
     public void testMoveDown() {
-        double initialY = MainPlayer.getPlayer().getPosition().getY();
+        double initialY = Player.getPlayer().getPosition().getY();
         push(KeyCode.DOWN);
-        double finalY = MainPlayer.getPlayer().getPosition().getY();
+        double finalY = Player.getPlayer().getPosition().getY();
 
         assertTrue(initialY < finalY);
     }
@@ -69,7 +69,7 @@ public class GameScreenTests extends ApplicationTest {
         sleep(2000);
         release(KeyCode.UP, KeyCode.LEFT);
 
-        double distance = MainPlayer.getPlayer().getPosition().magnitude();
+        double distance = Player.getPlayer().getPosition().magnitude();
 
         // Current corner of the room is only 800 pixels from center
         assertTrue(distance < 1200d);

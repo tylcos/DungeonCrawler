@@ -6,7 +6,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 
 /**
- * MainPlayer behavior is to move and attack based on the user's input
+ * Player behavior is to move and attack based on the user's input
  */
 public class MainPlayerEntityController implements IEntityController {
     private Entity entity;

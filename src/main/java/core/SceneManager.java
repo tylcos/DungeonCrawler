@@ -1,6 +1,6 @@
 package core;
 
-import game.entities.MainPlayer;
+import game.entities.Player;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -35,7 +35,7 @@ public final class SceneManager {
         if (GAME.equals(sceneName)) {
             GameEngine.setPaused(true);
 
-            GameEngine.destroy(GameEngine.ENTITY, MainPlayer.getPlayer());
+            GameEngine.destroy(GameEngine.ENTITY, Player.getPlayer());
         }
 
         try {

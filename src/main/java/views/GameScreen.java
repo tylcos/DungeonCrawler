@@ -2,7 +2,7 @@ package views;
 
 import core.GameEngine;
 import core.SceneManager;
-import game.entities.MainPlayer;
+import game.entities.Player;
 import game.levels.Level;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -29,11 +29,11 @@ public class GameScreen {
 
         // Loaded the GameScreen without going through the config screen
         if (!SceneManager.CONFIG.equals(SceneManager.getSceneName())) {
-            MainPlayer.setPlayer("Team Azula", "Weapon", "Normal");
+            Player.setPlayer("Team Azula", "Weapon", "Normal");
         }
 
         // Update UI
-        MainPlayer.setUiInfoText(uiInfoText);
+        Player.setUiInfoText(uiInfoText);
         Level.addUiEventHandler(event -> uiMinimap.setText(level.getMinimapString()));
 
         // Start level spawning
