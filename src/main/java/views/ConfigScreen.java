@@ -2,7 +2,7 @@ package views;
 
 import core.SceneManager;
 import data.RandomUtil;
-import game.entities.MainPlayer;
+import game.entities.Player;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -38,9 +38,9 @@ public class ConfigScreen {
      */
     public void onStartClick() {
         if (isNameValid()) {
-            MainPlayer.setPlayer(inputTextName.getText(),
-                                 inputWeapon.getValue(),
-                                 inputDifficulty.getValue());
+            Player.setPlayer(inputTextName.getText(),
+                             inputWeapon.getValue(),
+                             inputDifficulty.getValue());
             SceneManager.loadScene(SceneManager.GAME);
         }
     }

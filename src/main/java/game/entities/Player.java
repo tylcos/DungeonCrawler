@@ -12,11 +12,12 @@ import javafx.scene.input.KeyCode;
 /**
  * Singleton controller for the player
  */
-public final class MainPlayer extends Entity {
-    private static MainPlayer player;
-    private        String     name;
-    private        Weapon     weapon;
-    private        String     difficulty;
+public final class Player extends Entity {
+    private static Player player;
+
+    private        String name;
+    private        Weapon weapon;
+    private        String difficulty;
 
     private boolean onAttackMode;
     private int     attackTime;
@@ -24,17 +25,17 @@ public final class MainPlayer extends Entity {
     private static TextArea uiInfoText;
 
     /**
-     * Initializes the MainPlayer singleton
+     * Initializes the Player singleton
      *
      * @param image      the path of the image of a main player
      * @param weaponName the name of the weapon the player has
      * @param difficulty the difficulty of the game
      */
     public static void setPlayer(String image, String weaponName, String difficulty) {
-        player = new MainPlayer(image, weaponName, difficulty);
+        player = new Player(image, weaponName, difficulty);
     }
 
-    private MainPlayer(String image, String weaponName, String difficulty) {
+    private Player(String image, String weaponName, String difficulty) {
         // Position is overwritten when a new room is loaded
         super("/images/Player.png", Point2D.ZERO, new Point2D(5, 5));
 
@@ -49,7 +50,7 @@ public final class MainPlayer extends Entity {
             break;
         case "Normal":
             money = 75;
-            health = 4;
+            health = 40;
             break;
         case "Hard":
             money = 50;
@@ -120,17 +121,16 @@ public final class MainPlayer extends Entity {
     @Override
     public void onCollision(Collidable other) {
         if (other instanceof CollidableTile) {
-            bounceBack(other, (int) (getVelocity().magnitude() * GameEngine.getDt()));
+            bounceBack((int) (getVelocity().magnitude() * GameEngine.getDt()));
         }
     }
 
     /**
-     * makes player bounce back from wall or enemy
+     * Makes the player bounce back from wall or enemy
      *
-     * @param other          the wall or enemy
      * @param bounceDistance the distance to bounce
      */
-    private void bounceBack(Collidable other, int bounceDistance) {
+    private void bounceBack(int bounceDistance) {
         Point2D dp = new Point2D(-bounceDistance * Math.signum(getPosition().getX()),
                                  -bounceDistance * Math.signum(getPosition().getY()));
 
@@ -166,7 +166,7 @@ public final class MainPlayer extends Entity {
 
     public void switchToNoWeapon() {
         Image png = new Image("images/Player.png");
-        MainPlayer.getPlayer().setNewImage(png);
+        Player.getPlayer().setNewImage(png);
         weapon = new Weapon("weaponName", 0, 0);
     }
 
@@ -189,7 +189,7 @@ public final class MainPlayer extends Entity {
             throw new IllegalStateException("Unexpected weapon: " + weapon.getName());
         }
 
-        MainPlayer.getPlayer().setNewImage(attack);
+        Player.getPlayer().setNewImage(attack);
     }
 
     /**
@@ -230,7 +230,7 @@ public final class MainPlayer extends Entity {
      * @param uiInfoText TextArea that displays the information
      */
     public static void setUiInfoText(TextArea uiInfoText) {
-        MainPlayer.uiInfoText = uiInfoText;
+        Player.uiInfoText = uiInfoText;
     }
 
     /**
@@ -238,7 +238,7 @@ public final class MainPlayer extends Entity {
      *
      * @return the main player
      */
-    public static MainPlayer getPlayer() {
+    public static Player getPlayer() {
         return player;
     }
 }
