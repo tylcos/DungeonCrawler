@@ -97,6 +97,18 @@ public class Room extends GridPane {
     /**
      * Constructs a room from a .room file at the given position in the specified level.
      *
+     * @param template the file to load the room from
+     * @param position the position to make the room at
+     * @param level    the level this room was created in
+     * @param start    if this is the start room and all doors should be active
+     */
+    public Room(String template, Point2D position, Level level, boolean start) {
+        this(template, position, level, start, null);
+    }
+
+    /**
+     * Constructs a room from a .room file at the given position in the specified level.
+     *
      * {@code creator} will have a doorway into this room.
      *
      * @param template the file to load the room from
@@ -129,18 +141,6 @@ public class Room extends GridPane {
 
         // Create the walls, floors, and doors that compose this room
         constructRoomFromBlueprint(template, creator);
-    }
-
-    /**
-     * Constructs a room from a .room file at the given position in the specified level.
-     *
-     * @param template the file to load the room from
-     * @param position the position to make the room at
-     * @param level    the level this room was created in
-     * @param start    if this is the start room and all doors should be active
-     */
-    public Room(String template, Point2D position, Level level, boolean start) {
-        this(template, position, level, start, null);
     }
 
     /**
@@ -382,10 +382,10 @@ public class Room extends GridPane {
      */
     private void generateDoor(Image image, StackPane cell, Direction direction, Room destination) {
         if (destination == null) {
-            Door d = new Door(image, true);
-            bodies.add(d);
-            cell.getChildren().add(d);
-            level.queueLinkRoom(this, direction, d);
+            Door door = new Door(image, true);
+            bodies.add(door);
+            cell.getChildren().add(door);
+            level.queueLinkRoom(this, direction, door);
         } else {
             Door d = new Door(image, true, destination);
             bodies.add(d);

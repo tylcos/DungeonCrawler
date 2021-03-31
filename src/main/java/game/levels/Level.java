@@ -1,6 +1,7 @@
 package game.levels;
 
-import core.*;
+import core.GameEngine;
+import core.SceneManager;
 import data.RandomUtil;
 import game.collidables.*;
 import game.entities.Player;
@@ -20,7 +21,7 @@ public class Level {
     public static final int MIN_END_DISTANCE = 6;  // Minimum distance away the exit must be
 
     /* CHEATS */
-    private static boolean spawnEnemiesInStartRoom;
+    private static boolean spawnEnemiesInEntrance;
     private static boolean doorsNeverLock;
 
     /*
@@ -54,17 +55,15 @@ public class Level {
         mapOffset = MAX_DIAMETER / 2;
     }
 
-    // TODO implement adding stuff to rooms
-
     /**
-     * Use this method to add stuff like items and entities to the rooms
+     * Adds items and entities to the rooms.
      */
-    private void addStuffToRooms() {
+    private void spawnGameElements() {
         for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
             for (int x = 0; x < MAX_DIAMETER; ++x) {
                 Room room = map[x][y];
 
-                if (room != null && (spawnEnemiesInStartRoom || !room.isEntrance())) {
+                if (room != null && (spawnEnemiesInEntrance || !room.isEntrance())) {
                     int numberOfCoins = RandomUtil.getInt(3, 5);
                     for (int i = 0; i < numberOfCoins; i++) {
                         room.addCollectable(new Coin());
@@ -95,32 +94,12 @@ public class Level {
         map[mapOffset][mapOffset] = new Room("/rooms/rectangle.room", Point2D.ZERO, this, true);
         // Generate the rest of the rooms
         dequeueAndLinkRooms();
-        // Adds stuff to rooms
-        addStuffToRooms();
-        // Sets the active room to the entrance
-        setRoom(map[mapOffset][mapOffset]);
+        // Add game elements to rooms
+        spawnGameElements();
+        // Set the active room to the entrance
+        loadRoom(map[mapOffset][mapOffset]);
         // Spawn the player
         GameEngine.instantiate(GameEngine.ENTITY, Player.getPlayer());
-
-        // Print out map for debugging
-        if (GameDriver.isDebug()) {
-            for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
-                for (int x = 0; x < MAX_DIAMETER; ++x) {
-                    if (map[x][y] == null) {
-                        System.out.print(".");
-                    } else {
-                        if (map[x][y].isEntrance()) {
-                            System.out.print("E");
-                        } else if (map[x][y].isExit()) {
-                            System.out.print("X");
-                        } else {
-                            System.out.print("O");
-                        }
-                    }
-                }
-                System.out.println();
-            }
-        }
     }
 
     /**
@@ -128,13 +107,10 @@ public class Level {
      *
      * @param newRoom the room to switch to
      */
-    public void setRoom(Room newRoom) {
+    public void loadRoom(Room newRoom) {
         Direction fromDir = null;
         if (currentRoom != null) {
-            // Unload the old room
-            GameEngine.destroy(GameEngine.ITEM, currentRoom.getCollectables());
-            GameEngine.destroy(GameEngine.ENTITY, currentRoom.getEntities());
-            GameEngine.removeFromPhysics(currentRoom.getBodies());
+            unloadCurrentRoom();
             fromDir = Direction.vectorToDirection(
                     currentRoom.getPosition().subtract(newRoom.getPosition()));
         }
@@ -157,20 +133,28 @@ public class Level {
         player.setPosition(Point2D.ZERO);
         player.setVelocity(Point2D.ZERO);
 
-        // Lock doors
-        if (fromDir != null) { // this won't run on the entrance room
+        // Lock doors for rooms other than the entrance room
+        if (fromDir != null) {
             if (!currentRoom.isClear() && !doorsNeverLock) {
-                // lock doors
                 currentRoom.lockDoors(fromDir);
             } else {
-                // unlock doors
                 currentRoom.unlockDoors();
             }
         }
 
+        // Update the minimap
         if (uiEventHandler != null) {
             uiEventHandler.handle(null);
         }
+    }
+
+    /**
+     * Unloads the specified room from the level.
+     */
+    public void unloadCurrentRoom() {
+        GameEngine.destroy(GameEngine.ITEM, currentRoom.getCollectables());
+        GameEngine.destroy(GameEngine.ENTITY, currentRoom.getEntities());
+        GameEngine.removeFromPhysics(currentRoom.getBodies());
     }
 
     /**
@@ -358,8 +342,8 @@ public class Level {
         return currentRoom;
     }
 
-    public static void setSpawnEnemiesInStartRoom(boolean spawnEnemiesInStartRoom) {
-        Level.spawnEnemiesInStartRoom = spawnEnemiesInStartRoom;
+    public static void setSpawnEnemiesInEntrance(boolean spawnEnemiesInEntrance) {
+        Level.spawnEnemiesInEntrance = spawnEnemiesInEntrance;
     }
 
     public static void setDoorsNeverLock(boolean doorsNeverLock) {

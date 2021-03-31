@@ -23,7 +23,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
     // Auto starts on the game screen
     @Before
     public void start() throws Exception {
-        Level.setSpawnEnemiesInStartRoom(true);
+        Level.setSpawnEnemiesInEntrance(true);
 
         launch(GameDriver.class, "--scene=GAME", "-NoDebug");
         assertEquals("Failed to load game screen.", SceneManager.GAME, SceneManager.getSceneName());
