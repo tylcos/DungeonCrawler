@@ -37,7 +37,7 @@ public final class Player extends Entity {
 
     private Player(String image, String weaponName, String difficulty) {
         // Position is overwritten when a new room is loaded
-        super("/images/Player.png", Point2D.ZERO, new Point2D(5, 5));
+        super("/images/Player.png", Point2D.ZERO, new Point2D(1, 1));
 
         // todo: fix weapon damage and price
         name   = image;

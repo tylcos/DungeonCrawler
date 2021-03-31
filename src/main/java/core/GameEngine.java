@@ -110,13 +110,13 @@ public final class GameEngine {
      * @param paused if GameEngine is paused
      */
     public static void setPaused(boolean paused) {
+        GameEngine.paused = paused;
+
         if (paused) {
             frameTimer.stop();
         } else {
             frameTimer.start();
         }
-
-        GameEngine.paused = paused;
     }
 
     /**

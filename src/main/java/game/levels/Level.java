@@ -4,8 +4,7 @@ import core.GameEngine;
 import core.SceneManager;
 import data.RandomUtil;
 import game.collidables.*;
-import game.entities.Player;
-import game.entities.Slime;
+import game.entities.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -127,11 +126,12 @@ public class Level {
         GameEngine.instantiate(GameEngine.ENTITY, currentRoom.getEntities());
         GameEngine.addToPhysics(currentRoom.getBodies());
 
+        currentRoom.getEntities().forEach(Entity::start);
+
         // Put the player in the "center" of the room
         Player player = Player.getPlayer();
         player.toFront();
         player.setPosition(Point2D.ZERO);
-        player.setVelocity(Point2D.ZERO);
 
         // Lock doors for rooms other than the entrance room
         if (fromDir != null) {
@@ -152,6 +152,8 @@ public class Level {
      * Unloads the specified room from the level.
      */
     public void unloadCurrentRoom() {
+        currentRoom.getEntities().forEach(Entity::stop);
+
         GameEngine.destroy(GameEngine.ITEM, currentRoom.getCollectables());
         GameEngine.destroy(GameEngine.ENTITY, currentRoom.getEntities());
         GameEngine.removeFromPhysics(currentRoom.getBodies());

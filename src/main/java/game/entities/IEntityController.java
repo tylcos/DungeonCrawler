@@ -10,6 +10,11 @@ public interface IEntityController {
     void act();
 
     /**
+     * Allows the entity to make decisions.
+     */
+    void start();
+
+    /**
      * Stops the entity from making decisions.
      * Used to make dead enemies stop moving.
      */

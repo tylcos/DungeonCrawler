@@ -43,18 +43,18 @@ public enum Direction {
      * 
      * @return a letter representing to this Direction
      */
-    public String toLetter() {
+    public char toLetter() {
         switch (this) {
         case NORTH:
-            return "N";
+            return 'N';
         case EAST:
-            return "E";
+            return 'E';
         case SOUTH:
-            return "S";
+            return 'S';
         case WEST:
-            return "W";
+            return 'W';
         default:
-            return null;
+            throw new IllegalStateException("Unexpected value: " + this);
         }
     }
 
@@ -74,7 +74,7 @@ public enum Direction {
         case WEST:
             return 3;
         default:
-            return -1;
+            throw new IllegalStateException("Unexpected value: " + this);
         }
     }
 
@@ -94,7 +94,7 @@ public enum Direction {
         case WEST:
             return EAST;
         default:
-            return null;
+            throw new IllegalStateException("Unexpected value: " + this);
         }
     }
 }

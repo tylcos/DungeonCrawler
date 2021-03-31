@@ -95,6 +95,14 @@ public abstract class Entity extends Collidable {
         }
     }
 
+    public final void start() {
+        entityController.start();
+    }
+
+    public final void stop() {
+        entityController.stop();
+    }
+
     /**
      * Returns the entity's balance
      *
