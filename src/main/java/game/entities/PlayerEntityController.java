@@ -8,20 +8,27 @@ import javafx.scene.input.KeyCode;
 /**
  * Player behavior is to move and attack based on the user's input
  */
-public class PlayerEntityController implements IEntityController {
-    private Entity entity;
-
+public class PlayerEntityController extends EntityController {
     private double speed = 600d;
     // Smooths input over around 125ms
     // inputSmooth = 1d would remove smoothing
     // https://www.desmos.com/calculator/xjyyi5sndo
-    private double  inputSmooth = .2d;
+    private double  inputSmooth = .3d;
 
+    /**
+     * Create an EntityController to control an entity
+     *
+     * @param entity the entity to be controlled
+     */
     public PlayerEntityController(Entity entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     public void act() {
+        if (stopped) {
+            return;
+        }
+
         // User input logic
         Point2D input = Point2D.ZERO;
         if (InputManager.get(KeyCode.W) || InputManager.get(KeyCode.UP)) {
@@ -45,14 +52,5 @@ public class PlayerEntityController implements IEntityController {
 
         double dVelocity = velocity.subtract(entity.getVelocity()).magnitude() / speed;
         entity.setVelocity(dVelocity < .01 ? rawVelocity : velocity);
-    }
-
-    @Override
-    public void start() {
-    }
-
-    @Override
-    public void stop() {
-        entity.setVelocity(Point2D.ZERO);
     }
 }

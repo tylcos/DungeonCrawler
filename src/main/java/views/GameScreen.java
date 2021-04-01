@@ -1,9 +1,11 @@
 package views;
 
+import core.GameDriver;
 import core.GameEngine;
 import game.entities.Player;
 import game.levels.Level;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
 
@@ -17,6 +19,8 @@ public class GameScreen {
     private TextArea  uiInfoText;
     @FXML
     private StackPane renderPane;
+    @FXML
+    private Label     version;
 
     private static Level level;
 
@@ -24,6 +28,8 @@ public class GameScreen {
      * Initializes the game screen
      */
     public void initialize() {
+        version.setText(GameDriver.GAME_VERSION);
+
         // Loaded the GameScreen without going through the config screen
         if (Player.getPlayer() == null) {
             Player.setPlayer("Team Azula", "Weapon", "Normal");
