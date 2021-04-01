@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCode;
 /**
  * Player behavior is to move and attack based on the user's input
  */
-public class MainPlayerEntityController implements IEntityController {
+public class PlayerEntityController implements IEntityController {
     private Entity entity;
 
     private double speed = 600d;
@@ -17,7 +17,7 @@ public class MainPlayerEntityController implements IEntityController {
     // https://www.desmos.com/calculator/xjyyi5sndo
     private double  inputSmooth = .2d;
 
-    public MainPlayerEntityController(Entity entity) {
+    public PlayerEntityController(Entity entity) {
         this.entity = entity;
     }
 

@@ -1,3 +1,19 @@
+#Top {
+    -fx-background-color: #3C1F2A;
+}
+
+Label, TextArea {
+    -fx-text-fill: lightgray;
+}
+
 .gameInfoText {
     -fx-font: 18px "Consolas";
+}
+
+Label.buttonText {
+    -fx-padding: 0 50 0 50
+}
+
+Label.buttonText:hover {
+    -fx-background-color: #2F1821;
 }

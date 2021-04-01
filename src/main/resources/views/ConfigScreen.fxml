@@ -6,7 +6,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
-<StackPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../styles/ConfigStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.ConfigScreen">
+<?import java.net.URL?>
+<StackPane id="Top" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.ConfigScreen">
     <children>
         <GridPane alignment="CENTER" hgap="50.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" vgap="30.0" StackPane.alignment="CENTER">
             <columnConstraints>
@@ -65,15 +66,18 @@
                 </Label>
             </children>
         </GridPane>
-        <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" prefHeight="215.0" prefWidth="705.0" stylesheets="@../styles/Global.css"
-              StackPane.alignment="BOTTOM_RIGHT">
+        <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" prefHeight="215.0" prefWidth="705.0" stylesheets="@../styles/Global.css" StackPane.alignment="BOTTOM_RIGHT">
             <children>
-                <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" layoutX="527.0" layoutY="188.0" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Team Azula - Team 03"/>
-                <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="version 0.30"/>
+                <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" layoutX="527.0" layoutY="188.0" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Team Azula - Team 03" />
+                <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="version 0.30" />
             </children>
             <StackPane.margin>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </StackPane.margin>
         </VBox>
     </children>
+    <stylesheets>
+        <URL value="@../styles/Global.css" />
+        <URL value="@../styles/ConfigStyle.css" />
+    </stylesheets>
 </StackPane>

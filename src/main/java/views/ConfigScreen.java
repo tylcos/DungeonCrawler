@@ -57,7 +57,7 @@ public class ConfigScreen {
         boolean isValid = !name.trim().isEmpty() && name.length() <= 28;
 
         if (isValid) {
-            inputTextName.setStyle("-fx-background-color: white;");
+            inputTextName.setStyle("-fx-background-color: gray;");
         } else {
             inputTextName.setStyle("-fx-background-color: #ff6868;");
         }
