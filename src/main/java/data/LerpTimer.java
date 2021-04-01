@@ -24,8 +24,9 @@ public class LerpTimer {
                 } else {
                     action.accept(time / totalTime);
                 }
-
             }
         }.start();
+
+        action.accept(0d);
     }
 }

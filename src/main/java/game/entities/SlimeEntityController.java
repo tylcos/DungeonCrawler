@@ -13,25 +13,32 @@ import java.util.List;
  * The behavior is to move closely around the player while attacking periodically.
  */
 public class SlimeEntityController extends EntityController {
+    private State state = State.running;
+
+    // Variables for movement
     private double speed;
     private double inputSmooth;
 
+    // Variables for changing the state of the entity
     private double strafingDistance;
     private double attackingDistance;
 
+    // Variables for generating bias
     private double biasScale;
     private double timeFactorX;
     private double timeFactorY;
 
-    private State state = State.running;
-
+    // Small dot for debugging where the entity is moving towards
     private DebugPoint debugPoint;
 
+    // All possible states of the entity
     private enum State {
         attacking, charging, running
     }
 
     /**
+     * Sets up random parameters for the Controller
+     *
      * @param entity the entity to control
      */
     public SlimeEntityController(Entity entity) {
@@ -51,27 +58,31 @@ public class SlimeEntityController extends EntityController {
     }
 
     public void act() {
+        // Spawn debug point for the first time
         if (GameDriver.isDebug() && !debugPoint.isRendered() && !stopped) {
             GameEngine.addToLayer(GameEngine.VFX, List.of(debugPoint));
         }
 
+        // Smoothly stop the entity
         if (stopped) {
             entity.setVelocity(entity.getVelocity().interpolate(Point2D.ZERO, .01d));
             return;
         }
 
-
+        // Bias that follows a Lissajous figure, used for random movement
         double t = GameEngine.getT();
         Point2D bias = new Point2D(biasScale * Math.cos(t * timeFactorX),
                                    biasScale * Math.cos(t * timeFactorY));
 
-        Player  player           = Player.getPlayer();
-        Point2D difference       = player.getPosition().subtract(entity.getPosition());
-        Point2D biasedDifference = difference.add(bias);
-        double  distance         = difference.magnitude();
+        Player player = Player.getPlayer();
+        // Points directly to the Player
+        Point2D difference = player.getPosition().subtract(entity.getPosition());
+        // Points to where the entity should move
+        Point2D target   = difference.add(bias);
+        double  distance = difference.magnitude();
 
-        difference       = difference.normalize();
-        biasedDifference = biasedDifference.normalize();
+        difference = difference.normalize();
+        target     = target.normalize();
 
         // Change states based on position
         if (distance >= strafingDistance) {
@@ -84,6 +95,7 @@ public class SlimeEntityController extends EntityController {
             player.damage(1); // Attack player
         }
 
+        // Swarm the Player on death
         if (player.isDead()) {
             strafingDistance = 10;
             biasScale        = 20;
@@ -96,17 +108,19 @@ public class SlimeEntityController extends EntityController {
             velocity = difference.multiply(speed);
             break;
         case charging:
-            velocity = biasedDifference.multiply(speed);
+            velocity = target.multiply(speed);
             break;
         case running:
-            velocity = biasedDifference.multiply(-speed);
+            velocity = target.multiply(-speed);
             break;
         default:
             throw new IllegalStateException("Invalid state: " + state);
         }
 
+        // Smoothly change velocity
         entity.setVelocity(entity.getVelocity().interpolate(velocity, inputSmooth));
 
+        // Shows where the entity is moving towards
         debugPoint.setPosition(bias.add(player.getPosition()));
     }
 

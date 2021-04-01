@@ -17,7 +17,7 @@ public class GeneralTests extends ApplicationTest {
 
     @Before
     public void start() throws Exception {
-        launch(GameDriver.class, "-NoDebug");
+        launch(GameDriver.class);
         assertEquals("Failed to load title screen.",
                      SceneManager.TITLE, SceneManager.getSceneName());
     }

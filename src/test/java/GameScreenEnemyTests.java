@@ -25,7 +25,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
     public void start() throws Exception {
         Level.setSpawnEnemiesInEntrance(true);
 
-        launch(GameDriver.class, "--scene=GAME", "-NoDebug");
+        launch(GameDriver.class, "--scene=GAME");
         assertEquals("Failed to load game screen.", SceneManager.GAME, SceneManager.getSceneName());
     }
 
