@@ -1,5 +1,6 @@
 package views;
 
+import core.GameDriver;
 import core.SceneManager;
 import game.entities.Player;
 import javafx.fxml.FXML;
@@ -11,11 +12,15 @@ import javafx.scene.control.Label;
 public class EndScreen {
     @FXML
     private Label endGameText;
+    @FXML
+    private Label version;
 
     /**
      * Initializes the configuration screen
      */
     public void initialize() {
+        version.setText(GameDriver.GAME_VERSION);
+
         String msg = "You Escaped The Dungeon!";
         if (Player.getPlayer() != null && Player.getPlayer().isDead()) {
             msg = "You Died In The Dungeon!";

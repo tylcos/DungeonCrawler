@@ -2,7 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
@@ -53,15 +53,21 @@
             <StackPane.margin>
                 <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
             </StackPane.margin>
+         <effect>
+            <Bloom threshold="0.0" />
+         </effect>
         </VBox>
-        <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" prefHeight="215.0" prefWidth="705.0" stylesheets="@../styles/Global.css" StackPane.alignment="BOTTOM_RIGHT">
+        <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" stylesheets="@../styles/Global.css" StackPane.alignment="BOTTOM_RIGHT">
             <children>
                 <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" layoutX="527.0" layoutY="188.0" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Team Azula - Team 03" />
-                <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="version 0.30" />
+                <Label fx:id="version" alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Version" />
             </children>
             <StackPane.margin>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </StackPane.margin>
+         <effect>
+            <Glow level="1.0" />
+         </effect>
         </VBox>
     </children>
     <stylesheets>

@@ -1,13 +1,15 @@
 package game.entities;
 
-import core.GameEngine;
-import core.SceneManager;
+import core.*;
+import data.LerpTimer;
 import game.Weapon;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
+import javafx.scene.effect.*;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  * Singleton controller for the player
@@ -15,9 +17,9 @@ import javafx.scene.image.Image;
 public final class Player extends Entity {
     private static Player player;
 
-    private        String name;
-    private        Weapon weapon;
-    private        String difficulty;
+    private String name;
+    private Weapon weapon;
+    private String difficulty;
 
     private boolean onAttackMode;
     private int     attackTime;
@@ -66,16 +68,6 @@ public final class Player extends Entity {
     @Override
     public void update() {
         uiInfoText.setText(toStringFormatted());
-
-        if (isDead) {
-            // Used for fading out when you die
-            setOpacity(getOpacity() - .2d * GameEngine.getDt());
-            if (getOpacity() <= 0) {
-                SceneManager.loadScene(SceneManager.END);
-            }
-
-            return;
-        }
 
         // Used for player movement and eventually attacking
         entityController.act();
@@ -199,6 +191,21 @@ public final class Player extends Entity {
     @Override
     protected void onDeath() {
         setRotate(90); // You can rotate the image instead of changing it to PlayerDead.png
+
+        // Blurs the screen and makes the edges red
+        Point2D screenDimensions = ScreenManager.getScreenDimensions();
+
+        GaussianBlur blur = new GaussianBlur(0);
+        ColorInput red = new ColorInput(0, 0, screenDimensions.getX(),
+                                        screenDimensions.getY(), Color.WHITE);
+        Blend blend = new Blend(BlendMode.MULTIPLY, blur, red);
+
+        getScene().getRoot().setEffect(blend);
+        new LerpTimer(5, t -> {
+            blur.setRadius(20 * t);
+
+            red.setPaint(Color.color(1, 1 - .5 * t, 1 - .5 * t));
+        }, () -> SceneManager.loadScene(SceneManager.END));
     }
 
     /**

@@ -11,12 +11,13 @@ import java.util.stream.Collectors;
  * Launches application
  */
 public class GameDriver extends Application {
+    public static final String GAME_TITLE = "Dungeon Crawler - Team Azula";
+    public static final String GAME_VERSION = "Version 0.30";
+
     public static final double WIDTH      = 1920d;
     public static final double HEIGHT     = 1080d;
     public static final double MIN_WIDTH  = 1280d;
     public static final double MIN_HEIGHT = 720d;
-
-    public static final String GAME_TITLE = "Dungeon Crawler - Team Azula";
 
     private static boolean debug = true;
 
@@ -32,6 +33,7 @@ public class GameDriver extends Application {
         primaryStage.setMinWidth(MIN_WIDTH);
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.widthProperty().addListener(observable -> ScreenManager.updateScreen());
+        primaryStage.heightProperty().addListener(observable -> ScreenManager.updateScreen());
 
         primaryStage.setRenderScaleX(1d);
         primaryStage.setRenderScaleY(1d);

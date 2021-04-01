@@ -12,9 +12,7 @@ import java.util.List;
  * Defines the Slime AI.
  * The behavior is to move closely around the player while attacking periodically.
  */
-public class SlimeEntityController implements IEntityController {
-    private Entity entity;
-
+public class SlimeEntityController extends EntityController {
     private double speed;
     private double inputSmooth;
 
@@ -30,14 +28,14 @@ public class SlimeEntityController implements IEntityController {
     private DebugPoint debugPoint;
 
     private enum State {
-        stopped, attacking, charging, running
+        attacking, charging, running
     }
 
     /**
      * @param entity the entity to control
      */
     public SlimeEntityController(Entity entity) {
-        this.entity = entity;
+        super(entity);
 
         speed       = RandomUtil.getInt(300, 400);
         inputSmooth = RandomUtil.get() * .01d + 0.01d;
@@ -53,9 +51,15 @@ public class SlimeEntityController implements IEntityController {
     }
 
     public void act() {
-        if (GameDriver.isDebug() && !debugPoint.isRendered() && state != State.stopped) {
+        if (GameDriver.isDebug() && !debugPoint.isRendered() && !stopped) {
             GameEngine.addToLayer(GameEngine.VFX, List.of(debugPoint));
         }
+
+        if (stopped) {
+            entity.setVelocity(entity.getVelocity().interpolate(Point2D.ZERO, .01d));
+            return;
+        }
+
 
         double t = GameEngine.getT();
         Point2D bias = new Point2D(biasScale * Math.cos(t * timeFactorX),
@@ -69,28 +73,25 @@ public class SlimeEntityController implements IEntityController {
         difference       = difference.normalize();
         biasedDifference = biasedDifference.normalize();
 
-        if (state != State.stopped) {
-            if (distance >= strafingDistance) {
-                state = State.charging;
-            } else if (state == State.charging && distance < strafingDistance) {
-                state = State.attacking;
-            } else if (state == State.attacking && distance < attackingDistance) {
-                state = State.running;
+        // Change states based on position
+        if (distance >= strafingDistance) {
+            state = State.charging;
+        } else if (state == State.charging && distance < strafingDistance) {
+            state = State.attacking;
+        } else if (state == State.attacking && distance < attackingDistance) {
+            state = State.running;
 
-                player.damage(1); // Attack player
-            }
-
-            if (player.isDead()) {
-                strafingDistance = 10;
-                biasScale        = 20;
-            }
+            player.damage(1); // Attack player
         }
 
+        if (player.isDead()) {
+            strafingDistance = 10;
+            biasScale        = 20;
+        }
+
+        // Change velocity based on state
         Point2D velocity;
         switch (state) {
-        case stopped:
-            velocity = Point2D.ZERO;
-            break;
         case attacking:
             velocity = difference.multiply(speed);
             break;
@@ -110,13 +111,8 @@ public class SlimeEntityController implements IEntityController {
     }
 
     @Override
-    public void start() {
-        state = State.charging;
-    }
-
-    @Override
     public void stop() {
-        state = State.stopped;
+        stopped = true;
 
         if (GameDriver.isDebug()) {
             GameEngine.removeFromLayer(GameEngine.VFX, List.of(debugPoint));

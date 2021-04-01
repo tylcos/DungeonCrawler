@@ -1,11 +1,11 @@
 package views;
 
+import core.GameDriver;
 import core.SceneManager;
 import data.RandomUtil;
 import game.entities.Player;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 /**
  * FXML controller for player creation screen
@@ -17,11 +17,15 @@ public class ConfigScreen {
     private ComboBox<String> inputWeapon;
     @FXML
     private ComboBox<String> inputDifficulty;
+    @FXML
+    private Label            version;
 
     /**
      * Initializes the configuration screen
      */
     public void initialize() {
+        version.setText(GameDriver.GAME_VERSION);
+
         inputTextName.setText(RandomUtil.getRandomName());
         inputTextName.selectAll();
     }
