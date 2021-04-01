@@ -37,7 +37,7 @@ public final class Player extends Entity {
 
     private Player(String image, String weaponName, String difficulty) {
         // Position is overwritten when a new room is loaded
-        super("/images/Player.png", Point2D.ZERO, new Point2D(1, 1));
+        super("/images/Player.png", Point2D.ZERO, new Point2D(.7, .7));
 
         // todo: fix weapon damage and price
         name   = image;
@@ -60,7 +60,7 @@ public final class Player extends Entity {
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
 
-        entityController = new MainPlayerEntityController(this);
+        entityController = new PlayerEntityController(this);
     }
 
     @Override
