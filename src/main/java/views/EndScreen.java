@@ -5,6 +5,9 @@ import core.SceneManager;
 import game.entities.Player;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Glow;
+import javafx.scene.effect.InnerShadow;
+import javafx.scene.paint.Color;
 
 /**
  * The screen that is displayed upon defeating the last monster and escaping the dungeon.
@@ -21,12 +24,20 @@ public class EndScreen {
     public void initialize() {
         version.setText(GameDriver.GAME_VERSION);
 
-        String msg = "You Escaped The Dungeon!";
+        InnerShadow color = new InnerShadow();
+        color.setInput(new Glow(1));
+        color.setWidth(50);
+        color.setHeight(50);
+
         if (Player.getPlayer() != null && Player.getPlayer().isDead()) {
-            msg = "You Died In The Dungeon!";
+            endGameText.setText("You Died In The Dungeon!");
+            color.setColor(Color.RED);
+        } else {
+            endGameText.setText("You Escaped The Dungeon!");
+            color.setColor(Color.BLUE);
         }
 
-        endGameText.setText(msg);
+        endGameText.setEffect(color);
     }
 
     /**

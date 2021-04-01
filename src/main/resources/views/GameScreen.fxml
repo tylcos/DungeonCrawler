@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import java.net.URL?>
-<StackPane id="Top" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GameScreen">
+<StackPane id="Top" fx:id="top" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GameScreen">
     <children>
         <StackPane fx:id="renderPane" />
         <AnchorPane mouseTransparent="true" StackPane.alignment="CENTER">

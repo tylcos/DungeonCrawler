@@ -14,22 +14,29 @@
             <children>
                 <ImageView fx:id="titleImage" fitWidth="600.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
                     <image>
-                        <Image url="@../images/Title.gif" />
+                        <Image url="@../images/Title.gif"/>
                     </image>
-               <effect>
-                  <InnerShadow height="40.0" radius="19.5" width="40.0">
-                     <input>
-                        <InnerShadow choke="1.0" height="20.0" radius="9.5" width="20.0" />
-                     </input>
-                     <color>
-                        <Color red="0.6315789222717285" />
-                     </color>
-                  </InnerShadow>
-               </effect>
+                    <effect>
+                        <DropShadow height="100.0" radius="49.5" width="100.0">
+                            <input>
+                                <InnerShadow choke="0.4" height="50.0" radius="24.5" width="50.0">
+                                    <color>
+                                        <Color red="0.6315789222717285"/>
+                                    </color>
+                                    <input>
+                                        <InnerShadow choke="1.0" height="20.0" radius="9.5" width="20.0"/>
+                                    </input>
+                                </InnerShadow>
+                            </input>
+                            <color>
+                                <Color red="1.0" green="0.7546296119689941" blue="0.7546296119689941"/>
+                            </color>
+                        </DropShadow>
+                    </effect>
                 </ImageView>
                 <ImageView fx:id="image1" fitHeight="1080.0" fitWidth="1920.0" mouseTransparent="true" pickOnBounds="true" StackPane.alignment="CENTER">
                     <image>
-                        <Image url="@../images/IntroPage.gif" />
+                        <Image url="@../images/IntroPage.gif"/>
                     </image>
                 </ImageView>
             </children>
@@ -37,41 +44,41 @@
         <VBox maxHeight="-Infinity" maxWidth="-Infinity" StackPane.alignment="BOTTOM_LEFT">
             <Label onMouseClicked="#onStartClick" styleClass="buttonText" text="Start">
                 <font>
-                    <Font name="Javanese Text" size="55.0" />
+                    <Font name="Javanese Text" size="55.0"/>
                 </font>
             </Label>
             <Label layoutX="10.0" layoutY="10.0" styleClass="buttonText" text="Options">
                 <font>
-                    <Font name="Javanese Text" size="55.0" />
+                    <Font name="Javanese Text" size="55.0"/>
                 </font>
             </Label>
             <Label layoutX="10.0" layoutY="161.0" onMouseClicked="#onExitClick" styleClass="buttonText" text="Exit">
                 <font>
-                    <Font name="Javanese Text" size="55.0" />
+                    <Font name="Javanese Text" size="55.0"/>
                 </font>
             </Label>
             <StackPane.margin>
-                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
             </StackPane.margin>
-         <effect>
-            <Bloom threshold="0.0" />
-         </effect>
+            <effect>
+                <Bloom threshold="0.0"/>
+            </effect>
         </VBox>
         <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" stylesheets="@../styles/Global.css" StackPane.alignment="BOTTOM_RIGHT">
             <children>
-                <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" layoutX="527.0" layoutY="188.0" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Team Azula - Team 03" />
-                <Label fx:id="version" alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Version" />
+                <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" layoutX="527.0" layoutY="188.0" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Team Azula - Team 03"/>
+                <Label fx:id="version" alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Version"/>
             </children>
             <StackPane.margin>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </StackPane.margin>
-         <effect>
-            <Glow level="1.0" />
-         </effect>
+            <effect>
+                <Glow level="1.0"/>
+            </effect>
         </VBox>
     </children>
     <stylesheets>
-        <URL value="@../styles/Global.css" />
-        <URL value="@../styles/TitleStyle.css" />
+        <URL value="@../styles/Global.css"/>
+        <URL value="@../styles/TitleStyle.css"/>
     </stylesheets>
 </StackPane>

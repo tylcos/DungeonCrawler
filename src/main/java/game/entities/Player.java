@@ -1,13 +1,14 @@
 package game.entities;
 
-import core.*;
+import core.GameEngine;
+import core.SceneManager;
+import data.GameEffects;
 import data.LerpTimer;
 import game.Weapon;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
-import javafx.scene.effect.*;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -185,26 +186,32 @@ public final class Player extends Entity {
         Player.getPlayer().setImage(attack);
     }
 
+    @Override
+    public void damage(int amount) {
+        if (isDead) {
+            return;
+        }
+
+        getScene().getRoot().setEffect(GameEffects.RED_EDGES);
+        new LerpTimer(1, t -> GameEffects.RED_EDGES.setColor(Color.color(1, 0, 0, 1 - t)));
+
+        super.damage(amount);
+    }
+
     /**
-     * Rotates the player on death.
+     * Blurs the screen and switches to the end scene.
      */
     @Override
     protected void onDeath() {
         setRotate(90); // You can rotate the image instead of changing it to PlayerDead.png
 
-        // Blurs the screen and makes the edges red
-        Point2D screenDimensions = ScreenManager.getScreenDimensions();
-
-        GaussianBlur blur = new GaussianBlur(0);
-        ColorInput red = new ColorInput(0, 0, screenDimensions.getX(),
-                                        screenDimensions.getY(), Color.WHITE);
-        Blend blend = new Blend(BlendMode.MULTIPLY, blur, red);
-
-        getScene().getRoot().setEffect(blend);
+        // Blurs and changes color to red
+        getScene().getRoot().setEffect(GameEffects.DEATH);
         new LerpTimer(5, t -> {
-            blur.setRadius(20 * t);
+            double x = 1 - .5 * t;
 
-            red.setPaint(Color.color(1, 1 - .5 * t, 1 - .5 * t));
+            GameEffects.GAME_BLUR.setRadius(20 * t);
+            GameEffects.DEATH_COLOR.setPaint(Color.color(1, x, x));
         }, () -> SceneManager.loadScene(SceneManager.END));
     }
 

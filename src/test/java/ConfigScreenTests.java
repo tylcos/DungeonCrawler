@@ -18,7 +18,7 @@ public class ConfigScreenTests extends ApplicationTest {
     // Auto starts on the config screen
     @Before
     public void start() throws Exception {
-        launch(GameDriver.class, "--scene=CONFIG", "-NoDebug");
+        launch(GameDriver.class, "--scene=CONFIG");
         assertEquals("Failed to load config screen.",
                      SceneManager.CONFIG, SceneManager.getSceneName());
     }

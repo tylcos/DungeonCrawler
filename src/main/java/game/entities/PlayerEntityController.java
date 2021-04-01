@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCode;
  * Player behavior is to move and attack based on the user's input
  */
 public class PlayerEntityController extends EntityController {
+    // Variables for movement
     private double speed = 600d;
     // Smooths input over around 125ms
     // inputSmooth = 1d would remove smoothing

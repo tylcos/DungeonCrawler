@@ -72,7 +72,7 @@ public abstract class Entity extends Collidable {
      *
      * @param amount the amount to decrease entity's health by
      */
-    public final void damage(int amount) {
+    public void damage(int amount) {
         if (isDead) {
             return;
         }

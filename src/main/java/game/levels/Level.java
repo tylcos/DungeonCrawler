@@ -2,6 +2,7 @@ package game.levels;
 
 import core.GameEngine;
 import core.SceneManager;
+import data.GameEffects;
 import data.RandomUtil;
 import game.collidables.*;
 import game.entities.Player;
@@ -145,6 +146,8 @@ public class Level {
         if (uiEventHandler != null) {
             uiEventHandler.handle(null);
         }
+
+        currentRoom.setEffect(GameEffects.ROOM_SHADOW);
     }
 
     /**
@@ -193,10 +196,10 @@ public class Level {
      *
      * @param from      the room we're linking from
      * @param direction the direction we're linking in
-     * @param d         the door we're linking from
+     * @param door         the door we're linking from
      */
-    public void queueLinkRoom(Room from, Direction direction, Door d) {
-        QueueLink ql = new QueueLink(from, direction, d);
+    public void queueLinkRoom(Room from, Direction direction, Door door) {
+        QueueLink ql = new QueueLink(from, direction, door);
         roomLinkQueue.add(ql);
     }
 
@@ -357,18 +360,6 @@ public class Level {
         private Room      from;
         private Direction dir;
         private Door      door;
-
-        public Room getFrom() {
-            return from;
-        }
-
-        public Direction getDir() {
-            return dir;
-        }
-
-        public Door getDoor() {
-            return door;
-        }
 
         /**
          * Creates a new QueueLink with given data.

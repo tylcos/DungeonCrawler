@@ -13,7 +13,7 @@ public class EndScreenTests extends ApplicationTest {
     // Auto starts on the win screen
     @Before
     public void start() throws Exception {
-        launch(GameDriver.class, "--scene=END", "-NoDebug");
+        launch(GameDriver.class, "--scene=END");
         assertEquals("Failed to load win screen.",
                      SceneManager.END, SceneManager.getSceneName());
     }

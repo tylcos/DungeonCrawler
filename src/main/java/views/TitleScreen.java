@@ -2,10 +2,10 @@ package views;
 
 import core.GameDriver;
 import core.SceneManager;
+import data.GameEffects;
 import data.LerpTimer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
@@ -47,9 +47,8 @@ public class TitleScreen {
         });
 
         // Blurs the screen on scene load
-        BoxBlur blur = new BoxBlur(START_BLUR_STRENGTH, 0, 1);
-        scalePane.setEffect(blur);
-        new LerpTimer(2, t -> blur.setWidth(START_BLUR_STRENGTH * (1 - t)));
+        scalePane.setEffect(GameEffects.HORIZONTAL_BLUR);
+        new LerpTimer(2, t -> GameEffects.HORIZONTAL_BLUR.setWidth(START_BLUR_STRENGTH * (1 - t)));
 
         /*
         if (GameDriver.isDebug()) {

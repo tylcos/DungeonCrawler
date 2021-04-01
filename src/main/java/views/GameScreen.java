@@ -2,6 +2,8 @@ package views;
 
 import core.GameDriver;
 import core.GameEngine;
+import data.GameEffects;
+import data.LerpTimer;
 import game.entities.Player;
 import game.levels.Level;
 import javafx.fxml.FXML;
@@ -13,6 +15,8 @@ import javafx.scene.layout.StackPane;
  * FXML controller for the main game screen
  */
 public class GameScreen {
+    @FXML
+    private StackPane top;
     @FXML
     private TextArea  uiMinimap;
     @FXML
@@ -44,6 +48,10 @@ public class GameScreen {
 
         level = new Level();
         level.generateMap();
+
+        // Blurs the screen on scene load
+        top.setEffect(GameEffects.GAME_BLUR);
+        new LerpTimer(1, t -> GameEffects.GAME_BLUR.setRadius(20 * (1 - t)));
     }
 
     public static Level getLevel() {
