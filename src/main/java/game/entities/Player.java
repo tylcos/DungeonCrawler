@@ -1,13 +1,13 @@
 package game.entities;
 
-import core.*;
+import core.GameEngine;
+import core.SceneManager;
 import game.Weapon;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 
 /**
  * Singleton controller for the player
@@ -46,11 +46,11 @@ public final class Player extends Entity {
         switch (difficulty) {
         case "Boring":
             money = 100;
-            health = 5;
+            health = 10;
             break;
         case "Normal":
             money = 75;
-            health = 40;
+            health = 5;
             break;
         case "Hard":
             money = 50;
@@ -80,6 +80,7 @@ public final class Player extends Entity {
         // Used for player movement and eventually attacking
         entityController.act();
 
+        /*
         if (attackTime > 200) {
             String currentWeapon = weapon.getName();
             if ("Bow".equals(currentWeapon)) {
@@ -115,7 +116,7 @@ public final class Player extends Entity {
             switchToNoWeapon();
         }
 
-        attackTime++;
+        attackTime++;*/
     }
 
     @Override
