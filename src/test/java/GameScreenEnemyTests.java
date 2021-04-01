@@ -116,7 +116,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
         Player player = Player.getPlayer();
         player.damage(Integer.MAX_VALUE);
         player.setOpacity(0);
-        sleep(100);
+        sleep(6000);
 
         verifyThat("You Died In The Dungeon!", NodeMatchers.isVisible());
         verifyThat("Play Again", NodeMatchers.isVisible());

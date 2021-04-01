@@ -23,9 +23,8 @@ public final class GameEngine {
     private static List<Entity>     dynamicBodies = new ArrayList<>(32);
 
     // Timing utilities used for the game loop
-    private static boolean        paused = true;
     private static AnimationTimer frameTimer;
-    private static long frameCounter;
+    private static long           frameCounter;
     private static double         t;
     private static double         dt;
 
@@ -54,18 +53,18 @@ public final class GameEngine {
 
         // Setup game loop
         frameTimer = new AnimationTimer() {
-            private long lastNanoTime = System.nanoTime();
+            private long lastFrameTime = System.nanoTime();
 
             public void handle(long now) {
-                dt           = (now - lastNanoTime) * 1e-9d;
-                lastNanoTime = now;
+                dt            = (now - lastFrameTime) * 1e-9d;
+                lastFrameTime = now;
                 t += dt;
 
                 GameEngine.update();
                 frameCounter++;
             }
         };
-        setPaused(false);
+        frameTimer.start();
 
         // Setup rendering layers
         ObservableList<Node> children = renderPane.getChildren();
@@ -75,6 +74,13 @@ public final class GameEngine {
         }
 
         renderLayers[VFX].setMouseTransparent(true);
+
+        // Clear up variables
+        staticBodies.clear();
+        dynamicBodies.clear();
+
+        t = 0;
+        frameCounter = 0;
     }
 
     /**
@@ -103,27 +109,10 @@ public final class GameEngine {
     }
 
     /**
-     * Returns if game is paused.
-     *
-     * @return true if the game is paused; false otherwise
+     * Stops the game manager and stops rendering all entities.
      */
-    public static boolean isPaused() {
-        return paused;
-    }
-
-    /**
-     * Pauses the game manager and update methods on all entities.
-     *
-     * @param paused if GameEngine is paused
-     */
-    public static void setPaused(boolean paused) {
-        GameEngine.paused = paused;
-
-        if (paused) {
-            frameTimer.stop();
-        } else {
-            frameTimer.start();
-        }
+    public static void stop() {
+        frameTimer.stop();
     }
 
     /**

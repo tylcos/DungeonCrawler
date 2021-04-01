@@ -7,7 +7,7 @@ Label, TextArea {
 }
 
 .gameInfoText {
-    -fx-font: 18px "Consolas";
+    -fx-font: 26px "Consolas";
 }
 
 Label.buttonText {

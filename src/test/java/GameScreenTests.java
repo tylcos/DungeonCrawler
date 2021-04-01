@@ -93,8 +93,8 @@ public class GameScreenTests extends ApplicationTest {
     public void testExit() {
         Room end = GameScreen.getLevel().getExit();
         assertNotNull(end);
-        int distance = end.getDistanceFromEntrance();
 
+        int distance = end.getDistanceFromEntrance();
         assertTrue(distance >= 6);
     }
 

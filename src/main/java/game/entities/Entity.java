@@ -17,7 +17,7 @@ public abstract class Entity extends Collidable {
     protected boolean isDead;
     protected int     money;
 
-    protected IEntityController entityController;
+    protected EntityController entityController;
 
     /**
      * Initializes the Image and position of an entity.

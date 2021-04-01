@@ -3,6 +3,8 @@ package core;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import views.GameScreen;
 
@@ -13,6 +15,7 @@ import java.io.IOException;
  */
 public final class SceneManager {
     private static Stage  stage;
+    private static Scene  scene;
     private static String sceneName;
 
     public static final String TITLE  = "/views/TitleScreen.fxml";
@@ -33,7 +36,7 @@ public final class SceneManager {
     public static void loadScene(String fxmlPath) {
         // Exiting Game scene
         if (GAME.equals(sceneName)) {
-            GameEngine.setPaused(true);
+            GameEngine.stop();
 
             GameScreen.getLevel().unloadCurrentRoom();
         }
@@ -41,8 +44,10 @@ public final class SceneManager {
         try {
             sceneName = fxmlPath;
 
-            Parent newParent = FXMLLoader.load(SceneManager.class.getResource(fxmlPath));
-            stage.setScene(new Scene(newParent));
+            Parent newRoot = FXMLLoader.load(SceneManager.class.getResource(fxmlPath));
+            scene.setRoot(newRoot);
+
+            stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             System.err.println("Error loading fxml scene: " + fxmlPath);
@@ -60,12 +65,15 @@ public final class SceneManager {
     }
 
     /**
-     * Sets the current stage.
+     * Sets the current stage and scene.
      *
      * @param stage the current stage
      */
     public static void setStage(Stage stage) {
         SceneManager.stage = stage;
+
+        SceneManager.scene = new Scene(new Label());
+        scene.setFill(Color.valueOf("#3C1F2A"));
     }
 
     /**
