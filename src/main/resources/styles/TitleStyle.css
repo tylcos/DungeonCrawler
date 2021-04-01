@@ -1,11 +1,3 @@
 .inputText {
     -fx-font: 60px "Javanese Text";
 }
-
-Label.buttonText {
-    -fx-padding: 0 50 0 50
-}
-
-Label.buttonText:hover {
-    -fx-background-color: lightgrey;
-}

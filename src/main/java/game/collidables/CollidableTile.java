@@ -20,16 +20,6 @@ public abstract class CollidableTile extends Collidable {
     }
 
     /**
-     * Constructor taking a path to an image of a CollidableTile.
-     *
-     * @param image the path to the image to use
-     * @param isStatic if the body is static or not
-     */
-    public CollidableTile(String image, boolean isStatic) {
-        super(image, isStatic);
-    }
-
-    /**
      * Detects if the given Collidable is touching this CollidableTile.
      *
      * @param target the CollidableTile to check for collision

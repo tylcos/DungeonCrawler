@@ -4,16 +4,16 @@
 
 .inputText {
     -fx-font: 30px "Javanese Text";
-    -fx-highlight-fill: lightblue;
-    -fx-highlight-text-fill: black;
+    -fx-text-fill: white;
+    -fx-background-color: gray;
 }
 
 
-Label.buttonText {
-    -fx-font: 50px "Javanese Text";
-    -fx-padding: 0 50 0 50;
+.combo-box .list-cell {
+    -fx-text-fill: white;
 }
 
-Label.buttonText:hover {
-    -fx-background-color: lightgrey;
+.combo-box .combo-box-popup .list-view .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: #444444;
 }

@@ -7,7 +7,3 @@ Label.buttonText {
     -fx-font: 50px "Javanese Text";
     -fx-padding: 0 50 0 50;
 }
-
-Label.buttonText:hover {
-    -fx-background-color: lightgrey;
-}

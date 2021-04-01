@@ -3,7 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<StackPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../styles/EndScreenStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.EndScreen">
+<?import java.net.URL?>
+<StackPane id="Top" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.EndScreen">
     <children>
         <VBox alignment="CENTER" StackPane.alignment="CENTER">
             <StackPane.margin>
@@ -26,4 +27,8 @@
             </StackPane.margin>
         </VBox>
     </children>
+    <stylesheets>
+        <URL value="@../styles/Global.css" />
+        <URL value="@../styles/EndScreenStyle.css" />
+    </stylesheets>
 </StackPane>

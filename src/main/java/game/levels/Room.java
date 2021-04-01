@@ -47,14 +47,14 @@ public class Room extends GridPane {
     public static final float DISTANCE_TAX  = 0.9f;
 
     // A table to translate between letters in .room files and sprites in game
-    private static HashMap<String, Image> spriteTable = new HashMap<>() {
+    private static HashMap<Character, Image> spriteTable = new HashMap<>() {
         {
-            put(".", new Image(Room.class.getResource("/images/Floor.png").toString()));
-            put("x", new Image(Room.class.getResource("/images/Wall.png").toString()));
-            put("N", new Image(Room.class.getResource("/images/debug door.png").toString()));
-            put("E", new Image(Room.class.getResource("/images/debug door.png").toString()));
-            put("S", new Image(Room.class.getResource("/images/debug door.png").toString()));
-            put("W", new Image(Room.class.getResource("/images/debug door.png").toString()));
+            put('.', new Image(Room.class.getResource("/images/Floor.png").toString()));
+            put('x', new Image(Room.class.getResource("/images/Wall.png").toString()));
+            put('N', new Image(Room.class.getResource("/images/DoorE.png").toString()));
+            put('E', new Image(Room.class.getResource("/images/DoorN.png").toString()));
+            put('S', new Image(Room.class.getResource("/images/DoorE.png").toString()));
+            put('W', new Image(Room.class.getResource("/images/DoorN.png").toString()));
         }
     };
 
@@ -66,8 +66,8 @@ public class Room extends GridPane {
 
     private Level   level;                        // The level this room belongs to
     private Point2D position;                     // The position of this room in the level
-    private boolean exit; // Whether this room is the exit
-    private boolean entrance; // Whether this room is the entrance
+    private boolean exit;                         // Whether this room is the exit
+    private boolean entrance;                     // Whether this room is the entrance
     private int     distanceFromEntrance = 999;   // # of doorways separating this room from the
     //                                               entrance
 
@@ -200,17 +200,17 @@ public class Room extends GridPane {
         for (String row : blueprint) {
             for (int col = 0; col < row.length(); ++col) {
                 switch (row.charAt(col)) {
+                case 'N':
+                    testedDoors[Direction.NORTH.toValue()] = true;
+                    break;
                 case 'E':
                     testedDoors[Direction.EAST.toValue()] = true;
-                    break;
-                case 'W':
-                    testedDoors[Direction.WEST.toValue()] = true;
                     break;
                 case 'S':
                     testedDoors[Direction.SOUTH.toValue()] = true;
                     break;
-                case 'N':
-                    testedDoors[Direction.NORTH.toValue()] = true;
+                case 'W':
+                    testedDoors[Direction.WEST.toValue()] = true;
                     break;
                 default:
                     break;
@@ -289,24 +289,25 @@ public class Room extends GridPane {
         // Read the blueprint character by character and add the appropriate tiles to the room
         for (int row = 0; row < blueprint.size(); ++row) {
             for (int col = 0; col < blueprint.get(row).length(); ++col) {
-                Image     img  = spriteTable.get("" + blueprint.get(row).charAt(col));
+                Image     img  = spriteTable.get(blueprint.get(row).charAt(col));
                 StackPane cell = new StackPane();
                 // By setting min and max size to the same thing, the StackPane will always take
                 // up the same amount of space in the GridPane
                 cell.setMaxSize(CELL_SIZE, CELL_SIZE);
                 cell.setMinSize(CELL_SIZE, CELL_SIZE);
+
                 switch (blueprint.get(row).charAt(col)) {
+                case 'N':
+                    addDoor(img, cell, Direction.NORTH);
+                    break;
                 case 'E':
                     addDoor(img, cell, Direction.EAST);
-                    break;
-                case 'W':
-                    addDoor(img, cell, Direction.WEST);
                     break;
                 case 'S':
                     addDoor(img, cell, Direction.SOUTH);
                     break;
-                case 'N':
-                    addDoor(img, cell, Direction.NORTH);
+                case 'W':
+                    addDoor(img, cell, Direction.WEST);
                     break;
                 case 'x':
                     addWall(img, cell);
@@ -321,6 +322,7 @@ public class Room extends GridPane {
                     System.err.println("Detected an invalid character in room " + fileName
                                        + "! Please check file for errors!");
                 }
+
                 add(cell, col, row);
             }
         }
@@ -337,13 +339,13 @@ public class Room extends GridPane {
     private void addDoor(Image image, StackPane cell, Direction direction) {
         boolean valid = level.getRoomExistsOrAvailable(this, direction);
         if (!valid) {
-            addWall(spriteTable.get("x"), cell);
+            addWall(spriteTable.get('x'), cell);
         } else {
             if (activeDoors[direction.toValue()]) {
                 Room room = level.getRoomIfExists(this, direction);
                 generateDoor(image, cell, direction, room);
             } else {
-                addWall(spriteTable.get("x"), cell);
+                addWall(spriteTable.get('x'), cell);
             }
         }
         doors.get(direction).add(cell);
@@ -387,9 +389,9 @@ public class Room extends GridPane {
             cell.getChildren().add(door);
             level.queueLinkRoom(this, direction, door);
         } else {
-            Door d = new Door(image, true, destination);
-            bodies.add(d);
-            cell.getChildren().add(d);
+            Door door = new Door(image, true, destination);
+            bodies.add(door);
+            cell.getChildren().add(door);
             destination.createDoor(direction.opposite(), this);
         }
     }
