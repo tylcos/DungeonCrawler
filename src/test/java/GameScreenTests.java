@@ -20,7 +20,7 @@ public class GameScreenTests extends ApplicationTest {
     // Auto starts on the game screen
     @Before
     public void start() throws Exception {
-        launch(GameDriver.class, "--scene=GAME", "-NoDebug");
+        launch(GameDriver.class, "--scene=GAME");
         assertEquals("Failed to load game screen.", SceneManager.GAME, SceneManager.getSceneName());
     }
 

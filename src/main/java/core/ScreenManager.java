@@ -49,11 +49,20 @@ public final class ScreenManager {
                                        SceneManager.getStage().getHeight() * .5d);
     }
 
-    public static Point2D getScreenDimensions() {
-        return screenDimensions;
+    public static double getWidth() {
+        return screenDimensions.getX();
     }
 
-    public static Point2D getScreenCenter() {
-        return screenCenter;
+    public static double getHeight() {
+        return screenDimensions.getY();
+    }
+
+    /**
+     * Returns scale of screen relative to a 1080p display
+     *
+     * @return scale of screen relative to a 1080p display
+     */
+    public static double getScale() {
+        return screenDimensions.getY() / 1080d;
     }
 }

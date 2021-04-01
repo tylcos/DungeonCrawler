@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * Launches application
  */
 public class GameDriver extends Application {
-    public static final String GAME_TITLE = "Dungeon Crawler - Team Azula";
+    public static final String GAME_TITLE   = "Dungeon Crawler - Team Azula";
     public static final String GAME_VERSION = "Version 0.30";
 
     public static final double WIDTH      = 1920d;
@@ -19,7 +19,7 @@ public class GameDriver extends Application {
     public static final double MIN_WIDTH  = 1280d;
     public static final double MIN_HEIGHT = 720d;
 
-    private static boolean debug = true;
+    private static boolean debug;
 
     public static void main(String[] args) {
         launch(args);
@@ -49,8 +49,8 @@ public class GameDriver extends Application {
                                        .collect(Collectors.toList());
 
         // "-NoDebug" parameter
-        if (unnamed.contains("-nodebug")) {
-            debug = false;
+        if (unnamed.contains("-debug")) {
+            debug = true;
         }
 
         // "--scene=ANY_SCENE" parameter
