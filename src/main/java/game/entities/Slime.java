@@ -1,6 +1,9 @@
 package game.entities;
 
+import core.GameEngine;
 import data.RandomUtil;
+import game.collidables.Collidable;
+import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -68,5 +71,24 @@ public class Slime extends Entity {
     @Override
     public void onDeath() {
         setImage(new Image(SLIME_DEAD_SPRITES[slimeType]));
+    }
+
+    @Override
+    public void onCollision(Collidable other) {
+        if (other instanceof CollidableTile) {
+            bounceBack((int) (getVelocity().magnitude() * GameEngine.getDt()));
+        }
+    }
+
+    /**
+     * Makes the player bounce back from wall or enemy
+     *
+     * @param bounceDistance the distance to bounce
+     */
+    private void bounceBack(int bounceDistance) {
+        Point2D dp = new Point2D(-bounceDistance * Math.signum(getPosition().getX()),
+                                 -bounceDistance * Math.signum(getPosition().getY()));
+
+        setPosition(getPosition().add(dp));
     }
 }

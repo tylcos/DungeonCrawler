@@ -25,6 +25,7 @@ public final class GameEngine {
     // Timing utilities used for the game loop
     private static boolean        paused = true;
     private static AnimationTimer frameTimer;
+    private static long frameCounter;
     private static double         t;
     private static double         dt;
 
@@ -61,6 +62,7 @@ public final class GameEngine {
                 t += dt;
 
                 GameEngine.update();
+                frameCounter++;
             }
         };
         setPaused(false);
@@ -79,6 +81,11 @@ public final class GameEngine {
      * Updates position of all entities and checks for collisions.
      */
     public static void update() {
+        // Allow the scene to build on the first frame which is necessary for some reason
+        if (frameCounter == 0) {
+            return;
+        }
+
         // Copies entities to avoid concurrent modification errors
         // TODO 3/17/2021 convert to swapping between two lists to avoid allocating every frame
         Entity[]     currentDynamicBodies = dynamicBodies.toArray(Entity[]::new);
@@ -257,6 +264,13 @@ public final class GameEngine {
         renderPane.getChildren().set(layer, newPane);
 
         renderLayers[layer] = newPane;
+    }
+
+    /**
+     * Clears the VFX layer which is usually used for debug or visual effects in a level
+     */
+    public static void clearVFX() {
+        renderLayers[VFX].getChildren().clear();
     }
 
     /**

@@ -39,11 +39,11 @@ public final class SceneManager {
         }
 
         try {
+            sceneName = fxmlPath;
+
             Parent newParent = FXMLLoader.load(SceneManager.class.getResource(fxmlPath));
             stage.setScene(new Scene(newParent));
             stage.show();
-
-            sceneName = fxmlPath;
         } catch (IOException e) {
             System.err.println("Error loading fxml scene: " + fxmlPath);
             e.printStackTrace();
