@@ -9,6 +9,8 @@ public abstract class EntityController {
     protected Entity  entity;
     protected boolean stopped;
 
+    protected boolean useDebugPoints;
+
     /**
      * Create an EntityController to control an entity
      *

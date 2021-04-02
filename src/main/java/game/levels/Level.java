@@ -69,10 +69,11 @@ public class Level {
         List<List<Supplier<Entity>>> enemies = new ArrayList<>(3);
         enemies.add(List.of(Slime::new));
         enemies.add(List.of(Skull::new));
-        enemies.add(List.of(Skull::new));
+        enemies.add(List.of(Mage::new));
 
-        // Enemies spawned:
-        // Boring [2,3], Normal [2,6], Hard [2, 9]
+        // Enemies spawned: Boring [2,3], Normal [2,6], Hard [2, 9]
+        // Each element in the array is a different tier
+        // https://www.desmos.com/calculator/phcoaqjd5c
         int difficulty = Player.getPlayer().getDifficulty();
         int[] enemiesToSpawnPerTier = {
                 RandomUtil.getInt(1, 3 + difficulty),

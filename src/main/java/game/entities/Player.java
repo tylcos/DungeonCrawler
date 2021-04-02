@@ -118,20 +118,23 @@ public final class Player extends Entity {
     @Override
     public void onCollision(Collidable other) {
         if (other instanceof CollidableTile) {
-            bounceBack((int) (getVelocity().magnitude() * GameEngine.getDt()));
+            bounceBack((int) (getVelocity().magnitude() * GameEngine.getDt()), Point2D.ZERO);
         }
     }
 
     /**
-     * Makes the player bounce back from wall or enemy
+     * Makes the entity bounce back from wall or enemy
      *
      * @param bounceDistance the distance to bounce
+     * @param fromPoint      the point to bounce back from
      */
-    private void bounceBack(int bounceDistance) {
-        Point2D dp = new Point2D(-bounceDistance * Math.signum(getPosition().getX()),
-                                 -bounceDistance * Math.signum(getPosition().getY()));
+    private void bounceBack(int bounceDistance, Point2D fromPoint) {
+        Point2D difference = position.subtract(fromPoint);
 
-        setPosition(getPosition().add(dp));
+        Point2D dp = new Point2D(-bounceDistance * Math.signum(difference.getX()),
+                                 -bounceDistance * Math.signum(difference.getY()));
+
+        setPosition(position.add(dp));
     }
 
     /**
