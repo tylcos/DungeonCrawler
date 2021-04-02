@@ -72,6 +72,17 @@ public final class RandomUtil {
     }
 
     /**
+     * Generates a random double within [min, max).
+     *
+     * @param min the minimum bound
+     * @param max the maximum bound
+     * @return a random double within [min, max)
+     */
+    public static double get(double min, double max) {
+        return RAND.nextDouble() * (max - min) + min;
+    }
+
+    /**
      * Generates a random integer within [0, max).
      *
      * @param max the maximum bound

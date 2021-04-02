@@ -12,7 +12,7 @@ import java.util.List;
  * Defines the Slime AI.
  * The behavior is to move closely around the player while attacking periodically.
  */
-public class SlimeEntityController extends EntityController {
+public class SkullEntityController extends EntityController {
     private State state = State.running;
 
     // Variables for movement
@@ -41,16 +41,16 @@ public class SlimeEntityController extends EntityController {
      *
      * @param entity the entity to control
      */
-    public SlimeEntityController(Entity entity) {
+    public SkullEntityController(Entity entity) {
         super(entity);
 
-        speed       = RandomUtil.getInt(300, 400);
-        inputSmooth = RandomUtil.get(0.01d, 0.02d);
+        speed       = RandomUtil.getInt(400, 500);
+        inputSmooth = RandomUtil.get(0.02d, 0.03d);
 
-        strafingDistance  = RandomUtil.get(100d, 200d);
+        strafingDistance  = RandomUtil.get(50d, 100d);
         attackingDistance = 50;
 
-        biasScale   = 200;
+        biasScale   = 100;
         timeFactorX = RandomUtil.get(1d, 2d);
         timeFactorY = RandomUtil.get(1d, 2d);
 
@@ -63,9 +63,8 @@ public class SlimeEntityController extends EntityController {
             GameEngine.addToLayer(GameEngine.VFX, List.of(debugPoint));
         }
 
-        // Smoothly stop the entity
+        // Stop the entity
         if (stopped) {
-            entity.setVelocity(entity.getVelocity().interpolate(Point2D.ZERO, .01d));
             return;
         }
 
@@ -76,12 +75,17 @@ public class SlimeEntityController extends EntityController {
 
         Player player = Player.getPlayer();
         // Points directly to the Player
-        Point2D difference = player.getPosition().subtract(entity.getPosition());
+        Point2D difference      = player.getPosition().subtract(entity.getPosition());
         Point2D playerDirection = difference.normalize();
-        double  distance = difference.magnitude();
+        double  distance        = difference.magnitude();
+
+        // Predicts where the player will be
+        double  timeToReach = difference.magnitude() / speed;
+        Point2D playerDp    = player.getVelocity().multiply(timeToReach);
+        Point2D prediction  = difference.add(playerDp);
 
         // Points to where the entity should move
-        Point2D target   = difference.add(bias);
+        Point2D target          = prediction.add(bias);
         Point2D targetDirection = target.normalize();
 
         // Change states based on position
@@ -98,7 +102,7 @@ public class SlimeEntityController extends EntityController {
         // Swarm the Player on death
         if (player.isDead()) {
             strafingDistance = 10;
-            biasScale        = 20;
+            biasScale        = 30;
         }
 
         // Change velocity based on state
