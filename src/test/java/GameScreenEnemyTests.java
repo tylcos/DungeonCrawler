@@ -37,7 +37,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
         AtomicInteger timesClicked = new AtomicInteger(0);
 
         clickOnEnemies(entity -> entity.setOnMouseClicked(event -> timesClicked.getAndIncrement()),
-                       entity -> {});
+                       entity -> { });
 
         assertTrue(timesClicked.get() != 0);
     }
