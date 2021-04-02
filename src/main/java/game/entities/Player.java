@@ -20,7 +20,7 @@ public final class Player extends Entity {
 
     private String name;
     private Weapon weapon;
-    private String difficulty;
+    private int difficulty;
 
     private boolean onAttackMode;
     private int     attackTime;
@@ -50,14 +50,17 @@ public final class Player extends Entity {
         case "Boring":
             money = 100;
             health = 10;
+            this.difficulty = 0;
             break;
         case "Normal":
             money = 75;
             health = 5;
+            this.difficulty = 1;
             break;
         case "Hard":
             money = 50;
             health = 3;
+            this.difficulty = 2;
             break;
         default:
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
@@ -226,6 +229,14 @@ public final class Player extends Entity {
 
     public Weapon getWeapon() {
         return weapon;
+    }
+
+    /**
+     * Returns the current difficulty [0,2]
+     * @return the current difficulty [0,2]
+     */
+    public int getDifficulty() {
+        return difficulty;
     }
 
     public String toStringFormatted() {
