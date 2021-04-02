@@ -1,6 +1,5 @@
 package game.entities;
 
-import core.GameDriver;
 import core.GameEngine;
 import data.RandomUtil;
 import game.collidables.DebugPoint;
@@ -9,8 +8,8 @@ import javafx.geometry.Point2D;
 import java.util.List;
 
 /**
- * Defines the Slime AI.
- * The behavior is to move closely around the player while attacking periodically.
+ * Defines the Skull AI.
+ * The behavior is to move to where the player is predicted to be.
  */
 public class SkullEntityController extends EntityController {
     private State state = State.running;
@@ -59,7 +58,7 @@ public class SkullEntityController extends EntityController {
 
     public void act() {
         // Spawn debug point for the first time
-        if (GameDriver.isDebug() && !debugPoint.isRendered() && !stopped) {
+        if (useDebugPoints && !debugPoint.isRendered() && !stopped) {
             GameEngine.addToLayer(GameEngine.VFX, List.of(debugPoint));
         }
 
@@ -132,7 +131,7 @@ public class SkullEntityController extends EntityController {
     public void stop() {
         stopped = true;
 
-        if (GameDriver.isDebug()) {
+        if (useDebugPoints) {
             GameEngine.removeFromLayer(GameEngine.VFX, List.of(debugPoint));
         }
     }
