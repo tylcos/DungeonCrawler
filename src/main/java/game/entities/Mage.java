@@ -9,21 +9,21 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 
 /**
- * Skull enemy
+ * Mage enemy
  */
-public class Skull extends Entity {
+public class Mage extends Entity {
     /**
-     * Creates an instance of Skull.
+     * Creates an instance of Mage.
      */
-    public Skull() {
-        super(new Image("/images/skull_v2_3.png", 80, 80, true, false),
+    public Mage() {
+        super(new Image("/images/skeleton2_v2_1.png", 100, 100, true, false),
               RandomUtil.getPoint2D(300),
               new Point2D(1, 1));
 
-        health = 2;
-        money  = 10;
+        health = 5;
+        money  = 40;
 
-        entityController = new SkullEntityController(this);
+        entityController = new MageEntityController(this);
 
         setOnMouseClicked(this::attackedByPlayer);
     }
