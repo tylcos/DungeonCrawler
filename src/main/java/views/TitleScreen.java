@@ -48,7 +48,8 @@ public class TitleScreen {
 
         // Blurs the screen on scene load
         scalePane.setEffect(GameEffects.HORIZONTAL_BLUR);
-        new LerpTimer(2, t -> GameEffects.HORIZONTAL_BLUR.setWidth(START_BLUR_STRENGTH * (1 - t)));
+        new LerpTimer(2, t -> GameEffects.HORIZONTAL_BLUR
+                                      .setWidth(START_BLUR_STRENGTH * Math.pow(1 - t, 2)));
 
         /*
         if (GameDriver.isDebug()) {

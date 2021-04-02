@@ -3,6 +3,7 @@ package game.entities;
 import game.collidables.Collidable;
 import game.levels.Room;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import views.GameScreen;
 
 /**
@@ -27,6 +28,19 @@ public abstract class Entity extends Collidable {
      * @param scale    the scale of the image
      */
     protected Entity(String image, Point2D position, Point2D scale) {
+        super(image, false);
+        setPosition(position);
+        setScale(scale);
+    }
+
+    /**
+     * Initializes the Image and position of an entity.
+     *
+     * @param image    the image of the entity
+     * @param position the position to create the entity at
+     * @param scale    the scale of the image
+     */
+    protected Entity(Image image, Point2D position, Point2D scale) {
         super(image, false);
         setPosition(position);
         setScale(scale);

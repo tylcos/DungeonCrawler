@@ -64,11 +64,12 @@ public class Room extends GridPane {
      */
     private static HashMap<String, ArrayList<String>> fileCache = new HashMap<>();
 
-    private Level   level;                        // The level this room belongs to
-    private Point2D position;                     // The position of this room in the level
-    private boolean exit;                         // Whether this room is the exit
-    private boolean entrance;                     // Whether this room is the entrance
-    private int     distanceFromEntrance = 999;   // # of doorways separating this room from the
+    private Level   level;                      // The level this room belongs to
+    private Point2D position;                   // The position of this room in the level
+    private boolean exit;                       // Whether this room is the exit
+    private boolean entrance;                   // Whether this room is the entrance
+    private boolean generated;                  // Whether this room has had game elements generated
+    private int     distanceFromEntrance = 999; // # of doorways separating this room from the
     //                                               entrance
 
     // A list of all collidable bodies making up this room
@@ -511,7 +512,7 @@ public class Room extends GridPane {
     }
 
     /**
-     * Checks if this room is the exit for its level.
+     * Whether this room is the exit for its level.
      *
      * @return true if this room is the exit
      */
@@ -520,12 +521,30 @@ public class Room extends GridPane {
     }
 
     /**
-     * Checks if this room is the entrance for its level.
+     * Whether this room is the entrance for its level.
      *
      * @return true if this room is the entrance
      */
     public boolean isEntrance() {
         return entrance;
+    }
+
+    /**
+     * Whether this room has had game elements generated.
+     *
+     * @return true if this room has had game elements generated
+     */
+    public boolean isGenerated() {
+        return generated;
+    }
+
+    /**
+     * Set whether this room has had game elements generated.
+     *
+     * @param generated true if this room has had game elements generated
+     */
+    public void setGenerated(boolean generated) {
+        this.generated = generated;
     }
 
     /**

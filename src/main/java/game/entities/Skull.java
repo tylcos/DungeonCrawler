@@ -9,40 +9,21 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 
 /**
- * Basic slime enemy
+ * Skull enemy
  */
-public class Slime extends Entity {
-    private int slimeType;
-
-    // @formatter:off
-    private static final String[] SLIME_SPRITES = {
-        "/images/enemy1.gif",
-        "/images/enemy2.gif",
-        "/images/enemy3.gif"
-    };
-
-    private static final String[] SLIME_DEAD_SPRITES = {
-        "/images/enemyDead1.png",
-        "/images/enemyDead2.png",
-        "/images/enemyDead3.png"
-    };
-    // @formatter:on
-
+public class Skull extends Entity {
     /**
      * Creates an instance of Slime.
      */
-    public Slime() {
-        super(SLIME_SPRITES[0],
+    public Skull() {
+        super(new Image("/images/skull_v2_3.png", 80, 80, true, false),
               RandomUtil.getPoint2D(300),
-              new Point2D(5, 5));
+              new Point2D(1, 1));
 
         health = 2;
-        money  = 20;
+        money  = 10;
 
-        slimeType = RandomUtil.getInt(SLIME_SPRITES.length);
-        setImage(new Image(SLIME_SPRITES[slimeType]));
-
-        entityController = new SlimeEntityController(this);
+        entityController = new SkullEntityController(this);
 
         setOnMouseClicked(this::attackedByPlayer);
     }
@@ -63,21 +44,20 @@ public class Slime extends Entity {
         }
 
         damage(1);
-        bounceBack(-10, Player.getPlayer().getPosition());
+        bounceBack(-20, Player.getPlayer().getPosition());
     }
 
     /**
-     * Sets the image to a dead slime
+     * Destroys the entity
      */
     @Override
     public void onDeath() {
-        setImage(new Image(SLIME_DEAD_SPRITES[slimeType]));
+        setVisible(false);
     }
 
     @Override
     public void onCollision(Collidable other) {
         if (other instanceof CollidableTile) {
-            // Stop dead slimes from moving through walls
             double magnitude = Math.max(100d, velocity.magnitude());
 
             bounceBack((int) (magnitude * GameEngine.getDt()), Point2D.ZERO);

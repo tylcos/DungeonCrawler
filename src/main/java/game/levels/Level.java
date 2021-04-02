@@ -5,14 +5,13 @@ import core.SceneManager;
 import data.GameEffects;
 import data.RandomUtil;
 import game.collidables.*;
-import game.entities.Player;
-import game.entities.Slime;
+import game.entities.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Level generates a random level and manages what is currently loaded on the screen
@@ -57,29 +56,53 @@ public class Level {
     }
 
     /**
-     * Adds items and entities to the rooms.
+     * Adds items and entities to the room.
+     *
+     * @param room the room to be added to
      */
-    private void spawnGameElements() {
-        for (int y = MAX_DIAMETER - 1; y >= 0; --y) {
-            for (int x = 0; x < MAX_DIAMETER; ++x) {
-                Room room = map[x][y];
+    private void generateGameElements(Room room) {
+        if (!spawnEnemiesInEntrance && room.isEntrance()) {
+            return;
+        }
 
-                if (room != null && (spawnEnemiesInEntrance || !room.isEntrance())) {
-                    int numberOfCoins = RandomUtil.getInt(3, 5);
-                    for (int i = 0; i < numberOfCoins; i++) {
-                        room.addCollectable(new Coin());
-                    }
+        // 2d list of enemy constructors separated into difficulty tiers
+        List<List<Supplier<Entity>>> enemies = new ArrayList<>(3);
+        enemies.add(List.of(Slime::new));
+        enemies.add(List.of(Skull::new));
+        enemies.add(List.of(Skull::new));
 
-                    int numberOfItems = RandomUtil.getInt(2);
-                    for (int i = 0; i < numberOfItems; i++) {
-                        room.addCollectable(new Item());
-                    }
+        // Enemies spawned:
+        // Boring [2,3], Normal [2,6], Hard [2, 9]
+        int difficulty = Player.getPlayer().getDifficulty();
+        int[] enemiesToSpawnPerTier = {
+                RandomUtil.getInt(1, 3 + difficulty),
+                RandomUtil.getInt(1, 2 + difficulty),
+                RandomUtil.getInt(0, 1 + difficulty)
+        };
 
-                    int numberOfEnemies = RandomUtil.getInt(2, 5);
-                    for (int i = 0; i < numberOfEnemies; i++) {
-                        room.addEntity(new Slime());
-                    }
-                }
+        Arrays.stream(enemiesToSpawnPerTier).forEach(System.out::println);
+
+        // Start spawning game elements
+        // Add coins to the room
+        int numberOfCoins = RandomUtil.getInt(3, 5);
+        for (int i = 0; i < numberOfCoins; i++) {
+            room.addCollectable(new Coin());
+        }
+
+        // Add items to the room
+        int numberOfItems = RandomUtil.getInt(2);
+        for (int i = 0; i < numberOfItems; i++) {
+            room.addCollectable(new Item());
+        }
+
+        // Add enemies to the current room
+        for (int tier = 0; tier < 3; tier++) {
+            List<Supplier<Entity>> currentTier = enemies.get(tier);
+
+            for (int i = 0; i < enemiesToSpawnPerTier[tier]; i++) {
+                int    randomIndex  = RandomUtil.getInt(currentTier.size());
+                Entity currentEnemy = currentTier.get(randomIndex).get();
+                room.addEntity(currentEnemy);
             }
         }
     }
@@ -95,8 +118,6 @@ public class Level {
         map[mapOffset][mapOffset] = new Room("/rooms/rectangle.room", Point2D.ZERO, this, true);
         // Generate the rest of the rooms
         dequeueAndLinkRooms();
-        // Add game elements to rooms
-        spawnGameElements();
         // Set the active room to the entrance
         loadRoom(map[mapOffset][mapOffset]);
         // Spawn the player
@@ -120,6 +141,11 @@ public class Level {
         if (newRoom.isExit()) {
             SceneManager.loadScene(SceneManager.END);
             return;
+        }
+
+        if (!currentRoom.isGenerated()) {
+            generateGameElements(currentRoom);
+            currentRoom.setGenerated(true);
         }
 
         // Load the new room
@@ -196,7 +222,7 @@ public class Level {
      *
      * @param from      the room we're linking from
      * @param direction the direction we're linking in
-     * @param door         the door we're linking from
+     * @param door      the door we're linking from
      */
     public void queueLinkRoom(Room from, Direction direction, Door door) {
         QueueLink ql = new QueueLink(from, direction, door);
