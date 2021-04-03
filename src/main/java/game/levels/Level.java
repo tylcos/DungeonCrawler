@@ -96,6 +96,18 @@ public class Level {
             room.addCollectable(new Item());
         }
 
+        // Add health potions to the room. 25% spawn rate probability.
+        int numberOfHealthPotions = (RandomUtil.getInt(4) == 0) ? 1 : 0;
+        for (int i = 0; i < numberOfHealthPotions; i++) {
+            room.addCollectable(new HealthPotion());
+        }
+
+        // Add attack potions to the room. 25% spawn rate probability.
+        int numberOfAttackPotions = (RandomUtil.getInt(1) == 0) ? 1 : 0;
+        for (int i = 0; i < numberOfAttackPotions; i++) {
+            room.addCollectable(new AttackPotion());
+        }
+
         // Add enemies to the current room
         for (int tier = 0; tier < 3; tier++) {
             List<Supplier<Entity>> currentTier = enemies.get(tier);
