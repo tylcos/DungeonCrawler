@@ -235,8 +235,8 @@ public final class Player extends Entity {
     }
 
     /**
-     * Returns the current difficulty [0,2]
-     * @return the current difficulty [0,2]
+     * Returns the current difficulty [0,2]. 0 is Boring, 1 is Normal, 2 is Hard.
+     * @return the current difficulty [0,2]. 0 is Boring, 1 is Normal, 2 is Hard.
      */
     public int getDifficulty() {
         return difficulty;
