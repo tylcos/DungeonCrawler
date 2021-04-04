@@ -47,7 +47,7 @@ public class Room extends GridPane {
     public static final float DISTANCE_TAX  = 0.9f;
 
     // A table to translate between letters in .room files and sprites in game
-    private static HashMap<Character, Image> spriteTable = new HashMap<>() {
+    private static final HashMap<Character, Image> spriteTable = new HashMap<>() {
         {
             put('.', new Image(Room.class.getResource("/images/Floor.png").toString()));
             put('x', new Image(Room.class.getResource("/images/Wall.png").toString()));
@@ -57,12 +57,16 @@ public class Room extends GridPane {
             put('W', new Image(Room.class.getResource("/images/DoorN.png").toString()));
         }
     };
+    // TODO different sprite for victory door
+    private static final Image winDoor = 
+            new Image(Room.class.getResource("/images/DoorN.png").toString());
 
     /*
      * A cache for the contents of room files we have read before. With this, we don't have to make
      * read requests to a file more than once! Disks are slow and flash storage is fast :)
      */
     private static HashMap<String, ArrayList<String>> fileCache = new HashMap<>();
+    private static HashMap<String, EnumMap<Direction, Point2D>> doorOffsetCache = new HashMap<>();
 
     private Level   level;                      // The level this room belongs to
     private Point2D position;                   // The position of this room in the level
@@ -84,12 +88,13 @@ public class Room extends GridPane {
     // Contains valid door tiles for each direction.
     // Used by createDoor() to add doors to rooms that are already generated.
     private EnumMap<Direction, ArrayList<StackPane>> doors = new EnumMap<>(Direction.class);
-
     {
         for (Direction direction : Direction.values()) {
             doors.put(direction, new ArrayList<>());
         }
     }
+    
+    private EnumMap<Direction, Point2D> doorOffsets;
 
     // Holds which doors have been activated
     // A door which is active leads to another room.
@@ -154,9 +159,11 @@ public class Room extends GridPane {
     private ArrayList<String> readFile(String name) {
         ArrayList<String> lines = new ArrayList<>();
         ArrayList<String> cache = fileCache.get(name);
+        EnumMap<Direction, Point2D> dCache = doorOffsetCache.get(name);
         if (cache != null) {
             // File is cached. Load from cache.
             lines = cache;
+            doorOffsets = dCache;
         } else {
             // File does not exist in cache. Read from file.
             InputStream is = Room.class.getResourceAsStream(name);
@@ -180,8 +187,18 @@ public class Room extends GridPane {
                     e.printStackTrace();
                 }
             }
+            // Get height and width of room by checking size of list and lines of list
+            double heightR = ((lines.size() - 3) / 2.0) * CELL_SIZE;
+            double widthR = ((lines.get(0).length() - 3) / 2.0) * CELL_SIZE;
+            EnumMap<Direction, Point2D> dOffset = new EnumMap<Direction, Point2D>(Direction.class);
+            dOffset.put(Direction.NORTH, new Point2D(0, -heightR));
+            dOffset.put(Direction.EAST, new Point2D(widthR, 0));
+            dOffset.put(Direction.SOUTH, new Point2D(0, heightR));
+            dOffset.put(Direction.WEST, new Point2D(-widthR, 0));
+            doorOffsets = dOffset;
             // Add file to cache.
             fileCache.put(name, lines);
+            doorOffsetCache.put(name, dOffset);
         }
         return lines;
     }
@@ -228,6 +245,14 @@ public class Room extends GridPane {
             activeDoors[creatorDirection.toValue()] = true;
             testedDoors[creatorDirection.toValue()] = false;
             ++branches;
+            
+            // Also activate door to win screen if exit
+            if (exit) {
+                Direction exitDirection = creatorDirection.opposite();
+                activeDoors[exitDirection.toValue()] = true;
+                testedDoors[exitDirection.toValue()] = false;
+                ++branches;
+            }
         }
 
         int numberOfDoors = 0; // tracks number of doors that can be activated
@@ -327,6 +352,8 @@ public class Room extends GridPane {
                 add(cell, col, row);
             }
         }
+        // TODO stuff
+        // make player spawn on the door they entered through!
     }
 
     /**
@@ -384,7 +411,12 @@ public class Room extends GridPane {
      * @param destination the room the door leads to
      */
     private void generateDoor(Image image, StackPane cell, Direction direction, Room destination) {
-        if (destination == null) {
+        if (destination == null && exit) {
+            Door door = new Door(winDoor, true);
+            door.setWin();
+            bodies.add(door);
+            cell.getChildren().add(door);
+        } else if (destination == null) {
             Door door = new Door(image, true);
             bodies.add(door);
             cell.getChildren().add(door);
@@ -473,6 +505,15 @@ public class Room extends GridPane {
             }
         }
         return trueDoors;
+    }
+    
+    // TODO implement
+    public Point2D getDoorCoords(Direction direction) {
+        Point2D offset = doorOffsets.get(direction);
+        System.out.println(offset);
+        return offset;
+        // this will have to be some set number grabbed from the file
+        //return Point2D.ZERO;
     }
 
     /**
