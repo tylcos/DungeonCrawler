@@ -77,6 +77,27 @@ public enum Direction {
             throw new IllegalStateException("Unexpected value: " + this);
         }
     }
+    
+    /**
+     * Describes this number as a unique Direction.
+     * 
+     * @param value a number 0 through 3
+     * @return NORTH for 0, EAST for 1, SOUTH for 2, WEST for 3
+     */
+    public static Direction valueToDirection(int value) {
+        switch (value) {
+        case 0:
+            return NORTH;
+        case 1:
+            return EAST;
+        case 2:
+            return SOUTH;
+        case 3:
+            return WEST;
+        default:
+            throw new IllegalStateException("Unexpected value: " + value);
+        }
+    }
 
     /**
      * The Direction pointing in the opposite direction of this one.
