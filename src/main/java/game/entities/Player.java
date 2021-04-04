@@ -9,7 +9,6 @@ import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
@@ -20,10 +19,7 @@ public final class Player extends Entity {
 
     private String name;
     private Weapon weapon;
-    private int difficulty;
-
-    private boolean onAttackMode;
-    private int     attackTime;
+    private int    difficulty;
 
     private static TextArea uiInfoText;
 
@@ -44,7 +40,7 @@ public final class Player extends Entity {
 
         // todo: fix weapon damage and price
         name   = image;
-        weapon = new Weapon(weaponName, 0, 0);
+        weapon = new Weapon(weaponName, 1, 0);
 
         switch (difficulty) {
         case "Boring":
@@ -137,61 +133,6 @@ public final class Player extends Entity {
         setPosition(position.add(dp));
     }
 
-    /**
-     * change weapon to Bow
-     */
-    public void swapToBow() {
-        Image bow = new Image("images/PlayerBow2.gif");
-        setImage(bow);
-        weapon = new Weapon("Bow", 0, 0);
-    }
-
-    /**
-     * change weapon to Axe
-     */
-    public void swapToAxe() {
-        Image axe = new Image("images/PlayerAxe.gif");
-        setImage(axe);
-        weapon = new Weapon("Axe", 0, 0);
-    }
-
-    /**
-     * change to weapon to sword
-     */
-    public void swapToSword() {
-        Image sword = new Image("images/PlayerSwordAttack.png");
-        setImage(sword);
-        weapon = new Weapon("Sword", 0, 0);
-    }
-
-    public void switchToNoWeapon() {
-        Image png = new Image("images/Player.png");
-        Player.getPlayer().setImage(png);
-        weapon = new Weapon("weaponName", 0, 0);
-    }
-
-    /*
-     * Active AttackMotion
-     */
-    public void attackMotion() {
-        Image attack;
-        switch (weapon.getName()) {
-        case "Bow":
-            attack = new Image("images/PlayerBowAttack.gif");
-            break;
-        case "Axe":
-            attack = new Image("images/PlayerAxeAttack.gif");
-            break;
-        case "Sword":
-            attack = new Image("images/PlayerSwordAttack.png");
-            break;
-        default:
-            throw new IllegalStateException("Unexpected weapon: " + weapon.getName());
-        }
-
-        Player.getPlayer().setImage(attack);
-    }
-
     @Override
     public void damage(int amount) {
         if (isDead) {
@@ -202,6 +143,23 @@ public final class Player extends Entity {
         new LerpTimer(1, t -> GameEffects.RED_EDGES.setColor(Color.color(1, 0, 0, 1 - t)));
 
         super.damage(amount);
+    }
+
+    /**
+     * Increases the Player's health by two HP upon drinking the health potion. The Player cannot
+     * regain more health than they started out with.
+     */
+    public void regenerate() {
+        int maxHealth;
+        if (difficulty == 0) {
+            maxHealth = 10;
+        } else if (difficulty == 2) {
+            maxHealth = 3;
+        } else {
+            maxHealth = 5;
+        }
+
+        health = Math.min(health + 2, maxHealth);
     }
 
     /**
@@ -221,22 +179,14 @@ public final class Player extends Entity {
         }, () -> SceneManager.loadScene(SceneManager.END));
     }
 
-    /**
-     * Returns if the player is attacking.
-     *
-     * @return true if the player is attacking; false otherwise
-     */
-    public boolean getIsOnAttack() {
-        return onAttackMode;
-    }
-
     public Weapon getWeapon() {
         return weapon;
     }
 
     /**
-     * Returns the current difficulty [0,2]
-     * @return the current difficulty [0,2]
+     * Returns the current difficulty [0,2]. 0 is Boring, 1 is Normal, 2 is Hard.
+     *
+     * @return the current difficulty [0,2]. 0 is Boring, 1 is Normal, 2 is Hard.
      */
     public int getDifficulty() {
         return difficulty;
