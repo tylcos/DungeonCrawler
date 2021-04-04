@@ -1,6 +1,8 @@
-package game.collidables;
+package game.potions;
 
 import data.RandomUtil;
+import game.collidables.Collectable;
+import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
 
@@ -22,8 +24,8 @@ public class HealthPotion extends Collectable {
             return;
         }
 
-        Player.getPlayer().regenerate();
-
         setCollected();
+
+        Player.getPlayer().regenerate();
     }
 }
