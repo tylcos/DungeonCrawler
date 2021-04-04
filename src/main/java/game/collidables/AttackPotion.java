@@ -24,10 +24,11 @@ public class AttackPotion extends Collectable {
 
         int currDamage = Player.getPlayer().getWeapon().getDamage();
         long potionLasting = 30000; // 30,000 milliseconds = 30 seconds
-        long currTime = System.currentTimeMillis();
-        if (currTime > potionLasting) {
+        // long endTime = System.currentTimeMillis() + potionLasting;
+
+        // while (System.currentTimeMillis() < endTime) {
             Player.getPlayer().getWeapon().setDamage(currDamage * 2);
-        }
+        // }
 
         setCollected();
     }
