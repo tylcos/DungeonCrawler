@@ -11,29 +11,30 @@ import javafx.scene.text.Text;
  */
 public class Weapon {
     private String name;
-    private int damage;
-    private int price;
+    private int    damage;
+    private int    price;
 
     /**
      * Creates an instance of a weapon with the name, damage it does, and its price.
      *
-     * @param name the name of the weapon
+     * @param name   the name of the weapon
      * @param damage the damage the weapon does
-     * @param price the price of the weapon
+     * @param price  the price of the weapon
      */
     public Weapon(String name, int damage, int price) {
-        this.name = name;
+        this.name   = name;
         this.damage = damage;
-        this.price = price;
+        this.price  = price;
     }
 
     /**
      * Displays the weapon on the screen
+     *
      * @return the StackPane of the weapon
      */
     public StackPane getWeaponDisplay() {
         StackPane weaponDisplay = new StackPane();
-        Circle weapon = new Circle();
+        Circle    weapon        = new Circle();
         weapon.setFill(Color.BLUE);
         weapon.setRadius(35);
         Text exitText = new Text("Weapon: " + name + "\ndamage: " + damage + "\nprice: " + price);
@@ -42,6 +43,61 @@ public class Weapon {
         weaponDisplay.getChildren().addAll(weapon, exitText);
         return weaponDisplay;
     }
+
+    //    /**
+    //     * change weapon to Bow
+    //     */
+    //    public void swapToBow() {
+    //        Image bow = new Image("images/PlayerBow2.gif");
+    //        setImage(bow);
+    //        weapon = new Weapon("Bow", 0, 0);
+    //    }
+    //
+    //    /**
+    //     * change weapon to Axe
+    //     */
+    //    public void swapToAxe() {
+    //        Image axe = new Image("images/PlayerAxe.gif");
+    //        setImage(axe);
+    //        weapon = new Weapon("Axe", 0, 0);
+    //    }
+    //
+    //    /**
+    //     * change to weapon to sword
+    //     */
+    //    public void swapToSword() {
+    //        Image sword = new Image("images/PlayerSwordAttack.png");
+    //        setImage(sword);
+    //        weapon = new Weapon("Sword", 0, 0);
+    //    }
+    //
+    //    public void switchToNoWeapon() {
+    //        Image png = new Image("images/Player.png");
+    //        Player.getPlayer().setImage(png);
+    //        weapon = new Weapon("weaponName", 0, 0);
+    //    }
+    //
+    //    /*
+    //     * Active AttackMotion
+    //     */
+    //    public void attackMotion() {
+    //        Image attack;
+    //        switch (weapon.getName()) {
+    //        case "Bow":
+    //            attack = new Image("images/PlayerBowAttack.gif");
+    //            break;
+    //        case "Axe":
+    //            attack = new Image("images/PlayerAxeAttack.gif");
+    //            break;
+    //        case "Sword":
+    //            attack = new Image("images/PlayerSwordAttack.png");
+    //            break;
+    //        default:
+    //            throw new IllegalStateException("Unexpected weapon: " + weapon.getName());
+    //        }
+    //
+    //        Player.getPlayer().setImage(attack);
+    //    }
 
     /**
      * Returns the name of the weapon.
@@ -77,6 +133,11 @@ public class Weapon {
      */
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    public void addDamageMultiplier(double multiplier) {
+        // Rounds (damage * multiplier) to the nearest int
+        damage = (int) (damage * multiplier + .5d);
     }
 
     /**
