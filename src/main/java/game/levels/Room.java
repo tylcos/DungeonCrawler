@@ -507,13 +507,13 @@ public class Room extends GridPane {
         return trueDoors;
     }
     
-    // TODO implement
+    /**
+     * Return coordinates that the player should be at when they pass through a door
+     * @param direction the direction the player came from
+     * @return the coordinates the player should be at
+     */
     public Point2D getDoorCoords(Direction direction) {
-        Point2D offset = doorOffsets.get(direction);
-        System.out.println(offset);
-        return offset;
-        // this will have to be some set number grabbed from the file
-        //return Point2D.ZERO;
+        return doorOffsets.get(direction);
     }
 
     /**

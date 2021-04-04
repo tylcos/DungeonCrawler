@@ -84,6 +84,9 @@ public class Door extends CollidableTile {
         locked = false;
     }
     
+    /**
+     * Make touching this door with a key the victory condition.
+     */
     public void setWin() {
         win = true;
     }
