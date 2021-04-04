@@ -6,6 +6,8 @@ import data.GameEffects;
 import data.RandomUtil;
 import game.collidables.*;
 import game.entities.*;
+import game.potions.AttackPotion;
+import game.potions.HealthPotion;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -81,8 +83,6 @@ public class Level {
                 RandomUtil.getInt(0, 1 + difficulty)
         };
 
-        Arrays.stream(enemiesToSpawnPerTier).forEach(System.out::println);
-
         // Start spawning game elements
         // Add coins to the room
         int numberOfCoins = RandomUtil.getInt(3, 5);
@@ -97,13 +97,13 @@ public class Level {
         }
 
         // Add health potions to the room. 25% spawn rate probability.
-        int numberOfHealthPotions = (RandomUtil.getInt(4) == 0) ? 1 : 0;
+        int numberOfHealthPotions = (RandomUtil.get() < .25d) ? 1 : 0;
         for (int i = 0; i < numberOfHealthPotions; i++) {
             room.addCollectable(new HealthPotion());
         }
 
         // Add attack potions to the room. 25% spawn rate probability.
-        int numberOfAttackPotions = (RandomUtil.getInt(1) == 0) ? 1 : 0;
+        int numberOfAttackPotions = (RandomUtil.get() < 1d) ? 1 : 0;
         for (int i = 0; i < numberOfAttackPotions; i++) {
             room.addCollectable(new AttackPotion());
         }

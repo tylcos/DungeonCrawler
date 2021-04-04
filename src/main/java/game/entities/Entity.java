@@ -109,24 +109,6 @@ public abstract class Entity extends Collidable {
         }
     }
 
-    /**
-     * Increases the entity's health by two HP upon drinking the health potion. The entity cannot regain more
-     * health than it started out with.
-     */
-    public void regenerate() {
-        int currDifficulty = Player.getPlayer().getDifficulty();
-        int maxHealth;
-
-        if (currDifficulty == 0) {
-            maxHealth = 10;
-        } else if (currDifficulty == 2) {
-            maxHealth = 3;
-        } else {
-            maxHealth = 5;
-        }
-        health = Math.min(health + 2, maxHealth);
-    }
-
     public final void start() {
         entityController.start();
     }
