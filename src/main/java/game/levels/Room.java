@@ -55,17 +55,20 @@ public class Room extends GridPane {
             put('E', new Image(Room.class.getResource("/images/DoorN.png").toString()));
             put('S', new Image(Room.class.getResource("/images/DoorE.png").toString()));
             put('W', new Image(Room.class.getResource("/images/DoorN.png").toString()));
+            // THESE LOWERCASE ONES ARE FOR THE VICTORY DOOR
+            // TODO different sprite for victory door
+            put('n', new Image(Room.class.getResource("/images/DoorE.png").toString()));
+            put('e', new Image(Room.class.getResource("/images/DoorN.png").toString()));
+            put('s', new Image(Room.class.getResource("/images/DoorE.png").toString()));
+            put('w', new Image(Room.class.getResource("/images/DoorN.png").toString()));
         }
     };
-    // TODO different sprite for victory door
-    private static final Image winDoor = 
-            new Image(Room.class.getResource("/images/DoorN.png").toString());
 
     /*
      * A cache for the contents of room files we have read before. With this, we don't have to make
      * read requests to a file more than once! Disks are slow and flash storage is fast :)
      */
-    private static HashMap<String, ArrayList<String>> fileCache = new HashMap<>();
+    private static HashMap<String, ArrayList<String>> fileCache       = new HashMap<>();
     private static HashMap<String, EnumMap<Direction, Point2D>> doorOffsetCache = new HashMap<>();
 
     private Level   level;                      // The level this room belongs to
@@ -74,7 +77,7 @@ public class Room extends GridPane {
     private boolean entrance;                   // Whether this room is the entrance
     private boolean generated;                  // Whether this room has had game elements generated
     private int     distanceFromEntrance = 999; // # of doorways separating this room from the
-    //                                               entrance
+    // entrance
 
     // A list of all collidable bodies making up this room
     private ArrayList<Collidable> bodies = new ArrayList<>();
@@ -93,7 +96,7 @@ public class Room extends GridPane {
             doors.put(direction, new ArrayList<>());
         }
     }
-    
+
     private EnumMap<Direction, Point2D> doorOffsets;
 
     // Holds which doors have been activated
@@ -135,10 +138,10 @@ public class Room extends GridPane {
         }
         if (start) {
             distanceFromEntrance = 0;
-            entrance             = true;
+            entrance = true;
         }
         this.position = position;
-        this.level    = level;
+        this.level = level;
 
         // By default GridPanes are aligned to the top-left, but we want the room's
         // tiles centered
@@ -245,7 +248,7 @@ public class Room extends GridPane {
             activeDoors[creatorDirection.toValue()] = true;
             testedDoors[creatorDirection.toValue()] = false;
             ++branches;
-            
+
             // Also activate door to win screen if exit
             if (exit) {
                 Direction exitDirection = creatorDirection.opposite();
@@ -277,7 +280,7 @@ public class Room extends GridPane {
             // The magic below will randomly choose a door to make active/inactive
             // Beginning of magic
             int randomInt = RandomUtil.getInt(0, numberOfDoors);
-            int counter   = 0;
+            int counter = 0;
             while (randomInt > 0 || !testedDoors[counter]) {
                 ++counter;
                 if (testedDoors[counter]) {
@@ -315,7 +318,7 @@ public class Room extends GridPane {
         // Read the blueprint character by character and add the appropriate tiles to the room
         for (int row = 0; row < blueprint.size(); ++row) {
             for (int col = 0; col < blueprint.get(row).length(); ++col) {
-                Image     img  = spriteTable.get(blueprint.get(row).charAt(col));
+                Image img = spriteTable.get(blueprint.get(row).charAt(col));
                 StackPane cell = new StackPane();
                 // By setting min and max size to the same thing, the StackPane will always take
                 // up the same amount of space in the GridPane
@@ -346,14 +349,12 @@ public class Room extends GridPane {
                     break;
                 default:
                     System.err.println("Detected an invalid character in room " + fileName
-                                       + "! Please check file for errors!");
+                            + "! Please check file for errors!");
                 }
 
                 add(cell, col, row);
             }
         }
-        // TODO stuff
-        // make player spawn on the door they entered through!
     }
 
     /**
@@ -412,7 +413,9 @@ public class Room extends GridPane {
      */
     private void generateDoor(Image image, StackPane cell, Direction direction, Room destination) {
         if (destination == null && exit) {
-            Door door = new Door(winDoor, true);
+            // TODO modify this based on direction
+            Door door =
+                    new Door(spriteTable.get(Character.toLowerCase(direction.toLetter())), true);
             door.setWin();
             bodies.add(door);
             cell.getChildren().add(door);
@@ -488,7 +491,7 @@ public class Room extends GridPane {
             }
         }
     }
-    
+
     /**
      * Get the doors that are on the {@code direction} wall of this room.
      *
@@ -506,9 +509,10 @@ public class Room extends GridPane {
         }
         return trueDoors;
     }
-    
+
     /**
      * Return coordinates that the player should be at when they pass through a door
+     * 
      * @param direction the direction the player came from
      * @return the coordinates the player should be at
      */
