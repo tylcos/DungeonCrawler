@@ -1,5 +1,6 @@
 package game.collidables;
 
+import core.SceneManager;
 import game.entities.Player;
 import game.levels.Room;
 import javafx.scene.image.Image;
@@ -11,6 +12,7 @@ import views.GameScreen;
 public class Door extends CollidableTile {
     private Room destination;
     private boolean locked;
+    private boolean win = false;
 
     /**
      * Constructor taking an Image of a door.
@@ -37,6 +39,12 @@ public class Door extends CollidableTile {
 
     @Override
     public void onCollision(Collidable other) {
+        if (win) {
+            if (other instanceof Player) {
+                // TODO win game if player has key
+                SceneManager.loadScene(SceneManager.END);
+            }
+        }
         if (!locked) {
             if (other instanceof Player) {
                 GameScreen.getLevel().loadRoom(destination);
@@ -74,5 +82,9 @@ public class Door extends CollidableTile {
      */
     public void unlock() {
         locked = false;
+    }
+    
+    public void setWin() {
+        win = true;
     }
 }

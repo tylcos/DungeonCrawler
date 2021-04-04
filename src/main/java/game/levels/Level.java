@@ -139,10 +139,10 @@ public class Level {
         }
         currentRoom = newRoom;
 
-        if (newRoom.isExit()) {
-            SceneManager.loadScene(SceneManager.END);
-            return;
-        }
+//        if (newRoom.isExit()) {
+//            SceneManager.loadScene(SceneManager.END);
+//            return;
+//        }
 
         if (!currentRoom.isGenerated()) {
             generateGameElements(currentRoom);
@@ -158,15 +158,18 @@ public class Level {
         // Put the player in the "center" of the room
         Player player = Player.getPlayer();
         player.toFront();
-        player.setPosition(Point2D.ZERO);
 
         // Lock doors for rooms other than the entrance room
         if (fromDir != null) {
+            Point2D doorPos = currentRoom.getDoorCoords(fromDir);
+            player.setPosition(doorPos);
             if (!currentRoom.isClear() && !doorsNeverLock) {
                 currentRoom.lockDoors(fromDir);
             } else {
                 currentRoom.unlockDoors();
             }
+        } else {
+            player.setPosition(Point2D.ZERO);
         }
 
         // Update the minimap
