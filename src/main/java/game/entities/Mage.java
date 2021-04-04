@@ -6,6 +6,7 @@ import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -45,6 +46,29 @@ public class Mage extends Entity {
 
         damage(1);
         bounceBack(-20, Player.getPlayer().getPosition());
+        Player.getPlayer().attackMotion();
+
+        double Xval = event.getScreenX();
+        double Yval = event.getSceneY();
+
+        ImageView imageView = new ImageView();
+        Image newImage = new Image("images/testAttackMotion(From anotherGame).gif");
+        imageView.setImage(newImage);
+        imageView.setX(Xval);
+        imageView.setY(Yval);
+        
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     /**

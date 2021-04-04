@@ -32,7 +32,6 @@ public abstract class Collectable extends Collidable {
     public boolean getCollected() {
         return isCollected;
     }
-
     /**
      * Sets isCollected to true
      */

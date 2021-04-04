@@ -1,6 +1,7 @@
 package game.entities;
 
 import core.GameEngine;
+import core.InputManager;
 import core.SceneManager;
 import data.GameEffects;
 import data.LerpTimer;
@@ -10,6 +11,8 @@ import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 /**
@@ -23,7 +26,7 @@ public final class Player extends Entity {
     private int difficulty;
 
     private boolean onAttackMode;
-    private int     attackTime;
+    private int attackTime;
 
     private static TextArea uiInfoText;
 
@@ -43,27 +46,27 @@ public final class Player extends Entity {
         super("/images/Player.png", Point2D.ZERO, new Point2D(.7, .7));
 
         // todo: fix weapon damage and price
-        name   = image;
+        name = image;
         weapon = new Weapon(weaponName, 0, 0);
 
         switch (difficulty) {
-        case "Boring":
-            money = 100;
-            health = 10;
-            this.difficulty = 0;
-            break;
-        case "Normal":
-            money = 75;
-            health = 5;
-            this.difficulty = 1;
-            break;
-        case "Hard":
-            money = 50;
-            health = 3;
-            this.difficulty = 2;
-            break;
-        default:
-            throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
+            case "Boring":
+                money = 100;
+                health = 10;
+                this.difficulty = 0;
+                break;
+            case "Normal":
+                money = 75;
+                health = 5;
+                this.difficulty = 1;
+                break;
+            case "Hard":
+                money = 50;
+                health = 3;
+                this.difficulty = 2;
+                break;
+            default:
+                throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
 
         entityController = new PlayerEntityController(this);
@@ -90,7 +93,7 @@ public final class Player extends Entity {
             }
             attackTime = 0;
         }
-
+        */
         // Player attacks
         if (InputManager.get(KeyCode.SPACE)) {
             onAttackMode = true;
@@ -99,10 +102,10 @@ public final class Player extends Entity {
             onAttackMode = false;
         }
 
-        if (InputManager.get(KeyCode.DIGIT1)) {
+        if (InputManager.get(KeyCode.DIGIT2)) {
             swapToBow();
         }
-        if (InputManager.get(KeyCode.DIGIT2)) {
+        if (InputManager.get(KeyCode.DIGIT1)) {
             swapToAxe();
         }
         if (InputManager.get(KeyCode.DIGIT3)) {
@@ -112,7 +115,7 @@ public final class Player extends Entity {
             switchToNoWeapon();
         }
 
-        attackTime++;*/
+        attackTime++;
     }
 
     @Override
@@ -121,6 +124,7 @@ public final class Player extends Entity {
             bounceBack((int) (getVelocity().magnitude() * GameEngine.getDt()), Point2D.ZERO);
         }
     }
+
 
     /**
      * Makes the entity bounce back from wall or enemy
@@ -132,7 +136,7 @@ public final class Player extends Entity {
         Point2D difference = position.subtract(fromPoint);
 
         Point2D dp = new Point2D(-bounceDistance * Math.signum(difference.getX()),
-                                 -bounceDistance * Math.signum(difference.getY()));
+                -bounceDistance * Math.signum(difference.getY()));
 
         setPosition(position.add(dp));
     }
@@ -141,18 +145,21 @@ public final class Player extends Entity {
      * change weapon to Bow
      */
     public void swapToBow() {
-        Image bow = new Image("images/PlayerBow2.gif");
+        Image bow = new Image("images/PlayerBow.png");
         setImage(bow);
         weapon = new Weapon("Bow", 0, 0);
+        Point2D newScale = new Point2D(5, 5);
     }
 
     /**
      * change weapon to Axe
      */
     public void swapToAxe() {
-        Image axe = new Image("images/PlayerAxe.gif");
+        Image axe = new Image("images/PlayerAxe.png");
         setImage(axe);
         weapon = new Weapon("Axe", 0, 0);
+        Point2D newScale = new Point2D(5, 5);
+        super.setScale(newScale);
     }
 
     /**
@@ -162,12 +169,16 @@ public final class Player extends Entity {
         Image sword = new Image("images/PlayerSwordAttack.png");
         setImage(sword);
         weapon = new Weapon("Sword", 0, 0);
+        Point2D newScale = new Point2D(5, 5);
+        super.setScale(newScale);
     }
 
     public void switchToNoWeapon() {
         Image png = new Image("images/Player.png");
         Player.getPlayer().setImage(png);
         weapon = new Weapon("weaponName", 0, 0);
+        Point2D newScale = new Point2D(5, 5);
+        super.setScale(newScale);
     }
 
     /*
@@ -176,17 +187,20 @@ public final class Player extends Entity {
     public void attackMotion() {
         Image attack;
         switch (weapon.getName()) {
-        case "Bow":
-            attack = new Image("images/PlayerBowAttack.gif");
-            break;
-        case "Axe":
-            attack = new Image("images/PlayerAxeAttack.gif");
-            break;
-        case "Sword":
-            attack = new Image("images/PlayerSwordAttack.png");
-            break;
-        default:
-            throw new IllegalStateException("Unexpected weapon: " + weapon.getName());
+            case "Bow":
+                attack = new Image("images/PlayerBow.png");
+                super.setScale(new Point2D(5, 5));
+                break;
+            case "Axe":
+                attack = new Image("images/PlayerAxe.png");
+                super.setScale(new Point2D(5, 5));
+                break;
+            case "Sword":
+                attack = new Image("images/PlayerSwordAttack.png");
+                super.setScale(new Point2D(5, 5));
+                break;
+            default:
+                throw new IllegalStateException("Unexpected weapon: " + weapon.getName());
         }
 
         Player.getPlayer().setImage(attack);
@@ -236,6 +250,7 @@ public final class Player extends Entity {
 
     /**
      * Returns the current difficulty [0,2]
+     *
      * @return the current difficulty [0,2]
      */
     public int getDifficulty() {
@@ -245,7 +260,7 @@ public final class Player extends Entity {
     public String toStringFormatted() {
         String formattedHealth = isDead ? "DEAD" : String.valueOf(health);
         return String.format("Name: %s \nWeapon: %s \nMoney: %d \nHealth: %s",
-                             name, weapon, money, formattedHealth);
+                name, weapon, money, formattedHealth);
     }
 
     @Override

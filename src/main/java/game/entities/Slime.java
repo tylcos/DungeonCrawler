@@ -64,6 +64,7 @@ public class Slime extends Entity {
 
         damage(1);
         bounceBack(-10, Player.getPlayer().getPosition());
+        Player.getPlayer().attackMotion();
     }
 
     /**
