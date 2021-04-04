@@ -456,6 +456,24 @@ public class Room extends GridPane {
             }
         }
     }
+    
+    /**
+     * Get the doors that are on the {@code direction} wall of this room.
+     *
+     * @param direction which side of the room the doors are on
+     * @return a list of Doors in that direction. If there are none the list will be empty.
+     */
+    public List<Door> getDoors(Direction direction) {
+        ArrayList<Door> trueDoors = new ArrayList<Door>();
+        ArrayList<StackPane> doorList = doors.get(direction);
+        for (StackPane p : doorList) {
+            Node node = p.getChildren().get(0); // the only child should be a door
+            if (node instanceof Door) {
+                trueDoors.add((Door) node);
+            }
+        }
+        return trueDoors;
+    }
 
     /**
      * Returns a list of all collidables contained in this room.
