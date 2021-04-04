@@ -103,7 +103,7 @@ public class Level {
         }
 
         // Add attack potions to the room. 25% spawn rate probability.
-        int numberOfAttackPotions = (RandomUtil.get() < 1d) ? 1 : 0;
+        int numberOfAttackPotions = (RandomUtil.get() < .25d) ? 1 : 0;
         for (int i = 0; i < numberOfAttackPotions; i++) {
             room.addCollectable(new AttackPotion());
         }
