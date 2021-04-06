@@ -416,7 +416,7 @@ public class Room extends GridPane {
             // TODO modify this based on direction
             Door door =
                     new Door(spriteTable.get(Character.toLowerCase(direction.toLetter())), true);
-            door.setWin();
+          //  door.setWin();
             bodies.add(door);
             cell.getChildren().add(door);
         } else if (destination == null) {
