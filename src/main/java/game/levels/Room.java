@@ -252,7 +252,9 @@ public class Room extends GridPane {
             // Also activate door to win screen if exit
             if (exit) {
                 Direction exitDirection = creatorDirection.opposite();
-                activeDoors[exitDirection.toValue()] = true;
+                // None of these variables matter if this is the exit and this improves the
+                // minimap behavior
+                //activeDoors[exitDirection.toValue()] = true;
                 testedDoors[exitDirection.toValue()] = false;
                 ++branches;
             }
@@ -413,7 +415,6 @@ public class Room extends GridPane {
      */
     private void generateDoor(Image image, StackPane cell, Direction direction, Room destination) {
         if (destination == null && exit) {
-            // TODO modify this based on direction
             Door door =
                     new Door(spriteTable.get(Character.toLowerCase(direction.toLetter())), true);
             door.setWin();
