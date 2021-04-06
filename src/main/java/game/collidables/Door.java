@@ -10,9 +10,9 @@ import views.GameScreen;
  * The door of a room
  */
 public class Door extends CollidableTile {
-    private Room destination;
-    private boolean locked;
-    private boolean win = false;
+    private Room destination;    // Room this door leads to
+    private boolean locked;      // Whether this door can be entered
+    private boolean win = false; // Whether touching this door with the key wins the game
 
     /**
      * Constructor taking an Image of a door.
@@ -37,37 +37,41 @@ public class Door extends CollidableTile {
         this.destination = destination;
     }
 
-    @Override
-    public void onCollision(Collidable other) {
-        if (other instanceof Player) {
-            if (Player.getPlayer().isKeyActivated()) {
-                setWin();
-            }
-            //if keyActivated and unlocked
-            if (win && !locked) {
-                //SceneManager.loadScene(SceneManager.END);
-                System.out.println("key activated and door unlocked");
-            } else {
-                GameScreen.getLevel().loadRoom(destination);
-            }
-        }
-
-    }
-
 //    @Override
 //    public void onCollision(Collidable other) {
-//        if (win) {
-//            if (other instanceof Player) {
-//                // TODO win game if player has key
-//                SceneManager.loadScene(SceneManager.END);
+//        if (other instanceof Player) {
+//            if (Player.getPlayer().isKeyActivated()) {
+//                setWin();
 //            }
-//        }
-//        if (!locked) {
-//            if (other instanceof Player) {
+//            //if keyActivated and unlocked
+//            if (win && !locked) {
+//                //SceneManager.loadScene(SceneManager.END);
+//                System.out.println("key activated and door unlocked");
+//            } else {
 //                GameScreen.getLevel().loadRoom(destination);
 //            }
 //        }
+//
 //    }
+
+    @Override
+    public void onCollision(Collidable other) {
+        if (win) {
+            // if door is win door try to win
+            if (other instanceof Player) {
+                if (Player.getPlayer().isKeyActivated()) {
+                    SceneManager.loadScene(SceneManager.END);
+                }
+            }
+        } else {
+            // if door is not win door act normally
+            if (!locked) {
+                if (other instanceof Player) {
+                    GameScreen.getLevel().loadRoom(destination);
+                }
+            }
+        }
+    }
 
 
     // victory if: keyActivated && unlocked
