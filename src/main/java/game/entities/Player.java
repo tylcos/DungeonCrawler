@@ -26,7 +26,7 @@ public final class Player extends Entity {
     private String name;
     private Weapon weapon;
     private Key key;
-    private boolean keyActivated;
+    private boolean keyActivated = false;
     private int difficulty;
 
     private static TextArea uiInfoText;
@@ -71,11 +71,6 @@ public final class Player extends Entity {
         }
 
         entityController = new PlayerEntityController(this);
-        if (InputManager.get(KeyCode.K)) {
-            handleKey();
-        } else {
-            keyActivated = false;
-        }
     }
 
     private void handleKey() {
@@ -96,6 +91,9 @@ public final class Player extends Entity {
         // Used for player movement and eventually attacking
         entityController.act();
 
+        if (InputManager.get(KeyCode.K)) {
+            handleKey();
+        }
         /*
         if (attackTime > 200) {
             String currentWeapon = weapon.getName();
