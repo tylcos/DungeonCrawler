@@ -1,15 +1,21 @@
 package game.entities;
 
 import core.GameEngine;
+import core.InputManager;
 import core.SceneManager;
 import data.GameEffects;
 import data.LerpTimer;
 import game.Weapon;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
+import game.collidables.Key;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.input.MouseEvent;
+
 
 /**
  * Singleton controller for the player
@@ -19,7 +25,9 @@ public final class Player extends Entity {
 
     private String name;
     private Weapon weapon;
-    private int    difficulty;
+    private Key key;
+    private boolean keyActivated;
+    private int difficulty;
 
     private static TextArea uiInfoText;
 
@@ -45,7 +53,7 @@ public final class Player extends Entity {
         switch (difficulty) {
         case "Boring":
             money = 100;
-            health = 10;
+            health = 1000000000;
             this.difficulty = 0;
             break;
         case "Normal":
@@ -63,7 +71,23 @@ public final class Player extends Entity {
         }
 
         entityController = new PlayerEntityController(this);
+        if (InputManager.get(KeyCode.K)) {
+            handleKey();
+        } else {
+            keyActivated = false;
+        }
     }
+
+    private void handleKey() {
+        if (key != null) {
+            setImage(new Image("/images/key.png"));
+            keyActivated = true;
+        } else {
+            System.out.println("player has not collected key");
+        }
+    }
+
+
 
     @Override
     public void update() {
@@ -115,6 +139,10 @@ public final class Player extends Entity {
     public void onCollision(Collidable other) {
         if (other instanceof CollidableTile) {
             bounceBack((int) (getVelocity().magnitude() * GameEngine.getDt()), Point2D.ZERO);
+        }
+        if (other instanceof Key) {
+            this.key = (Key) other;
+            System.out.println("collected key");
         }
     }
 
@@ -181,6 +209,10 @@ public final class Player extends Entity {
 
     public Weapon getWeapon() {
         return weapon;
+    }
+
+    public boolean isKeyActivated() {
+        return keyActivated;
     }
 
     /**

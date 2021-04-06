@@ -39,18 +39,39 @@ public class Door extends CollidableTile {
 
     @Override
     public void onCollision(Collidable other) {
-        if (win) {
-            if (other instanceof Player) {
-                // TODO win game if player has key
-                SceneManager.loadScene(SceneManager.END);
+        if (other instanceof Player) {
+            if (Player.getPlayer().isKeyActivated()) {
+                setWin();
             }
-        }
-        if (!locked) {
-            if (other instanceof Player) {
+            //if keyActivated and unlocked
+            if (win && !locked) {
+                //SceneManager.loadScene(SceneManager.END);
+                System.out.println("key activated and door unlocked");
+            } else {
                 GameScreen.getLevel().loadRoom(destination);
             }
         }
+
     }
+
+//    @Override
+//    public void onCollision(Collidable other) {
+//        if (win) {
+//            if (other instanceof Player) {
+//                // TODO win game if player has key
+//                SceneManager.loadScene(SceneManager.END);
+//            }
+//        }
+//        if (!locked) {
+//            if (other instanceof Player) {
+//                GameScreen.getLevel().loadRoom(destination);
+//            }
+//        }
+//    }
+
+
+    // victory if: keyActivated && unlocked
+    // bounce back if: key not activated or locked
 
     /**
      * Sets the room that a door leads to a new room.
