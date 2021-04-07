@@ -9,10 +9,12 @@ import java.util.List;
 
 /**
  * Defines the Slime AI.
- * The behavior is to move closely around the player while attacking periodically.
+ *
+ * The behavior is to move closely around the player while attacking periodically with no
+ * prediction.
  */
 public class SlimeEntityController extends EntityController {
-    private State state = State.running;
+    private State state = State.relaxing;
 
     // Variables for movement
     private double speed;
@@ -32,7 +34,7 @@ public class SlimeEntityController extends EntityController {
 
     // All possible states of the entity
     private enum State {
-        attacking, charging, running
+        attacking, charging, running, relaxing
     }
 
     /**
@@ -57,10 +59,16 @@ public class SlimeEntityController extends EntityController {
     }
 
     public void act() {
-        // Smoothly stop the entity
+        // Smoothly stop the entity if needed
         if (stopped) {
             entity.setVelocity(entity.getVelocity().interpolate(Point2D.ZERO, .01d));
             return;
+        }
+
+        // Delay the Entity from moving for 1 second
+        timeSinceRoomLoad += GameEngine.getDt();
+        if (state == State.relaxing && timeSinceRoomLoad > 1d) {
+            state = State.running;
         }
 
         // Spawn debug point for the first time
@@ -84,7 +92,7 @@ public class SlimeEntityController extends EntityController {
         Point2D targetDirection = target.normalize();
 
         // Change states based on position
-        if (distance >= strafingDistance) {
+        if (state != State.relaxing && distance >= strafingDistance) {
             state = State.charging;
         } else if (state == State.charging && distance < strafingDistance) {
             state = State.attacking;
@@ -111,6 +119,9 @@ public class SlimeEntityController extends EntityController {
             break;
         case running:
             velocity = targetDirection.multiply(-speed);
+            break;
+        case relaxing:
+            velocity = bias.normalize().multiply(relaxingBiasScale);
             break;
         default:
             throw new IllegalStateException("Invalid state: " + state);
