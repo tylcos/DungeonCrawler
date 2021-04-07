@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
  */
 public class Slime extends Entity {
     private int slimeType;
+    private int attackDuration;
 
     // @formatter:off
     private static final String[] SLIME_SPRITES = {
@@ -47,6 +48,7 @@ public class Slime extends Entity {
 
     @Override
     public void update() {
+
         entityController.act();
     }
 
@@ -59,12 +61,19 @@ public class Slime extends Entity {
         if (isDead || Player.getPlayer().isDead()) {
             return;
         }
-
+        Point2D currentPosition = this.getPosition();
+        AttackAnimation animation = AttackAnimation.getAttackAnimation();
+        animation.setPosition(currentPosition);
+        attackDuration++;
         // Replace with the Player calling this method directly if we move away from clicking to
         // attack
         int damage = Player.getPlayer().getWeapon().getDamage();
         damage(damage);
         bounceBack(-10, Player.getPlayer().getPosition());
+
+
+
+
     }
 
     /**
@@ -83,6 +92,8 @@ public class Slime extends Entity {
 
             bounceBack((int) (magnitude * GameEngine.getDt()), Point2D.ZERO);
         }
+
+
     }
 
     /**
