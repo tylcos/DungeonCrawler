@@ -9,10 +9,12 @@ import java.util.Arrays;
 
 /**
  * Defines the Mage AI.
- * The behavior is to move to where the player is predicted to be.
+ *
+ * The behavior is to move to where the player is predicted to be assuming the player maintains
+ * a constant radius and constant dθ/dt around the center of the room.
  */
 public class MageEntityController extends EntityController {
-    private State state = State.running;
+    private State state = State.relaxing;
 
     // Variables for movement
     private double speed;
@@ -25,16 +27,22 @@ public class MageEntityController extends EntityController {
     // Variables for generating bias
     private double predictionGuessScale;
 
+    // Variables for predicting the Player's position
     private              double previousTheta;
     private              double thetaDot = .1d;
     private static final double TWO_PI   = 2 * Math.PI;
+
+    // Variables for generating bias
+    private double biasScale;
+    private double timeFactorX;
+    private double timeFactorY;
 
     // Small dot for debugging where the entity is moving towards
     private DebugPoint[] debugPoints;
 
     // All possible states of the entity
     private enum State {
-        attacking, charging, running
+        attacking, charging, running, relaxing
     }
 
     /**
@@ -51,7 +59,11 @@ public class MageEntityController extends EntityController {
         strafingDistance  = RandomUtil.get(100d, 150d);
         attackingDistance = 50;
 
-        predictionGuessScale = RandomUtil.get(.75d, 1d);
+        predictionGuessScale = RandomUtil.get(.6d, 1d);
+
+        biasScale   = 100;
+        timeFactorX = RandomUtil.get(1d, 2d);
+        timeFactorY = RandomUtil.get(1d, 2d);
 
         debugPoints = new DebugPoint[]{
             new DebugPoint(),
@@ -66,12 +78,18 @@ public class MageEntityController extends EntityController {
         if (useDebugPoints && !debugPoints[0].isRendered() && !stopped) {
             GameEngine.addToLayer(GameEngine.VFX, Arrays.asList(debugPoints));
         }
-
-        // Stop the entity
+        // Stop the entity if needed
         if (stopped) {
             return;
         }
 
+        // Delay the Entity from moving for 1 second
+        timeSinceRoomLoad += GameEngine.getDt();
+        if (state == State.relaxing && timeSinceRoomLoad > 1d) {
+            state = State.running;
+        }
+
+        // Start predicting the player position
         Player  player         = Player.getPlayer();
         Point2D playerPosition = player.getPosition();
         // Points directly to the Player
@@ -90,7 +108,7 @@ public class MageEntityController extends EntityController {
             dTheta = TWO_PI - currentTheta - previousTheta;
         }
         double currentThetaDot = dTheta / GameEngine.getDt();
-        thetaDot += (currentThetaDot - thetaDot) * .03d;
+        thetaDot += (currentThetaDot - thetaDot) * .02d;
 
 
         // Iteratively approximate time to reach player and prediction
@@ -113,7 +131,7 @@ public class MageEntityController extends EntityController {
         Point2D targetDirection = target.normalize();
 
         // Change states based on position
-        if (distance >= strafingDistance) {
+        if (state != State.relaxing && distance >= strafingDistance) {
             state = State.charging;
         } else if (state == State.charging && distance < strafingDistance) {
             state = State.attacking;
@@ -139,6 +157,11 @@ public class MageEntityController extends EntityController {
             break;
         case running:
             velocity = targetDirection.multiply(-speed);
+            break;
+        case relaxing:
+            double t = GameEngine.getT();
+            velocity = new Point2D(relaxingBiasScale * Math.cos(t * timeFactorX),
+                                   relaxingBiasScale * Math.cos(t * timeFactorY));
             break;
         default:
             throw new IllegalStateException("Invalid state: " + state);

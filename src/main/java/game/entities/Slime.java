@@ -32,9 +32,7 @@ public class Slime extends Entity {
      * Creates an instance of Slime.
      */
     public Slime() {
-        super(SLIME_SPRITES[0],
-              RandomUtil.getPoint2D(300),
-              new Point2D(5, 5));
+        super(SLIME_SPRITES[0], RandomUtil.getPoint2D(300), new Point2D(5, 5));
 
         health = 2;
         money  = 20;

@@ -63,7 +63,7 @@ public final class Player extends Entity {
         case "Debug":
             money = 10000;
             maxHealth = 10000;
-            this.difficulty = 2;
+            this.difficulty = 1;
             break;
         default:
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);

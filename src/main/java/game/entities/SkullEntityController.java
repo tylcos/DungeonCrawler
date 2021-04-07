@@ -9,10 +9,12 @@ import java.util.List;
 
 /**
  * Defines the Skull AI.
- * The behavior is to move to where the player is predicted to be.
+ *
+ * The behavior is to move to where the player is predicted to be assuming the Player maintains
+ * constant dx/dt and dy/dt.
  */
 public class SkullEntityController extends EntityController {
-    private State state = State.running;
+    private State state = State.relaxing;
 
     // Variables for movement
     private double speed;
@@ -32,7 +34,7 @@ public class SkullEntityController extends EntityController {
 
     // All possible states of the entity
     private enum State {
-        attacking, charging, running
+        attacking, charging, running, relaxing
     }
 
     /**
@@ -57,14 +59,20 @@ public class SkullEntityController extends EntityController {
     }
 
     public void act() {
+        // Stop the entity if needed
+        if (stopped) {
+            return;
+        }
+
+        // Delay the Entity from moving for 1 second
+        timeSinceRoomLoad += GameEngine.getDt();
+        if (state == State.relaxing && timeSinceRoomLoad > 1d) {
+            state = State.running;
+        }
+
         // Spawn debug point for the first time
         if (useDebugPoints && !debugPoint.isRendered() && !stopped) {
             GameEngine.addToLayer(GameEngine.VFX, List.of(debugPoint));
-        }
-
-        // Stop the entity
-        if (stopped) {
-            return;
         }
 
         // Bias that follows a Lissajous figure, used for random movement
@@ -88,7 +96,7 @@ public class SkullEntityController extends EntityController {
         Point2D targetDirection = target.normalize();
 
         // Change states based on position
-        if (distance >= strafingDistance) {
+        if (state != State.relaxing && distance >= strafingDistance) {
             state = State.charging;
         } else if (state == State.charging && distance < strafingDistance) {
             state = State.attacking;
@@ -115,6 +123,9 @@ public class SkullEntityController extends EntityController {
             break;
         case running:
             velocity = targetDirection.multiply(-speed);
+            break;
+        case relaxing:
+            velocity = bias.normalize().multiply(relaxingBiasScale);
             break;
         default:
             throw new IllegalStateException("Invalid state: " + state);
