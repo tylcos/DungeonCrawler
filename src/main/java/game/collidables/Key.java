@@ -1,5 +1,6 @@
 package game.collidables;
 
+import core.SoundManager;
 import game.entities.Player;
 import javafx.geometry.Point2D;
 
@@ -19,9 +20,13 @@ public class Key extends Collectable {
 
     @Override
     public void onCollision(Collidable other) {
+        if (isCollected || !(other instanceof Player)) {
+            return;
+        }
         if (other instanceof Player) {
             System.out.println("collided with key");
             setCollected();
+            SoundManager.playCoinOrKeyCollected();
         }
 
     }

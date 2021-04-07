@@ -1,6 +1,7 @@
 package game.entities;
 
 import core.GameEngine;
+import core.SoundManager;
 import data.RandomUtil;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
@@ -56,6 +57,8 @@ public class Mage extends Entity {
     @Override
     public void onDeath() {
         setVisible(false);
+        //huh why isnt this working
+        SoundManager.playEnemyKilled();
     }
 
     @Override

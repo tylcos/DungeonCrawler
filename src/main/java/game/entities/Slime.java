@@ -1,6 +1,7 @@
 package game.entities;
 
 import core.GameEngine;
+import core.SoundManager;
 import data.RandomUtil;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
@@ -74,7 +75,9 @@ public class Slime extends Entity {
      */
     @Override
     public void onDeath() {
+
         setImage(new Image(SLIME_DEAD_SPRITES[slimeType]));
+        SoundManager.playEnemyKilled();
     }
 
     @Override

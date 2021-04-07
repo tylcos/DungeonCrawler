@@ -1,6 +1,7 @@
 package game.collidables;
 
 import core.SceneManager;
+import core.SoundManager;
 import game.entities.Player;
 import game.levels.Room;
 import javafx.scene.image.Image;
@@ -43,6 +44,7 @@ public class Door extends CollidableTile {
             // if door is win door try to win
             if (other instanceof Player) {
                 if (Player.getPlayer().isKeyActivated()) {
+                    SoundManager.playVictory();
                     SceneManager.loadScene(SceneManager.END);
                 }
             }
@@ -50,6 +52,7 @@ public class Door extends CollidableTile {
             // if door is not win door act normally
             if (!locked) {
                 if (other instanceof Player) {
+                    SoundManager.playDoorCreak();
                     GameScreen.getLevel().loadRoom(destination);
                 }
             }
