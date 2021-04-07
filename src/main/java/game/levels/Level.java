@@ -192,7 +192,9 @@ public class Level {
         }
 
         currentRoom.setEffect(GameEffects.ROOM_SHADOW);
-        exit.addCollectable(new Key());
+        if (Key.NUM_SPAWNED == 0) {
+            exit.addCollectable(new Key());
+        }
     }
 
     /**

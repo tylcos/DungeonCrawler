@@ -37,26 +37,9 @@ public class Door extends CollidableTile {
         this.destination = destination;
     }
 
-//    @Override
-//    public void onCollision(Collidable other) {
-//        if (other instanceof Player) {
-//            if (Player.getPlayer().isKeyActivated()) {
-//                setWin();
-//            }
-//            //if keyActivated and unlocked
-//            if (win && !locked) {
-//                //SceneManager.loadScene(SceneManager.END);
-//                System.out.println("key activated and door unlocked");
-//            } else {
-//                GameScreen.getLevel().loadRoom(destination);
-//            }
-//        }
-//
-//    }
-
     @Override
     public void onCollision(Collidable other) {
-        if (win) {
+        if (win && !locked) {
             // if door is win door try to win
             if (other instanceof Player) {
                 if (Player.getPlayer().isKeyActivated()) {
