@@ -87,7 +87,6 @@ public class Level {
         }
 
         // Add Entities
-
         // 2d list of Entity constructors separated into difficulty tiers
         List<List<Supplier<Entity>>> enemies = new ArrayList<>(3);
         enemies.add(List.of(Slime::new));
@@ -131,10 +130,6 @@ public class Level {
         loadRoom(map[mapOffset][mapOffset]);
         // Spawn the player
         GameEngine.instantiate(GameEngine.ENTITY, Player.getPlayer());
-        GameEngine.instantiate(GameEngine.ENTITY, AttackAnimation.getAttackAnimation());
-
-
-
     }
 
     /**

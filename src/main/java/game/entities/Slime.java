@@ -61,10 +61,7 @@ public class Slime extends Entity {
         if (isDead || Player.getPlayer().isDead()) {
             return;
         }
-        Point2D currentPosition = this.getPosition();
-        AttackAnimation animation = AttackAnimation.getAttackAnimation();
-        animation.setPosition(currentPosition);
-        attackDuration++;
+
         // Replace with the Player calling this method directly if we move away from clicking to
         // attack
         int damage = Player.getPlayer().getWeapon().getDamage();
