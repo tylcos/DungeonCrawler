@@ -21,6 +21,8 @@ public final class Player extends Entity {
     private Weapon weapon;
     private int    difficulty;
 
+    private int maxHealth;
+
     private static TextArea uiInfoText;
 
     /**
@@ -45,22 +47,29 @@ public final class Player extends Entity {
         switch (difficulty) {
         case "Boring":
             money = 100;
-            health = 10;
+            maxHealth = 10;
             this.difficulty = 0;
             break;
         case "Normal":
             money = 75;
-            health = 5;
+            maxHealth = 5;
             this.difficulty = 1;
             break;
         case "Hard":
             money = 50;
-            health = 3;
+            maxHealth = 3;
+            this.difficulty = 2;
+            break;
+        case "Debug":
+            money = 10000;
+            maxHealth = 10000;
             this.difficulty = 2;
             break;
         default:
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
+
+        health = maxHealth;
 
         entityController = new PlayerEntityController(this);
     }
@@ -150,15 +159,6 @@ public final class Player extends Entity {
      * regain more health than they started out with.
      */
     public void regenerate() {
-        int maxHealth;
-        if (difficulty == 0) {
-            maxHealth = 10;
-        } else if (difficulty == 2) {
-            maxHealth = 3;
-        } else {
-            maxHealth = 5;
-        }
-
         health = Math.min(health + 2, maxHealth);
     }
 
