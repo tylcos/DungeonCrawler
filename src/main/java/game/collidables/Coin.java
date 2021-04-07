@@ -1,5 +1,6 @@
 package game.collidables;
 
+import core.SoundManager;
 import data.RandomUtil;
 import game.entities.Player;
 import javafx.geometry.Point2D;
@@ -26,8 +27,8 @@ public class Coin extends Collectable {
         }
 
         Player.getPlayer().addMoney(value);
-
         setCollected();
+        SoundManager.playCoinOrKeyCollected();
     }
 
     /**

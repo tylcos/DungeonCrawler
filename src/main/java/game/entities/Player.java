@@ -3,6 +3,7 @@ package game.entities;
 import core.GameEngine;
 import core.InputManager;
 import core.SceneManager;
+import core.SoundManager;
 import data.GameEffects;
 import data.LerpTimer;
 import game.Weapon;
@@ -77,6 +78,7 @@ public final class Player extends Entity {
         if (key != null) {
             setImage(new Image("/images/key.png"));
             keyActivated = true;
+            SoundManager.playKeyActivated();
         } else {
             System.out.println("player has not collected key");
         }
@@ -164,7 +166,7 @@ public final class Player extends Entity {
         if (isDead) {
             return;
         }
-
+        SoundManager.playPlayerAttacked();
         getScene().getRoot().setEffect(GameEffects.RED_EDGES);
         new LerpTimer(1, t -> GameEffects.RED_EDGES.setColor(Color.color(1, 0, 0, 1 - t)));
 
