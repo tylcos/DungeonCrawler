@@ -5,7 +5,7 @@ import data.RandomUtil;
 import game.collidables.DebugPoint;
 import javafx.geometry.Point2D;
 
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * Defines the Mage AI.
@@ -23,16 +23,14 @@ public class MageEntityController extends EntityController {
     private double attackingDistance;
 
     // Variables for generating bias
-    private double biasScale;
-    private double timeFactorX;
-    private double timeFactorY;
+    private double predictionGuessScale;
 
     private              double previousTheta;
-    private              double thetaDot      = .1d;
-    private static final double TWO_PI        = 2 * Math.PI;
+    private              double thetaDot = .1d;
+    private static final double TWO_PI   = 2 * Math.PI;
 
     // Small dot for debugging where the entity is moving towards
-    private DebugPoint debugPoint;
+    private DebugPoint[] debugPoints;
 
     // All possible states of the entity
     private enum State {
@@ -50,16 +48,23 @@ public class MageEntityController extends EntityController {
         speed       = RandomUtil.getInt(400, 500);
         inputSmooth = RandomUtil.get(0.02d, 0.03d);
 
-        strafingDistance  = RandomUtil.get(50d, 100d);
+        strafingDistance  = RandomUtil.get(100d, 150d);
         attackingDistance = 50;
 
-        debugPoint = new DebugPoint();
+        predictionGuessScale = RandomUtil.get(.75d, 1d);
+
+        debugPoints = new DebugPoint[]{
+            new DebugPoint(),
+            new DebugPoint(),
+            new DebugPoint(),
+            new DebugPoint()
+        };
     }
 
     public void act() {
         // Spawn debug point for the first time
-        if (useDebugPoints && !debugPoint.isRendered() && !stopped) {
-            GameEngine.addToLayer(GameEngine.VFX, List.of(debugPoint));
+        if (useDebugPoints && !debugPoints[0].isRendered() && !stopped) {
+            GameEngine.addToLayer(GameEngine.VFX, Arrays.asList(debugPoints));
         }
 
         // Stop the entity
@@ -75,18 +80,33 @@ public class MageEntityController extends EntityController {
         double  distance        = difference.magnitude();
 
         // Predicts where the player will be
-        double timeToReach     = difference.magnitude() / speed;
-        double radius          = player.getPosition().magnitude();
-        double currentTheta    = (Math.atan2(playerPosition.getY(), playerPosition.getX())
-                                  + TWO_PI) % TWO_PI;
-        double currentThetaDot = ((currentTheta - previousTheta) % TWO_PI) / GameEngine.getDt();
-        thetaDot += (currentThetaDot - thetaDot) * .01d;
+        double timeToReach = difference.magnitude() / speed;
+        double radius      = player.getPosition().magnitude();
+        double currentTheta = (Math.atan2(playerPosition.getY(), playerPosition.getX())
+                               + TWO_PI) % TWO_PI;
 
-        double predictedTheta = currentTheta + .7d * timeToReach * thetaDot;
+        double dTheta = (currentTheta - previousTheta);
+        if (Math.abs(dTheta) > 1) {
+            dTheta = TWO_PI - currentTheta - previousTheta;
+        }
+        double currentThetaDot = dTheta / GameEngine.getDt();
+        thetaDot += (currentThetaDot - thetaDot) * .03d;
+
+
+        // Iteratively approximate time to reach player and prediction
+        double predictedTheta = currentTheta + timeToReach * thetaDot * predictionGuessScale;
         Point2D prediction = new Point2D(radius * Math.cos(predictedTheta),
                                          radius * Math.sin(predictedTheta));
+        for (int i = 0; i < 3; i++) {
+            debugPoints[i].setPosition(prediction);
+            difference     = prediction.subtract(entity.getPosition());
+            timeToReach    = difference.magnitude() / speed;
+            predictedTheta = currentTheta + timeToReach * thetaDot * predictionGuessScale;
+            prediction     = new Point2D(radius * Math.cos(predictedTheta),
+                                         radius * Math.sin(predictedTheta));
+        }
+        debugPoints[3].setPosition(prediction);
 
-        debugPoint.setPosition(prediction);
 
         // Points to where the entity should move
         Point2D target          = prediction.subtract(entity.getPosition());
@@ -106,7 +126,6 @@ public class MageEntityController extends EntityController {
         // Swarm the Player on death
         if (player.isDead()) {
             strafingDistance = 10;
-            biasScale        = 30;
         }
 
         // Change velocity based on state
@@ -139,7 +158,7 @@ public class MageEntityController extends EntityController {
         stopped = true;
 
         if (useDebugPoints) {
-            GameEngine.removeFromLayer(GameEngine.VFX, List.of(debugPoint));
+            GameEngine.removeFromLayer(GameEngine.VFX, Arrays.asList(debugPoints));
         }
     }
 }
