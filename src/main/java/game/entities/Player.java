@@ -107,37 +107,8 @@ public final class Player extends Entity {
         if (InputManager.get(KeyCode.DIGIT3)) {
             swapToSword();
         }
-        if(attackDuration > 200){
-
-
-            attackDuration = 0;
-        }
-        Point2D currentPosition = this.getPosition();
-        AttackAnimation animation = new AttackAnimation("images/attackAnimation1.gif");
-        animation.setPosition(currentPosition);
-        attackDuration++;
-
-
         // Used for player movement and eventually attacking
         entityController.act();
-
-        /*
-        if (attackTime > 200) {
-            String currentWeapon = weapon.getName();
-            if ("Bow".equals(currentWeapon)) {
-                swapToBow();
-            }
-            if ("Sword".equals(currentWeapon)) {
-                swapToSword();
-            }
-            if ("Axe".equals(currentWeapon)) {
-                swapToAxe();
-            }
-
-        }
-        */
-
-       // attackTime++;
     }
 
     @Override
