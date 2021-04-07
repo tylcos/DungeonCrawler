@@ -131,6 +131,10 @@ public class Level {
         loadRoom(map[mapOffset][mapOffset]);
         // Spawn the player
         GameEngine.instantiate(GameEngine.ENTITY, Player.getPlayer());
+        GameEngine.instantiate(GameEngine.ENTITY, AttackAnimation.getAttackAnimation());
+
+
+
     }
 
     /**

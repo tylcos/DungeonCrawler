@@ -1,6 +1,7 @@
 package game.entities;
 
 import core.GameEngine;
+import core.InputManager;
 import core.SceneManager;
 import data.GameEffects;
 import data.LerpTimer;
@@ -9,6 +10,8 @@ import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
 /**
@@ -24,6 +27,8 @@ public final class Player extends Entity {
     private int maxHealth;
 
     private static TextArea uiInfoText;
+
+    private  int attackDuration;
 
     /**
      * Initializes the Player singleton
@@ -71,12 +76,47 @@ public final class Player extends Entity {
 
         health = maxHealth;
 
+        if (InputManager.get(KeyCode.DIGIT1)) {
+            swapToBow();
+        }
+        if (InputManager.get(KeyCode.DIGIT2)) {
+            swapToAxe();
+        }
+        if (InputManager.get(KeyCode.DIGIT3)) {
+            swapToSword();
+        }
+        if (InputManager.get(KeyCode.R)) {
+            switchToNoWeapon();
+        }
+
         entityController = new PlayerEntityController(this);
     }
 
     @Override
     public void update() {
         uiInfoText.setText(toStringFormatted());
+
+
+
+        if (InputManager.get(KeyCode.DIGIT1)) {
+            swapToBow();
+        }
+        if (InputManager.get(KeyCode.DIGIT2)) {
+            swapToAxe();
+        }
+        if (InputManager.get(KeyCode.DIGIT3)) {
+            swapToSword();
+        }
+        if(attackDuration > 200){
+
+
+            attackDuration = 0;
+        }
+        Point2D currentPosition = this.getPosition();
+        AttackAnimation animation = new AttackAnimation("images/attackAnimation1.gif");
+        animation.setPosition(currentPosition);
+        attackDuration++;
+
 
         // Used for player movement and eventually attacking
         entityController.act();
@@ -93,31 +133,11 @@ public final class Player extends Entity {
             if ("Axe".equals(currentWeapon)) {
                 swapToAxe();
             }
-            attackTime = 0;
-        }
 
-        // Player attacks
-        if (InputManager.get(KeyCode.SPACE)) {
-            onAttackMode = true;
-            attackMotion();
-        } else {
-            onAttackMode = false;
         }
+        */
 
-        if (InputManager.get(KeyCode.DIGIT1)) {
-            swapToBow();
-        }
-        if (InputManager.get(KeyCode.DIGIT2)) {
-            swapToAxe();
-        }
-        if (InputManager.get(KeyCode.DIGIT3)) {
-            swapToSword();
-        }
-        if (InputManager.get(KeyCode.R)) {
-            switchToNoWeapon();
-        }
-
-        attackTime++;*/
+       // attackTime++;
     }
 
     @Override
@@ -219,5 +239,44 @@ public final class Player extends Entity {
      */
     public static Player getPlayer() {
         return player;
+    }
+    /**
+     * change weapon to Bow
+     */
+    public void swapToBow() {
+        Image bow = new Image("images/PlayerBow.png");
+        setImage(bow);
+        weapon = new Weapon("Bow", 1, 0);
+        Point2D newScale = new Point2D(5, 5);
+    }
+
+    /**
+     * change weapon to Axe
+     */
+    public void swapToAxe() {
+        Image axe = new Image("images/PlayerAxe.png");
+        setImage(axe);
+        weapon = new Weapon("Axe", 1, 0);
+        Point2D newScale = new Point2D(5, 5);
+        super.setScale(newScale);
+    }
+
+    /**
+     * change to weapon to sword
+     */
+    public void swapToSword() {
+        Image sword = new Image("images/PlayerSwordAttack.png");
+        setImage(sword);
+        weapon = new Weapon("Sword", 1, 0);
+        Point2D newScale = new Point2D(5, 5);
+        super.setScale(newScale);
+    }
+
+    public void switchToNoWeapon() {
+        Image png = new Image("images/Player.png");
+        Player.getPlayer().setImage(png);
+        weapon = new Weapon("weaponName", 0, 0);
+        Point2D newScale = new Point2D(5, 5);
+        super.setScale(newScale);
     }
 }
