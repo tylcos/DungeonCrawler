@@ -9,6 +9,9 @@ public abstract class EntityController {
     protected Entity  entity;
     protected boolean stopped;
 
+    protected double timeSinceRoomLoad;
+    protected double relaxingBiasScale = 150;
+
     protected boolean useDebugPoints;
 
     /**
