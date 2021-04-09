@@ -37,6 +37,8 @@ public class LerpTimer {
                 time = (now - startTime) * 1e-9d;
 
                 if (time > totalTime) {
+                    action.accept(1d);
+
                     onFinish.run();
                     stop();
                 } else {

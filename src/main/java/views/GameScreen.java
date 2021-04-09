@@ -36,7 +36,7 @@ public class GameScreen {
 
         // Loaded the GameScreen without going through the config screen
         if (Player.getPlayer() == null) {
-            Player.setPlayer("Team Azula", "Weapon", "Normal");
+            Player.setPlayer("Team Azula", "Weapon", "Debug");
         }
 
         // Update UI

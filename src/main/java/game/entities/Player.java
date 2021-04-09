@@ -30,7 +30,11 @@ public final class Player extends Entity {
     private boolean keyActivated = false;
     private int difficulty;
 
+    private int maxHealth;
+
     private static TextArea uiInfoText;
+
+    private  int attackDuration;
 
     /**
      * Initializes the Player singleton
@@ -54,21 +58,41 @@ public final class Player extends Entity {
         switch (difficulty) {
         case "Boring":
             money = 100;
-            health = 1000000000;
+            health = 10;
             this.difficulty = 0;
             break;
         case "Normal":
             money = 75;
-            health = 5;
+            maxHealth = 5;
             this.difficulty = 1;
             break;
         case "Hard":
             money = 50;
-            health = 3;
+            maxHealth = 3;
             this.difficulty = 2;
+            break;
+        case "Debug":
+            money = 10000;
+            maxHealth = 10000;
+            this.difficulty = 1;
             break;
         default:
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
+        }
+
+        health = maxHealth;
+
+        if (InputManager.get(KeyCode.DIGIT1)) {
+            swapToBow();
+        }
+        if (InputManager.get(KeyCode.DIGIT2)) {
+            swapToAxe();
+        }
+        if (InputManager.get(KeyCode.DIGIT3)) {
+            swapToSword();
+        }
+        if (InputManager.get(KeyCode.R)) {
+            switchToNoWeapon();
         }
 
         entityController = new PlayerEntityController(this);
@@ -95,6 +119,7 @@ public final class Player extends Entity {
         if (InputManager.get(KeyCode.K)) {
             handleKey();
         }
+        
         /*
         if (attackTime > 200) {
             String currentWeapon = weapon.getName();
@@ -132,6 +157,9 @@ public final class Player extends Entity {
         }
 
         attackTime++;*/
+        
+        // Used for player movement and eventually attacking
+        entityController.act();
     }
 
     @Override
@@ -177,15 +205,6 @@ public final class Player extends Entity {
      * regain more health than they started out with.
      */
     public void regenerate() {
-        int maxHealth;
-        if (difficulty == 0) {
-            maxHealth = 10;
-        } else if (difficulty == 2) {
-            maxHealth = 3;
-        } else {
-            maxHealth = 5;
-        }
-
         health = Math.min(health + 2, maxHealth);
     }
 
@@ -250,5 +269,44 @@ public final class Player extends Entity {
      */
     public static Player getPlayer() {
         return player;
+    }
+    /**
+     * change weapon to Bow
+     */
+    public void swapToBow() {
+        Image bow = new Image("images/PlayerBow.png");
+        setImage(bow);
+        weapon = new Weapon("Bow", 1, 0);
+        Point2D newScale = new Point2D(5, 5);
+    }
+
+    /**
+     * change weapon to Axe
+     */
+    public void swapToAxe() {
+        Image axe = new Image("images/PlayerAxe.png");
+        setImage(axe);
+        weapon = new Weapon("Axe", 1, 0);
+        Point2D newScale = new Point2D(5, 5);
+        super.setScale(newScale);
+    }
+
+    /**
+     * change to weapon to sword
+     */
+    public void swapToSword() {
+        Image sword = new Image("images/PlayerSwordAttack.png");
+        setImage(sword);
+        weapon = new Weapon("Sword", 1, 0);
+        Point2D newScale = new Point2D(5, 5);
+        super.setScale(newScale);
+    }
+
+    public void switchToNoWeapon() {
+        Image png = new Image("images/Player.png");
+        Player.getPlayer().setImage(png);
+        weapon = new Weapon("weaponName", 0, 0);
+        Point2D newScale = new Point2D(5, 5);
+        super.setScale(newScale);
     }
 }

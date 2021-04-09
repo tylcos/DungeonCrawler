@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
  */
 public class Slime extends Entity {
     private int slimeType;
+    private int attackDuration;
 
     // @formatter:off
     private static final String[] SLIME_SPRITES = {
@@ -33,9 +34,7 @@ public class Slime extends Entity {
      * Creates an instance of Slime.
      */
     public Slime() {
-        super(SLIME_SPRITES[0],
-              RandomUtil.getPoint2D(300),
-              new Point2D(5, 5));
+        super(SLIME_SPRITES[0], RandomUtil.getPoint2D(300), new Point2D(5, 5));
 
         health = 2;
         money  = 20;
@@ -50,6 +49,7 @@ public class Slime extends Entity {
 
     @Override
     public void update() {
+
         entityController.act();
     }
 
@@ -68,6 +68,10 @@ public class Slime extends Entity {
         int damage = Player.getPlayer().getWeapon().getDamage();
         damage(damage);
         bounceBack(-10, Player.getPlayer().getPosition());
+
+
+
+
     }
 
     /**
@@ -88,6 +92,8 @@ public class Slime extends Entity {
 
             bounceBack((int) (magnitude * GameEngine.getDt()), Point2D.ZERO);
         }
+
+
     }
 
     /**
