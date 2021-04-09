@@ -113,6 +113,7 @@ public class Level {
                 room.addEntity(currentEnemy);
             }
         }
+        exit.addCollectable(new Key());
     }
 
     /**
@@ -170,6 +171,7 @@ public class Level {
         if (fromDir != null) {
             Point2D doorPos = currentRoom.getDoorCoords(fromDir);
             player.setPosition(doorPos);
+            //todo: comment
             if (!currentRoom.isClear() && !doorsNeverLock) {
                 currentRoom.lockDoors(fromDir);
             } else {
@@ -185,6 +187,9 @@ public class Level {
         }
 
         currentRoom.setEffect(GameEffects.ROOM_SHADOW);
+        if (Key.NUM_SPAWNED == 0) {
+            exit.addCollectable(new Key());
+        }
     }
 
     /**
@@ -209,7 +214,7 @@ public class Level {
         int x = (int) (from.getPosition().getX() + direction.vector().getX());
         int y = (int) (from.getPosition().getY() + direction.vector().getY());
         boolean valid = x + mapOffset < MAX_DIAMETER && y + mapOffset < MAX_DIAMETER
-                        && x + mapOffset >= 0 && y + mapOffset >= 0;
+                && x + mapOffset >= 0 && y + mapOffset >= 0;
         if (valid && exit != null && map[x + mapOffset][y + mapOffset] == exit) {
             return false;
         }
@@ -251,7 +256,7 @@ public class Level {
             if (existing == null) {
                 Point2D newRoomPos = next.from.getPosition().add(next.dir.vector());
                 Room newRoom = new Room(RandomUtil.getRandomRoomBlueprint(), newRoomPos, this,
-                                        false, next.from);
+                        false, next.from);
                 map[(int) (newRoomPos.getX() + mapOffset)][(int) (newRoomPos.getY() + mapOffset)] =
                         newRoom;
                 next.door.setDestination(newRoom);

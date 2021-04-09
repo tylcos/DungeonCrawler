@@ -1,6 +1,7 @@
 package game.collidables;
 
 import core.SceneManager;
+import core.SoundManager;
 import game.entities.Player;
 import game.levels.Room;
 import javafx.scene.image.Image;
@@ -10,9 +11,9 @@ import views.GameScreen;
  * The door of a room
  */
 public class Door extends CollidableTile {
-    private Room destination;
-    private boolean locked;
-    private boolean win = false;
+    private Room destination;    // Room this door leads to
+    private boolean locked;      // Whether this door can be entered
+    private boolean win = false; // Whether touching this door with the key wins the game
 
     /**
      * Constructor taking an Image of a door.
@@ -39,18 +40,28 @@ public class Door extends CollidableTile {
 
     @Override
     public void onCollision(Collidable other) {
-        if (win) {
+        if (win && !locked) {
+            // if door is win door try to win
             if (other instanceof Player) {
-                // TODO win game if player has key
-                SceneManager.loadScene(SceneManager.END);
+                if (Player.getPlayer().isKeyActivated()) {
+                    SoundManager.playVictory();
+                    SceneManager.loadScene(SceneManager.END);
+                }
             }
-        }
-        if (!locked) {
-            if (other instanceof Player) {
-                GameScreen.getLevel().loadRoom(destination);
+        } else {
+            // if door is not win door act normally
+            if (!locked) {
+                if (other instanceof Player) {
+                    SoundManager.playDoorCreak();
+                    GameScreen.getLevel().loadRoom(destination);
+                }
             }
         }
     }
+
+
+    // victory if: keyActivated && unlocked
+    // bounce back if: key not activated or locked
 
     /**
      * Sets the room that a door leads to a new room.
