@@ -1,7 +1,6 @@
 package game.levels;
 
 import core.GameEngine;
-import core.SceneManager;
 import data.GameEffects;
 import data.RandomUtil;
 import game.collidables.*;
@@ -67,7 +66,28 @@ public class Level {
             return;
         }
 
-        // 2d list of enemy constructors separated into difficulty tiers
+        // Add Collectables
+
+        // List of Collectable constructors, add any new Collectables to be spawned here
+        // Each element for any index i, will be spawned collectablesToSpawn[i] times
+        List<Supplier<Collectable>> collectables =
+                List.of(Coin::new, HealthPotion::new, AttackPotion::new);
+
+        int[] collectablesToSpawn = {
+                RandomUtil.getInt(1, 5),        // Coin [1,4]
+                RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn rate probability
+                RandomUtil.get() < .25 ? 1 : 0  // Attack Potion 25% spawn rate probability
+        };
+
+        // Add collectables to the current room
+        for (int type = 0; type < collectables.size(); type++) {
+            for (int i = 0; i < collectablesToSpawn[type]; i++) {
+                room.addCollectable(collectables.get(type).get());
+            }
+        }
+
+        // Add Entities
+        // 2d list of Entity constructors separated into difficulty tiers
         List<List<Supplier<Entity>>> enemies = new ArrayList<>(3);
         enemies.add(List.of(Slime::new));
         enemies.add(List.of(Skull::new));
@@ -75,38 +95,13 @@ public class Level {
 
         // Enemies spawned: Boring [2,3], Normal [2,6], Hard [2, 9]
         // Each element in the array is a different tier
-        // https://www.desmos.com/calculator/phcoaqjd5c
+        // https://www.desmos.com/calculator/k4ten4ecln
         int difficulty = Player.getPlayer().getDifficulty();
         int[] enemiesToSpawnPerTier = {
                 RandomUtil.getInt(1, 3 + difficulty),
                 RandomUtil.getInt(1, 2 + difficulty),
                 RandomUtil.getInt(0, 1 + difficulty)
         };
-
-        // Start spawning game elements
-        // Add coins to the room
-        int numberOfCoins = RandomUtil.getInt(3, 5);
-        for (int i = 0; i < numberOfCoins; i++) {
-            room.addCollectable(new Coin());
-        }
-
-        // Add items to the room
-        int numberOfItems = RandomUtil.getInt(2);
-        for (int i = 0; i < numberOfItems; i++) {
-            room.addCollectable(new Item());
-        }
-
-        // Add health potions to the room. 25% spawn rate probability.
-        int numberOfHealthPotions = (RandomUtil.get() < .25d) ? 1 : 0;
-        for (int i = 0; i < numberOfHealthPotions; i++) {
-            room.addCollectable(new HealthPotion());
-        }
-
-        // Add attack potions to the room. 25% spawn rate probability.
-        int numberOfAttackPotions = (RandomUtil.get() < .25d) ? 1 : 0;
-        for (int i = 0; i < numberOfAttackPotions; i++) {
-            room.addCollectable(new AttackPotion());
-        }
 
         // Add enemies to the current room
         for (int tier = 0; tier < 3; tier++) {
@@ -152,10 +147,10 @@ public class Level {
         }
         currentRoom = newRoom;
 
-//        if (newRoom.isExit()) {
-//            SceneManager.loadScene(SceneManager.END);
-//            return;
-//        }
+//      if (newRoom.isExit()) {
+//          SceneManager.loadScene(SceneManager.END);
+//          return;
+//      }
 
         if (!currentRoom.isGenerated()) {
             generateGameElements(currentRoom);
