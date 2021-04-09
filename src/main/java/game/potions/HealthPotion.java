@@ -1,5 +1,6 @@
 package game.potions;
 
+import core.SoundManager;
 import data.RandomUtil;
 import game.collidables.Collectable;
 import game.collidables.Collidable;
@@ -24,6 +25,7 @@ public class HealthPotion extends Collectable {
             return;
         }
 
+        SoundManager.playPotionCollected();
         setCollected();
 
         Player.getPlayer().regenerate();
