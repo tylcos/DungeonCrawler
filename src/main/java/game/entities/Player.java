@@ -74,17 +74,16 @@ public final class Player extends Entity {
         entityController = new PlayerEntityController(this);
     }
 
+    //handles player when key activated
     private void handleKey() {
         if (key != null) {
-            setImage(new Image("/images/key.png"));
+            setImage(new Image("/images/PlayerWithKey (2).png"));
             keyActivated = true;
             SoundManager.playKeyActivated();
         } else {
             System.out.println("player has not collected key");
         }
     }
-
-
 
     @Override
     public void update() {
