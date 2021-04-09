@@ -58,7 +58,7 @@ public final class Player extends Entity {
         switch (difficulty) {
         case "Boring":
             money = 100;
-            health = 10;
+            maxHealth = 10;
             this.difficulty = 0;
             break;
         case "Normal":
@@ -98,14 +98,14 @@ public final class Player extends Entity {
         entityController = new PlayerEntityController(this);
     }
 
-    //handles player when key activated
+    /**
+     * Updates player sprite to show key
+     */
     private void handleKey() {
         if (key != null) {
             setImage(new Image("/images/PlayerWithKey (2).png"));
             keyActivated = true;
             SoundManager.playKeyActivated();
-        } else {
-            System.out.println("player has not collected key");
         }
     }
 

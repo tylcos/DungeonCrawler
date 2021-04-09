@@ -1,5 +1,6 @@
 package game.potions;
 
+import core.SoundManager;
 import data.RandomUtil;
 import game.collidables.Collectable;
 import game.collidables.Collidable;
@@ -29,6 +30,7 @@ public class AttackPotion extends Collectable {
             return;
         }
 
+        SoundManager.playPotionCollected();
         setCollected();
 
         Player.getPlayer().getWeapon().addDamageMultiplier(2d);
