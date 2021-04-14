@@ -29,7 +29,7 @@ public abstract class Collectable extends Collidable {
      *
      * @return isCollected
      */
-    public boolean getCollected() {
+    public boolean isCollected() {
         return isCollected;
     }
 
