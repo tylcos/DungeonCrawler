@@ -24,6 +24,7 @@ public class Level {
     /* CHEATS */
     private static boolean spawnEnemiesInEntrance;
     private static boolean doorsNeverLock;
+    private static boolean spawnItemsInEntrance;
 
     /*
      * Quick explanation of map coordinates for those concerned: map can be thought of as a 2D grid
@@ -34,11 +35,11 @@ public class Level {
      *
      * Now, remember map is actually an array of arrays underneath its grid-like visage so we can't
      * directly access the Room at (-2, -2) with map[-2][-2]. Instead, we add mapOffset to our x and
-     * y coordinates to convert from the coordinate grid to indicies of the array. So for (-2, -2)
+     * y coordinates to convert from the coordinate grid to indices of the array. So for (-2, -2)
      * we would use map[-2 + mapOffset][-2 + mapOffset].
      */
     private       Room[][] map;        // 2D array of all the rooms making up the level
-    private final int      mapOffset;  // Offset used for calculating array indicies from positions
+    private final int      mapOffset;  // Offset used for calculating array indices from positions
     private       Room     currentRoom;
     private       Room     exit;
 
@@ -62,7 +63,7 @@ public class Level {
      * @param room the room to be added to
      */
     private void generateGameElements(Room room) {
-        if (!spawnEnemiesInEntrance && room.isEntrance()) {
+        if (!spawnEnemiesInEntrance && !spawnItemsInEntrance && room.isEntrance()) {
             return;
         }
 
@@ -73,11 +74,17 @@ public class Level {
         List<Supplier<Collectable>> collectables =
                 List.of(Coin::new, HealthPotion::new, AttackPotion::new);
 
-        int[] collectablesToSpawn = {
-                RandomUtil.getInt(1, 5),        // Coin [1,4]
-                RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn rate probability
-                RandomUtil.get() < .25 ? 1 : 0  // Attack Potion 25% spawn rate probability
-        };
+        int[] collectablesToSpawn;
+
+        if (!spawnItemsInEntrance) {
+            collectablesToSpawn = new int[]{
+                    RandomUtil.getInt(1, 5),        // Coin [1,4]
+                    RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn rate probability
+                    RandomUtil.get() < .25 ? 1 : 0  // Attack Potion 25% spawn rate probability
+            };
+        } else {
+            collectablesToSpawn = new int[]{1, 1, 1};
+        }
 
         // Add collectables to the current room
         for (int type = 0; type < collectables.size(); type++) {
@@ -86,31 +93,33 @@ public class Level {
             }
         }
 
-        // Add Entities
-        // 2d list of Entity constructors separated into difficulty tiers
-        List<List<Supplier<Entity>>> enemies = new ArrayList<>(3);
-        enemies.add(List.of(Slime::new));
-        enemies.add(List.of(Skull::new));
-        enemies.add(List.of(Mage::new));
+        if (!spawnItemsInEntrance) {
+            // Add Entities
+            // 2d list of Entity constructors separated into difficulty tiers
+            List<List<Supplier<Entity>>> enemies = new ArrayList<>(3);
+            enemies.add(List.of(Slime::new));
+            enemies.add(List.of(Skull::new));
+            enemies.add(List.of(Mage::new));
 
-        // Enemies spawned: Boring [2,3], Normal [2,6], Hard [2, 9]
-        // Each element in the array is a different tier
-        // https://www.desmos.com/calculator/k4ten4ecln
-        int difficulty = Player.getPlayer().getDifficulty();
-        int[] enemiesToSpawnPerTier = {
-                RandomUtil.getInt(1, 3 + difficulty),
-                RandomUtil.getInt(1, 2 + difficulty),
-                RandomUtil.getInt(0, 1 + difficulty)
-        };
+            // Enemies spawned: Boring [2,3], Normal [2,6], Hard [2, 9]
+            // Each element in the array is a different tier
+            // https://www.desmos.com/calculator/k4ten4ecln
+            int difficulty = Player.getPlayer().getDifficulty();
+            int[] enemiesToSpawnPerTier = {
+                    RandomUtil.getInt(1, 3 + difficulty),
+                    RandomUtil.getInt(1, 2 + difficulty),
+                    RandomUtil.getInt(0, 1 + difficulty)
+            };
 
-        // Add enemies to the current room
-        for (int tier = 0; tier < 3; tier++) {
-            List<Supplier<Entity>> currentTier = enemies.get(tier);
+            // Add enemies to the current room
+            for (int tier = 0; tier < 3; tier++) {
+                List<Supplier<Entity>> currentTier = enemies.get(tier);
 
-            for (int i = 0; i < enemiesToSpawnPerTier[tier]; i++) {
-                int    randomIndex  = RandomUtil.getInt(currentTier.size());
-                Entity currentEnemy = currentTier.get(randomIndex).get();
-                room.addEntity(currentEnemy);
+                for (int i = 0; i < enemiesToSpawnPerTier[tier]; i++) {
+                    int randomIndex = RandomUtil.getInt(currentTier.size());
+                    Entity currentEnemy = currentTier.get(randomIndex).get();
+                    room.addEntity(currentEnemy);
+                }
             }
         }
         exit.addCollectable(new Key());
@@ -393,6 +402,10 @@ public class Level {
 
     public static void setDoorsNeverLock(boolean doorsNeverLock) {
         Level.doorsNeverLock = doorsNeverLock;
+    }
+
+    public static void setSpawnItemsInEntrance(boolean spawnItemsInEntrance) {
+        Level.spawnItemsInEntrance = spawnItemsInEntrance;
     }
 
     /**
