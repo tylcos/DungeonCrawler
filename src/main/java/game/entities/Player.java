@@ -19,17 +19,17 @@ import utilities.TimerUtil;
 public final class Player extends Entity {
     private static Player player;
 
-    private String  name;
-    private Weapon  weapon;
+    private String name;
+    private Weapon weapon;
+    private int    difficulty;
+    private int    maxHealth;
+
+    private double speedMultiplier = 1d;
+
     private Key     key;
     private boolean keyActivated;
-    private int     difficulty;
-
-    private int maxHealth;
 
     private static TextArea uiInfoText;
-
-    private int attackDuration;
 
     /**
      * Initializes the Player singleton
@@ -74,34 +74,9 @@ public final class Player extends Entity {
         default:
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
-
         health = maxHealth;
 
-        if (InputManager.get(KeyCode.DIGIT1)) {
-            swapToBow();
-        }
-        if (InputManager.get(KeyCode.DIGIT2)) {
-            swapToAxe();
-        }
-        if (InputManager.get(KeyCode.DIGIT3)) {
-            swapToSword();
-        }
-        if (InputManager.get(KeyCode.R)) {
-            switchToNoWeapon();
-        }
-
-        entityController = new PlayerEntityController(this);
-    }
-
-    /**
-     * Updates player sprite to show key
-     */
-    private void handleKey() {
-        if (key != null) {
-            setImage(new Image("/images/PlayerWithKey (2).png"));
-            keyActivated = true;
-            SoundManager.playKeyActivated();
-        }
+        entityController = new PlayerEntityController(this, this::getSpeedMultiplier);
     }
 
     @Override
@@ -178,6 +153,25 @@ public final class Player extends Entity {
         }, () -> SceneManager.loadScene(SceneManager.END));
     }
 
+    /**
+     * Updates player sprite to show key
+     */
+    private void handleKey() {
+        if (key != null) {
+            setImage(new Image("/images/PlayerWithKey (2).png"));
+            keyActivated = true;
+            SoundManager.playKeyActivated();
+        }
+    }
+
+    public void addSpeedMultiplier(double multiplier) {
+        speedMultiplier *= multiplier;
+    }
+
+    public double getSpeedMultiplier() {
+        return speedMultiplier;
+    }
+
     public Weapon getWeapon() {
         return weapon;
     }
@@ -222,45 +216,5 @@ public final class Player extends Entity {
      */
     public static Player getPlayer() {
         return player;
-    }
-
-    /**
-     * change weapon to Bow
-     */
-    public void swapToBow() {
-        Image bow = new Image("images/PlayerBow.png");
-        setImage(bow);
-        weapon = new Weapon("Bow", 1, 0);
-        Point2D newScale = new Point2D(5, 5);
-    }
-
-    /**
-     * change weapon to Axe
-     */
-    public void swapToAxe() {
-        Image axe = new Image("images/PlayerAxe.png");
-        setImage(axe);
-        weapon = new Weapon("Axe", 1, 0);
-        Point2D newScale = new Point2D(5, 5);
-        setScale(newScale);
-    }
-
-    /**
-     * change to weapon to sword
-     */
-    public void swapToSword() {
-        Image sword = new Image("images/PlayerSwordAttack.png");
-        setImage(sword);
-        weapon = new Weapon("Sword", 1, 0);
-        Point2D newScale = new Point2D(5, 5);
-        setScale(newScale);
-    }
-
-    public void switchToNoWeapon() {
-        Image png = new Image("images/Player.png");
-        Player.getPlayer().setImage(png);
-        weapon = new Weapon("weaponName", 0, 0);
-        Point2D newScale = new Point2D(5, 5);
-        setScale(newScale);
     }
 }
