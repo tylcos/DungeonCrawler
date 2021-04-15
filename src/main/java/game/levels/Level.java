@@ -79,13 +79,13 @@ public class Level {
         if (spawnItemsInEntrance) {
             collectablesToSpawn = IntStream.generate(() -> 1).limit(collectables.size()).toArray();
         } else {
-            collectablesToSpawn = new int[]{
+            collectablesToSpawn = new int[] {
                 RandomUtil.getInt(1, 5),        // Coin [1,4]
-                RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn rate
-                RandomUtil.get() < .25 ? 1 : 0, // Attack Potion 25% spawn rate
-                RandomUtil.get() < .25 ? 1 : 0, // Speed Potion 25% spawn rate
-                RandomUtil.get() < .05 ? 1 : 0, // Nuke 5% spawn rate
-                RandomUtil.get() < 0.5 ? 1 : 0  //  Weapon 50% spawn rate
+                RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn chance
+                RandomUtil.get() < .25 ? 1 : 0, // Attack Potion 25% spawn chance
+                RandomUtil.get() < .25 ? 1 : 0, // Speed Potion 25% spawn chance
+                RandomUtil.get() < .05 ? 1 : 0, // Nuke 5% spawn chance
+                RandomUtil.get() < .50 ? 1 : 0  // Weapon 50% spawn chance
             };
         }
 
@@ -125,7 +125,6 @@ public class Level {
                 }
             }
         }
-        exit.addCollectable(new Key());
     }
 
     /**
@@ -143,6 +142,10 @@ public class Level {
         loadRoom(map[mapOffset][mapOffset]);
         // Spawn the player
         GameEngine.instantiate(GameEngine.ENTITY, Player.getPlayer());
+
+        if (Key.getNumSpawned() == 0) {
+            exit.addCollectable(new Key());
+        }
     }
 
     /**
@@ -175,9 +178,8 @@ public class Level {
         GameEngine.instantiate(GameEngine.ENTITY, currentRoom.getEntities());
         GameEngine.addToPhysics(currentRoom.getBodies());
 
-        // Put the player in the "center" of the room
         Player player = Player.getPlayer();
-        player.toFront();
+        player.toBack();
 
         // Lock doors for rooms other than the entrance room
         if (fromDir != null) {
@@ -199,9 +201,6 @@ public class Level {
         }
 
         currentRoom.setEffect(GameEffects.ROOM_SHADOW);
-        if (Key.getNumSpawned() == 0) {
-            exit.addCollectable(new Key());
-        }
     }
 
     /**
