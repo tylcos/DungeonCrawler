@@ -10,7 +10,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import utilities.GameEffects;
 import utilities.TimerUtil;
@@ -54,28 +53,28 @@ public final class Player extends Entity {
         weapon = new Weapon(weaponName, 1, 0);
 
         switch (difficulty) {
-            case "Boring":
-                money = 100;
-                maxHealth = 10;
-                this.difficulty = 0;
-                break;
-            case "Normal":
-                money = 75;
-                maxHealth = 5;
-                this.difficulty = 1;
-                break;
-            case "Hard":
-                money = 50;
-                maxHealth = 3;
-                this.difficulty = 2;
-                break;
-            case "Debug":
-                money = 10000;
-                maxHealth = 10000;
-                this.difficulty = 1;
-                break;
-            default:
-                throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
+        case "Boring":
+            money = 100;
+            maxHealth = 10;
+            this.difficulty = 0;
+            break;
+        case "Normal":
+            money = 75;
+            maxHealth = 5;
+            this.difficulty = 1;
+            break;
+        case "Hard":
+            money = 50;
+            maxHealth = 3;
+            this.difficulty = 2;
+            break;
+        case "Debug":
+            money = 10000;
+            maxHealth = 10000;
+            this.difficulty = 1;
+            break;
+        default:
+            throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
         health = maxHealth;
 
@@ -89,11 +88,11 @@ public final class Player extends Entity {
         if (InputManager.get(KeyCode.K)) {
             handleKey();
         }
-        if (InputManager.get(KeyCode.TAB) && weaponObtained == true){
+        if (InputManager.get(KeyCode.TAB) && weaponObtained) {
             swapToAxe();
             Inventory.changeWeapon("images/PlayerAxe.png");
         }
-        if(InputManager.get(KeyCode.Q) && weaponObtained == true){
+        if (InputManager.get(KeyCode.Q) && weaponObtained) {
             swapToSword();
             Inventory.changeWeapon("images/PlayerSwordAttack.png");
         }
@@ -249,5 +248,8 @@ public final class Player extends Entity {
         Point2D newScale = new Point2D(5, 5);
         super.setScale(newScale);
     }
-    public void setWeaponObtained(){ this.weaponObtained = true; }
+
+    public void setWeaponObtained() {
+        this.weaponObtained = true;
+    }
 }
