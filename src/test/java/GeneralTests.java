@@ -1,11 +1,11 @@
 import core.*;
-import data.RandomUtil;
 import javafx.scene.input.KeyCode;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 import org.testfx.matcher.base.WindowMatchers;
+import utilities.RandomUtil;
 
 import java.util.stream.Stream;
 

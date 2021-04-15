@@ -1,14 +1,14 @@
 package game.potions;
 
 import core.SoundManager;
-import data.RandomUtil;
-import data.TimerUtil;
 import game.IItem;
 import game.Inventory;
 import game.collidables.Collectable;
 import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
+import utilities.RandomUtil;
+import utilities.TimerUtil;
 
 /**
  * An attack potion that increases the player's weapon damage by a factor of 2.

@@ -1,8 +1,6 @@
 package game.entities;
 
 import core.*;
-import data.GameEffects;
-import data.LerpTimer;
 import game.Weapon;
 import game.collidables.*;
 import javafx.geometry.Point2D;
@@ -10,6 +8,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import utilities.GameEffects;
+import utilities.TimerUtil;
 
 /**
  * Singleton controller for the player
@@ -106,51 +106,9 @@ public final class Player extends Entity {
     public void update() {
         uiInfoText.setText(toStringFormatted());
 
-        // Used for player movement and eventually attacking
-        entityController.act();
-
         if (InputManager.get(KeyCode.K)) {
             handleKey();
         }
-        
-        /*
-        if (attackTime > 200) {
-            String currentWeapon = weapon.getName();
-            if ("Bow".equals(currentWeapon)) {
-                swapToBow();
-            }
-            if ("Sword".equals(currentWeapon)) {
-                swapToSword();
-            }
-            if ("Axe".equals(currentWeapon)) {
-                swapToAxe();
-            }
-            attackTime = 0;
-        }
-
-        // Player attacks
-        if (InputManager.get(KeyCode.SPACE)) {
-            onAttackMode = true;
-            attackMotion();
-        } else {
-            onAttackMode = false;
-        }
-
-        if (InputManager.get(KeyCode.DIGIT1)) {
-            swapToBow();
-        }
-        if (InputManager.get(KeyCode.DIGIT2)) {
-            swapToAxe();
-        }
-        if (InputManager.get(KeyCode.DIGIT3)) {
-            swapToSword();
-        }*/
-
-        if (InputManager.get(KeyCode.R)) {
-            switchToNoWeapon();
-        }
-
-        //attackTime++;
 
         // Used for player movement and eventually attacking
         entityController.act();
@@ -159,8 +117,9 @@ public final class Player extends Entity {
     @Override
     public void onCollision(Collidable other) {
         if (other instanceof CollidableTile) {
-            bounceBack((int) (getVelocity().magnitude() * GameEngine.getDt()), Point2D.ZERO);
+            bounceBack((int) (getVelocity().magnitude() * GameEngine.getDt()));
         }
+
         if (other instanceof Key) {
             key = (Key) other;
             System.out.println("collected key");
@@ -171,13 +130,10 @@ public final class Player extends Entity {
      * Makes the entity bounce back from wall or enemy
      *
      * @param bounceDistance the distance to bounce
-     * @param fromPoint      the point to bounce back from
      */
-    private void bounceBack(int bounceDistance, Point2D fromPoint) {
-        Point2D difference = position.subtract(fromPoint);
-
-        Point2D dp = new Point2D(-bounceDistance * Math.signum(difference.getX()),
-                                 -bounceDistance * Math.signum(difference.getY()));
+    private void bounceBack(int bounceDistance) {
+        Point2D dp = new Point2D(-bounceDistance * Math.signum(position.getX()),
+                                 -bounceDistance * Math.signum(position.getY()));
 
         setPosition(position.add(dp));
     }
@@ -187,9 +143,10 @@ public final class Player extends Entity {
         if (isDead) {
             return;
         }
+
         SoundManager.playPlayerAttacked();
         getScene().getRoot().setEffect(GameEffects.RED_EDGES);
-        new LerpTimer(1, t -> GameEffects.RED_EDGES.setColor(Color.color(1, 0, 0, 1 - t)));
+        TimerUtil.lerp(1, t -> GameEffects.RED_EDGES.setColor(Color.color(1, 0, 0, 1 - t)));
 
         super.damage(amount);
     }
@@ -211,7 +168,7 @@ public final class Player extends Entity {
 
         // Blurs and changes color to red
         getScene().getRoot().setEffect(GameEffects.DEATH);
-        new LerpTimer(5, t -> {
+        TimerUtil.lerp(5, t -> {
             double x = 1 - .5 * t;
 
             GameEffects.GAME_BLUR.setRadius(20 * t);

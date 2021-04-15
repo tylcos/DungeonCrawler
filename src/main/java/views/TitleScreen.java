@@ -2,12 +2,12 @@ package views;
 
 import core.GameDriver;
 import core.SceneManager;
-import data.GameEffects;
-import data.LerpTimer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import utilities.GameEffects;
+import utilities.TimerUtil;
 
 import java.util.function.Supplier;
 
@@ -48,20 +48,8 @@ public class TitleScreen {
 
         // Blurs the screen on scene load
         scalePane.setEffect(GameEffects.HORIZONTAL_BLUR);
-        new LerpTimer(2, t -> GameEffects.HORIZONTAL_BLUR
+        TimerUtil.lerp(2, t -> GameEffects.HORIZONTAL_BLUR
                                       .setWidth(START_BLUR_STRENGTH * Math.pow(1 - t, 2)));
-
-        /*
-        if (GameDriver.isDebug()) {
-            Stage stage = SceneManager.getStage();
-            System.out.println("\nDebug Screen Scaling");
-            System.out.println("Screen Scale: " + Screen.getPrimary().getOutputScaleX()
-                               + ", " + Screen.getPrimary().getOutputScaleY());
-            System.out.println("Output Scale: " + stage.getOutputScaleX()
-                               + ", " + stage.getOutputScaleY());
-            System.out.println("Render Scale: " + stage.getRenderScaleX()
-                               + ", " + stage.getRenderScaleY());
-        }*/
 
         version.setText(GameDriver.GAME_VERSION);
     }

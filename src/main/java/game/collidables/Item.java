@@ -1,8 +1,8 @@
 package game.collidables;
 
-import data.RandomUtil;
 import game.entities.Player;
 import javafx.geometry.Point2D;
+import utilities.RandomUtil;
 
 /**
  * An item the player can collect for an effect.
