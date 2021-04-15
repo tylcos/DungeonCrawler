@@ -19,38 +19,39 @@ import utilities.TimerUtil;
  */
 public final class Player extends Entity {
     private static Player player;
+
     private String name;
     private Weapon weapon;
-    private int difficulty;
-    private int maxHealth;
+    private int    difficulty;
+    private int    maxHealth;
 
     private double speedMultiplier = 1d;
 
-    private Key key;
+    private Key     key;
     private boolean keyActivated;
-    private boolean pressOnce = false;
+    private boolean pressOnce;
+
+    private boolean weaponObtained;
 
     private static TextArea uiInfoText;
-    private boolean weaponObtained;
 
     /**
      * Initializes the Player singleton
      *
-     * @param image      the path of the image of a main player
+     * @param playerName the name of the main player
      * @param weaponName the name of the weapon the player has
      * @param difficulty the difficulty of the game
      */
-    public static void setPlayer(String image, String weaponName, String difficulty) {
-        player = new Player(image, weaponName, difficulty);
+    public static void setPlayer(String playerName, String weaponName, String difficulty) {
+        player      = new Player(weaponName, difficulty);
+        player.name = playerName;
     }
 
-    private Player(String image, String weaponName, String difficulty) {
+    private Player(String weaponName, String difficulty) {
         // Position is overwritten when a new room is loaded
         super("images/PlayerSwordAttack.png", Point2D.ZERO, new Point2D(5, 5));
 
-        // todo: fix weapon damage and price
-        name = image;
-        weapon = new Weapon(weaponName, 1, 0);
+        weapon = new Weapon("Starting " + weaponName, weaponName, 1, 1d);
 
         switch (difficulty) {
         case "Boring":
@@ -78,7 +79,9 @@ public final class Player extends Entity {
         }
         health = maxHealth;
 
-        entityController = new PlayerEntityController(this, this::getSpeedMultiplier);
+        entityController = new PlayerEntityController(this,
+                                                      this::getSpeedMultiplier,
+                                                      this::getWeapon);
     }
 
     @Override
@@ -88,14 +91,17 @@ public final class Player extends Entity {
         if (InputManager.get(KeyCode.K)) {
             handleKey();
         }
+
         if (InputManager.get(KeyCode.TAB) && weaponObtained) {
             swapToAxe();
             Inventory.changeWeapon("images/PlayerAxe.png");
         }
+
         if (InputManager.get(KeyCode.Q) && weaponObtained) {
             swapToSword();
             Inventory.changeWeapon("images/PlayerSwordAttack.png");
         }
+
         // Used for player movement and eventually attacking
         entityController.act();
     }
@@ -119,7 +125,7 @@ public final class Player extends Entity {
      */
     private void bounceBack(int bounceDistance) {
         Point2D dp = new Point2D(-bounceDistance * Math.signum(position.getX()),
-                -bounceDistance * Math.signum(position.getY()));
+                                 -bounceDistance * Math.signum(position.getY()));
 
         setPosition(position.add(dp));
     }
@@ -172,7 +178,6 @@ public final class Player extends Entity {
             SoundManager.playKeyActivated();
         }
     }
-
     public void addSpeedMultiplier(double multiplier) {
         speedMultiplier *= multiplier;
     }
@@ -201,7 +206,7 @@ public final class Player extends Entity {
     public String toStringFormatted() {
         String formattedHealth = isDead ? "DEAD" : String.valueOf(health);
         return String.format("Name: %s \nWeapon: %s \nMoney: %d \nHealth: %s",
-                name, weapon, money, formattedHealth);
+                             name, weapon, money, formattedHealth);
     }
 
     @Override
@@ -227,13 +232,14 @@ public final class Player extends Entity {
         return player;
     }
 
+
     /**
      * change weapon to Axe
      */
     public void swapToAxe() {
         Image axe = new Image("images/PlayerAxe.png");
         setImage(axe);
-        weapon = new Weapon("Axe", 1, 0);
+        weapon = new Weapon("Axe", 2, 0);
         Point2D newScale = new Point2D(5, 5);
         super.setScale(newScale);
     }
@@ -244,7 +250,7 @@ public final class Player extends Entity {
     public void swapToSword() {
         Image sword = new Image("images/PlayerSwordAttack.png");
         setImage(sword);
-        weapon = new Weapon("Sword", 2, 0);
+        weapon = new Weapon("Sword", 1, 0);
         Point2D newScale = new Point2D(5, 5);
         super.setScale(newScale);
     }

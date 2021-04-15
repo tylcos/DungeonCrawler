@@ -103,7 +103,7 @@ public class SkullEntityController extends EntityController {
         } else if (state == State.attacking && distance < attackingDistance) {
             state = State.running;
 
-            player.damage(1); // Attack player
+            attack();
         }
 
         // Swarm the Player on death
