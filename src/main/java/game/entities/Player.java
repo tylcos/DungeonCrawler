@@ -1,6 +1,7 @@
 package game.entities;
 
 import core.*;
+import game.Inventory;
 import game.Weapon;
 import game.collectables.Key;
 import game.collidables.Collidable;
@@ -9,6 +10,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import utilities.GameEffects;
 import utilities.TimerUtil;
@@ -18,18 +20,19 @@ import utilities.TimerUtil;
  */
 public final class Player extends Entity {
     private static Player player;
-
     private String name;
     private Weapon weapon;
-    private int    difficulty;
-    private int    maxHealth;
+    private int difficulty;
+    private int maxHealth;
 
     private double speedMultiplier = 1d;
 
-    private Key     key;
+    private Key key;
     private boolean keyActivated;
+    private boolean pressOnce = false;
 
     private static TextArea uiInfoText;
+    private boolean weaponObtained;
 
     /**
      * Initializes the Player singleton
@@ -44,35 +47,35 @@ public final class Player extends Entity {
 
     private Player(String image, String weaponName, String difficulty) {
         // Position is overwritten when a new room is loaded
-        super("/images/Player.png", Point2D.ZERO, new Point2D(.7, .7));
+        super("images/PlayerSwordAttack.png", Point2D.ZERO, new Point2D(5, 5));
 
         // todo: fix weapon damage and price
-        name   = image;
+        name = image;
         weapon = new Weapon(weaponName, 1, 0);
 
         switch (difficulty) {
-        case "Boring":
-            money = 100;
-            maxHealth = 10;
-            this.difficulty = 0;
-            break;
-        case "Normal":
-            money = 75;
-            maxHealth = 5;
-            this.difficulty = 1;
-            break;
-        case "Hard":
-            money = 50;
-            maxHealth = 3;
-            this.difficulty = 2;
-            break;
-        case "Debug":
-            money = 10000;
-            maxHealth = 10000;
-            this.difficulty = 1;
-            break;
-        default:
-            throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
+            case "Boring":
+                money = 100;
+                maxHealth = 10;
+                this.difficulty = 0;
+                break;
+            case "Normal":
+                money = 75;
+                maxHealth = 5;
+                this.difficulty = 1;
+                break;
+            case "Hard":
+                money = 50;
+                maxHealth = 3;
+                this.difficulty = 2;
+                break;
+            case "Debug":
+                money = 10000;
+                maxHealth = 10000;
+                this.difficulty = 1;
+                break;
+            default:
+                throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
         }
         health = maxHealth;
 
@@ -86,7 +89,14 @@ public final class Player extends Entity {
         if (InputManager.get(KeyCode.K)) {
             handleKey();
         }
-
+        if (InputManager.get(KeyCode.TAB) && weaponObtained == true){
+            swapToAxe();
+            Inventory.changeWeapon("images/PlayerAxe.png");
+        }
+        if(InputManager.get(KeyCode.Q) && weaponObtained == true){
+            swapToSword();
+            Inventory.changeWeapon("images/PlayerSwordAttack.png");
+        }
         // Used for player movement and eventually attacking
         entityController.act();
     }
@@ -110,7 +120,7 @@ public final class Player extends Entity {
      */
     private void bounceBack(int bounceDistance) {
         Point2D dp = new Point2D(-bounceDistance * Math.signum(position.getX()),
-                                 -bounceDistance * Math.signum(position.getY()));
+                -bounceDistance * Math.signum(position.getY()));
 
         setPosition(position.add(dp));
     }
@@ -192,7 +202,7 @@ public final class Player extends Entity {
     public String toStringFormatted() {
         String formattedHealth = isDead ? "DEAD" : String.valueOf(health);
         return String.format("Name: %s \nWeapon: %s \nMoney: %d \nHealth: %s",
-                             name, weapon, money, formattedHealth);
+                name, weapon, money, formattedHealth);
     }
 
     @Override
@@ -217,4 +227,27 @@ public final class Player extends Entity {
     public static Player getPlayer() {
         return player;
     }
+
+    /**
+     * change weapon to Axe
+     */
+    public void swapToAxe() {
+        Image axe = new Image("images/PlayerAxe.png");
+        setImage(axe);
+        weapon = new Weapon("Axe", 1, 0);
+        Point2D newScale = new Point2D(5, 5);
+        super.setScale(newScale);
+    }
+
+    /**
+     * change to weapon to sword
+     */
+    public void swapToSword() {
+        Image sword = new Image("images/PlayerSwordAttack.png");
+        setImage(sword);
+        weapon = new Weapon("Sword", 2, 0);
+        Point2D newScale = new Point2D(5, 5);
+        super.setScale(newScale);
+    }
+    public void setWeaponObtained(){ this.weaponObtained = true; }
 }
