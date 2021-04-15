@@ -121,4 +121,18 @@ public class GameScreenItemsTests extends ApplicationTest {
             }
         }
     }
+
+    /**
+     * Tests if a potion can be used from the inventory
+     */
+    @Test
+    public void testInventoryUsingItem() {
+        int startWeaponDamage = Player.getPlayer().getWeapon().getDamage();
+
+        AttackPotion attackPotion = new AttackPotion();
+        attackPotion.activate();
+
+        push(KeyCode.getKeyCode(String.valueOf(attackPotion.getItemID() + 1)));
+        assertEquals(startWeaponDamage * 2, Player.getPlayer().getWeapon().getDamage());
+    }
 }
