@@ -92,4 +92,7 @@ public class GeneralTests extends ApplicationTest {
         release(KeyCode.W);
         assertFalse(InputManager.get(KeyCode.W));
     }
+
+
+
 }
