@@ -5,20 +5,23 @@ package game;
  */
 public class Weapon {
     private String name;
+    private String type;
     private int    damage;
-    private int    price;
+    private double    fireRate;
 
     /**
      * Creates an instance of a weapon with the name, damage it does, and its price.
      *
-     * @param name   the name of the weapon
-     * @param damage the damage the weapon does
-     * @param price  the price of the weapon
+     * @param name     the name of the weapon
+     * @param type     the type of the weapon
+     * @param damage   the damage the weapon does
+     * @param fireRate the fire rate of the weapon
      */
-    public Weapon(String name, int damage, int price) {
-        this.name   = name;
-        this.damage = damage;
-        this.price  = price;
+    public Weapon(String name, String type, int damage, double fireRate) {
+        this.name     = name;
+        this.type     = type;
+        this.damage   = damage;
+        this.fireRate = fireRate;
     }
 
     /**
@@ -37,6 +40,15 @@ public class Weapon {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * The type of the weapon like ranged or sword.
+     *
+     * @return the type of the weapon
+     */
+    public String getType() {
+        return type;
     }
 
     /**
@@ -64,22 +76,8 @@ public class Weapon {
         damage = modifiedDamage < Integer.MAX_VALUE ? (int) modifiedDamage : Integer.MAX_VALUE;
     }
 
-    /**
-     * Returns the price of the weapon.
-     *
-     * @return the price of the weapon
-     */
-    public int getPrice() {
-        return price;
-    }
-
-    /**
-     * Sets the price of the weapon to a new price.
-     *
-     * @param price the new price of the weapon
-     */
-    public void setPrice(int price) {
-        this.price = price;
+    public double getFireRate() {
+        return fireRate;
     }
 
     /**
