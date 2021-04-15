@@ -1,9 +1,8 @@
-package game.potions;
+package game.collectables;
 
 import core.SoundManager;
 import game.IItem;
 import game.Inventory;
-import game.collidables.Collectable;
 import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
@@ -41,9 +40,10 @@ public class AttackPotion extends Collectable implements IItem {
 
     public void activate() {
         Player.getPlayer().getWeapon().addDamageMultiplier(POTION_STRENGTH);
-        TimerUtil.schedule(() -> Player.getPlayer().getWeapon()
-                                         .addDamageMultiplier(1 / POTION_STRENGTH),
-                           POTION_DURATION);
+
+        TimerUtil.schedule(POTION_DURATION,
+                           () -> Player.getPlayer().getWeapon()
+                                     .addDamageMultiplier(1 / POTION_STRENGTH));
     }
 
     public int getItemID() {

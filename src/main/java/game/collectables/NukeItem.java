@@ -1,0 +1,52 @@
+package game.collectables;
+
+import core.SoundManager;
+import game.IItem;
+import game.Inventory;
+import game.collidables.Collidable;
+import game.entities.Player;
+import javafx.geometry.Point2D;
+import utilities.RandomUtil;
+import views.GameScreen;
+
+/**
+ * A Item that kills all enemies
+ */
+public class NukeItem extends Collectable implements IItem {
+    private static final int    ITEM_ID = 3;
+    private static final String IMAGE   = "/images/Nuke.png";
+
+    private static final double SUICIDE_CHANCE = .01d;
+
+    public NukeItem() {
+        super(IMAGE, RandomUtil.getPoint2D(300), new Point2D(1, 1));
+    }
+
+    @Override
+    public void onCollision(Collidable other) {
+        if (isCollected || !(other instanceof Player)) {
+            return;
+        }
+
+        SoundManager.playPotionCollected();
+        setCollected();
+
+        Inventory.addItem(this);
+    }
+
+    public void activate() {
+        GameScreen.getLevel().getCurrentRoom().getEntities().forEach(e -> e.damage(e.getHealth()));
+
+        if (RandomUtil.get() < SUICIDE_CHANCE) {
+            Player.getPlayer().damage(Player.getPlayer().getHealth());
+        }
+    }
+
+    public int getItemID() {
+        return ITEM_ID;
+    }
+
+    public String getItemImage() {
+        return IMAGE;
+    }
+}
