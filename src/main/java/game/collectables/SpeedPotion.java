@@ -7,18 +7,19 @@ import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
 import utilities.RandomUtil;
-import views.GameScreen;
+import utilities.TimerUtil;
 
 /**
  * A Item that kills all enemies and possibly the Player
  */
-public class NukeItem extends Collectable implements IItem {
-    private static final int    ITEM_ID = 3;
-    private static final String IMAGE   = "/images/Nuke.png";
+public class SpeedPotion extends Collectable implements IItem {
+    private static final int    ITEM_ID = 2;
+    private static final String IMAGE   = "/images/PotionOfSpeed.gif";
 
-    private static final double BACKFIRE_CHANCE = .01d;
+    private static final double POTION_DURATION = 5d;
+    private static final double POTION_STRENGTH = 1.5d;
 
-    public NukeItem() {
+    public SpeedPotion() {
         super(IMAGE, RandomUtil.getPoint2D(300), new Point2D(2, 2));
     }
 
@@ -35,11 +36,10 @@ public class NukeItem extends Collectable implements IItem {
     }
 
     public void activate() {
-        GameScreen.getLevel().getCurrentRoom().getEntities().forEach(e -> e.damage(e.getHealth()));
+        Player.getPlayer().addSpeedMultiplier(POTION_STRENGTH);
 
-        if (RandomUtil.get() < BACKFIRE_CHANCE) {
-            Player.getPlayer().damage(Player.getPlayer().getHealth());
-        }
+        TimerUtil.schedule(POTION_DURATION,
+                           () -> Player.getPlayer().addSpeedMultiplier(1 / POTION_STRENGTH));
     }
 
     public int getItemID() {

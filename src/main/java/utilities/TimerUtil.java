@@ -17,15 +17,15 @@ public final class TimerUtil {
     /**
      * Schedule an action to run after a delay.
      *
-     * @param delay  the delay for running the action
+     * @param delay  the delay before running the action
      * @param action the action to run
      */
-    public static void schedule(long delay, Runnable action) {
-        TIMER.schedule(new RunnableTimerTask(action), delay);
+    public static void schedule(double delay, Runnable action) {
+        TIMER.schedule(new RunnableTimerTask(action), (long) (delay * 1000d));
     }
 
     /**
-     * Calls an action every frame with a normalized time [0-1].
+     * Calls an action every frame with a parameterized time [0-1].
      * Used for fading effects or changing any value linearly over time.
      *
      * @param totalTime The total time in seconds the timer will run for
@@ -36,7 +36,7 @@ public final class TimerUtil {
     }
 
     /**
-     * Calls an action every frame with a normalized time [0-1] and a finish action once done.
+     * Calls an action every frame with a parameterized time [0-1] and a finish action once done.
      * Used for fading effects or changing any value linearly over time.
      *
      * @param totalTime The total time in seconds the timer will run for
