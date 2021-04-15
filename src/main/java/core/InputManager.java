@@ -10,20 +10,19 @@ import java.util.*;
  * Provides utility for acting on user input in a state based or event driven manner.
  */
 public final class InputManager {
-    private static EnumMap<KeyCode, Boolean> inputState = new EnumMap<>(KeyCode.class);
-
+    private static EnumMap<KeyCode, Boolean>        keyStates = new EnumMap<>(KeyCode.class);
     private static EnumMap<KeyCode, List<Runnable>> keyEvents = new EnumMap<>(KeyCode.class);
 
     // Initializer for setting up inputState
     static {
         for (KeyCode keyCode : KeyCode.values()) {
-            inputState.put(keyCode, false);
+            keyStates.put(keyCode, false);
         }
 
         Stage stage = SceneManager.getStage();
-        stage.addEventFilter(KeyEvent.KEY_RELEASED, key -> inputState.put(key.getCode(), false));
+        stage.addEventFilter(KeyEvent.KEY_RELEASED, key -> keyStates.put(key.getCode(), false));
         stage.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            inputState.put(key.getCode(), true);
+            keyStates.put(key.getCode(), true);
 
             // Run all events assigned to this key
             if (keyEvents.containsKey(key.getCode())) {
@@ -45,7 +44,7 @@ public final class InputManager {
      * @return whether the key is currently pressed
      */
     public static boolean get(KeyCode keyCode) {
-        return inputState.get(keyCode);
+        return keyStates.get(keyCode);
     }
 
     /**
@@ -87,7 +86,7 @@ public final class InputManager {
      * Clears all event handlers for a specific key.
      * Used for event driven input management.
      *
-     * @param keyCode  the key to unsubscribe all events from
+     * @param keyCode the key to unsubscribe all events from
      */
     public static void clearEventHandler(KeyCode keyCode) {
         if (keyEvents.containsKey(keyCode)) {

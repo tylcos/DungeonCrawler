@@ -34,21 +34,20 @@ public final class Player extends Entity {
     /**
      * Initializes the Player singleton
      *
-     * @param image      the path of the image of a main player
+     * @param playerName the name of the main player
      * @param weaponName the name of the weapon the player has
      * @param difficulty the difficulty of the game
      */
-    public static void setPlayer(String image, String weaponName, String difficulty) {
-        player = new Player(image, weaponName, difficulty);
+    public static void setPlayer(String playerName, String weaponName, String difficulty) {
+        player = new Player(weaponName, difficulty);
+        player.name = playerName;
     }
 
-    private Player(String image, String weaponName, String difficulty) {
+    private Player(String weaponName, String difficulty) {
         // Position is overwritten when a new room is loaded
         super("/images/Player.png", Point2D.ZERO, new Point2D(.7, .7));
 
-        // todo: fix weapon damage and price
-        name   = image;
-        weapon = new Weapon(weaponName, 1, 0);
+        weapon = new Weapon("Starting " + weaponName, weaponName, 1, 1d);
 
         switch (difficulty) {
         case "Boring":
@@ -76,7 +75,9 @@ public final class Player extends Entity {
         }
         health = maxHealth;
 
-        entityController = new PlayerEntityController(this, this::getSpeedMultiplier);
+        entityController = new PlayerEntityController(this,
+                                                      this::getSpeedMultiplier,
+                                                      this::getWeapon);
     }
 
     @Override

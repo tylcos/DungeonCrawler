@@ -1,11 +1,13 @@
 package game.entities;
 
-import core.GameEngine;
-import core.InputManager;
+import core.*;
+import game.Weapon;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 /**
  * Player behavior is to move and attack based on the user's input
@@ -19,16 +21,23 @@ public class PlayerEntityController extends EntityController {
     // https://www.desmos.com/calculator/xjyyi5sndo
     private double         inputSmooth = .3d;
 
+    private Supplier<Weapon> weaponSupplier;
+
     /**
      * Create an EntityController to control an entity
      *
      * @param entity          the entity to be controlled
      * @param speedMultiplier a supplier for the speed multiplier
+     * @param weaponSupplier  a supplier for the current weapon
      */
-    public PlayerEntityController(Entity entity, DoubleSupplier speedMultiplier) {
+    public PlayerEntityController(Entity entity, DoubleSupplier speedMultiplier,
+                                  Supplier<Weapon> weaponSupplier) {
         super(entity);
 
         this.speedMultiplier = speedMultiplier;
+        this.weaponSupplier  = weaponSupplier;
+
+        SceneManager.getStage().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> attack());
     }
 
     public void act() {
@@ -60,5 +69,17 @@ public class PlayerEntityController extends EntityController {
 
         double dVelocity = velocity.subtract(entity.getVelocity()).magnitude() / modifiedSpeed;
         entity.setVelocity(dVelocity < .01 ? rawVelocity : velocity);
+    }
+
+    @Override
+    void attack() {
+        Weapon weapon = weaponSupplier.get();
+        switch (weapon.getType()) {
+        case "Bow":
+
+            break;
+        default:
+
+        }
     }
 }

@@ -44,4 +44,11 @@ public abstract class EntityController {
 
         entity.setVelocity(Point2D.ZERO);
     }
+
+    /**
+     * Makes the Entity attack the Player by default.
+     */
+    void attack() {
+        Player.getPlayer().damage(1);
+    }
 }
