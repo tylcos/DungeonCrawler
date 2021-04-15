@@ -6,8 +6,10 @@ import javafx.animation.AnimationTimer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.chart.XYChart;
+import javafx.scene.layout.*;
+import javafx.scene.shape.Circle;
+import views.GameScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ public final class GameEngine {
     private static long           frameCounter;
     private static double         t;
     private static double         dt;
+    private static double         averageFps;
 
     private static final int       RENDER_LAYERS = 4;
     private static       StackPane renderPane;
@@ -59,9 +62,28 @@ public final class GameEngine {
                 dt            = (now - lastFrameTime) * 1e-9d;
                 lastFrameTime = now;
                 t += dt;
+                averageFps += (1d / dt - averageFps) * .1;
 
                 GameEngine.update();
                 frameCounter++;
+
+                // Debug FPS graph
+                if (GameDriver.isDebug()) {
+                    ObservableList<XYChart.Data<Number, Number>> data =
+                            GameScreen.getFpsGraph().getData().get(0).getData();
+
+                    XYChart.Data<Number, Number> point = new XYChart.Data<>(frameCounter % 600,
+                                                                            averageFps);
+                    Region pointRegion = new Region();
+                    pointRegion.setShape(new Circle(0));
+                    point.setNode(pointRegion);
+
+                    if (data.size() >= 600) {
+                        data.set((int) (frameCounter % 600), point);
+                    } else {
+                        data.add(point);
+                    }
+                }
             }
         };
         frameTimer.start();
@@ -79,7 +101,7 @@ public final class GameEngine {
         staticBodies.clear();
         dynamicBodies.clear();
 
-        t = 0;
+        t            = 0;
         frameCounter = 0;
     }
 
