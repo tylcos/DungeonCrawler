@@ -101,4 +101,12 @@ public class Door extends CollidableTile {
     public void setWin() {
         win = true;
     }
+    
+    /**
+     * Checks if touching this door with a key the victory condition.
+     * @return true if this is the victory door
+     */
+    public boolean getWin() {
+        return win;
+    }
 }
