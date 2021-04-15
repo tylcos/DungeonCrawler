@@ -72,20 +72,20 @@ public class Level {
         // List of Collectable constructors, add any new Collectables to be spawned here
         // Each element for any index i, will be spawned collectablesToSpawn[i] times
         List<Supplier<Collectable>> collectables =
-                List.of(Coin:: new, HealthPotion::new, AttackPotion::new, SpeedPotion::new,
-                        NukeItem::new , newWeapon :: new);
+            List.of(Coin::new, HealthPotion::new, AttackPotion::new, SpeedPotion::new,
+                    NukeItem::new, newWeapon::new);
 
         int[] collectablesToSpawn;
         if (spawnItemsInEntrance) {
             collectablesToSpawn = IntStream.generate(() -> 1).limit(collectables.size()).toArray();
         } else {
             collectablesToSpawn = new int[]{
-                    RandomUtil.getInt(1, 5),        // Coin [1,4]
-                    RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn rate
-                    RandomUtil.get() < .25 ? 1 : 0, // Attack Potion 25% spawn rate
-                    RandomUtil.get() < .25 ? 1 : 0, // Speed Potion 25% spawn rate
-                    RandomUtil.get() < .05 ? 1 : 0, // Nuke 5% spawn rate
-                    RandomUtil.get() < 0.5 ? 1 : 0  //  Weapon 50% spawn rate
+                RandomUtil.getInt(1, 5),        // Coin [1,4]
+                RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn rate
+                RandomUtil.get() < .25 ? 1 : 0, // Attack Potion 25% spawn rate
+                RandomUtil.get() < .25 ? 1 : 0, // Speed Potion 25% spawn rate
+                RandomUtil.get() < .05 ? 1 : 0, // Nuke 5% spawn rate
+                RandomUtil.get() < 0.5 ? 1 : 0  //  Weapon 50% spawn rate
             };
         }
 
@@ -109,9 +109,9 @@ public class Level {
             // https://www.desmos.com/calculator/k4ten4ecln
             int difficulty = Player.getPlayer().getDifficulty();
             int[] enemiesToSpawnPerTier = {
-                    RandomUtil.getInt(1, 3 + difficulty),
-                    RandomUtil.getInt(1, 2 + difficulty),
-                    RandomUtil.getInt(0, 1 + difficulty)
+                RandomUtil.getInt(1, 3 + difficulty),
+                RandomUtil.getInt(1, 2 + difficulty),
+                RandomUtil.getInt(0, 1 + difficulty)
             };
 
             // Add enemies to the current room
@@ -155,7 +155,7 @@ public class Level {
         if (currentRoom != null) {
             unloadCurrentRoom();
             fromDir = Direction.vectorToDirection(
-                    currentRoom.getPosition().subtract(newRoom.getPosition()));
+                currentRoom.getPosition().subtract(newRoom.getPosition()));
         }
         currentRoom = newRoom;
 
@@ -270,7 +270,7 @@ public class Level {
                 Room newRoom = new Room(RandomUtil.getRandomRoomBlueprint(), newRoomPos, this,
                                         false, next.from);
                 map[(int) (newRoomPos.getX() + mapOffset)][(int) (newRoomPos.getY() + mapOffset)] =
-                        newRoom;
+                    newRoom;
                 next.door.setDestination(newRoom);
                 newRoom.createDoor(next.dir.opposite(), next.from);
                 if (newRoom.isExit()) {
@@ -398,10 +398,10 @@ public class Level {
     public Room getCurrentRoom() {
         return currentRoom;
     }
-    
+
     /**
      * Returns the map of the level.
-     * 
+     *
      * @return the map of rooms
      */
     public Room[][] getMap() {

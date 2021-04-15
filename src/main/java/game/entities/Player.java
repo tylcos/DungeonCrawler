@@ -1,6 +1,7 @@
 package game.entities;
 
 import core.*;
+import game.Inventory;
 import game.Weapon;
 import game.collectables.Key;
 import game.collidables.Collidable;
@@ -28,6 +29,9 @@ public final class Player extends Entity {
 
     private Key     key;
     private boolean keyActivated;
+    private boolean pressOnce;
+
+    private boolean weaponObtained;
 
     private static TextArea uiInfoText;
 
@@ -39,7 +43,7 @@ public final class Player extends Entity {
      * @param difficulty the difficulty of the game
      */
     public static void setPlayer(String playerName, String weaponName, String difficulty) {
-        player = new Player(weaponName, difficulty);
+        player      = new Player(weaponName, difficulty);
         player.name = playerName;
     }
 
@@ -86,6 +90,16 @@ public final class Player extends Entity {
 
         if (InputManager.get(KeyCode.K)) {
             handleKey();
+        }
+
+        if (InputManager.get(KeyCode.TAB) && weaponObtained) {
+            swapToAxe();
+            Inventory.changeWeapon("images/PlayerAxe.png");
+        }
+
+        if (InputManager.get(KeyCode.Q) && weaponObtained) {
+            swapToSword();
+            Inventory.changeWeapon("images/PlayerSwordAttack.png");
         }
 
         // Used for player movement and eventually attacking
@@ -163,6 +177,32 @@ public final class Player extends Entity {
             keyActivated = true;
             SoundManager.playKeyActivated();
         }
+    }
+
+    /**
+     * change weapon to Axe
+     */
+    public void swapToAxe() {
+        Image axe = new Image("images/PlayerAxe.png");
+        setImage(axe);
+        weapon = new Weapon("Axe", 1, 0);
+        Point2D newScale = new Point2D(5, 5);
+        setScale(newScale);
+    }
+
+    /**
+     * change to weapon to sword
+     */
+    public void swapToSword() {
+        Image sword = new Image("images/PlayerSwordAttack.png");
+        setImage(sword);
+        weapon = new Weapon("Sword", 2, 0);
+        Point2D newScale = new Point2D(5, 5);
+        setScale(newScale);
+    }
+
+    public void setWeaponObtained() {
+        weaponObtained = true;
     }
 
     public void addSpeedMultiplier(double multiplier) {
