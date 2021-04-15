@@ -78,6 +78,7 @@ public class MageEntityController extends EntityController {
         if (useDebugPoints && !debugPoints[0].isRendered() && !stopped) {
             GameEngine.addToLayer(GameEngine.VFX, Arrays.asList(debugPoints));
         }
+
         // Stop the entity if needed
         if (stopped) {
             return;
@@ -104,7 +105,7 @@ public class MageEntityController extends EntityController {
                                + TWO_PI) % TWO_PI;
 
         double dTheta = (currentTheta - previousTheta);
-        if (Math.abs(dTheta) > 1) {
+        if (Math.abs(dTheta) > 3) {
             dTheta = TWO_PI - currentTheta - previousTheta;
         }
         double currentThetaDot = dTheta / GameEngine.getDt();
@@ -138,7 +139,7 @@ public class MageEntityController extends EntityController {
         } else if (state == State.attacking && distance < attackingDistance) {
             state = State.running;
 
-            player.damage(1); // Attack player
+            attack();
         }
 
         // Swarm the Player on death
