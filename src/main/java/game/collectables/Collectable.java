@@ -1,5 +1,6 @@
-package game.collidables;
+package game.collectables;
 
+import game.collidables.Collidable;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 

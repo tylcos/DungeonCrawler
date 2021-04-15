@@ -14,7 +14,13 @@ public final class TimerUtil {
 
     private TimerUtil() { }
 
-    public static void schedule(Runnable action, long delay) {
+    /**
+     * Schedule an action to run after a delay.
+     *
+     * @param delay  the delay for running the action
+     * @param action the action to run
+     */
+    public static void schedule(long delay, Runnable action) {
         TIMER.schedule(new RunnableTimerTask(action), delay);
     }
 

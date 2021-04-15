@@ -1,10 +1,9 @@
 package game.levels;
 
 import core.GameEngine;
-import game.collidables.*;
+import game.collectables.*;
+import game.collidables.Door;
 import game.entities.*;
-import game.potions.AttackPotion;
-import game.potions.HealthPotion;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -73,7 +72,7 @@ public class Level {
         // List of Collectable constructors, add any new Collectables to be spawned here
         // Each element for any index i, will be spawned collectablesToSpawn[i] times
         List<Supplier<Collectable>> collectables =
-                List.of(Coin::new, HealthPotion::new, AttackPotion::new);
+                List.of(Coin::new, HealthPotion::new, AttackPotion::new, NukeItem::new);
 
         int[] collectablesToSpawn;
         if (spawnItemsInEntrance) {
@@ -81,8 +80,9 @@ public class Level {
         } else {
             collectablesToSpawn = new int[]{
                     RandomUtil.getInt(1, 5),        // Coin [1,4]
-                    RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn rate probability
-                    RandomUtil.get() < .25 ? 1 : 0  // Attack Potion 25% spawn rate probability
+                    RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn rate
+                    RandomUtil.get() < .25 ? 1 : 0, // Attack Potion 25% spawn rate
+                    RandomUtil.get() < .05 ? 1 : 0  // Nuke 5% spawn rate
             };
         }
 
@@ -196,7 +196,7 @@ public class Level {
         }
 
         currentRoom.setEffect(GameEffects.ROOM_SHADOW);
-        if (Key.NUM_SPAWNED == 0) {
+        if (Key.getNumSpawned() == 0) {
             exit.addCollectable(new Key());
         }
     }

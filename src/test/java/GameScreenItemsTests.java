@@ -1,28 +1,15 @@
 import core.GameDriver;
 import core.SceneManager;
-import game.Weapon;
-import game.collidables.Coin;
-import game.collidables.Collectable;
-import game.collidables.Item;
-import game.entities.Entity;
+import game.collectables.*;
 import game.entities.Player;
 import game.levels.Level;
-import game.potions.AttackPotion;
-import game.potions.HealthPotion;
-import javafx.event.Event;
-import javafx.geometry.Point2D;
-import javafx.scene.input.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
-import org.testfx.matcher.base.NodeMatchers;
 import views.GameScreen;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-
-import static org.junit.Assert.*;
-import static org.testfx.api.FxAssert.verifyThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GameScreenItemsTests extends ApplicationTest {
 

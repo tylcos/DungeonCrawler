@@ -1,9 +1,8 @@
-package game.potions;
+package game.collectables;
 
 import core.SoundManager;
 import game.IItem;
 import game.Inventory;
-import game.collidables.Collectable;
 import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
