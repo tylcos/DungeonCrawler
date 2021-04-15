@@ -1,4 +1,4 @@
-package data;
+package utilities;
 
 import core.SceneManager;
 import core.ScreenManager;

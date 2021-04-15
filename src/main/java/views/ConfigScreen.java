@@ -2,10 +2,10 @@ package views;
 
 import core.GameDriver;
 import core.SceneManager;
-import data.RandomUtil;
 import game.entities.Player;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import utilities.RandomUtil;
 
 /**
  * FXML controller for player creation screen

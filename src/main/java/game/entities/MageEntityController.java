@@ -1,9 +1,9 @@
 package game.entities;
 
 import core.GameEngine;
-import data.RandomUtil;
 import game.collidables.DebugPoint;
 import javafx.geometry.Point2D;
+import utilities.RandomUtil;
 
 import java.util.Arrays;
 

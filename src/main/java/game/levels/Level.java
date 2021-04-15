@@ -1,8 +1,6 @@
 package game.levels;
 
 import core.GameEngine;
-import data.GameEffects;
-import data.RandomUtil;
 import game.collidables.*;
 import game.entities.*;
 import game.potions.AttackPotion;
@@ -10,6 +8,8 @@ import game.potions.HealthPotion;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import utilities.GameEffects;
+import utilities.RandomUtil;
 
 import java.util.*;
 import java.util.function.Supplier;

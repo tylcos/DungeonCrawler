@@ -1,9 +1,9 @@
 package game.collidables;
 
 import core.SoundManager;
-import data.RandomUtil;
 import game.entities.Player;
 import javafx.geometry.Point2D;
+import utilities.RandomUtil;
 
 /**
  * A coin that the player can collect to increase their money

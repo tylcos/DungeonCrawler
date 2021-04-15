@@ -1,6 +1,5 @@
 package game.levels;
 
-import data.RandomUtil;
 import game.collidables.*;
 import game.entities.Entity;
 import javafx.geometry.Point2D;
@@ -10,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import utilities.RandomUtil;
 
 import java.io.*;
 import java.util.*;

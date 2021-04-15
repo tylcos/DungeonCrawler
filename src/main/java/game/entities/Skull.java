@@ -1,12 +1,12 @@
 package game.entities;
 
 import core.GameEngine;
-import data.RandomUtil;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import utilities.RandomUtil;
 
 /**
  * Skull enemy
