@@ -4,6 +4,7 @@ import core.SoundManager;
 import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
+import utilities.RandomUtil;
 
 public class Key extends Collectable {
     private static int numSpawned;
@@ -13,8 +14,7 @@ public class Key extends Collectable {
      *
      */
     public Key() {
-        //todo: change to random pos
-        super("/images/key.png", new Point2D(100, 50), new Point2D(0.1, 0.1));
+        super("/images/key.png", RandomUtil.getPoint2D(300), new Point2D(0.1, 0.1));
         numSpawned++;
     }
 
