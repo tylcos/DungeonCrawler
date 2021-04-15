@@ -13,6 +13,7 @@ import javafx.geometry.Point2D;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 /**
  * Level generates a random level and manages what is currently loaded on the screen
@@ -75,15 +76,14 @@ public class Level {
                 List.of(Coin::new, HealthPotion::new, AttackPotion::new);
 
         int[] collectablesToSpawn;
-
-        if (!spawnItemsInEntrance) {
+        if (spawnItemsInEntrance) {
+            collectablesToSpawn = IntStream.generate(() -> 1).limit(collectables.size()).toArray();
+        } else {
             collectablesToSpawn = new int[]{
                     RandomUtil.getInt(1, 5),        // Coin [1,4]
                     RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn rate probability
                     RandomUtil.get() < .25 ? 1 : 0  // Attack Potion 25% spawn rate probability
             };
-        } else {
-            collectablesToSpawn = new int[]{1, 1, 1};
         }
 
         // Add collectables to the current room
@@ -116,7 +116,7 @@ public class Level {
                 List<Supplier<Entity>> currentTier = enemies.get(tier);
 
                 for (int i = 0; i < enemiesToSpawnPerTier[tier]; i++) {
-                    int randomIndex = RandomUtil.getInt(currentTier.size());
+                    int    randomIndex  = RandomUtil.getInt(currentTier.size());
                     Entity currentEnemy = currentTier.get(randomIndex).get();
                     room.addEntity(currentEnemy);
                 }
@@ -156,10 +156,10 @@ public class Level {
         }
         currentRoom = newRoom;
 
-//      if (newRoom.isExit()) {
-//          SceneManager.loadScene(SceneManager.END);
-//          return;
-//      }
+        //      if (newRoom.isExit()) {
+        //          SceneManager.loadScene(SceneManager.END);
+        //          return;
+        //      }
 
         if (!currentRoom.isGenerated()) {
             generateGameElements(currentRoom);
@@ -223,7 +223,7 @@ public class Level {
         int x = (int) (from.getPosition().getX() + direction.vector().getX());
         int y = (int) (from.getPosition().getY() + direction.vector().getY());
         boolean valid = x + mapOffset < MAX_DIAMETER && y + mapOffset < MAX_DIAMETER
-                && x + mapOffset >= 0 && y + mapOffset >= 0;
+                        && x + mapOffset >= 0 && y + mapOffset >= 0;
         if (valid && exit != null && map[x + mapOffset][y + mapOffset] == exit) {
             return false;
         }
@@ -265,7 +265,7 @@ public class Level {
             if (existing == null) {
                 Point2D newRoomPos = next.from.getPosition().add(next.dir.vector());
                 Room newRoom = new Room(RandomUtil.getRandomRoomBlueprint(), newRoomPos, this,
-                        false, next.from);
+                                        false, next.from);
                 map[(int) (newRoomPos.getX() + mapOffset)][(int) (newRoomPos.getY() + mapOffset)] =
                         newRoom;
                 next.door.setDestination(newRoom);

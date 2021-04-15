@@ -25,6 +25,8 @@ public class GameScreen {
     @FXML
     private TextArea  uiInfoText;
     @FXML
+    private HBox      hotbar;
+    @FXML
     private StackPane renderPane;
     @FXML
     private Label     version;
@@ -48,6 +50,7 @@ public class GameScreen {
         // Update UI
         Player.setUiInfoText(uiInfoText);
         Level.addUiEventHandler(event -> uiMinimap.setText(level.getMinimapString()));
+        Inventory.setHotbar(hotbar);
 
         // Start Game
         GameEngine.start(renderPane);
