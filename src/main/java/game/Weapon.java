@@ -7,10 +7,21 @@ public class Weapon {
     private String name;
     private String type;
     private int    damage;
-    private double    fireRate;
+    private double fireRate;
 
     /**
-     * Creates an instance of a weapon with the name, damage it does, and its price.
+     * Creates an instance of a weapon with the name, damage it does, and its fire rate.
+     *
+     * @param type     the type of the weapon
+     * @param damage   the damage the weapon does
+     * @param fireRate the fire rate of the weapon
+     */
+    public Weapon(String type, int damage, double fireRate) {
+        this(type, type, damage, fireRate);
+    }
+
+    /**
+     * Creates an instance of a weapon with the name, type, damage it does, and its fire rate.
      *
      * @param name     the name of the weapon
      * @param type     the type of the weapon
