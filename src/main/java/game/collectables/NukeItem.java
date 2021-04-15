@@ -1,13 +1,19 @@
 package game.collectables;
 
+import core.SceneManager;
 import core.SoundManager;
 import game.IItem;
 import game.Inventory;
 import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import utilities.RandomUtil;
 import views.GameScreen;
+
+import java.io.FileInputStream;
 
 /**
  * A Item that kills all enemies and possibly the Player
@@ -36,7 +42,6 @@ public class NukeItem extends Collectable implements IItem {
 
     public void activate() {
         GameScreen.getLevel().getCurrentRoom().getEntities().forEach(e -> e.damage(e.getHealth()));
-
         if (RandomUtil.get() < BACKFIRE_CHANCE) {
             Player.getPlayer().damage(Player.getPlayer().getHealth());
         }
