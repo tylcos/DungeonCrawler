@@ -1,5 +1,6 @@
 package game.levels;
 
+import game.collectables.Collectable;
 import game.collidables.*;
 import game.entities.Entity;
 import javafx.geometry.Point2D;
@@ -47,7 +48,7 @@ public class Room extends GridPane {
     public static final float DISTANCE_TAX  = 0.9f;
 
     // A table to translate between letters in .room files and sprites in game
-    private static final HashMap<Character, Image> spriteTable = new HashMap<>() {
+    private static final HashMap<Character, Image> SPRITE_TABLE = new HashMap<>() {
         {
             put('.', new Image(Room.class.getResource("/images/Floor.png").toString()));
             put('x', new Image(Room.class.getResource("/images/Wall.png").toString()));
@@ -320,7 +321,7 @@ public class Room extends GridPane {
         // Read the blueprint character by character and add the appropriate tiles to the room
         for (int row = 0; row < blueprint.size(); ++row) {
             for (int col = 0; col < blueprint.get(row).length(); ++col) {
-                Image img = spriteTable.get(blueprint.get(row).charAt(col));
+                Image img = SPRITE_TABLE.get(blueprint.get(row).charAt(col));
                 StackPane cell = new StackPane();
                 // By setting min and max size to the same thing, the StackPane will always take
                 // up the same amount of space in the GridPane
@@ -370,13 +371,13 @@ public class Room extends GridPane {
     private void addDoor(Image image, StackPane cell, Direction direction) {
         boolean valid = level.getRoomExistsOrAvailable(this, direction);
         if (!valid) {
-            addWall(spriteTable.get('x'), cell);
+            addWall(SPRITE_TABLE.get('x'), cell);
         } else {
             if (activeDoors[direction.toValue()]) {
                 Room room = level.getRoomIfExists(this, direction);
                 generateDoor(image, cell, direction, room);
             } else {
-                addWall(spriteTable.get('x'), cell);
+                addWall(SPRITE_TABLE.get('x'), cell);
             }
         }
         doors.get(direction).add(cell);
@@ -416,7 +417,7 @@ public class Room extends GridPane {
     private void generateDoor(Image image, StackPane cell, Direction direction, Room destination) {
         if (destination == null && exit) {
             Door door =
-                    new Door(spriteTable.get(Character.toLowerCase(direction.toLetter())), true);
+                    new Door(SPRITE_TABLE.get(Character.toLowerCase(direction.toLetter())), true);
             door.setWin();
             bodies.add(door);
             cell.getChildren().add(door);
@@ -450,7 +451,7 @@ public class Room extends GridPane {
                 bodies.remove(child);
             }
             p.getChildren().clear();
-            Door d = new Door(spriteTable.get(direction.toLetter()), true, to);
+            Door d = new Door(SPRITE_TABLE.get(direction.toLetter()), true, to);
             bodies.add(d);
             p.getChildren().add(d);
         }

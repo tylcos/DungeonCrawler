@@ -1,6 +1,7 @@
-package game.collidables;
+package game.collectables;
 
 import core.SoundManager;
+import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
 import utilities.RandomUtil;
