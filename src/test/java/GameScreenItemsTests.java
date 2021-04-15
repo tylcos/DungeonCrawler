@@ -121,4 +121,54 @@ public class GameScreenItemsTests extends ApplicationTest {
             }
         }
     }
+
+    /**
+     * Test if the weapon item was collected
+     */
+    @Test
+    public void testWeaponItemCollected() {
+        for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
+            if (collectable instanceof newWeapon) {
+                Player.getPlayer().setPosition(collectable.getPosition());
+                sleep(500);
+                assertTrue(collectable.isCollected());
+            }
+        }
+    }
+
+    /**
+     * Test if weapon is changeable after the weapon item collected
+     */
+    @Test
+    public void testWeaponChangedAfterCollected() {
+        for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
+            if (collectable instanceof newWeapon) {
+                Player.getPlayer().setPosition(collectable.getPosition());
+                sleep(500);
+                Player.getPlayer().getWeapon().getName();
+                push(KeyCode.TAB);
+                assertEquals("Axe", Player.getPlayer().getWeapon().getName());
+
+            }
+        }
+    }
+
+    /**
+     * Test if weapon is not changeable until player collect the weapon item.
+     */
+    @Test
+    public void testNoWeaponChange(){
+        for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
+            if (collectable instanceof newWeapon) {
+                Player.getPlayer().getWeapon().getName();
+                push(KeyCode.TAB);
+                assertEquals("Starting Weapon", Player.getPlayer().getWeapon().getName()); 
+            }
+        }
+
+    }
+
+
+
+
 }
