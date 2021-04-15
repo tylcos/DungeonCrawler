@@ -25,6 +25,19 @@ public abstract class Collectable extends Collidable {
     }
 
     /**
+     * Creates an instance of the Collectable object
+     *
+     * @param image    the image of the object
+     * @param position the position of the object
+     * @param scale    the scale of the object
+     */
+    public Collectable(Image image, Point2D position, Point2D scale) {
+        super(image, true);
+        setPosition(position);
+        setScale(scale);
+    }
+
+    /**
      * Gets the isCollected field
      *
      * @return isCollected
@@ -39,7 +52,7 @@ public abstract class Collectable extends Collidable {
     public void setCollected() {
         isCollected = true;
 
-        setImage(new Image("images/Invisible.gif"));
+        setImage(new Image("images/blank.png"));
     }
 
     /**

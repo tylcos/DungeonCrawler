@@ -16,23 +16,23 @@ public abstract class Collidable extends ImageView {
     private boolean isStatic;
 
     /**
-     * Constructor taking an Image.
-     *
-     * @param image    the Image to use
-     * @param isStatic if the body is static or not
-     */
-    public Collidable(Image image, boolean isStatic) {
-        super(image);
-        this.isStatic = isStatic;
-    }
-
-    /**
      * Constructor taking a path to an image.
      *
      * @param image    the path to the image to use
      * @param isStatic if the body is static or not
      */
     public Collidable(String image, boolean isStatic) {
+        super(image);
+        this.isStatic = isStatic;
+    }
+
+    /**
+     * Constructor taking an Image.
+     *
+     * @param image    the Image to use
+     * @param isStatic if the body is static or not
+     */
+    public Collidable(Image image, boolean isStatic) {
         super(image);
         this.isStatic = isStatic;
     }
