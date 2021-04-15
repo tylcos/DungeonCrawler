@@ -24,6 +24,7 @@
                      </input>
                   </InnerShadow>
                </effect></TextArea>
+            <HBox fx:id="hotbar" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" />
             </children>
         </AnchorPane>
         <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" prefHeight="215.0" prefWidth="705.0" StackPane.alignment="BOTTOM_RIGHT">

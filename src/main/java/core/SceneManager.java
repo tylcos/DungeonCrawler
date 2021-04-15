@@ -44,7 +44,8 @@ public final class SceneManager {
         try {
             sceneName = fxmlPath;
 
-            Parent newRoot = FXMLLoader.load(SceneManager.class.getResource(fxmlPath));
+            FXMLLoader fxmlLoader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+            Parent newRoot = fxmlLoader.load();
             scene.setRoot(newRoot);
 
             stage.setScene(scene);

@@ -137,7 +137,9 @@ public class Weapon {
 
     public void addDamageMultiplier(double multiplier) {
         // Rounds (damage * multiplier) to the nearest int
-        damage = (int) (damage * multiplier + .5d);
+        double modifiedDamage = damage * multiplier + .5d;
+
+        damage = modifiedDamage < Integer.MAX_VALUE ? (int) modifiedDamage : Integer.MAX_VALUE;
     }
 
     /**

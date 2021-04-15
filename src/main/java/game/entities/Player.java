@@ -1,22 +1,15 @@
 package game.entities;
 
-import core.GameEngine;
-import core.InputManager;
-import core.SceneManager;
-import core.SoundManager;
+import core.*;
 import data.GameEffects;
 import data.LerpTimer;
 import game.Weapon;
-import game.collidables.Collidable;
-import game.collidables.CollidableTile;
-import game.collidables.Key;
+import game.collidables.*;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.input.MouseEvent;
-
 
 /**
  * Singleton controller for the player
@@ -24,17 +17,17 @@ import javafx.scene.input.MouseEvent;
 public final class Player extends Entity {
     private static Player player;
 
-    private String name;
-    private Weapon weapon;
-    private Key key;
-    private boolean keyActivated = false;
-    private int difficulty;
+    private String  name;
+    private Weapon  weapon;
+    private Key     key;
+    private boolean keyActivated;
+    private int     difficulty;
 
     private int maxHealth;
 
     private static TextArea uiInfoText;
 
-    private  int attackDuration;
+    private int attackDuration;
 
     /**
      * Initializes the Player singleton
@@ -151,13 +144,14 @@ public final class Player extends Entity {
         }
         if (InputManager.get(KeyCode.DIGIT3)) {
             swapToSword();
-        }
+        }*/
+
         if (InputManager.get(KeyCode.R)) {
             switchToNoWeapon();
         }
 
-        attackTime++;*/
-        
+        //attackTime++;
+
         // Used for player movement and eventually attacking
         entityController.act();
     }
@@ -168,7 +162,7 @@ public final class Player extends Entity {
             bounceBack((int) (getVelocity().magnitude() * GameEngine.getDt()), Point2D.ZERO);
         }
         if (other instanceof Key) {
-            this.key = (Key) other;
+            key = (Key) other;
             System.out.println("collected key");
         }
     }
@@ -270,6 +264,7 @@ public final class Player extends Entity {
     public static Player getPlayer() {
         return player;
     }
+
     /**
      * change weapon to Bow
      */
@@ -288,7 +283,7 @@ public final class Player extends Entity {
         setImage(axe);
         weapon = new Weapon("Axe", 1, 0);
         Point2D newScale = new Point2D(5, 5);
-        super.setScale(newScale);
+        setScale(newScale);
     }
 
     /**
@@ -299,7 +294,7 @@ public final class Player extends Entity {
         setImage(sword);
         weapon = new Weapon("Sword", 1, 0);
         Point2D newScale = new Point2D(5, 5);
-        super.setScale(newScale);
+        setScale(newScale);
     }
 
     public void switchToNoWeapon() {
@@ -307,6 +302,6 @@ public final class Player extends Entity {
         Player.getPlayer().setImage(png);
         weapon = new Weapon("weaponName", 0, 0);
         Point2D newScale = new Point2D(5, 5);
-        super.setScale(newScale);
+        setScale(newScale);
     }
 }
