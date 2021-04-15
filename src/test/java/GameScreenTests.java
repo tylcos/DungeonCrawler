@@ -11,9 +11,7 @@ import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import views.GameScreen;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -118,38 +116,41 @@ public class GameScreenTests extends ApplicationTest {
             assertTrue(door);
         }
     }
-    
+
     @Test
     public void testExitDoor() {
-        Room end = GameScreen.getLevel().getExit();
-        int exitDirs = 0;
+        Room end      = GameScreen.getLevel().getExit();
+        int  exitDirs = 0;
         for (Direction dir : Direction.values()) {
-            List<Door> doors = end.getDoors(dir);
-            int numExits = 0;
-            for(Door d : doors) {
+            List<Door> doors    = end.getDoors(dir);
+            int        numExits = 0;
+            for (Door d : doors) {
                 if (d.getWin()) {
                     ++numExits;
                 }
             }
+
             assertTrue(numExits == doors.size() || numExits == 0);
             if (numExits > 0) {
                 ++exitDirs;
             }
         }
-        assertTrue(exitDirs == 1);
+
+        assertEquals(1, exitDirs);
     }
-    
+
     @Test
     public void testNumExits() {
-        Room[][] rooms = GameScreen.getLevel().getMap();
-        int numExit = 0;
+        Room[][] rooms   = GameScreen.getLevel().getMap();
+        int      numExit = 0;
         for (int i = 0; i < rooms.length; ++i) {
             for (int j = 0; j < rooms[i].length; ++j) {
-                if (rooms[i][j].isExit()) {
+                if (rooms[i][j] != null && rooms[i][j].isExit()) {
                     ++numExit;
                 }
             }
         }
-        assertTrue(numExit == 1);
+
+        assertEquals(1, numExit);
     }
 }
