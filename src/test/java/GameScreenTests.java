@@ -1,5 +1,6 @@
 import core.GameDriver;
 import core.SceneManager;
+import game.collidables.Door;
 import game.entities.Player;
 import game.levels.Direction;
 import game.levels.Room;
@@ -12,6 +13,7 @@ import views.GameScreen;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -90,7 +92,7 @@ public class GameScreenTests extends ApplicationTest {
     }
 
     @Test
-    public void testExit() {
+    public void testExitDistance() {
         Room end = GameScreen.getLevel().getExit();
         assertNotNull(end);
 
@@ -115,5 +117,39 @@ public class GameScreenTests extends ApplicationTest {
         for (boolean door : activeDoors) {
             assertTrue(door);
         }
+    }
+    
+    @Test
+    public void testExitDoor() {
+        Room end = GameScreen.getLevel().getExit();
+        int exitDirs = 0;
+        for (Direction dir : Direction.values()) {
+            List<Door> doors = end.getDoors(dir);
+            int numExits = 0;
+            for(Door d : doors) {
+                if (d.getWin()) {
+                    ++numExits;
+                }
+            }
+            assertTrue(numExits == doors.size() || numExits == 0);
+            if (numExits > 0) {
+                ++exitDirs;
+            }
+        }
+        assertTrue(exitDirs == 1);
+    }
+    
+    @Test
+    public void testNumExits() {
+        Room[][] rooms = GameScreen.getLevel().getMap();
+        int numExit = 0;
+        for (int i = 0; i < rooms.length; ++i) {
+            for (int j = 0; j < rooms[i].length; ++j) {
+                if (rooms[i][j].isExit()) {
+                    ++numExit;
+                }
+            }
+        }
+        assertTrue(numExit == 1);
     }
 }
