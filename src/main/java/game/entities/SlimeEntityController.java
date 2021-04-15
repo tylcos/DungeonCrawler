@@ -59,6 +59,11 @@ public class SlimeEntityController extends EntityController {
     }
 
     public void act() {
+        // Spawn debug point for the first time
+        if (useDebugPoints && !debugPoint.isRendered()) {
+            GameEngine.addToLayer(GameEngine.VFX, List.of(debugPoint));
+        }
+
         // Smoothly stop the entity if needed
         if (stopped) {
             entity.setVelocity(entity.getVelocity().interpolate(Point2D.ZERO, .01d));
@@ -69,11 +74,6 @@ public class SlimeEntityController extends EntityController {
         timeSinceRoomLoad += GameEngine.getDt();
         if (state == State.relaxing && timeSinceRoomLoad > 1d) {
             state = State.running;
-        }
-
-        // Spawn debug point for the first time
-        if (useDebugPoints && !debugPoint.isRendered()) {
-            GameEngine.addToLayer(GameEngine.VFX, List.of(debugPoint));
         }
 
         // Bias that follows a Lissajous figure, used for random movement
@@ -99,7 +99,7 @@ public class SlimeEntityController extends EntityController {
         } else if (state == State.attacking && distance < attackingDistance) {
             state = State.running;
 
-            player.damage(1); // Attack player
+            attack();
         }
 
         // Swarm the Player on death

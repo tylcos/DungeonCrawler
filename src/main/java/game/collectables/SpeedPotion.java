@@ -10,14 +10,14 @@ import utilities.RandomUtil;
 import utilities.TimerUtil;
 
 /**
- * A Item that kills all enemies and possibly the Player
+ * A Item that speeds up the Player's movement
  */
 public class SpeedPotion extends Collectable implements IItem {
     private static final int    ITEM_ID = 2;
     private static final String IMAGE   = "/images/PotionOfSpeed.gif";
 
     private static final double POTION_DURATION = 5d;
-    private static final double POTION_STRENGTH = 1.5d;
+    private static final double POTION_STRENGTH = 4d / 3d;
 
     public SpeedPotion() {
         super(IMAGE, RandomUtil.getPoint2D(300), new Point2D(2, 2));

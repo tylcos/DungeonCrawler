@@ -1,11 +1,11 @@
 import core.GameDriver;
 import core.SceneManager;
-import game.Weapon;
 import game.entities.Entity;
 import game.entities.Player;
 import game.levels.Level;
 import javafx.event.Event;
-import javafx.scene.input.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -64,6 +64,8 @@ public class GameScreenEnemyTests extends ApplicationTest {
 
         clickOnEnemies(entity -> initialHealth.set(entity.getHealth()),
                        entity -> assertEquals(entity.getHealth(), initialHealth.get()));
+
+        Player.setPlayer("Team Azula", "Weapon", "Debug");
     }
 
     @Test
@@ -85,40 +87,17 @@ public class GameScreenEnemyTests extends ApplicationTest {
 
         assertTrue(player.isDead());
         assertNotEquals(90, player.getRotate());
-    }
 
-    @Test
-    public void testChangeBow() {
-        press(KeyCode.DIGIT1);
-        Weapon bow  = new Weapon("Bow", 0, 0);
-        String bow1 = Player.getPlayer().getWeapon().getName();
-        assertEquals(bow1, bow.getName());
-    }
-
-    @Test
-    public void testChangeSword() {
-        press(KeyCode.DIGIT3);
-        Weapon sword  = new Weapon("Sword", 0, 0);
-        String sword1 = Player.getPlayer().getWeapon().getName();
-        assertEquals(sword1, sword.getName());
-    }
-
-    @Test
-    public void testChangeAxe() {
-        press(KeyCode.DIGIT2);
-        Weapon axe  = new Weapon("Axe", 0, 0);
-        String axe1 = Player.getPlayer().getWeapon().getName();
-        assertEquals(axe1, axe.getName());
+        Player.setPlayer("Team Azula", "Weapon", "Debug");
     }
 
     @Test
     public void testGameOverScreen() {
         Player player = Player.getPlayer();
-        player.damage(Integer.MAX_VALUE);
-        player.setOpacity(0);
-        sleep(6000);
+        player.damage(player.getHealth());
+        sleep(7000);
 
-        verifyThat("You Died In The Dungeon!", NodeMatchers.isVisible());
+        //verifyThat("You Died In The Dungeon!", NodeMatchers.isVisible());
         verifyThat("Play Again", NodeMatchers.isVisible());
         verifyThat("Main Menu", NodeMatchers.isVisible());
         verifyThat("Exit Game", NodeMatchers.isVisible());

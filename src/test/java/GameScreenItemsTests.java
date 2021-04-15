@@ -1,8 +1,10 @@
 import core.GameDriver;
 import core.SceneManager;
+import game.IItem;
 import game.collectables.*;
 import game.entities.Player;
 import game.levels.Level;
+import javafx.scene.input.KeyCode;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -30,14 +32,15 @@ public class GameScreenItemsTests extends ApplicationTest {
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
             if (collectable instanceof Coin) {
                 Player.getPlayer().setPosition(collectable.getPosition());
-                sleep(2000);
+                sleep(500);
+
                 assertTrue(collectable.isCollected());
             }
         }
     }
 
     /**
-     * Tests if coin added money
+     * Tests if coin adds money when collected
      */
     @Test
     public void testCoinMoneyAdded() {
@@ -45,7 +48,7 @@ public class GameScreenItemsTests extends ApplicationTest {
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
             if (collectable instanceof Coin) {
                 Player.getPlayer().setPosition(collectable.getPosition());
-                sleep(2000);
+                sleep(500);
 
                 // check if money increased from the random value [1, 25]
                 assertTrue(Player.getPlayer().getMoney() > startMoney);
@@ -61,7 +64,7 @@ public class GameScreenItemsTests extends ApplicationTest {
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
             if (collectable instanceof HealthPotion) {
                 Player.getPlayer().setPosition(collectable.getPosition());
-                sleep(2000);
+                sleep(500);
                 assertTrue(collectable.isCollected());
             }
         }
@@ -76,7 +79,9 @@ public class GameScreenItemsTests extends ApplicationTest {
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
             if (collectable instanceof HealthPotion) {
                 Player.getPlayer().setPosition(collectable.getPosition());
-                sleep(2000);
+                sleep(500);
+                press(KeyCode.getKeyCode(String.valueOf(((IItem) collectable).getItemID() + 1)));
+
                 assertEquals(startHealth, Player.getPlayer().getHealth());
             }
         }
@@ -88,9 +93,10 @@ public class GameScreenItemsTests extends ApplicationTest {
     @Test
     public void testAttackPotionCollected() {
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
+            System.out.println(collectable);
             if (collectable instanceof AttackPotion) {
                 Player.getPlayer().setPosition(collectable.getPosition());
-                sleep(2000);
+                sleep(500);
                 assertTrue(collectable.isCollected());
             }
         }
@@ -105,7 +111,9 @@ public class GameScreenItemsTests extends ApplicationTest {
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
             if (collectable instanceof AttackPotion) {
                 Player.getPlayer().setPosition(collectable.getPosition());
-                sleep(1000);
+                sleep(500);
+                push(KeyCode.getKeyCode(String.valueOf(((IItem) collectable).getItemID() + 1)));
+                sleep(500);
                 assertEquals(startWeaponDamage * 2, Player.getPlayer().getWeapon().getDamage());
 
                 sleep(5000); // reset back to normal attack damage after 5 seconds
