@@ -390,10 +390,19 @@ public class Level {
     /**
      * Returns the currently loaded room.
      *
-     * @return the level loaded
+     * @return the room loaded
      */
     public Room getCurrentRoom() {
         return currentRoom;
+    }
+    
+    /**
+     * Returns the map of the level.
+     * 
+     * @return the map of rooms
+     */
+    public Room[][] getMap() {
+        return map;
     }
 
     public static void setSpawnEnemiesInEntrance(boolean spawnEnemiesInEntrance) {
