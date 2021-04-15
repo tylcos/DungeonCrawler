@@ -72,8 +72,8 @@ public class Level {
         // List of Collectable constructors, add any new Collectables to be spawned here
         // Each element for any index i, will be spawned collectablesToSpawn[i] times
         List<Supplier<Collectable>> collectables =
-                List.of(Coin::new, HealthPotion::new, AttackPotion::new, SpeedPotion::new,
-                        NukeItem::new);
+                List.of(Coin:: new, HealthPotion::new, AttackPotion::new, SpeedPotion::new,
+                        NukeItem::new , newWeapon :: new);
 
         int[] collectablesToSpawn;
         if (spawnItemsInEntrance) {
@@ -84,7 +84,8 @@ public class Level {
                     RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn rate
                     RandomUtil.get() < .25 ? 1 : 0, // Attack Potion 25% spawn rate
                     RandomUtil.get() < .25 ? 1 : 0, // Speed Potion 25% spawn rate
-                    RandomUtil.get() < .05 ? 1 : 0  // Nuke 5% spawn rate
+                    RandomUtil.get() < .05 ? 1 : 0, // Nuke 5% spawn rate
+                    RandomUtil.get() < 0.5 ? 1 : 0  //  Weapon 50% spawn rate
             };
         }
 

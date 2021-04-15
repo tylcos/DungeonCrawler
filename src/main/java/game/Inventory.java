@@ -102,7 +102,7 @@ public final class Inventory {
         hotbar.getChildren().clear();
 
         // Add weapon slot
-        weapon = new ImageView(new Image("/images/PlayerBow.gif", 100, 100, true, false));
+        weapon = new ImageView(new Image("images/PlayerSwordAttack.png", 100, 100, true, false));
         VBox column = new VBox(weapon);
         column.setBackground(BACKGROUND);
         hotbar.getChildren().add(column);
