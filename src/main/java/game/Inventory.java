@@ -17,8 +17,6 @@ import java.util.*;
  * Manages the player inventory system.
  */
 public final class Inventory {
-    private static HBox hotbar;
-
     private static ImageView weapon;
 
     // Stores a queue of items for each slot
@@ -31,27 +29,54 @@ public final class Inventory {
 
     private static final Image      BLANK      = new Image("/images/blank.png");
     private static final Background BACKGROUND = new Background(new BackgroundFill(
-            Color.gray(1d, .3d),
+            Color.gray(.5d, .7d),
             new CornerRadii(20),
             Insets.EMPTY));
 
     private Inventory() { }
 
-    public static void addItem(IItem item) {
-        items.get(item.getItemID()).add(item);
-
-        updateHotbarUI(item.getItemID());
+    public static void changeWeapon(String weaponPath) {
+        weapon.setImage(new Image(weaponPath, 100, 100, true, false));
     }
 
+    /**
+     * Add a collected item to the inventory
+     *
+     * @param item the item to add
+     */
+    public static void addItem(IItem item) {
+        int          slotIndex   = item.getItemID();
+        Queue<IItem> currentSlot = items.get(slotIndex);
+
+        currentSlot.add(item);
+
+        // Only update image if the slot was empty
+        if (currentSlot.size() == 1) {
+            updateSlot(slotIndex);
+        }
+
+        itemCounters.get(slotIndex).setText(String.valueOf(currentSlot.size()));
+    }
+
+    /**
+     * Remove an item from a specific slot
+     *
+     * @param slotIndex the index of the slot to remove from
+     */
     public static void removeItem(int slotIndex) {
         if (!items.get(slotIndex).isEmpty()) {
             items.get(slotIndex).remove().activate();
 
-            updateHotbarUI(slotIndex);
+            updateSlot(slotIndex);
         }
     }
 
-    private static void updateHotbarUI(int index) {
+    /**
+     * Update the image and text for a specific slot
+     *
+     * @param index the index of the slot to update
+     */
+    private static void updateSlot(int index) {
         Queue<IItem> currentSlot = items.get(index);
 
         if (currentSlot.isEmpty()) {
@@ -66,12 +91,28 @@ public final class Inventory {
         }
     }
 
-    public static void setHotbar(HBox hotbar) {
-        Inventory.hotbar = hotbar;
-
+    /**
+     * Sets up hotbar slots and text
+     *
+     * @param hotbar hotbar from the scene
+     */
+    public static void initializeInventory(HBox hotbar) {
         // Setup slots
         items.clear();
         hotbar.getChildren().clear();
+
+        // Add weapon slot
+        weapon = new ImageView(new Image("/images/PlayerBow.gif", 100, 100, true, false));
+        VBox column = new VBox(weapon);
+        column.setBackground(BACKGROUND);
+        hotbar.getChildren().add(column);
+
+        // Add spacer between weapon and collectable
+        Region spacer = new Region();
+        spacer.setMinWidth(50);
+        hotbar.getChildren().add(spacer);
+
+        // Add collectable slots
         for (int i = 0; i < 4; i++) {
             items.add(new LinkedList<>());
 
@@ -80,16 +121,17 @@ public final class Inventory {
             itemCounters.add(new Label(EMPTY_ITEM_TEXT));
             itemCounters.get(i).setFont(new Font(20));
 
-            VBox column = new VBox(itemImages.get(i), itemCounters.get(i));
+            column = new VBox(itemImages.get(i), itemCounters.get(i));
             column.setAlignment(Pos.CENTER);
             column.setPadding(new Insets(10));
             column.setBackground(BACKGROUND);
             hotbar.getChildren().add(column);
 
-            // Setup key events for 1-4
+            // Setup activating the collectables by pressing 1-4 or by clicking on them
             final int finalI  = i;
             KeyCode   keyCode = KeyCode.getKeyCode(String.valueOf(i + 1));
             InputManager.setEventHandler(keyCode, () -> removeItem(finalI));
+            column.setOnMouseClicked(event -> removeItem(finalI));
         }
     }
 }

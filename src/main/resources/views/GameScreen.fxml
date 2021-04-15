@@ -9,11 +9,11 @@
 <StackPane id="Top" fx:id="top" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GameScreen">
     <children>
         <StackPane fx:id="renderPane" />
-        <AnchorPane mouseTransparent="true" StackPane.alignment="CENTER">
+        <AnchorPane StackPane.alignment="CENTER">
             <children>
-                <TextArea fx:id="uiInfoText" editable="false" minHeight="500.0" minWidth="500.0" styleClass="uiInfoText" text="Player Info&#10;Test&#10;Test&#10;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <TextArea fx:id="uiInfoText" editable="false" minHeight="500.0" minWidth="500.0" mouseTransparent="true" styleClass="uiInfoText" text="Player Info&#10;Test&#10;Test&#10;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                 </TextArea>
-                <TextArea fx:id="uiMinimap" editable="false" minHeight="500.0" minWidth="500.0" styleClass="minimap" text="minimap&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <TextArea fx:id="uiMinimap" editable="false" minHeight="500.0" minWidth="500.0" mouseTransparent="true" styleClass="minimap" text="minimap&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <effect>
                   <InnerShadow choke="0.5" height="20.0" radius="9.5" width="20.0">
                      <color>

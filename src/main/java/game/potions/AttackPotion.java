@@ -2,15 +2,13 @@ package game.potions;
 
 import core.SoundManager;
 import data.RandomUtil;
+import data.TimerUtil;
 import game.IItem;
 import game.Inventory;
 import game.collidables.Collectable;
 import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * An attack potion that increases the player's weapon damage by a factor of 2.
@@ -43,7 +41,9 @@ public class AttackPotion extends Collectable implements IItem {
 
     public void activate() {
         Player.getPlayer().getWeapon().addDamageMultiplier(POTION_STRENGTH);
-        new Timer().schedule(new EndPotionEffect(), POTION_DURATION);
+        TimerUtil.schedule(() -> Player.getPlayer().getWeapon()
+                                         .addDamageMultiplier(1 / POTION_STRENGTH),
+                           POTION_DURATION);
     }
 
     public int getItemID() {
@@ -52,12 +52,5 @@ public class AttackPotion extends Collectable implements IItem {
 
     public String getItemImage() {
         return IMAGE;
-    }
-
-    private static class EndPotionEffect extends TimerTask {
-        @Override
-        public void run() {
-            Player.getPlayer().getWeapon().addDamageMultiplier(1 / POTION_STRENGTH);
-        }
     }
 }

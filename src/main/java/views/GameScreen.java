@@ -50,7 +50,11 @@ public class GameScreen {
         // Update UI
         Player.setUiInfoText(uiInfoText);
         Level.addUiEventHandler(event -> uiMinimap.setText(level.getMinimapString()));
-        Inventory.setHotbar(hotbar);
+        Inventory.initializeInventory(hotbar);
+
+        if (GameDriver.isDebug()) {
+            addFPSGraph();
+        }
 
         // Start Game
         GameEngine.start(renderPane);
@@ -61,8 +65,17 @@ public class GameScreen {
         // Blurs the screen on scene load
         top.setEffect(GameEffects.GAME_BLUR);
         new LerpTimer(1, t -> GameEffects.GAME_BLUR.setRadius(20 * (1 - t)));
+    }
 
-        // Adds debug FPS graph
+    public static Level getLevel() {
+        return level;
+    }
+
+    public static LineChart<Number, Number> getFpsGraph() {
+        return fpsGraph;
+    }
+
+    private void addFPSGraph() {
         NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Frame Number");
         xAxis.setUpperBound(600);
@@ -86,13 +99,5 @@ public class GameScreen {
 
         // Press F1 to show FPS graph
         InputManager.setEventHandler(KeyCode.F1, () -> fpsGraph.setVisible(!fpsGraph.isVisible()));
-    }
-
-    public static Level getLevel() {
-        return level;
-    }
-
-    public static LineChart<Number, Number> getFpsGraph() {
-        return fpsGraph;
     }
 }

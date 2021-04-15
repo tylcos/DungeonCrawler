@@ -68,21 +68,8 @@ public final class GameEngine {
                 frameCounter++;
 
                 // Debug FPS graph
-                if (GameDriver.isDebug()) {
-                    ObservableList<XYChart.Data<Number, Number>> data =
-                            GameScreen.getFpsGraph().getData().get(0).getData();
-
-                    XYChart.Data<Number, Number> point = new XYChart.Data<>(frameCounter % 600,
-                                                                            averageFps);
-                    Region pointRegion = new Region();
-                    pointRegion.setShape(new Circle(0));
-                    point.setNode(pointRegion);
-
-                    if (data.size() >= 600) {
-                        data.set((int) (frameCounter % 600), point);
-                    } else {
-                        data.add(point);
-                    }
+                if (GameDriver.isDebug() && GameScreen.getFpsGraph().isVisible()) {
+                    updateFPSGraph();
                 }
             }
         };
@@ -306,6 +293,23 @@ public final class GameEngine {
                 collidable.onCollision(target);
                 target.onCollision(collidable);
             }
+        }
+    }
+
+    private static void updateFPSGraph() {
+        ObservableList<XYChart.Data<Number, Number>> data =
+                GameScreen.getFpsGraph().getData().get(0).getData();
+
+        XYChart.Data<Number, Number> point = new XYChart.Data<>(frameCounter % 600,
+                                                                averageFps);
+        Region pointRegion = new Region();
+        pointRegion.setShape(new Circle(0));
+        point.setNode(pointRegion);
+
+        if (data.size() >= 600) {
+            data.set((int) (frameCounter % 600), point);
+        } else {
+            data.add(point);
         }
     }
 }
