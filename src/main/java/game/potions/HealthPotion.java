@@ -1,13 +1,13 @@
 package game.potions;
 
 import core.SoundManager;
-import data.RandomUtil;
 import game.IItem;
 import game.Inventory;
 import game.collidables.Collectable;
 import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
+import utilities.RandomUtil;
 
 /**
  * A health potion that allows the player to regain two HP.

@@ -1,8 +1,6 @@
 package views;
 
 import core.*;
-import data.GameEffects;
-import data.LerpTimer;
 import game.Inventory;
 import game.entities.Player;
 import game.levels.Level;
@@ -13,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import utilities.GameEffects;
+import utilities.TimerUtil;
 
 /**
  * FXML controller for the main game screen
@@ -64,7 +64,7 @@ public class GameScreen {
 
         // Blurs the screen on scene load
         top.setEffect(GameEffects.GAME_BLUR);
-        new LerpTimer(1, t -> GameEffects.GAME_BLUR.setRadius(20 * (1 - t)));
+        TimerUtil.lerp(1, t -> GameEffects.GAME_BLUR.setRadius(20 * (1 - t)));
     }
 
     public static Level getLevel() {

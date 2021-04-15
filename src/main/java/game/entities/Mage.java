@@ -2,12 +2,12 @@ package game.entities;
 
 import core.GameEngine;
 import core.SoundManager;
-import data.RandomUtil;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import utilities.RandomUtil;
 
 /**
  * Mage enemy
