@@ -5,7 +5,6 @@ import core.SoundManager;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import utilities.RandomUtil;
 
@@ -17,9 +16,9 @@ public class Mage extends Entity {
      * Creates an instance of Mage.
      */
     public Mage() {
-        super(new Image("/images/skeleton2_v2_1.png", 100, 100, true, false),
+        super("/images/skeleton2_v2_1.png",
               RandomUtil.getPoint2D(300),
-              new Point2D(1, 1));
+              new Point2D(100, 100));
 
         health = 5;
         money  = 40;

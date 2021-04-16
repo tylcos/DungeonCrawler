@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
  */
 public class Level {
     public static final int MAX_DIAMETER     = 15; // Width/height of map. ODD NUMBERS ONLY
-    public static final int MIN_END_DISTANCE = 6;  // Minimum distance away the exit must be
+    public static final int MIN_END_DISTANCE = 1;  // Minimum distance away the exit must be
 
     /* CHEATS */
     private static boolean spawnEnemiesInEntrance;
@@ -77,7 +77,7 @@ public class Level {
         // Each element for any index i, will be spawned collectablesToSpawn[i] times
         List<Supplier<Collectable>> collectables =
             List.of(Coin::new, HealthPotion::new, AttackPotion::new, SpeedPotion::new,
-                    NukeItem::new, newWeapon::new);
+                    NukeItem::new, WeaponItem::new);
 
         int[] collectablesToSpawn;
         if (spawnItemsInEntrance) {
@@ -345,6 +345,8 @@ public class Level {
                     line1.append("S ");
                 } else if (room.isExit()) {
                     line1.append("X ");
+                } else if (room.isChallenge()) {
+                    line1.append("L ");
                 } else {
                     line1.append("O ");
                 }

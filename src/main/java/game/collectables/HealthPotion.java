@@ -19,7 +19,7 @@ public class HealthPotion extends Collectable implements IItem {
      * Creates an instance of a health potion placed randomly within the room. 25% spawn rate.
      */
     public HealthPotion() {
-        super(IMAGE, RandomUtil.getPoint2D(300), new Point2D(2, 2));
+        super(IMAGE, RandomUtil.getPoint2D(300), new Point2D(64, 64));
     }
 
     @Override

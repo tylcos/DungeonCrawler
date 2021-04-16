@@ -9,12 +9,12 @@ import utilities.RandomUtil;
 /**
  * A coin that the player can collect to increase their money
  */
-public class newWeapon extends Collectable {
+public class WeaponItem extends Collectable {
     /**
      * Creates an instance of a items placed randomly within the room.
      */
-    public newWeapon() {
-        super("/images/sword.gif", RandomUtil.getPoint2D(300), new Point2D(2, 2));
+    public WeaponItem() {
+        super("/images/sword.gif", RandomUtil.getPoint2D(300), new Point2D(64, 64));
     }
 
     @Override
