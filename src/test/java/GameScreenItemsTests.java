@@ -124,6 +124,7 @@ public class GameScreenItemsTests extends ApplicationTest {
 
     /**
 <<<<<<< HEAD
+<<<<<<< HEAD
      * Test if the weapon item was collected
      */
     @Test
@@ -163,20 +164,20 @@ public class GameScreenItemsTests extends ApplicationTest {
             if (collectable instanceof newWeapon) {
                 Player.getPlayer().getWeapon().getName();
                 push(KeyCode.TAB);
-                assertEquals("Starting Weapon", Player.getPlayer().getWeapon().getName()); 
+                assertEquals("Starting Weapon", Player.getPlayer().getWeapon().getName());
             }
         }
 
     }
     /**
+
      * Tests if a potion can be used from the inventory
      */
     @Test
     public void testInventoryUsingItem() {
         int startWeaponDamage = Player.getPlayer().getWeapon().getDamage();
-
         AttackPotion attackPotion = new AttackPotion();
-        attackPotion.onCollision(Player.getPlayer());
+        attackPotion.activate();
 
         push(KeyCode.getKeyCode(String.valueOf(attackPotion.getItemID() + 1)));
         assertEquals(startWeaponDamage * 2, Player.getPlayer().getWeapon().getDamage());
