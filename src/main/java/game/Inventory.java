@@ -20,19 +20,19 @@ public final class Inventory {
     private static ImageView weapon;
 
     // Stores a queue of items for each slot
-    private static List<Queue<IItem>> items        = new ArrayList<>(4);
+    private static List<Queue<IItem>> items;
     // The current displayed item image
-    private static List<ImageView>    itemImages   = new ArrayList<>(4);
-    private static List<Label>        itemCounters = new ArrayList<>(4);
+    private static List<ImageView>    itemImages;
+    private static List<Label>        itemCounters;
     //tewstskndasnklsandkladklasn
 
     private static final String EMPTY_ITEM_TEXT = "";
 
     private static final Image      BLANK      = new Image("/images/blank.png");
     private static final Background BACKGROUND = new Background(new BackgroundFill(
-            Color.gray(.5d, .7d),
-            new CornerRadii(20),
-            Insets.EMPTY));
+        Color.gray(.5d, .7d),
+        new CornerRadii(20),
+        Insets.EMPTY));
 
     private Inventory() { }
 
@@ -99,7 +99,9 @@ public final class Inventory {
      */
     public static void initializeInventory(HBox hotbar) {
         // Setup slots
-        items.clear();
+        items        = new ArrayList<>(4);
+        itemImages   = new ArrayList<>(4);
+        itemCounters = new ArrayList<>(4);
         hotbar.getChildren().clear();
 
         // Add weapon slot

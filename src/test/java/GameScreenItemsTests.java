@@ -157,7 +157,7 @@ public class GameScreenItemsTests extends ApplicationTest {
      * Test if weapon is not changeable until player collect the weapon item.
      */
     @Test
-    public void testNoWeaponChange(){
+    public void testNoWeaponChange() {
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
             if (collectable instanceof WeaponItem) {
                 Player.getPlayer().getWeapon().getName();
@@ -173,8 +173,8 @@ public class GameScreenItemsTests extends ApplicationTest {
      */
     @Test
     public void testInventoryUsingItem() {
-        int startWeaponDamage = Player.getPlayer().getWeapon().getDamage();
-        AttackPotion attackPotion = new AttackPotion();
+        int          startWeaponDamage = Player.getPlayer().getWeapon().getDamage();
+        AttackPotion attackPotion      = new AttackPotion();
         attackPotion.activate();
 
         push(KeyCode.getKeyCode(String.valueOf(attackPotion.getItemID() + 1)));
