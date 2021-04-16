@@ -13,10 +13,14 @@ import java.nio.file.Paths;
  */
 public final class SoundManager {
     private static double volume = 1d;
+    private static boolean soundOn = true;
 
     private SoundManager() { }
 
     private static void playSound(String audioPath, int duration) {
+        if (!soundOn) {
+            return;
+        }
         MediaPlayer mediaPlayer =
                 new MediaPlayer(new Media(Paths.get(audioPath).toUri().toString()));
 
@@ -24,6 +28,10 @@ public final class SoundManager {
         mediaPlayer.setVolume(volume);
         mediaPlayer.play();
         mediaPlayer.setStopTime(new Duration(duration));
+    }
+
+    public static void turnSoundOff() {
+        soundOn = false;
     }
 
     public static void playDoorCreak() {
