@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
  */
 public class Level {
     public static final int MAX_DIAMETER     = 15; // Width/height of map. ODD NUMBERS ONLY
-    public static final int MIN_END_DISTANCE = 6;  // Minimum distance away the exit must be
+    public static final int MIN_END_DISTANCE = 1;  // Minimum distance away the exit must be
 
     /* CHEATS */
     private static boolean spawnEnemiesInEntrance;
