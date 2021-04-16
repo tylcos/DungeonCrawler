@@ -73,7 +73,7 @@ public class Level {
         // Each element for any index i, will be spawned collectablesToSpawn[i] times
         List<Supplier<Collectable>> collectables =
             List.of(Coin::new, HealthPotion::new, AttackPotion::new, SpeedPotion::new,
-                    NukeItem::new, newWeapon::new);
+                    NukeItem::new, WeaponItem::new);
 
         int[] collectablesToSpawn;
         if (spawnItemsInEntrance) {

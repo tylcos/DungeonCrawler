@@ -4,7 +4,6 @@ import core.GameEngine;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import utilities.RandomUtil;
 
@@ -16,9 +15,9 @@ public class Skull extends Entity {
      * Creates an instance of Skull.
      */
     public Skull() {
-        super(new Image("/images/skull_v2_3.png", 80, 80, true, false),
+        super("/images/skull_v2_3.png",
               RandomUtil.getPoint2D(300),
-              new Point2D(1, 1));
+              new Point2D(80, 80));
 
         health = 2;
         money  = 10;
