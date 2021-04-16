@@ -1,7 +1,6 @@
 package game.levels;
 
 import core.GameEngine;
-import core.SoundManager;
 import game.collectables.*;
 import game.collidables.Door;
 import game.entities.*;
@@ -67,9 +66,6 @@ public class Level {
         if (!spawnEnemiesInEntrance && !spawnItemsInEntrance && room.isEntrance()) {
             return;
         }
-
-        setDoorsNeverLock(true);
-        SoundManager.turnSoundOff();
 
         // Add Collectables
 
