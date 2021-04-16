@@ -341,6 +341,8 @@ public class Level {
                     line1.append("S ");
                 } else if (room.isExit()) {
                     line1.append("X ");
+                } else if (room.isChallenge()) {
+                    line1.append("L ");
                 } else {
                     line1.append("O ");
                 }
