@@ -88,7 +88,7 @@ public class Level {
                 RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn chance
                 RandomUtil.get() < .25 ? 1 : 0, // Attack Potion 25% spawn chance
                 RandomUtil.get() < .25 ? 1 : 0, // Speed Potion 25% spawn chance
-                RandomUtil.get() < .05 ? 1 : 0, // Nuke 5% spawn chance
+                RandomUtil.get() < .10 ? 1 : 0, // Nuke 10% spawn chance
                 RandomUtil.get() < .50 ? 1 : 0  // Weapon 50% spawn chance
             };
         }
@@ -360,10 +360,12 @@ public class Level {
                         line1.setCharAt((x - leftBound) * 2 + 1, '\u2015');
                     }
                 } else {
-                    if (info[Direction.NORTH.toValue()] && room.getSourceDirection() == Direction.NORTH) {
+                    if (info[Direction.NORTH.toValue()]
+                        && room.getSourceDirection() == Direction.NORTH) {
                         line2.setCharAt((x - leftBound) * 2, '|');
                     }
-                    if (info[Direction.EAST.toValue()] && room.getSourceDirection() == Direction.EAST) {
+                    if (info[Direction.EAST.toValue()]
+                        && room.getSourceDirection() == Direction.EAST) {
                         line1.setCharAt((x - leftBound) * 2 + 1, '\u2015');
                     }
                 }

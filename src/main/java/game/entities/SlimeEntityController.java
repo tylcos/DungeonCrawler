@@ -5,8 +5,6 @@ import game.collidables.DebugPoint;
 import javafx.geometry.Point2D;
 import utilities.RandomUtil;
 
-import java.util.List;
-
 /**
  * Defines the Slime AI.
  *
@@ -61,7 +59,7 @@ public class SlimeEntityController extends EntityController {
     public void act() {
         // Spawn debug point for the first time
         if (useDebugPoints && !debugPoint.isRendered()) {
-            GameEngine.addToLayer(GameEngine.VFX, List.of(debugPoint));
+            GameEngine.addToLayer(GameEngine.VFX, debugPoint);
         }
 
         // Smoothly stop the entity if needed
@@ -139,7 +137,7 @@ public class SlimeEntityController extends EntityController {
         stopped = true;
 
         if (useDebugPoints) {
-            GameEngine.removeFromLayer(GameEngine.VFX, List.of(debugPoint));
+            GameEngine.removeFromLayer(GameEngine.VFX, debugPoint);
         }
     }
 }

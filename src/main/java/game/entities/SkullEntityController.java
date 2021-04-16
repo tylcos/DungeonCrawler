@@ -5,8 +5,6 @@ import game.collidables.DebugPoint;
 import javafx.geometry.Point2D;
 import utilities.RandomUtil;
 
-import java.util.List;
-
 /**
  * Defines the Skull AI.
  *
@@ -72,7 +70,7 @@ public class SkullEntityController extends EntityController {
 
         // Spawn debug point for the first time
         if (useDebugPoints && !debugPoint.isRendered() && !stopped) {
-            GameEngine.addToLayer(GameEngine.VFX, List.of(debugPoint));
+            GameEngine.addToLayer(GameEngine.VFX, debugPoint);
         }
 
         // Bias that follows a Lissajous figure, used for random movement
@@ -143,7 +141,7 @@ public class SkullEntityController extends EntityController {
         stopped = true;
 
         if (useDebugPoints) {
-            GameEngine.removeFromLayer(GameEngine.VFX, List.of(debugPoint));
+            GameEngine.removeFromLayer(GameEngine.VFX, debugPoint);
         }
     }
 }
