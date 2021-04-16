@@ -2,7 +2,6 @@ package core;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 
 import java.nio.file.Paths;
 
@@ -12,7 +11,7 @@ import java.nio.file.Paths;
  * kinda spotty sometimes, but we can add more as we go.
  */
 public final class SoundManager {
-    private static double volume = 1d;
+    private static double  volume  = .1d;
     private static boolean soundOn = true;
 
     private SoundManager() { }
@@ -22,12 +21,11 @@ public final class SoundManager {
             return;
         }
         MediaPlayer mediaPlayer =
-                new MediaPlayer(new Media(Paths.get(audioPath).toUri().toString()));
+            new MediaPlayer(new Media(Paths.get(audioPath).toUri().toString()));
 
         mediaPlayer.setRate(1.5d);
         mediaPlayer.setVolume(volume);
         mediaPlayer.play();
-        mediaPlayer.setStopTime(new Duration(duration));
     }
 
     public static void turnSoundOff() {

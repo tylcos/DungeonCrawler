@@ -1,12 +1,14 @@
 package game.collectables;
 
-import core.SoundManager;
+import core.*;
 import game.IItem;
 import game.Inventory;
 import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
+import javafx.scene.image.ImageView;
 import utilities.RandomUtil;
+import utilities.TimerUtil;
 import views.GameScreen;
 
 /**
@@ -39,6 +41,16 @@ public class NukeItem extends Collectable implements IItem {
         if (RandomUtil.get() < BACKFIRE_CHANCE) {
             Player.getPlayer().damage(Player.getPlayer().getHealth());
         }
+
+        ImageView blast = new ImageView("/images/nukeImage.gif");
+        blast.setScaleX(ScreenManager.getScale());
+        blast.setScaleY(ScreenManager.getScale());
+        blast.setTranslateX(RandomUtil.get(-200, 200));
+        blast.setTranslateY(RandomUtil.get(-200, 200));
+
+        GameEngine.addToLayer(GameEngine.VFX, blast);
+        TimerUtil.lerp(5d, t -> blast.setOpacity(1 - t),
+                       () -> GameEngine.removeFromLayer(GameEngine.VFX, blast));
     }
 
     public int getItemID() {
