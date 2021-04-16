@@ -195,10 +195,12 @@ public class Room extends GridPane {
             double heightR = ((lines.size() - 3) / 2.0) * CELL_SIZE;
             double widthR = ((lines.get(0).length() - 3) / 2.0) * CELL_SIZE;
             EnumMap<Direction, Point2D> dOffset = new EnumMap<Direction, Point2D>(Direction.class);
-            dOffset.put(Direction.NORTH, new Point2D(0, -heightR));
-            dOffset.put(Direction.EAST, new Point2D(widthR, 0));
-            dOffset.put(Direction.SOUTH, new Point2D(0, heightR));
-            dOffset.put(Direction.WEST, new Point2D(-widthR, 0));
+            // TODO CELL_SIZE is added an additional time because the player's sprite can be extra
+            // wide if they have a sword equipped
+            dOffset.put(Direction.NORTH, new Point2D(0, -heightR + (CELL_SIZE * 0.5)));
+            dOffset.put(Direction.EAST, new Point2D(widthR - (CELL_SIZE * 0.5), 0));
+            dOffset.put(Direction.SOUTH, new Point2D(0, heightR - (CELL_SIZE * 0.5)));
+            dOffset.put(Direction.WEST, new Point2D(-widthR + (CELL_SIZE * 0.5), 0));
             doorOffsets = dOffset;
             // Add file to cache.
             fileCache.put(name, lines);
