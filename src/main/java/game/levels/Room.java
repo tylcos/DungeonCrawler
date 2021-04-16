@@ -76,6 +76,7 @@ public class Room extends GridPane {
     private Point2D position;                   // The position of this room in the level
     private boolean exit;                       // Whether this room is the exit
     private boolean entrance;                   // Whether this room is the entrance
+    private boolean challenge;                  // Whether this room is a challenge room
     private boolean generated;                  // Whether this room has had game elements generated
     private int     distanceFromEntrance = 999; // # of doorways separating this room from the
     // entrance
@@ -479,6 +480,22 @@ public class Room extends GridPane {
             }
         }
     }
+    
+    /**
+     * Lock all doors.
+     */
+    public void lockDoors() {
+        for (Direction dir : Direction.values()) {
+            ArrayList<StackPane> doorList = doors.get(dir);
+            for (StackPane p : doorList) {
+                Node node = p.getChildren().get(0); // the only child should be a door
+                if (node instanceof Door) {
+                    Door door = (Door) node;
+                    door.lock();
+                }
+            }
+        }
+    }
 
     /**
      * Unlock all doors.
@@ -594,6 +611,16 @@ public class Room extends GridPane {
      */
     public boolean isEntrance() {
         return entrance;
+    }
+    
+
+    /**
+     * Whether this room is a challenge room.
+     * 
+     * @return true if this room is a challenge room
+     */
+    public boolean isChallenge() {
+        return challenge;
     }
 
     /**
