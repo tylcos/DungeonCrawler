@@ -10,19 +10,17 @@ import javafx.scene.image.Image;
 public abstract class Collectable extends Collidable {
     protected boolean isCollected;
     protected Point2D position;
-    protected Point2D scale;
 
     /**
      * Creates an instance of the Collectable object
      *
-     * @param imagePath the path of the image of the object
-     * @param position  the position of the object
-     * @param scale     the scale of the object
+     * @param imagePath  the path of the image of the object
+     * @param position   the position of the object
+     * @param dimensions the dimensions of the object
      */
-    public Collectable(String imagePath, Point2D position, Point2D scale) {
-        super(imagePath, true);
+    public Collectable(String imagePath, Point2D position, Point2D dimensions) {
+        super(new Image(imagePath, dimensions.getX(), dimensions.getY(), false, false), true);
         setPosition(position);
-        setScale(scale);
     }
 
     /**
@@ -30,12 +28,10 @@ public abstract class Collectable extends Collidable {
      *
      * @param image    the image of the object
      * @param position the position of the object
-     * @param scale    the scale of the object
      */
-    public Collectable(Image image, Point2D position, Point2D scale) {
+    public Collectable(Image image, Point2D position) {
         super(image, true);
         setPosition(position);
-        setScale(scale);
     }
 
     /**
@@ -75,26 +71,5 @@ public abstract class Collectable extends Collidable {
 
         setTranslateX(position.getX());
         setTranslateY(position.getY());
-    }
-
-    /**
-     * Gets the scaling of the Collectable.
-     *
-     * @return the current scale
-     */
-    public Point2D getScale() {
-        return scale;
-    }
-
-    /**
-     * Sets the scaling of the Collectable.
-     *
-     * @param scale the new scale
-     */
-    public void setScale(Point2D scale) {
-        this.scale = scale;
-
-        setScaleX(scale.getX());
-        setScaleY(scale.getY());
     }
 }

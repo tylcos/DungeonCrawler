@@ -20,7 +20,7 @@ public class SpeedPotion extends Collectable implements IItem {
     private static final double POTION_STRENGTH = 4d / 3d;
 
     public SpeedPotion() {
-        super(IMAGE, RandomUtil.getPoint2D(300), new Point2D(2, 2));
+        super(IMAGE, RandomUtil.getPoint2D(300), new Point2D(64, 64));
     }
 
     @Override

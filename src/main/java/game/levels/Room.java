@@ -76,6 +76,7 @@ public class Room extends GridPane {
     private Point2D position;                   // The position of this room in the level
     private boolean exit;                       // Whether this room is the exit
     private boolean entrance;                   // Whether this room is the entrance
+    private boolean challenge;                  // Whether this room is a challenge room
     private boolean generated;                  // Whether this room has had game elements generated
     private int     distanceFromEntrance = 999; // # of doorways separating this room from the
     // entrance
@@ -195,10 +196,12 @@ public class Room extends GridPane {
             double heightR = ((lines.size() - 3) / 2.0) * CELL_SIZE;
             double widthR = ((lines.get(0).length() - 3) / 2.0) * CELL_SIZE;
             EnumMap<Direction, Point2D> dOffset = new EnumMap<Direction, Point2D>(Direction.class);
-            dOffset.put(Direction.NORTH, new Point2D(0, -heightR));
-            dOffset.put(Direction.EAST, new Point2D(widthR, 0));
-            dOffset.put(Direction.SOUTH, new Point2D(0, heightR));
-            dOffset.put(Direction.WEST, new Point2D(-widthR, 0));
+            // TODO CELL_SIZE is added an additional time because the player's sprite can be extra
+            // wide if they have a sword equipped
+            dOffset.put(Direction.NORTH, new Point2D(0, -heightR + (CELL_SIZE * 0.5)));
+            dOffset.put(Direction.EAST, new Point2D(widthR - (CELL_SIZE * 0.5), 0));
+            dOffset.put(Direction.SOUTH, new Point2D(0, heightR - (CELL_SIZE * 0.5)));
+            dOffset.put(Direction.WEST, new Point2D(-widthR + (CELL_SIZE * 0.5), 0));
             doorOffsets = dOffset;
             // Add file to cache.
             fileCache.put(name, lines);
@@ -255,7 +258,7 @@ public class Room extends GridPane {
                 Direction exitDirection = creatorDirection.opposite();
                 // None of these variables matter if this is the exit and this improves the
                 // minimap behavior
-                //activeDoors[exitDirection.toValue()] = true;
+                activeDoors[exitDirection.toValue()] = true;
                 testedDoors[exitDirection.toValue()] = false;
                 ++branches;
             }
@@ -477,6 +480,22 @@ public class Room extends GridPane {
             }
         }
     }
+    
+    /**
+     * Lock all doors.
+     */
+    public void lockDoors() {
+        for (Direction dir : Direction.values()) {
+            ArrayList<StackPane> doorList = doors.get(dir);
+            for (StackPane p : doorList) {
+                Node node = p.getChildren().get(0); // the only child should be a door
+                if (node instanceof Door) {
+                    Door door = (Door) node;
+                    door.lock();
+                }
+            }
+        }
+    }
 
     /**
      * Unlock all doors.
@@ -592,6 +611,16 @@ public class Room extends GridPane {
      */
     public boolean isEntrance() {
         return entrance;
+    }
+    
+
+    /**
+     * Whether this room is a challenge room.
+     * 
+     * @return true if this room is a challenge room
+     */
+    public boolean isChallenge() {
+        return challenge;
     }
 
     /**

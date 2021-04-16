@@ -16,7 +16,7 @@ public class Coin extends Collectable {
      * Creates an instance of a coin placed randomly within the room.
      */
     public Coin() {
-        super("/images/coin.gif", RandomUtil.getPoint2D(300), new Point2D(2, 2));
+        super("/images/coin.gif", RandomUtil.getPoint2D(300), new Point2D(64, 64));
 
         value = RandomUtil.getInt(1, 25);
     }

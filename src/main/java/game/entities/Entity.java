@@ -12,7 +12,6 @@ import views.GameScreen;
 public abstract class Entity extends Collidable {
     protected Point2D position;
     protected Point2D velocity = new Point2D(0, 0);
-    protected Point2D scale;
 
     protected int     health;
     protected boolean isDead;
@@ -23,27 +22,25 @@ public abstract class Entity extends Collidable {
     /**
      * Initializes the Image and position of an entity.
      *
-     * @param image    the path to the image of the entity
-     * @param position the position to create the entity at
-     * @param scale    the scale of the image
+     * @param imagePath  the path to the image of the entity
+     * @param position   the position to create the entity at
+     * @param dimensions the dimensions of the image
      */
-    protected Entity(String image, Point2D position, Point2D scale) {
-        super(image, false);
+    protected Entity(String imagePath, Point2D position, Point2D dimensions) {
+        super(new Image(imagePath, dimensions.getX(), dimensions.getY(), false, false), false);
         setPosition(position);
-        setScale(scale);
     }
 
     /**
      * Initializes the Image and position of an entity.
      *
-     * @param image    the image of the entity
-     * @param position the position to create the entity at
-     * @param scale    the scale of the image
+     * @param image      the image of the entity
+     * @param position   the position to create the entity at
+     * @param dimensions the scale of the image
      */
-    protected Entity(Image image, Point2D position, Point2D scale) {
+    protected Entity(Image image, Point2D position, Point2D dimensions) {
         super(image, false);
         setPosition(position);
-        setScale(scale);
     }
 
     /**
@@ -190,27 +187,6 @@ public abstract class Entity extends Collidable {
      */
     public final void setVelocity(Point2D velocity) {
         this.velocity = velocity;
-    }
-
-    /**
-     * Gets the scaling of the entity.
-     *
-     * @return the scale of the entity
-     */
-    public final Point2D getScale() {
-        return scale;
-    }
-
-    /**
-     * Sets the scaling of the entity to a new scale.
-     *
-     * @param scale the new scale
-     */
-    public final void setScale(Point2D scale) {
-        this.scale = scale;
-
-        setScaleX(scale.getX());
-        setScaleY(scale.getY());
     }
 
     public final boolean isMainPlayer() {

@@ -24,6 +24,7 @@ public final class Inventory {
     // The current displayed item image
     private static List<ImageView>    itemImages   = new ArrayList<>(4);
     private static List<Label>        itemCounters = new ArrayList<>(4);
+    //tewstskndasnklsandkladklasn
 
     private static final String EMPTY_ITEM_TEXT = "";
 
