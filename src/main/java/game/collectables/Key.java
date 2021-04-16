@@ -14,7 +14,7 @@ public class Key extends Collectable {
      *
      */
     public Key() {
-        super("/images/key.png", RandomUtil.getPoint2D(300), new Point2D(0.1, 0.1));
+        super("/images/key.png", RandomUtil.getPoint2D(300), new Point2D(64, 64));
         numSpawned++;
     }
 

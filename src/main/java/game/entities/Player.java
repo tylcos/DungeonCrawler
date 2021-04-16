@@ -49,7 +49,7 @@ public final class Player extends Entity {
 
     private Player(String weaponName, String difficulty) {
         // Position is overwritten when a new room is loaded
-        super("images/PlayerSwordAttack.png", Point2D.ZERO, new Point2D(5, 5));
+        super("images/PlayerSwordAttack.png", Point2D.ZERO, new Point2D(125, 80));
 
         weapon = new Weapon("Starting " + weaponName, weaponName, 1, 1d);
 
@@ -240,8 +240,6 @@ public final class Player extends Entity {
         Image axe = new Image("images/PlayerAxe.png");
         setImage(axe);
         weapon = new Weapon("Axe", 2, 0);
-        Point2D newScale = new Point2D(5, 5);
-        super.setScale(newScale);
     }
 
     /**
@@ -251,11 +249,9 @@ public final class Player extends Entity {
         Image sword = new Image("images/PlayerSwordAttack.png");
         setImage(sword);
         weapon = new Weapon("Sword", 1, 0);
-        Point2D newScale = new Point2D(5, 5);
-        super.setScale(newScale);
     }
 
     public void setWeaponObtained() {
-        this.weaponObtained = true;
+        weaponObtained = true;
     }
 }
