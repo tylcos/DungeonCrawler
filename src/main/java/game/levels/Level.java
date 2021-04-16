@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
  */
 public class Level {
     public static final int MAX_DIAMETER     = 15; // Width/height of map. ODD NUMBERS ONLY
-    public static final int MIN_END_DISTANCE = 1;  // Minimum distance away the exit must be (6)
+    public static final int MIN_END_DISTANCE = 6;  // Minimum distance away the exit must be (6)
 
     /* CHEATS */
     private static boolean spawnEnemiesInEntrance;
@@ -147,9 +147,7 @@ public class Level {
         // Spawn the player
         GameEngine.instantiate(GameEngine.ENTITY, Player.getPlayer());
 
-        if (Key.getNumSpawned() == 0) {
-            exit.addCollectable(new Key());
-        }
+        exit.addCollectable(new Key());
     }
 
     /**
@@ -369,7 +367,6 @@ public class Level {
                         line1.setCharAt((x - leftBound) * 2 + 1, '\u2015');
                     }
                 }
-                
             }
 
             minimap.append(line2);

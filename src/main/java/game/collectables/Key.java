@@ -7,15 +7,12 @@ import javafx.geometry.Point2D;
 import utilities.RandomUtil;
 
 public class Key extends Collectable {
-    private static int numSpawned;
-
     /**
      * Creates an instance of the Key object
      *
      */
     public Key() {
         super("/images/key.png", RandomUtil.getPoint2D(300), new Point2D(64, 32));
-        numSpawned++;
     }
 
     @Override
@@ -26,9 +23,5 @@ public class Key extends Collectable {
 
         setCollected();
         SoundManager.playCoinOrKeyCollected();
-    }
-
-    public static int getNumSpawned() {
-        return numSpawned;
     }
 }

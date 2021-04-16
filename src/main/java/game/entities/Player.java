@@ -172,7 +172,7 @@ public final class Player extends Entity {
      */
     private void handleKey() {
         if (key != null) {
-            setImage(new Image("/images/rightPlayerWithKey.png"));
+            setImage(new Image("/images/rightPlayerWithKey.png", 125, 80, true, false));
             keyActivated = true;
             SoundManager.playKeyActivated();
         }
