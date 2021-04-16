@@ -23,7 +23,7 @@ public class AttackPotion extends Collectable implements IItem {
      * Creates an instance of a item placed randomly within the room. 25% spawn probability.
      */
     public AttackPotion() {
-        super(IMAGE, RandomUtil.getPoint2D(300), new Point2D(2, 2));
+        super(IMAGE, RandomUtil.getPoint2D(300), new Point2D(64, 64));
     }
 
     @Override

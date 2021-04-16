@@ -128,7 +128,7 @@ public class GameScreenItemsTests extends ApplicationTest {
     @Test
     public void testWeaponItemCollected() {
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
-            if (collectable instanceof newWeapon) {
+            if (collectable instanceof WeaponItem) {
                 Player.getPlayer().setPosition(collectable.getPosition());
                 sleep(500);
                 assertTrue(collectable.isCollected());
@@ -142,7 +142,7 @@ public class GameScreenItemsTests extends ApplicationTest {
     @Test
     public void testWeaponChangedAfterCollected() {
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
-            if (collectable instanceof newWeapon) {
+            if (collectable instanceof WeaponItem) {
                 Player.getPlayer().setPosition(collectable.getPosition());
                 sleep(500);
                 Player.getPlayer().getWeapon().getName();
@@ -159,7 +159,7 @@ public class GameScreenItemsTests extends ApplicationTest {
     @Test
     public void testNoWeaponChange(){
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
-            if (collectable instanceof newWeapon) {
+            if (collectable instanceof WeaponItem) {
                 Player.getPlayer().getWeapon().getName();
                 push(KeyCode.TAB);
                 assertEquals("Starting Weapon", Player.getPlayer().getWeapon().getName());
