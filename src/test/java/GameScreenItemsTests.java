@@ -123,8 +123,6 @@ public class GameScreenItemsTests extends ApplicationTest {
     }
 
     /**
-<<<<<<< HEAD
-<<<<<<< HEAD
      * Test if the weapon item was collected
      */
     @Test
@@ -169,8 +167,8 @@ public class GameScreenItemsTests extends ApplicationTest {
         }
 
     }
-    /**
 
+    /**
      * Tests if a potion can be used from the inventory
      */
     @Test
