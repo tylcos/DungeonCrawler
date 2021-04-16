@@ -80,6 +80,7 @@ public class Room extends GridPane {
     private boolean generated;                  // Whether this room has had game elements generated
     private int     distanceFromEntrance = 999; // # of doorways separating this room from the
     // entrance
+    private Direction source; // Direction pointing to the room that created this one
 
     // A list of all collidable bodies making up this room
     private ArrayList<Collidable> bodies = new ArrayList<>();
@@ -137,6 +138,8 @@ public class Room extends GridPane {
             if (distanceFromEntrance >= Level.MIN_END_DISTANCE && level.missingExit()) {
                 exit = true;
             }
+            
+            source = Direction.vectorToDirection(creator.position.subtract(position));
         }
         if (start) {
             distanceFromEntrance = 0;
@@ -670,5 +673,12 @@ public class Room extends GridPane {
     public boolean isClear() {
         // Is clear when all entities are the main player or dead
         return entities.stream().allMatch(e -> e.isMainPlayer() || e.isDead());
+    }
+
+    /**
+     * @return the source direction
+     */
+    public Direction getSourceDirection() {
+        return source;
     }
 }

@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
  */
 public class Level {
     public static final int MAX_DIAMETER     = 15; // Width/height of map. ODD NUMBERS ONLY
-    public static final int MIN_END_DISTANCE = 1;  // Minimum distance away the exit must be
+    public static final int MIN_END_DISTANCE = 1;  // Minimum distance away the exit must be (6)
 
     /* CHEATS */
     private static boolean spawnEnemiesInEntrance;
@@ -348,12 +348,22 @@ public class Level {
                 }
 
                 boolean[] info = room.getActiveDoors();
-                if (info[Direction.NORTH.toValue()]) {
-                    line2.setCharAt((x - leftBound) * 2, '|');
+                if (!room.isExit()) {
+                    if (info[Direction.NORTH.toValue()]) {
+                        line2.setCharAt((x - leftBound) * 2, '|');
+                    }
+                    if (info[Direction.EAST.toValue()]) {
+                        line1.setCharAt((x - leftBound) * 2 + 1, '\u2015');
+                    }
+                } else {
+                    if (info[Direction.NORTH.toValue()] && room.getSourceDirection() == Direction.NORTH) {
+                        line2.setCharAt((x - leftBound) * 2, '|');
+                    }
+                    if (info[Direction.EAST.toValue()] && room.getSourceDirection() == Direction.EAST) {
+                        line1.setCharAt((x - leftBound) * 2 + 1, '\u2015');
+                    }
                 }
-                if (info[Direction.EAST.toValue()]) {
-                    line1.setCharAt((x - leftBound) * 2 + 1, '\u2015');
-                }
+                
             }
 
             minimap.append(line2);
