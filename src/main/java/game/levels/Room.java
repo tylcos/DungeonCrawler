@@ -258,7 +258,7 @@ public class Room extends GridPane {
                 Direction exitDirection = creatorDirection.opposite();
                 // None of these variables matter if this is the exit and this improves the
                 // minimap behavior
-                //activeDoors[exitDirection.toValue()] = true;
+                activeDoors[exitDirection.toValue()] = true;
                 testedDoors[exitDirection.toValue()] = false;
                 ++branches;
             }
