@@ -193,8 +193,20 @@ public final class GameEngine {
     }
 
     /**
-     * Removes all given objects from the render layer.
-     * Used to render objects that do not need physics
+     * Adds the given object to the render layer.
+     * Used to render objects that do not need physics.
+     *
+     * @param <T>     any type that extends Node
+     * @param layer   the render layer to remove from
+     * @param object the object to remove
+     */
+    public static <T extends Node> void addToLayer(int layer, T object) {
+        renderLayers[layer].getChildren().add(object);
+    }
+
+    /**
+     * Adds all given objects to the render layer.
+     * Used to render objects that do not need physics.
      *
      * @param <T>     any type that extends Node
      * @param layer   the render layer to remove from
@@ -205,8 +217,18 @@ public final class GameEngine {
     }
 
     /**
+     * Removes the given object from the render layer.
+     *
+     * @param <T>     any type that extends Node
+     * @param layer   the render layer to remove from
+     * @param object the object to remove
+     */
+    public static <T extends Node> void removeFromLayer(int layer, T object) {
+        renderLayers[layer].getChildren().remove(object);
+    }
+
+    /**
      * Removes all given objects from the render layer.
-     * Used to render objects that do not need physics
      *
      * @param <T>     any type that extends Node
      * @param layer   the render layer to remove from

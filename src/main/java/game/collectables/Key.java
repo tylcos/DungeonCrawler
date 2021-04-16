@@ -14,7 +14,7 @@ public class Key extends Collectable {
      *
      */
     public Key() {
-        super("/images/key.png", RandomUtil.getPoint2D(300), new Point2D(64, 64));
+        super("/images/key.png", RandomUtil.getPoint2D(300), new Point2D(64, 32));
         numSpawned++;
     }
 
@@ -24,7 +24,6 @@ public class Key extends Collectable {
             return;
         }
 
-        System.out.println("collided with key");
         setCollected();
         SoundManager.playCoinOrKeyCollected();
     }

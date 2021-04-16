@@ -114,7 +114,6 @@ public final class Player extends Entity {
 
         if (other instanceof Key) {
             key = (Key) other;
-            System.out.println("collected key");
         }
     }
 
@@ -237,7 +236,7 @@ public final class Player extends Entity {
      * change weapon to Axe
      */
     public void swapToAxe() {
-        Image axe = new Image("images/PlayerAxe.png");
+        Image axe = new Image("images/PlayerAxe.png", 125, 80, true, false);
         setImage(axe);
         weapon = new Weapon("Axe", 2, 0);
     }
@@ -246,7 +245,7 @@ public final class Player extends Entity {
      * change to weapon to sword
      */
     public void swapToSword() {
-        Image sword = new Image("images/PlayerSwordAttack.png");
+        Image sword = new Image("images/PlayerSwordAttack.png", 125, 80, true, false);
         setImage(sword);
         weapon = new Weapon("Sword", 1, 0);
     }
