@@ -56,7 +56,7 @@ public final class Player extends Entity {
         switch (difficulty) {
         case "Boring":
             money = 100;
-            maxHealth = 10;
+            maxHealth = 100;
             this.difficulty = 0;
             break;
         case "Normal":
@@ -173,7 +173,7 @@ public final class Player extends Entity {
      */
     private void handleKey() {
         if (key != null) {
-            setImage(new Image("/images/PlayerWithKey (2).png"));
+            setImage(new Image("/images/rightPlayerWithKey.png"));
             keyActivated = true;
             SoundManager.playKeyActivated();
         }
