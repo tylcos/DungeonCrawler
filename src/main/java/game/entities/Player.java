@@ -79,9 +79,7 @@ public final class Player extends Entity {
         }
         health = maxHealth;
 
-        entityController = new PlayerEntityController(this,
-                                                      this::getSpeedMultiplier,
-                                                      this::getWeapon);
+        entityController = new PlayerEntityController(this);
     }
 
     @Override
@@ -177,6 +175,7 @@ public final class Player extends Entity {
             SoundManager.playKeyActivated();
         }
     }
+
     public void addSpeedMultiplier(double multiplier) {
         speedMultiplier *= multiplier;
     }

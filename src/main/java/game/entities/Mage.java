@@ -56,7 +56,7 @@ public class Mage extends Entity {
     @Override
     public void onDeath() {
         setVisible(false);
-        //huh why isnt this working
+
         SoundManager.playEnemyKilled();
     }
 
