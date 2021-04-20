@@ -13,7 +13,7 @@ import java.util.Arrays;
  * The behavior is to move to where the player is predicted to be assuming the player maintains
  * a constant radius and constant dθ/dt around the center of the room.
  */
-public class MageEntityController extends EntityController {
+public class MageEntityController extends EntityController<Mage> {
     private State state = State.relaxing;
 
     // Variables for movement
@@ -33,7 +33,6 @@ public class MageEntityController extends EntityController {
     private static final double TWO_PI   = 2 * Math.PI;
 
     // Variables for generating bias
-    private double biasScale;
     private double timeFactorX;
     private double timeFactorY;
 
@@ -50,7 +49,7 @@ public class MageEntityController extends EntityController {
      *
      * @param entity the entity to control
      */
-    public MageEntityController(Entity entity) {
+    public MageEntityController(Mage entity) {
         super(entity);
 
         speed       = RandomUtil.getInt(400, 500);
@@ -61,7 +60,6 @@ public class MageEntityController extends EntityController {
 
         predictionGuessScale = RandomUtil.get(.6d, 1d);
 
-        biasScale   = 100;
         timeFactorX = RandomUtil.get(1d, 2d);
         timeFactorY = RandomUtil.get(1d, 2d);
 
@@ -170,9 +168,6 @@ public class MageEntityController extends EntityController {
 
         // Smoothly change velocity
         entity.setVelocity(entity.getVelocity().interpolate(velocity, inputSmooth));
-
-        // Shows where the entity is moving towards
-        // debugPoint.setPosition(entity.getPosition().add(target));
 
         previousTheta = currentTheta;
     }

@@ -11,7 +11,7 @@ import utilities.RandomUtil;
  * The behavior is to move closely around the player while attacking periodically with no
  * prediction.
  */
-public class SlimeEntityController extends EntityController {
+public class SlimeEntityController extends EntityController<Slime> {
     private State state = State.relaxing;
 
     // Variables for movement
@@ -40,7 +40,7 @@ public class SlimeEntityController extends EntityController {
      *
      * @param entity the entity to control
      */
-    public SlimeEntityController(Entity entity) {
+    public SlimeEntityController(Slime entity) {
         super(entity);
 
         speed       = RandomUtil.getInt(300, 400);

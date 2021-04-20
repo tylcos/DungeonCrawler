@@ -11,7 +11,7 @@ import utilities.RandomUtil;
  * The behavior is to move to where the player is predicted to be assuming the Player maintains
  * constant dx/dt and dy/dt.
  */
-public class SkullEntityController extends EntityController {
+public class SkullEntityController extends EntityController<Skull> {
     private State state = State.relaxing;
 
     // Variables for movement
@@ -40,7 +40,7 @@ public class SkullEntityController extends EntityController {
      *
      * @param entity the entity to control
      */
-    public SkullEntityController(Entity entity) {
+    public SkullEntityController(Skull entity) {
         super(entity);
 
         speed       = RandomUtil.getInt(400, 500);
