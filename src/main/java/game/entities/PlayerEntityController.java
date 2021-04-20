@@ -1,41 +1,30 @@
 package game.entities;
 
 import core.*;
+import game.Inventory;
 import game.Weapon;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-
 /**
  * Player behavior is to move and attack based on the user's input
  */
-public class PlayerEntityController extends EntityController {
+public class PlayerEntityController extends EntityController<Player> {
     // Variables for movement
-    private double         speed       = 600d;
-    private DoubleSupplier speedMultiplier;
+    private double speed       = 600d;
     // Smooths input over around 125ms
     // inputSmooth = 1d would remove smoothing
     // https://www.desmos.com/calculator/xjyyi5sndo
-    private double         inputSmooth = .3d;
-
-    private Supplier<Weapon> weaponSupplier;
+    private double inputSmooth = .3d;
 
     /**
      * Create an EntityController to control an entity
      *
      * @param entity          the entity to be controlled
-     * @param speedMultiplier a supplier for the speed multiplier
-     * @param weaponSupplier  a supplier for the current weapon
      */
-    public PlayerEntityController(Entity entity, DoubleSupplier speedMultiplier,
-                                  Supplier<Weapon> weaponSupplier) {
+    public PlayerEntityController(Player entity) {
         super(entity);
-
-        this.speedMultiplier = speedMultiplier;
-        this.weaponSupplier  = weaponSupplier;
 
         SceneManager.getStage().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> attack());
     }
@@ -46,6 +35,7 @@ public class PlayerEntityController extends EntityController {
         }
 
         // User input logic
+        // Movement input
         Point2D input = Point2D.ZERO;
         if (InputManager.get(KeyCode.W) || InputManager.get(KeyCode.UP)) {
             input = input.add(0, -1);
@@ -60,9 +50,14 @@ public class PlayerEntityController extends EntityController {
             input = input.add(1, 0);
         }
 
+        // Weapon input
+        if (InputManager.get(KeyCode.TAB)) {
+            Inventory.changeWeapon("images/PlayerAxe.png");
+        }
+
         // TODO 3/24/2021 Use a better frame independent way of smoothing input
         double  dt            = GameEngine.getDt();
-        double  modifiedSpeed = speed * speedMultiplier.getAsDouble();
+        double  modifiedSpeed = speed * entity.getSpeedMultiplier();
         Point2D rawVelocity   = input.normalize().multiply(modifiedSpeed);
         Point2D velocity = entity.getVelocity().interpolate(rawVelocity,
                                                             inputSmooth * (60d * dt + .0007d / dt));
@@ -73,7 +68,7 @@ public class PlayerEntityController extends EntityController {
 
     @Override
     void attack() {
-        Weapon weapon = weaponSupplier.get();
+        Weapon weapon = entity.getWeapon();
         switch (weapon.getType()) {
         case "Bow":
 

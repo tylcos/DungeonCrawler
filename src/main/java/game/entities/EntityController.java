@@ -5,8 +5,8 @@ import javafx.geometry.Point2D;
 /**
  * Used for controlling the movement and attacking of an entity.
  */
-public abstract class EntityController {
-    protected Entity  entity;
+public abstract class EntityController<T extends Entity> {
+    protected T       entity;
     protected boolean stopped;
 
     protected double timeSinceRoomLoad;
@@ -19,7 +19,7 @@ public abstract class EntityController {
      *
      * @param entity the entity to be controlled
      */
-    public EntityController(Entity entity) {
+    public EntityController(T entity) {
         this.entity = entity;
     }
 

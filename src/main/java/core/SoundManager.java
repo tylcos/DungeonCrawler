@@ -16,10 +16,11 @@ public final class SoundManager {
 
     private SoundManager() { }
 
-    private static void playSound(String audioPath, int duration) {
+    private static void playSound(String audioPath) {
         if (!soundOn) {
             return;
         }
+
         MediaPlayer mediaPlayer =
             new MediaPlayer(new Media(Paths.get(audioPath).toUri().toString()));
 
@@ -33,30 +34,30 @@ public final class SoundManager {
     }
 
     public static void playDoorCreak() {
-        playSound("src/main/resources/audio/jail_cell_door.mp3", 1000);
+        playSound("src/main/resources/audio/jail_cell_door.mp3");
     }
 
     public static void playPlayerAttacked() {
-        playSound("src/main/resources/audio/lose sound 2 - 2.wav", 1000);
+        playSound("src/main/resources/audio/lose sound 2 - 2.wav");
     }
 
     public static void playEnemyKilled() {
-        playSound("src/main/resources/audio/positive 1.mp3", 1000);
+        playSound("src/main/resources/audio/positive 1.mp3");
     }
 
     public static void playCoinOrKeyCollected() {
-        playSound("src/main/resources/audio/Coin-collect-sound-effect.mp3", 1000);
+        playSound("src/main/resources/audio/Coin-collect-sound-effect.mp3");
     }
 
     public static void playPotionCollected() {
-        playSound("src/main/resources/audio/healspell3.aif", 1000);
+        playSound("src/main/resources/audio/healspell3.aif");
     }
 
     public static void playKeyActivated() {
-        playSound("src/main/resources/audio/key2 pickup.mp3", 1000);
+        playSound("src/main/resources/audio/key2 pickup.mp3");
     }
 
     public static void playVictory() {
-        playSound("src/main/resources/audio/Old victory sound roblox.mp3", 3000);
+        playSound("src/main/resources/audio/Old victory sound roblox.mp3");
     }
 }
