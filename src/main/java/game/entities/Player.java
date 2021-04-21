@@ -1,21 +1,20 @@
 package game.entities;
 
 import core.*;
-import game.Inventory;
-import game.Weapon;
+import game.*;
 import game.collectables.Key;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import utilities.GameEffects;
-import utilities.TimerUtil;
+import utilities.*;
 
 /**
- * Singleton controller for the player
+ * Singleton-like controller for the player
  */
 public final class Player extends Entity {
     private static Player player;
@@ -29,14 +28,12 @@ public final class Player extends Entity {
 
     private Key     key;
     private boolean keyActivated;
-    private boolean pressOnce;
 
-    private boolean weaponObtained;
-
-    private static TextArea uiInfoText;
+    private        ImageView heldWeapon;
+    private static TextArea  uiInfoText;
 
     /**
-     * Initializes the Player singleton
+     * Initializes the Player
      *
      * @param playerName the name of the main player
      * @param weaponName the name of the weapon the player has
@@ -48,10 +45,12 @@ public final class Player extends Entity {
     }
 
     private Player(String weaponName, String difficulty) {
-        // Position is overwritten when a new room is loaded
-        super("images/PlayerSwordAttack.png", Point2D.ZERO, new Point2D(125, 80));
+        super("Player.png", Point2D.ZERO, new Point2D(65, 70));
 
-        weapon = new Weapon("Starting " + weaponName, weaponName, 1, 1d);
+        Image weaponImage = ImageManager.getSprite("weapons.png", RandomUtil.getInt(3),
+                                                   RandomUtil.getInt(11), 32, 3);
+        weapon = new Weapon("Starting " + weaponName, WeaponType.valueOf(weaponName), 1, 1d,
+                            weaponImage);
 
         switch (difficulty) {
         case "Boring":
@@ -85,23 +84,22 @@ public final class Player extends Entity {
     @Override
     public void update() {
         uiInfoText.setText(toStringFormatted());
+        if (isDead) {
+            return;
+        }
 
         if (InputManager.get(KeyCode.K)) {
             handleKey();
         }
 
-        if (InputManager.get(KeyCode.TAB) && weaponObtained) {
-            swapToAxe();
-            Inventory.changeWeapon("images/PlayerAxe.png");
-        }
-
-        if (InputManager.get(KeyCode.Q) && weaponObtained) {
-            swapToSword();
-            Inventory.changeWeapon("images/PlayerSwordAttack.png");
-        }
-
-        // Used for player movement and eventually attacking
+        // Used for player movement and attacking
         entityController.act();
+
+        if (heldWeapon == null || heldWeapon.getParent() == null) {
+            heldWeapon = new ImageView(weapon.getImage());
+            GameEngine.addToLayer(GameEngine.VFX, heldWeapon);
+        }
+        Weapon.setWeaponPosition(heldWeapon);
     }
 
     @Override
@@ -170,10 +168,16 @@ public final class Player extends Entity {
      */
     private void handleKey() {
         if (key != null) {
-            setImage(new Image("/images/rightPlayerWithKey.png", 125, 80, true, false));
+            setImage(ImageManager.getImage("rightPlayerWithKey.png", 125, 80, true));
             keyActivated = true;
             SoundManager.playKeyActivated();
         }
+    }
+
+    public void changeWeapon(Weapon weapon) {
+        heldWeapon.setImage(weapon.getImage());
+
+        Inventory.changeWeapon(weapon);
     }
 
     public void addSpeedMultiplier(double multiplier) {
@@ -228,28 +232,5 @@ public final class Player extends Entity {
      */
     public static Player getPlayer() {
         return player;
-    }
-
-
-    /**
-     * change weapon to Axe
-     */
-    public void swapToAxe() {
-        Image axe = new Image("images/PlayerAxe.png", 125, 80, true, false);
-        setImage(axe);
-        weapon = new Weapon("Axe", 2, 0);
-    }
-
-    /**
-     * change to weapon to sword
-     */
-    public void swapToSword() {
-        Image sword = new Image("images/PlayerSwordAttack.png", 125, 80, true, false);
-        setImage(sword);
-        weapon = new Weapon("Sword", 1, 0);
-    }
-
-    public void setWeaponObtained() {
-        weaponObtained = true;
     }
 }

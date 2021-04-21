@@ -1,7 +1,6 @@
 package game.entities;
 
 import core.*;
-import game.Inventory;
 import game.Weapon;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -21,7 +20,7 @@ public class PlayerEntityController extends EntityController<Player> {
     /**
      * Create an EntityController to control an entity
      *
-     * @param entity          the entity to be controlled
+     * @param entity the entity to be controlled
      */
     public PlayerEntityController(Player entity) {
         super(entity);
@@ -50,11 +49,6 @@ public class PlayerEntityController extends EntityController<Player> {
             input = input.add(1, 0);
         }
 
-        // Weapon input
-        if (InputManager.get(KeyCode.TAB)) {
-            Inventory.changeWeapon("images/PlayerAxe.png");
-        }
-
         // TODO 3/24/2021 Use a better frame independent way of smoothing input
         double  dt            = GameEngine.getDt();
         double  modifiedSpeed = speed * entity.getSpeedMultiplier();
@@ -64,17 +58,25 @@ public class PlayerEntityController extends EntityController<Player> {
 
         double dVelocity = velocity.subtract(entity.getVelocity()).magnitude() / modifiedSpeed;
         entity.setVelocity(dVelocity < .01 ? rawVelocity : velocity);
+
+        // Weapon input
+        if (InputManager.get(KeyCode.TAB)) {
+            //entity.changeWeapon();
+        }
     }
 
     @Override
     void attack() {
         Weapon weapon = entity.getWeapon();
         switch (weapon.getType()) {
-        case "Bow":
+        case Bow:
+
+            break;
+        case Sword:
 
             break;
         default:
-
+            break;
         }
     }
 }

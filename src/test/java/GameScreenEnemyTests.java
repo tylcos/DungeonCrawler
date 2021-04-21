@@ -65,7 +65,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
         clickOnEnemies(entity -> initialHealth.set(entity.getHealth()),
                        entity -> assertEquals(entity.getHealth(), initialHealth.get()));
 
-        Player.setPlayer("Team Azula", "Weapon", "Debug");
+        Player.setPlayer("Team Azula", "Sword", "Debug");
     }
 
     @Test
@@ -88,7 +88,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
         assertTrue(player.isDead());
         assertNotEquals(90, player.getRotate());
 
-        Player.setPlayer("Team Azula", "Weapon", "Debug");
+        Player.setPlayer("Team Azula", "Sword", "Debug");
     }
 
     @Test

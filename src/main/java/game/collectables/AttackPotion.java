@@ -14,7 +14,7 @@ import utilities.TimerUtil;
  */
 public class AttackPotion extends Collectable implements IItem {
     private static final int    ITEM_ID = 1;
-    private static final String IMAGE   = "/images/PotionOfAttack.gif";
+    private static final String IMAGE   = "PotionOfAttack.gif";
 
     private static final double POTION_DURATION = 5d;
     private static final double POTION_STRENGTH = 2d;

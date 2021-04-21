@@ -1,5 +1,6 @@
 package game.entities;
 
+import core.ImageManager;
 import game.collidables.Collidable;
 import game.levels.Room;
 import javafx.geometry.Point2D;
@@ -17,7 +18,18 @@ public abstract class Entity extends Collidable {
     protected boolean isDead;
     protected int     money;
 
-    protected EntityController entityController;
+    protected EntityController<?> entityController;
+
+    /**
+     * Initializes the Image and position of an entity.
+     *
+     * @param imagePath  the path to the image of the entity
+     * @param position   the position to create the entity at
+     */
+    protected Entity(String imagePath, Point2D position) {
+        super(ImageManager.getImage(imagePath), false);
+        setPosition(position);
+    }
 
     /**
      * Initializes the Image and position of an entity.
@@ -27,7 +39,7 @@ public abstract class Entity extends Collidable {
      * @param dimensions the dimensions of the image
      */
     protected Entity(String imagePath, Point2D position, Point2D dimensions) {
-        super(new Image(imagePath, dimensions.getX(), dimensions.getY(), false, false), false);
+        super(ImageManager.getImage(imagePath, dimensions, false), false);
         setPosition(position);
     }
 
@@ -36,9 +48,8 @@ public abstract class Entity extends Collidable {
      *
      * @param image      the image of the entity
      * @param position   the position to create the entity at
-     * @param dimensions the scale of the image
      */
-    protected Entity(Image image, Point2D position, Point2D dimensions) {
+    protected Entity(Image image, Point2D position) {
         super(image, false);
         setPosition(position);
     }

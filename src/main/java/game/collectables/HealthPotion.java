@@ -13,7 +13,7 @@ import utilities.RandomUtil;
  */
 public class HealthPotion extends Collectable implements IItem {
     private static final int    ITEM_ID = 0;
-    private static final String IMAGE   = "/images/PotionOfHealth.gif";
+    private static final String IMAGE   = "PotionOfHealth.gif";
 
     /**
      * Creates an instance of a health potion placed randomly within the room. 25% spawn rate.
