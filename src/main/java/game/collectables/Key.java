@@ -12,7 +12,7 @@ public class Key extends Collectable {
      *
      */
     public Key() {
-        super("/images/key.png", RandomUtil.getPoint2D(300), new Point2D(64, 32));
+        super("key.png", RandomUtil.getPoint2D(300), new Point2D(64, 32));
     }
 
     @Override

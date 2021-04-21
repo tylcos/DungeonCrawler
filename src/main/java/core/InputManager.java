@@ -1,9 +1,12 @@
 package core;
 
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 
 /**
@@ -45,6 +48,17 @@ public final class InputManager {
      */
     public static boolean get(KeyCode keyCode) {
         return keyStates.get(keyCode);
+    }
+
+    /**
+     * Returns the mouse position.
+     *
+     * @return the mouse position
+     */
+    public static Point2D getMousePosition() {
+        Point point = MouseInfo.getPointerInfo().getLocation();
+
+        return ScreenManager.screenToGame(new Point2D(point.x, point.y));
     }
 
     /**

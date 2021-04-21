@@ -16,7 +16,7 @@ import views.GameScreen;
  */
 public class NukeItem extends Collectable implements IItem {
     private static final int    ITEM_ID = 3;
-    private static final String IMAGE   = "/images/Nuke.png";
+    private static final String IMAGE   = "Nuke.png";
 
     private static final double BACKFIRE_CHANCE = .01d;
 
@@ -42,7 +42,7 @@ public class NukeItem extends Collectable implements IItem {
             Player.getPlayer().damage(Player.getPlayer().getHealth());
         }
 
-        ImageView blast = new ImageView("/images/nukeImage.gif");
+        ImageView blast = new ImageView(ImageManager.getImage("nukeImage.gif"));
         blast.setScaleX(ScreenManager.getScale());
         blast.setScaleY(ScreenManager.getScale());
         blast.setTranslateX(RandomUtil.get(-200, 200));

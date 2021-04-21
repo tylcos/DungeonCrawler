@@ -6,10 +6,8 @@ import javafx.animation.AnimationTimer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.chart.XYChart;
-import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
-import views.GameScreen;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,11 +64,6 @@ public final class GameEngine {
 
                 GameEngine.update();
                 frameCounter++;
-
-                // Debug FPS graph
-                if (GameDriver.isDebug() && GameScreen.getFpsGraph().isVisible()) {
-                    updateFPSGraph();
-                }
             }
         };
         frameTimer.start();
@@ -96,11 +89,6 @@ public final class GameEngine {
      * Updates position of all entities and checks for collisions.
      */
     public static void update() {
-        // Allow the scene to build on the first frame which is necessary for some reason
-        if (frameCounter == 0) {
-            return;
-        }
-
         // Copies entities to avoid concurrent modification errors
         // TODO 3/17/2021 convert to swapping between two lists to avoid allocating every frame
         Entity[]     currentDynamicBodies = dynamicBodies.toArray(Entity[]::new);
@@ -111,9 +99,12 @@ public final class GameEngine {
             entity.update();
         }
 
-        // Purposefully runs physics update before collision checks
-        for (Collidable entity : currentDynamicBodies) {
-            runCollisionCheck(entity, currentDynamicBodies, currentStaticBodies);
+        // Allow the scene to build on the first frame which is necessary for some reason
+        if (frameCounter > 0) {
+            // Purposefully runs physics update before collision checks
+            for (Collidable entity : currentDynamicBodies) {
+                runCollisionCheck(entity, currentDynamicBodies, currentStaticBodies);
+            }
         }
     }
 
@@ -315,23 +306,6 @@ public final class GameEngine {
                 collidable.onCollision(target);
                 target.onCollision(collidable);
             }
-        }
-    }
-
-    private static void updateFPSGraph() {
-        ObservableList<XYChart.Data<Number, Number>> data =
-                GameScreen.getFpsGraph().getData().get(0).getData();
-
-        XYChart.Data<Number, Number> point = new XYChart.Data<>(frameCounter % 600,
-                                                                averageFps);
-        Region pointRegion = new Region();
-        pointRegion.setShape(new Circle(0));
-        point.setNode(pointRegion);
-
-        if (data.size() >= 600) {
-            data.set((int) (frameCounter % 600), point);
-        } else {
-            data.add(point);
         }
     }
 }

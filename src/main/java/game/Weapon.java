@@ -1,38 +1,40 @@
 package game;
 
+import core.InputManager;
+import game.entities.Player;
+import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 /**
  * Stores weapon info and utility methods
  */
 public class Weapon {
-    private String name;
-    private String type;
-    private int    damage;
-    private double fireRate;
+    private String     name;
+    private WeaponType type;
+    private int        damage;
+    private double     fireRate;
+
+    private Image image;
+
+    private static final double HOLD_DISTANCE = 90d;
 
     /**
-     * Creates an instance of a weapon with the name, damage it does, and its fire rate.
+     * Creates an instance of a weapon.
      *
-     * @param type     the type of the weapon
-     * @param damage   the damage the weapon does
-     * @param fireRate the fire rate of the weapon
+     * @param name     the name
+     * @param type     the type
+     * @param damage   the damage done on attack
+     * @param fireRate the fire rate
+     * @param image    the image
      */
-    public Weapon(String type, int damage, double fireRate) {
-        this(type, type, damage, fireRate);
-    }
-
-    /**
-     * Creates an instance of a weapon with the name, type, damage it does, and its fire rate.
-     *
-     * @param name     the name of the weapon
-     * @param type     the type of the weapon
-     * @param damage   the damage the weapon does
-     * @param fireRate the fire rate of the weapon
-     */
-    public Weapon(String name, String type, int damage, double fireRate) {
+    public Weapon(String name, WeaponType type, int damage, double fireRate, Image image) {
         this.name     = name;
         this.type     = type;
         this.damage   = damage;
         this.fireRate = fireRate;
+
+        this.image = image;
     }
 
     /**
@@ -58,7 +60,7 @@ public class Weapon {
      *
      * @return the type of the weapon
      */
-    public String getType() {
+    public WeaponType getType() {
         return type;
     }
 
@@ -91,6 +93,10 @@ public class Weapon {
         return fireRate;
     }
 
+    public Image getImage() {
+        return image;
+    }
+
     /**
      * The String output of the weapon.
      *
@@ -103,5 +109,17 @@ public class Weapon {
     @Override
     public String toString() {
         return toStringFormatted();
+    }
+
+    public static void setWeaponPosition(ImageView heldWeapon) {
+        Point2D playerPosition  = Player.getPlayer().getPosition();
+        Point2D mousePosition   = InputManager.getMousePosition();
+        Point2D facingDirection = mousePosition.subtract(playerPosition).normalize();
+        Point2D weaponPosition  = playerPosition.add(facingDirection.multiply(HOLD_DISTANCE));
+        double angle = Math.toDegrees(Math.atan2(facingDirection.getY(), facingDirection.getX()));
+
+        heldWeapon.setTranslateX(weaponPosition.getX());
+        heldWeapon.setTranslateY(weaponPosition.getY());
+        heldWeapon.setRotate(angle + 45);
     }
 }

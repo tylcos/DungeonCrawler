@@ -1,5 +1,6 @@
 package game.collectables;
 
+import core.ImageManager;
 import game.collidables.Collidable;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -19,7 +20,7 @@ public abstract class Collectable extends Collidable {
      * @param dimensions the dimensions of the object
      */
     public Collectable(String imagePath, Point2D position, Point2D dimensions) {
-        super(new Image(imagePath, dimensions.getX(), dimensions.getY(), false, false), true);
+        super(ImageManager.getImage(imagePath, dimensions, false), true);
         setPosition(position);
     }
 
@@ -49,7 +50,7 @@ public abstract class Collectable extends Collidable {
     public void setCollected() {
         isCollected = true;
 
-        setImage(new Image("images/blank.png"));
+        setImage(ImageManager.getImage("blank.png"));
     }
 
     /**

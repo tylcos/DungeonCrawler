@@ -3,7 +3,7 @@ package core;
 import javafx.geometry.Point2D;
 
 /**
- * Used to convert between screen coordinates and game coordinates
+ * Used to convert between screen, scene, and game coordinates
  */
 public final class ScreenManager {
     /**
@@ -15,46 +15,45 @@ public final class ScreenManager {
         updateScreen();
     }
 
-    private static Point2D screenDimensions;
-    private static Point2D screenCenter;
+    private static Point2D windowDimensions;
+    private static Point2D windowCenter;
 
     /**
-     * Converts game coordinates, where (0,0) is the center of the screen, to screen coordinates,
-     * where (0,0) is the top left of the screen.
+     * Converts scene coordinates, where (0,0) is the top left of the window, to game coordinates,
+     * where (0,0) is the center of the window.
      *
-     * Not sure if this will ever be needed
-     *
-     * @param gameCoordinates game coordinates
-     * @return screen coordinates
+     * @param sceneCoordinates scene coordinates
+     * @return game coordinates
      */
-    public static Point2D gameToScreen(Point2D gameCoordinates) {
-        return gameCoordinates.add(screenCenter);
+    public static Point2D sceneToGame(Point2D sceneCoordinates) {
+        return sceneCoordinates.subtract(windowCenter);
     }
 
     /**
      * Converts screen coordinates, where (0,0) is the top left of the screen, to game coordinates,
-     * where (0,0) is the center of the screen.
+     * where (0,0) is the center of the window.
      *
      * @param screenCoordinates screen coordinates
      * @return game coordinates
      */
     public static Point2D screenToGame(Point2D screenCoordinates) {
-        return screenCoordinates.subtract(screenCenter);
+        Point2D sceneCoordinates = SceneManager.getRoot().screenToLocal(screenCoordinates);
+        return sceneToGame(sceneCoordinates);
     }
 
     public static void updateScreen() {
-        screenDimensions = new Point2D(SceneManager.getStage().getWidth(),
+        windowDimensions = new Point2D(SceneManager.getStage().getWidth(),
                                        SceneManager.getStage().getHeight());
-        screenCenter     = new Point2D(SceneManager.getStage().getWidth() * .5d,
+        windowCenter     = new Point2D(SceneManager.getStage().getWidth() * .5d,
                                        SceneManager.getStage().getHeight() * .5d);
     }
 
     public static double getWidth() {
-        return screenDimensions.getX();
+        return windowDimensions.getX();
     }
 
     public static double getHeight() {
-        return screenDimensions.getY();
+        return windowDimensions.getY();
     }
 
     /**
@@ -63,6 +62,6 @@ public final class ScreenManager {
      * @return scale of screen relative to a 1080p display
      */
     public static double getScale() {
-        return screenDimensions.getY() / 1080d;
+        return windowDimensions.getY() / 1080d;
     }
 }

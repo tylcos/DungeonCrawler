@@ -14,7 +14,7 @@ public class WeaponItem extends Collectable {
      * Creates an instance of a items placed randomly within the room.
      */
     public WeaponItem() {
-        super("/images/sword.gif", RandomUtil.getPoint2D(300), new Point2D(64, 64));
+        super("sword.gif", RandomUtil.getPoint2D(300), new Point2D(64, 64));
     }
 
     @Override
@@ -23,7 +23,6 @@ public class WeaponItem extends Collectable {
             return;
         }
 
-        Player.getPlayer().setWeaponObtained();
         setCollected();
         SoundManager.playCoinOrKeyCollected();
     }

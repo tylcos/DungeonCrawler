@@ -8,7 +8,7 @@ import javafx.geometry.Point2D;
  */
 public class DebugPoint extends Collectable {
     public DebugPoint() {
-        super("/images/debugPoint.png", Point2D.ZERO, new Point2D(16, 16));
+        super("debugPoint.png", Point2D.ZERO, new Point2D(16, 16));
     }
 
     @Override

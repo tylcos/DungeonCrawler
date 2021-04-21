@@ -1,11 +1,9 @@
 package game.entities;
 
-import core.GameEngine;
-import core.SoundManager;
+import core.*;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import utilities.RandomUtil;
 
@@ -17,15 +15,15 @@ public class Slime extends Entity {
 
     // @formatter:off
     private static final String[] SLIME_SPRITES = {
-        "/images/enemy1.gif",
-        "/images/enemy2.gif",
-        "/images/enemy3.gif"
+        "enemy1.gif",
+        "enemy2.gif",
+        "enemy3.gif"
     };
 
     private static final String[] SLIME_DEAD_SPRITES = {
-        "/images/enemyDead1.png",
-        "/images/enemyDead2.png",
-        "/images/enemyDead3.png"
+        "enemyDead1.png",
+        "enemyDead2.png",
+        "enemyDead3.png"
     };
     // @formatter:on
 
@@ -39,7 +37,7 @@ public class Slime extends Entity {
         money  = 20;
 
         slimeType = RandomUtil.getInt(SLIME_SPRITES.length);
-        setImage(new Image(SLIME_SPRITES[slimeType], 300, 60, true, false));
+        setImage(ImageManager.getImage(SLIME_SPRITES[slimeType], 300, 60, true));
 
         entityController = new SlimeEntityController(this);
 
@@ -73,7 +71,7 @@ public class Slime extends Entity {
      */
     @Override
     public void onDeath() {
-        setImage(new Image(SLIME_DEAD_SPRITES[slimeType], 300, 60, true, false));
+        setImage(ImageManager.getImage(SLIME_DEAD_SPRITES[slimeType], 300, 60, true));
         SoundManager.playEnemyKilled();
     }
 

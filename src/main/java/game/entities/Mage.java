@@ -16,9 +16,7 @@ public class Mage extends Entity {
      * Creates an instance of Mage.
      */
     public Mage() {
-        super("/images/skeleton2_v2_1.png",
-              RandomUtil.getPoint2D(300),
-              new Point2D(100, 100));
+        super("skeleton2_v2_1.png", RandomUtil.getPoint2D(300), new Point2D(100, 100));
 
         health = 5;
         money  = 40;
