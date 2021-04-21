@@ -53,7 +53,9 @@ public class SlimeEntityController extends EntityController<Slime> {
         timeFactorX = RandomUtil.get(1d, 2d);
         timeFactorY = RandomUtil.get(1d, 2d);
 
-        debugPoint = new DebugPoint();
+        if (useDebugPoints) {
+            debugPoint = new DebugPoint();
+        }
     }
 
     public void act() {
@@ -129,7 +131,9 @@ public class SlimeEntityController extends EntityController<Slime> {
         entity.setVelocity(entity.getVelocity().interpolate(velocity, inputSmooth));
 
         // Shows where the entity is moving towards
-        debugPoint.setPosition(entity.getPosition().add(target));
+        if (useDebugPoints) {
+            debugPoint.setPosition(entity.getPosition().add(target));
+        }
     }
 
     @Override

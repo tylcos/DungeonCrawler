@@ -15,9 +15,7 @@ public class Skull extends Entity {
      * Creates an instance of Skull.
      */
     public Skull() {
-        super("/images/skull_v2_3.png",
-              RandomUtil.getPoint2D(300),
-              new Point2D(80, 80));
+        super("skull_v2_3.png", RandomUtil.getPoint2D(300), new Point2D(80, 80));
 
         health = 2;
         money  = 10;

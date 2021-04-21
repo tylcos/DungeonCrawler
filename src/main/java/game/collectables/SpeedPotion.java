@@ -14,7 +14,7 @@ import utilities.TimerUtil;
  */
 public class SpeedPotion extends Collectable implements IItem {
     private static final int    ITEM_ID = 2;
-    private static final String IMAGE   = "/images/PotionOfSpeed.gif";
+    private static final String IMAGE   = "PotionOfSpeed.gif";
 
     private static final double POTION_DURATION = 5d;
     private static final double POTION_STRENGTH = 4d / 3d;

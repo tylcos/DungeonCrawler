@@ -1,5 +1,6 @@
 package game.collidables;
 
+import core.ImageManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -18,11 +19,11 @@ public abstract class Collidable extends ImageView {
     /**
      * Constructor taking a path to an image.
      *
-     * @param image    the path to the image to use
-     * @param isStatic if the body is static or not
+     * @param imagePath the path to the image to use
+     * @param isStatic  if the body is static or not
      */
-    public Collidable(String image, boolean isStatic) {
-        super(image);
+    public Collidable(String imagePath, boolean isStatic) {
+        super(ImageManager.getImage(imagePath));
         this.isStatic = isStatic;
     }
 

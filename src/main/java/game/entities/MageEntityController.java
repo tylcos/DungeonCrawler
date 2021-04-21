@@ -63,12 +63,14 @@ public class MageEntityController extends EntityController<Mage> {
         timeFactorX = RandomUtil.get(1d, 2d);
         timeFactorY = RandomUtil.get(1d, 2d);
 
-        debugPoints = new DebugPoint[]{
-            new DebugPoint(),
-            new DebugPoint(),
-            new DebugPoint(),
-            new DebugPoint()
-        };
+        if (useDebugPoints) {
+            debugPoints = new DebugPoint[]{
+                new DebugPoint(),
+                new DebugPoint(),
+                new DebugPoint(),
+                new DebugPoint()
+            };
+        }
     }
 
     public void act() {
@@ -115,15 +117,19 @@ public class MageEntityController extends EntityController<Mage> {
         Point2D prediction = new Point2D(radius * Math.cos(predictedTheta),
                                          radius * Math.sin(predictedTheta));
         for (int i = 0; i < 3; i++) {
-            debugPoints[i].setPosition(prediction);
+            if (useDebugPoints) {
+                debugPoints[i].setPosition(prediction);
+            }
+
             difference     = prediction.subtract(entity.getPosition());
             timeToReach    = difference.magnitude() / speed;
             predictedTheta = currentTheta + timeToReach * thetaDot * predictionGuessScale;
             prediction     = new Point2D(radius * Math.cos(predictedTheta),
                                          radius * Math.sin(predictedTheta));
         }
-        debugPoints[3].setPosition(prediction);
-
+        if (useDebugPoints) {
+            debugPoints[3].setPosition(prediction);
+        }
 
         // Points to where the entity should move
         Point2D target          = prediction.subtract(entity.getPosition());

@@ -1,6 +1,8 @@
 package game;
 
+import core.ImageManager;
 import core.InputManager;
+import game.entities.Player;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -24,11 +26,10 @@ public final class Inventory {
     // The current displayed item image
     private static List<ImageView>    itemImages;
     private static List<Label>        itemCounters;
-    //tewstskndasnklsandkladklasn
 
     private static final String EMPTY_ITEM_TEXT = "";
 
-    private static final Image      BLANK      = new Image("/images/blank.png");
+    private static final Image      BLANK      = ImageManager.getImage("blank.png");
     private static final Background BACKGROUND = new Background(new BackgroundFill(
         Color.gray(.5d, .7d),
         new CornerRadii(20),
@@ -36,8 +37,8 @@ public final class Inventory {
 
     private Inventory() { }
 
-    public static void changeWeapon(String weaponPath) {
-        weapon.setImage(new Image(weaponPath, 100, 100, true, false));
+    public static void changeWeapon(Weapon newWeapon) {
+        weapon.setImage(newWeapon.getImage());
     }
 
     /**
@@ -85,7 +86,7 @@ public final class Inventory {
 
             itemCounters.get(index).setText(EMPTY_ITEM_TEXT);
         } else {
-            Image image = new Image(currentSlot.peek().getItemImage(), 64d, 64d, true, false);
+            Image image = ImageManager.getImage(currentSlot.peek().getItemImage(), 64, 64, true);
             itemImages.get(index).setImage(image);
 
             itemCounters.get(index).setText(String.valueOf(currentSlot.size()));
@@ -105,7 +106,9 @@ public final class Inventory {
         hotbar.getChildren().clear();
 
         // Add weapon slot
-        weapon = new ImageView(new Image("images/PlayerSwordAttack.png", 100, 100, true, false));
+        weapon = new ImageView(Player.getPlayer().getWeapon().getImage());
+        weapon.maxWidth(100);
+        weapon.maxHeight(100);
         VBox column = new VBox(weapon);
         column.setBackground(BACKGROUND);
         hotbar.getChildren().add(column);

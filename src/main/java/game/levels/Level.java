@@ -143,6 +143,10 @@ public class Level {
         // Spawn the player
         GameEngine.instantiate(GameEngine.ENTITY, Player.getPlayer());
 
+        if (exit == null) {
+            System.err.println("exit room not spawned");
+            throw new IllegalStateException("exit room not spawned");
+        }
         exit.addCollectable(new Key());
     }
 
@@ -159,11 +163,6 @@ public class Level {
                 currentRoom.getPosition().subtract(newRoom.getPosition()));
         }
         currentRoom = newRoom;
-
-        //      if (newRoom.isExit()) {
-        //          SceneManager.loadScene(SceneManager.END);
-        //          return;
-        //      }
 
         if (!currentRoom.isGenerated()) {
             generateGameElements(currentRoom);

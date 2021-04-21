@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import views.GameScreen;
 
 import java.io.IOException;
 
@@ -16,7 +15,12 @@ import java.io.IOException;
 public final class SceneManager {
     private static Stage  stage;
     private static Scene  scene;
+    private static Parent root;
+
     private static String sceneName;
+
+    private static Runnable onLoad;
+    private static Runnable onUnload;
 
     public static final String TITLE  = "/views/TitleScreen.fxml";
     public static final String CONFIG = "/views/ConfigScreen.fxml";
@@ -34,20 +38,24 @@ public final class SceneManager {
      * @param fxmlPath Scene to load
      */
     public static void loadScene(String fxmlPath) {
-        // Exiting Game scene
-        if (GAME.equals(sceneName)) {
-            GameEngine.stop();
-
-            GameScreen.getLevel().unloadCurrentRoom();
+        if (onUnload != null) {
+            onUnload.run();
+            onUnload = null;
         }
 
         try {
             sceneName = fxmlPath;
 
             FXMLLoader fxmlLoader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
-            Parent newRoot = fxmlLoader.load();
-            scene.setRoot(newRoot);
+            Parent     newRoot    = fxmlLoader.load();
+            root = newRoot;
 
+            if (onLoad != null) {
+                onLoad.run();
+                onLoad = null;
+            }
+
+            scene.setRoot(newRoot);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
@@ -78,11 +86,38 @@ public final class SceneManager {
     }
 
     /**
+     * Returns root node for the current scene.
+     *
+     * @return root node
+     */
+    public static Parent getRoot() {
+        return root;
+    }
+
+    /**
      * Returns the name of the current scene.
      *
      * @return the name of the current scene
      */
     public static String getSceneName() {
         return sceneName;
+    }
+
+    /**
+     * Sets runnable for when a scene is loaded
+     *
+     * @param onLoad runnable to run
+     */
+    public static void setOnLoad(Runnable onLoad) {
+        SceneManager.onLoad = onLoad;
+    }
+
+    /**
+     * Sets runnable for when a scene is unloaded
+     *
+     * @param onUnload runnable to run
+     */
+    public static void setOnUnload(Runnable onUnload) {
+        SceneManager.onUnload = onUnload;
     }
 }
