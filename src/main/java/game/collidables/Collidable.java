@@ -1,6 +1,7 @@
 package game.collidables;
 
 import core.ImageManager;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -46,12 +47,12 @@ public abstract class Collidable extends ImageView {
     public abstract void onCollision(Collidable other);
 
     /**
-     * Detects if the given Collidable is touching this Collidable.
+     * Detects if the given Node is intersecting this Collidable.
      *
-     * @param target the Collidable to check for collision
-     * @return true if collision is occurring, false otherwise
+     * @param target the Node to check for intersection
+     * @return whether the target is intersecting this Collidable
      */
-    public boolean intersects(Collidable target) {
+    public boolean intersects(Node target) {
         return getBoundsInParent().intersects(target.getBoundsInParent());
 
         // This works for everything but runs slower
