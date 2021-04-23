@@ -75,7 +75,7 @@ public class MageEntityController extends EntityController<Mage> {
 
     public void act() {
         // Spawn debug point for the first time
-        if (useDebugPoints && !debugPoints[0].isRendered() && !stopped) {
+        if (useDebugPoints && debugPoints[0].isNotRendered() && !stopped) {
             GameEngine.addToLayer(GameEngine.VFX, Arrays.asList(debugPoints));
         }
 

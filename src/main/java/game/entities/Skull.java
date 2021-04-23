@@ -40,10 +40,7 @@ public class Skull extends Entity {
             return;
         }
 
-        // Replace with the Player calling this method directly if we move away from clicking to
-        // attack
-        int damage = Player.getPlayer().getWeapon().getDamage();
-        damage(damage);
+        damage(1);
         bounceBack(-20, Player.getPlayer().getPosition());
     }
 

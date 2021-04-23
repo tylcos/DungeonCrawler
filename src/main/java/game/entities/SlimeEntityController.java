@@ -60,7 +60,7 @@ public class SlimeEntityController extends EntityController<Slime> {
 
     public void act() {
         // Spawn debug point for the first time
-        if (useDebugPoints && !debugPoint.isRendered()) {
+        if (useDebugPoints && debugPoint.isNotRendered()) {
             GameEngine.addToLayer(GameEngine.VFX, debugPoint);
         }
 

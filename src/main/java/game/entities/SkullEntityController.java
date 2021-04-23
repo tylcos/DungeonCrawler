@@ -71,7 +71,7 @@ public class SkullEntityController extends EntityController<Skull> {
         }
 
         // Spawn debug point for the first time
-        if (useDebugPoints && !debugPoint.isRendered() && !stopped) {
+        if (useDebugPoints && debugPoint.isNotRendered() && !stopped) {
             GameEngine.addToLayer(GameEngine.VFX, debugPoint);
         }
 

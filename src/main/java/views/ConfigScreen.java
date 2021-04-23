@@ -2,6 +2,7 @@ package views;
 
 import core.GameDriver;
 import core.SceneManager;
+import game.WeaponType;
 import game.entities.Player;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -43,7 +44,7 @@ public class ConfigScreen {
     public void onStartClick() {
         if (isNameValid()) {
             Player.setPlayer(inputTextName.getText(),
-                             inputWeapon.getValue(),
+                             WeaponType.valueOf(inputWeapon.getValue()),
                              inputDifficulty.getValue());
 
             SceneManager.loadScene(SceneManager.GAME);

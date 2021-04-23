@@ -106,7 +106,7 @@ public final class Inventory {
         hotbar.getChildren().clear();
 
         // Add weapon slot
-        weapon = new ImageView(Player.getPlayer().getWeapon().getImage());
+        weapon = new ImageView(Player.getPlayer().getWeaponHolder().getWeapon().getImage());
         weapon.maxWidth(100);
         weapon.maxHeight(100);
         VBox column = new VBox(weapon);
@@ -136,7 +136,7 @@ public final class Inventory {
             // Setup activating the collectables by pressing 1-4 or by clicking on them
             final int finalI  = i;
             KeyCode   keyCode = KeyCode.getKeyCode(String.valueOf(i + 1));
-            InputManager.setEventHandler(keyCode, () -> removeItem(finalI));
+            InputManager.setKeyHandler(keyCode, () -> removeItem(finalI));
             column.setOnMouseClicked(event -> removeItem(finalI));
         }
     }

@@ -198,7 +198,7 @@ public class Room extends GridPane {
             // Get height and width of room by checking size of list and lines of list
             double heightR = ((lines.size() - 3) / 2.0) * CELL_SIZE;
             double widthR = ((lines.get(0).length() - 3) / 2.0) * CELL_SIZE;
-            EnumMap<Direction, Point2D> dOffset = new EnumMap<Direction, Point2D>(Direction.class);
+            EnumMap<Direction, Point2D> dOffset = new EnumMap<>(Direction.class);
             // TODO CELL_SIZE is added an additional time because the player's sprite can be extra
             // wide if they have a sword equipped
             dOffset.put(Direction.NORTH, new Point2D(0, -heightR + (CELL_SIZE * 0.5)));
@@ -376,15 +376,15 @@ public class Room extends GridPane {
      */
     private void addDoor(Image image, StackPane cell, Direction direction) {
         boolean valid = level.getRoomExistsOrAvailable(this, direction);
-        if (!valid) {
-            addWall(SPRITE_TABLE.get('x'), cell);
-        } else {
+        if (valid) {
             if (activeDoors[direction.toValue()]) {
                 Room room = level.getRoomIfExists(this, direction);
                 generateDoor(image, cell, direction, room);
             } else {
                 addWall(SPRITE_TABLE.get('x'), cell);
             }
+        } else {
+            addWall(SPRITE_TABLE.get('x'), cell);
         }
         doors.get(direction).add(cell);
     }
