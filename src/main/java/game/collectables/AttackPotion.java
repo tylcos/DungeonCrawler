@@ -39,10 +39,10 @@ public class AttackPotion extends Collectable implements IItem {
     }
 
     public void activate() {
-        Player.getPlayer().getWeapon().addDamageMultiplier(POTION_STRENGTH);
+        Player.getPlayer().getWeaponHolder().getWeapon().addDamageMultiplier(POTION_STRENGTH);
 
         TimerUtil.schedule(POTION_DURATION,
-                           () -> Player.getPlayer().getWeapon()
+                           () -> Player.getPlayer().getWeaponHolder().getWeapon()
                                      .addDamageMultiplier(1 / POTION_STRENGTH));
     }
 

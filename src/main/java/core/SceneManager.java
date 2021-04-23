@@ -1,9 +1,9 @@
 package core;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -13,9 +13,9 @@ import java.io.IOException;
  * Loads initial window and subsequent scenes
  */
 public final class SceneManager {
-    private static Stage  stage;
-    private static Scene  scene;
-    private static Parent root;
+    private static Stage stage;
+    private static Scene scene;
+    private static Pane  root;
 
     private static String sceneName;
 
@@ -47,7 +47,7 @@ public final class SceneManager {
             sceneName = fxmlPath;
 
             FXMLLoader fxmlLoader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
-            Parent     newRoot    = fxmlLoader.load();
+            Pane       newRoot    = fxmlLoader.load();
             root = newRoot;
 
             if (onLoad != null) {
@@ -90,7 +90,7 @@ public final class SceneManager {
      *
      * @return root node
      */
-    public static Parent getRoot() {
+    public static Pane getRoot() {
         return root;
     }
 

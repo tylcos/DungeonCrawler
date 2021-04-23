@@ -15,8 +15,8 @@ public final class ScreenManager {
         updateScreen();
     }
 
-    private static Point2D windowDimensions;
-    private static Point2D windowCenter;
+    private static Point2D sceneDimensions;
+    private static Point2D sceneCenter;
 
     /**
      * Converts scene coordinates, where (0,0) is the top left of the window, to game coordinates,
@@ -26,7 +26,7 @@ public final class ScreenManager {
      * @return game coordinates
      */
     public static Point2D sceneToGame(Point2D sceneCoordinates) {
-        return sceneCoordinates.subtract(windowCenter);
+        return sceneCoordinates.subtract(sceneCenter);
     }
 
     /**
@@ -42,18 +42,18 @@ public final class ScreenManager {
     }
 
     public static void updateScreen() {
-        windowDimensions = new Point2D(SceneManager.getStage().getWidth(),
-                                       SceneManager.getStage().getHeight());
-        windowCenter     = new Point2D(SceneManager.getStage().getWidth() * .5d,
-                                       SceneManager.getStage().getHeight() * .5d);
+        sceneDimensions = new Point2D(SceneManager.getStage().getWidth(),
+                                      SceneManager.getStage().getHeight());
+        sceneCenter     = new Point2D(SceneManager.getStage().getWidth() * .5d,
+                                      SceneManager.getStage().getHeight() * .5d);
     }
 
     public static double getWidth() {
-        return windowDimensions.getX();
+        return sceneDimensions.getX();
     }
 
     public static double getHeight() {
-        return windowDimensions.getY();
+        return sceneDimensions.getY();
     }
 
     /**
@@ -62,6 +62,6 @@ public final class ScreenManager {
      * @return scale of screen relative to a 1080p display
      */
     public static double getScale() {
-        return windowDimensions.getY() / 1080d;
+        return sceneDimensions.getY() / 1080d;
     }
 }
