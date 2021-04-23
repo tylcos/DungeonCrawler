@@ -150,7 +150,9 @@ public class Level {
 
         if (exit == null) {
             System.err.println("exit room not spawned");
-            throw new IllegalStateException("exit room not spawned");
+
+            map = new Room[MAX_DIAMETER][MAX_DIAMETER];
+            generateMap();
         }
         exit.addCollectable(new Key());
     }
@@ -176,9 +178,9 @@ public class Level {
 
         // Load the new room
         GameEngine.setRenderLayer(GameEngine.ROOM, currentRoom);
+        GameEngine.addToPhysics(currentRoom.getBodies());
         GameEngine.instantiate(GameEngine.ITEM, currentRoom.getCollectables());
         GameEngine.instantiate(GameEngine.ENTITY, currentRoom.getEntities());
-        GameEngine.addToPhysics(currentRoom.getBodies());
 
         Player player = Player.getPlayer();
         player.toBack();

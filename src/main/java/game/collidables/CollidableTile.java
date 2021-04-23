@@ -1,5 +1,6 @@
 package game.collidables;
 
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 
 /**
@@ -26,7 +27,7 @@ public abstract class CollidableTile extends Collidable {
      * @return true if collision is occurring; false otherwise
      */
     @Override
-    public boolean intersects(Collidable target) {
+    public boolean intersects(Node target) {
         return getParent().getBoundsInParent().intersects(target.getBoundsInParent());
     }
 }

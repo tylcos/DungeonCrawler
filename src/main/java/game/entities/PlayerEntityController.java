@@ -6,6 +6,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import utilities.TimerUtil;
+import views.GameScreen;
+
+import java.util.List;
 
 /**
  * Player behavior is to move and attack based on the user's input
@@ -84,6 +87,8 @@ public class PlayerEntityController extends EntityController<Player> {
         if (attacking) {
             return;
         }
+
+        List<Entity> enemies = GameScreen.getLevel().getCurrentRoom().getEntities();
 
         updateWeaponOffsets();
 

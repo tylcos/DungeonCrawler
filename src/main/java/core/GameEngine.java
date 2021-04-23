@@ -11,6 +11,7 @@ import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Manages the spawning, removal, updating, and collision detecting of all entities and runs
@@ -113,6 +114,15 @@ public final class GameEngine {
      */
     public static void stop() {
         frameTimer.stop();
+    }
+
+    /**
+     * Number of frames since the game was started.
+     *
+     * @return frame counter
+     */
+    public static long getFrameCounter() {
+        return frameCounter;
     }
 
     /**
@@ -285,17 +295,23 @@ public final class GameEngine {
     }
 
     /**
+     * Returns all Entities that are currently colliding with the target.
+     *
+     * @param target the collidable to check for collisions on
+     * @return A stream of entities
+     */
+    public static Stream<Entity> getEntityCollisions(Node target) {
+        return dynamicBodies.stream().takeWhile(body -> body.intersects(target));
+    }
+
+    /**
      * Checks if the non-static target collidable hits any static collidables.
      *
      * @param target the collidable to check for collisions on
      * @return whether a collision was detected
      */
-    public static boolean testCollisionCheck(Collidable target) {
-        if (target.isStatic()) {
-            return false;
-        }
-
-        return staticBodies.stream().anyMatch(target::intersects);
+    public static boolean testCollisionCheck(Node target) {
+        return staticBodies.parallelStream().anyMatch(body -> body.intersects(target));
     }
 
     /**
@@ -306,8 +322,8 @@ public final class GameEngine {
      * @param currentStaticBodies  a copy of staticBodies
      */
     private static void runCollisionCheck(Collidable target,
-                                         Entity[] currentDynamicBodies,
-                                         Collidable[] currentStaticBodies) {
+                                          Entity[] currentDynamicBodies,
+                                          Collidable[] currentStaticBodies) {
         for (Collidable collidable : currentStaticBodies) {
             if (collidable != target && collidable.intersects(target)) {
                 collidable.onCollision(target);
