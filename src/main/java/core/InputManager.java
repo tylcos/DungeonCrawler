@@ -13,23 +13,27 @@ import java.util.*;
  * Provides utility for acting on user input in a state based or event driven manner.
  */
 public final class InputManager {
-    private static EnumMap<KeyCode, Boolean>        keyStates = new EnumMap<>(KeyCode.class);
+    private static EnumMap<KeyCode, Long>           keyStates = new EnumMap<>(KeyCode.class);
     private static EnumMap<KeyCode, List<Runnable>> keyEvents = new EnumMap<>(KeyCode.class);
 
     // Initializer for setting up inputState
     static {
         for (KeyCode keyCode : KeyCode.values()) {
-            keyStates.put(keyCode, false);
+            keyStates.put(keyCode, 0L);
         }
 
         Stage stage = SceneManager.getStage();
-        stage.addEventFilter(KeyEvent.KEY_RELEASED, key -> keyStates.put(key.getCode(), false));
+        stage.addEventFilter(KeyEvent.KEY_RELEASED,
+                             key -> keyStates.put(key.getCode(), -GameEngine.getFrameCounter()));
         stage.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            keyStates.put(key.getCode(), true);
+            if (keyStates.get(key.getCode()) <= 0) {
+                keyStates.put(key.getCode(), GameEngine.getFrameCounter());
+                System.out.println(key + " put " + GameEngine.getFrameCounter());
 
-            // Run all events assigned to this key
-            if (keyEvents.containsKey(key.getCode())) {
-                keyEvents.get(key.getCode()).forEach(Runnable::run);
+                // Run all events assigned to this key
+                if (keyEvents.containsKey(key.getCode())) {
+                    keyEvents.get(key.getCode()).forEach(Runnable::run);
+                }
             }
         });
     }
@@ -47,7 +51,29 @@ public final class InputManager {
      * @return whether the key is currently pressed
      */
     public static boolean get(KeyCode keyCode) {
-        return keyStates.get(keyCode);
+        return keyStates.get(keyCode) > 0;
+    }
+
+    /**
+     * Returns whether the key was pressed during this frame.
+     * Used for state based input management.
+     *
+     * @param keyCode the key code to be checked
+     * @return whether the key was pressed during this frame.
+     */
+    public static boolean getKeyDown(KeyCode keyCode) {
+        return keyStates.get(keyCode) == GameEngine.getFrameCounter();
+    }
+
+    /**
+     * Returns whether the key was released during this frame.
+     * Used for state based input management.
+     *
+     * @param keyCode the key code to be checked
+     * @return whether the key was released during this frame.
+     */
+    public static boolean getKeyUp(KeyCode keyCode) {
+        return keyStates.get(keyCode) == -GameEngine.getFrameCounter();
     }
 
     /**
