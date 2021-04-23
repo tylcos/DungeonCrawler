@@ -69,11 +69,11 @@ public abstract class Collidable extends ImageView {
     }
 
     /**
-     * Returns whether the collidable is being rendered.
+     * Returns whether the collidable is not being rendered.
      *
-     * @return whether the collidable is being rendered
+     * @return whether the collidable is not being rendered
      */
-    public final boolean isRendered() {
-        return getParent() != null;
+    public final boolean isNotRendered() {
+        return getParent() == null;
     }
 }

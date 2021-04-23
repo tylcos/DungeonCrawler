@@ -49,6 +49,22 @@ public class Level {
     // Used to update the ui minimap when a new room is loaded
     private static EventHandler<? extends Event> uiEventHandler;
 
+    public static final List<Supplier<Collectable>>  COLLECTABLES;
+    public static final List<List<Supplier<Entity>>> ENEMIES;
+
+    static {
+        // List of Collectable constructors, add any new Collectables to be spawned here
+        // Each element for any index i, will be spawned collectablesToSpawn[i] times
+        COLLECTABLES = List.of(Coin::new, HealthPotion::new, AttackPotion::new, SpeedPotion::new,
+                               NukeItem::new, WeaponItem::new);
+
+        // 2d list of Entity constructors separated into difficulty tiers
+        ENEMIES = new ArrayList<>(3);
+        ENEMIES.add(List.of(Slime::new));
+        ENEMIES.add(List.of(Skull::new));
+        ENEMIES.add(List.of(Mage::new));
+    }
+
     /**
      * Create a new level without anything inside it.
      */
@@ -69,15 +85,9 @@ public class Level {
 
         // Add Collectables
 
-        // List of Collectable constructors, add any new Collectables to be spawned here
-        // Each element for any index i, will be spawned collectablesToSpawn[i] times
-        List<Supplier<Collectable>> collectables =
-            List.of(Coin::new, HealthPotion::new, AttackPotion::new, SpeedPotion::new,
-                    NukeItem::new, WeaponItem::new);
-
         int[] collectablesToSpawn;
         if (spawnItemsInEntrance) {
-            collectablesToSpawn = IntStream.generate(() -> 1).limit(collectables.size()).toArray();
+            collectablesToSpawn = IntStream.generate(() -> 1).limit(COLLECTABLES.size()).toArray();
         } else {
             collectablesToSpawn = new int[] {
                 RandomUtil.getInt(1, 5),        // Coin [1,4]
@@ -90,19 +100,14 @@ public class Level {
         }
 
         // Add collectables to the current room
-        for (int type = 0; type < collectables.size(); type++) {
+        for (int type = 0; type < COLLECTABLES.size(); type++) {
             for (int i = 0; i < collectablesToSpawn[type]; i++) {
-                room.addCollectable(collectables.get(type).get());
+                room.addCollectable(COLLECTABLES.get(type).get());
             }
         }
 
         if (!spawnItemsInEntrance) {
             // Add Entities
-            // 2d list of Entity constructors separated into difficulty tiers
-            List<List<Supplier<Entity>>> enemies = new ArrayList<>(3);
-            enemies.add(List.of(Slime::new));
-            enemies.add(List.of(Skull::new));
-            enemies.add(List.of(Mage::new));
 
             // Enemies spawned: Boring [2,3], Normal [2,6], Hard [2, 9]
             // Each element in the array is a different tier
@@ -116,7 +121,7 @@ public class Level {
 
             // Add enemies to the current room
             for (int tier = 0; tier < 3; tier++) {
-                List<Supplier<Entity>> currentTier = enemies.get(tier);
+                List<Supplier<Entity>> currentTier = ENEMIES.get(tier);
 
                 for (int i = 0; i < enemiesToSpawnPerTier[tier]; i++) {
                     int    randomIndex  = RandomUtil.getInt(currentTier.size());

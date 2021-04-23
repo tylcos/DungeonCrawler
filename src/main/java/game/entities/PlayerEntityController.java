@@ -5,6 +5,7 @@ import game.Weapon;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import utilities.TimerUtil;
 
 /**
  * Player behavior is to move and attack based on the user's input
@@ -17,6 +18,12 @@ public class PlayerEntityController extends EntityController<Player> {
     // https://www.desmos.com/calculator/xjyyi5sndo
     private double inputSmooth = .3d;
 
+    private boolean      attacking;
+    private long         lastAttackTime;
+    private double       radiusOffset;
+    private double       angleOffset;
+    private WeaponHolder weaponHolder;
+
     /**
      * Create an EntityController to control an entity
      *
@@ -24,8 +31,15 @@ public class PlayerEntityController extends EntityController<Player> {
      */
     public PlayerEntityController(Player entity) {
         super(entity);
+        weaponHolder = entity.getWeaponHolder();
 
+        updateWeaponOffsets(); // Set initial offsets for current weapon
         SceneManager.getStage().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> attack());
+
+        InputManager.addKeyHandler(KeyCode.TAB, () -> {
+            weaponHolder.changeWeapon();
+            updateWeaponOffsets();
+        });
     }
 
     public void act() {
@@ -53,26 +67,38 @@ public class PlayerEntityController extends EntityController<Player> {
         double  dt            = GameEngine.getDt();
         double  modifiedSpeed = speed * entity.getSpeedMultiplier();
         Point2D rawVelocity   = input.normalize().multiply(modifiedSpeed);
-        Point2D velocity = entity.getVelocity().interpolate(rawVelocity,
-                                                            inputSmooth * (60d * dt + .0007d / dt));
+        Point2D velocity = entity.getVelocity()
+                               .interpolate(rawVelocity, -inputSmooth * (60d * dt + .0007d / dt));
 
         double dVelocity = velocity.subtract(entity.getVelocity()).magnitude() / modifiedSpeed;
         entity.setVelocity(dVelocity < .01 ? rawVelocity : velocity);
 
         // Weapon input
-        if (InputManager.get(KeyCode.TAB)) {
-            //entity.changeWeapon();
-        }
+        Weapon weapon = weaponHolder.getWeapon();
+        attacking = System.nanoTime() - lastAttackTime < weapon.getFireRate() * 1e9;
+        weaponHolder.setOffsets(radiusOffset, angleOffset);
     }
 
     @Override
     void attack() {
-        Weapon weapon = entity.getWeapon();
+        if (attacking) {
+            return;
+        }
+
+        updateWeaponOffsets();
+
+        lastAttackTime = System.nanoTime();
+    }
+
+    private void updateWeaponOffsets() {
+        Weapon weapon = weaponHolder.getWeapon();
         switch (weapon.getType()) {
         case Bow:
 
             break;
         case Sword:
+            double sign = angleOffset >= 0 ? 1 : -1;
+            TimerUtil.lerp(weapon.getFireRate() / 8, t -> angleOffset = sign * -45 * (2 * t - 1));
 
             break;
         default:

@@ -2,6 +2,7 @@ package views;
 
 import core.*;
 import game.Inventory;
+import game.WeaponType;
 import game.entities.Player;
 import game.levels.Level;
 import javafx.fxml.FXML;
@@ -42,7 +43,7 @@ public class GameScreen {
         SceneManager.setOnLoad(() -> {
             // Loaded the GameScreen without going through the config screen
             if (Player.getPlayer() == null) {
-                Player.setPlayer("Team Azula", "Sword", "Debug");
+                Player.setPlayer("Team Azula", WeaponType.Sword, "Debug");
             }
 
             version.setText(GameDriver.GAME_VERSION);

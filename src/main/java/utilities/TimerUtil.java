@@ -32,7 +32,7 @@ public final class TimerUtil {
      * @param action    An action that gets called every frame
      */
     public static void lerp(double totalTime, Consumer<Double> action) {
-        lerp(totalTime, action, () -> { });
+        lerp(totalTime, action, null);
     }
 
     /**
@@ -53,9 +53,11 @@ public final class TimerUtil {
 
                 if (time > totalTime) {
                     action.accept(1d);
-
-                    onFinish.run();
                     stop();
+
+                    if (onFinish != null) {
+                        onFinish.run();
+                    }
                 } else {
                     action.accept(time / totalTime);
                 }

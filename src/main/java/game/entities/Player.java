@@ -1,17 +1,17 @@
 package game.entities;
 
 import core.*;
-import game.*;
+import game.Weapon;
+import game.WeaponType;
 import game.collectables.Key;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import utilities.*;
+import utilities.GameEffects;
+import utilities.TimerUtil;
 
 /**
  * Singleton-like controller for the player
@@ -20,7 +20,6 @@ public final class Player extends Entity {
     private static Player player;
 
     private String name;
-    private Weapon weapon;
     private int    difficulty;
     private int    maxHealth;
 
@@ -29,28 +28,27 @@ public final class Player extends Entity {
     private Key     key;
     private boolean keyActivated;
 
-    private        ImageView heldWeapon;
-    private static TextArea  uiInfoText;
+    private WeaponHolder weaponHolder;
+
+    private static TextArea uiInfoText;
 
     /**
      * Initializes the Player
      *
      * @param playerName the name of the main player
-     * @param weaponName the name of the weapon the player has
+     * @param weaponType the name of the weapon the player has
      * @param difficulty the difficulty of the game
      */
-    public static void setPlayer(String playerName, String weaponName, String difficulty) {
-        player      = new Player(weaponName, difficulty);
-        player.name = playerName;
+    public static void setPlayer(String playerName, WeaponType weaponType, String difficulty) {
+        player = new Player(playerName, weaponType, difficulty);
     }
 
-    private Player(String weaponName, String difficulty) {
+    private Player(String playerName, WeaponType weaponType, String difficulty) {
         super("Player.png", Point2D.ZERO, new Point2D(65, 70));
+        name = playerName;
 
-        Image weaponImage = ImageManager.getSprite("weapons.png", RandomUtil.getInt(3),
-                                                   RandomUtil.getInt(11), 32, 3);
-        weapon = new Weapon("Starting " + weaponName, WeaponType.valueOf(weaponName), 1, 1d,
-                            weaponImage);
+        weaponHolder = new WeaponHolder(2);
+        weaponHolder.add(new Weapon("Starting " + weaponType, weaponType, 0));
 
         switch (difficulty) {
         case "Boring":
@@ -92,14 +90,11 @@ public final class Player extends Entity {
             handleKey();
         }
 
+        // Setup weapon image
+        weaponHolder.render();
+
         // Used for player movement and attacking
         entityController.act();
-
-        if (heldWeapon == null || heldWeapon.getParent() == null) {
-            heldWeapon = new ImageView(weapon.getImage());
-            GameEngine.addToLayer(GameEngine.VFX, heldWeapon);
-        }
-        Weapon.setWeaponPosition(heldWeapon);
     }
 
     @Override
@@ -174,10 +169,12 @@ public final class Player extends Entity {
         }
     }
 
-    public void changeWeapon(Weapon weapon) {
-        heldWeapon.setImage(weapon.getImage());
+    public Weapon addWeapon(Weapon weapon) {
+        return weaponHolder.add(weapon);
+    }
 
-        Inventory.changeWeapon(weapon);
+    public WeaponHolder getWeaponHolder() {
+        return weaponHolder;
     }
 
     public void addSpeedMultiplier(double multiplier) {
@@ -186,10 +183,6 @@ public final class Player extends Entity {
 
     public double getSpeedMultiplier() {
         return speedMultiplier;
-    }
-
-    public Weapon getWeapon() {
-        return weapon;
     }
 
     public boolean isKeyActivated() {
@@ -208,7 +201,7 @@ public final class Player extends Entity {
     public String toStringFormatted() {
         String formattedHealth = isDead ? "DEAD" : String.valueOf(health);
         return String.format("Name: %s \nWeapon: %s \nMoney: %d \nHealth: %s",
-                             name, weapon, money, formattedHealth);
+                             name, weaponHolder.getWeapon(), money, formattedHealth);
     }
 
     @Override

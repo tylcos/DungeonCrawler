@@ -68,7 +68,7 @@ public final class InputManager {
      * @param keyCode  the key to subscribe to
      * @param runnable the event to run once the key is pressed
      */
-    public static void addEventHandler(KeyCode keyCode, Runnable runnable) {
+    public static void addKeyHandler(KeyCode keyCode, Runnable runnable) {
         keyEvents.putIfAbsent(keyCode, new ArrayList<>(1));
 
         keyEvents.get(keyCode).add(runnable);
@@ -81,7 +81,7 @@ public final class InputManager {
      * @param keyCode  the key to unsubscribe from
      * @param runnable the event to remove
      */
-    public static void removeEventHandler(KeyCode keyCode, Runnable runnable) {
+    public static void removeKeyHandler(KeyCode keyCode, Runnable runnable) {
         keyEvents.get(keyCode).remove(runnable);
     }
 
@@ -92,7 +92,7 @@ public final class InputManager {
      * @param keyCode  the key to subscribe to
      * @param runnable the event to run once the key is pressed
      */
-    public static void setEventHandler(KeyCode keyCode, Runnable runnable) {
+    public static void setKeyHandler(KeyCode keyCode, Runnable runnable) {
         keyEvents.put(keyCode, List.of(runnable));
     }
 
@@ -102,7 +102,7 @@ public final class InputManager {
      *
      * @param keyCode the key to unsubscribe all events from
      */
-    public static void clearEventHandler(KeyCode keyCode) {
+    public static void clearKeyHandler(KeyCode keyCode) {
         if (keyEvents.containsKey(keyCode)) {
             keyEvents.get(keyCode).clear();
         }

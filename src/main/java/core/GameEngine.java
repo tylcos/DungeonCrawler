@@ -187,8 +187,8 @@ public final class GameEngine {
      * Adds the given object to the render layer.
      * Used to render objects that do not need physics.
      *
-     * @param <T>     any type that extends Node
-     * @param layer   the render layer to remove from
+     * @param <T>    any type that extends Node
+     * @param layer  the render layer to remove from
      * @param object the object to remove
      */
     public static <T extends Node> void addToLayer(int layer, T object) {
@@ -210,8 +210,8 @@ public final class GameEngine {
     /**
      * Removes the given object from the render layer.
      *
-     * @param <T>     any type that extends Node
-     * @param layer   the render layer to remove from
+     * @param <T>    any type that extends Node
+     * @param layer  the render layer to remove from
      * @param object the object to remove
      */
     public static <T extends Node> void removeFromLayer(int layer, T object) {
@@ -285,13 +285,27 @@ public final class GameEngine {
     }
 
     /**
+     * Checks if the non-static target collidable hits any static collidables.
+     *
+     * @param target the collidable to check for collisions on
+     * @return whether a collision was detected
+     */
+    public static boolean testCollisionCheck(Collidable target) {
+        if (target.isStatic()) {
+            return false;
+        }
+
+        return staticBodies.stream().anyMatch(target::intersects);
+    }
+
+    /**
      * Checks and handles collisions on the target collidable.
      *
      * @param target               the collidable to check for collisions on
      * @param currentDynamicBodies a copy of dynamicBodies
      * @param currentStaticBodies  a copy of staticBodies
      */
-    public static void runCollisionCheck(Collidable target,
+    private static void runCollisionCheck(Collidable target,
                                          Entity[] currentDynamicBodies,
                                          Collidable[] currentStaticBodies) {
         for (Collidable collidable : currentStaticBodies) {

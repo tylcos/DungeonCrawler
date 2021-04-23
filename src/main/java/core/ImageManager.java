@@ -1,5 +1,6 @@
 package core;
 
+import game.levels.Level;
 import javafx.geometry.Point2D;
 import javafx.scene.image.*;
 
@@ -8,15 +9,17 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
 import java.util.HashMap;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public final class ImageManager {
-    private static final HashMap<String, InputStream> IMAGES = new HashMap<>();
+    private static final HashMap<String, InputStream> DATA   = new HashMap<>();
+    private static final HashMap<String, Image>       IMAGES = new HashMap<>();
 
     // Load any images beforehand for better performance
     static {
         // Preload all images in a background thread for better performance while running
-        Thread startupThread = new Thread(() -> {
+        new Thread(() -> {
             File imagesDir = getPath("");
 
             try (Stream<Path> paths = Files.walk(imagesDir.toPath())) {
@@ -25,16 +28,22 @@ public final class ImageManager {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
-        startupThread.setDaemon(true);
-        startupThread.start();
+
+            Level.ENEMIES.forEach(tier -> tier.forEach(Supplier::get));
+            Level.COLLECTABLES.forEach(Supplier::get);
+        }).start();
     }
 
-    private ImageManager() {
-    }
+    private ImageManager() { }
 
     public static Image getImage(String name) {
-        return new Image(getInputStream(name));
+        if (IMAGES.containsKey(name)) {
+            return IMAGES.get(name);
+        }
+
+        Image image = new Image(getInputStream(name));
+        IMAGES.put(name, image);
+        return image;
     }
 
     public static Image getImage(String name, Point2D dimensions, boolean preserveRatio) {
@@ -42,37 +51,46 @@ public final class ImageManager {
     }
 
     public static Image getImage(String name, int width, int height, boolean preserveRatio) {
-        return new Image(getInputStream(name), width, height, preserveRatio, false);
+        String key = String.format("%s_%d_%d_%b", name, width, height, preserveRatio);
+        if (IMAGES.containsKey(key)) {
+            return IMAGES.get(key);
+        }
+
+        Image image = new Image(getInputStream(name), width, height, preserveRatio, false);
+        IMAGES.put(key, image);
+        return image;
     }
 
     public static Image getSprite(String name, int x, int y, int spacing) {
-        Image sheet = getImage(name);
-
-        WritableImage wr = new WritableImage(spacing, spacing);
-        PixelWriter   pw = wr.getPixelWriter();
-        pw.setPixels(0, 0, spacing, spacing, sheet.getPixelReader(), spacing * x, spacing * y);
-
-        return wr;
+        return getSprite(name, x, y, spacing, 1d);
     }
 
     public static Image getSprite(String name, int x, int y, int spacing, double scale) {
+        String key = String.format("%s_%d_%d_%d_%f", name, x, y, spacing, scale);
+        if (IMAGES.containsKey(key)) {
+            return IMAGES.get(key);
+        }
+
         Image sheet = getImage(name);
-        sheet = getImage(name, (int) (sheet.getWidth() * scale),
-                         (int) (sheet.getHeight() * scale), false);
+        if (Math.abs(scale - 1d) > 1e-9) {
+            sheet = getImage(name, (int) (sheet.getWidth() * scale),
+                             (int) (sheet.getHeight() * scale), false);
+        }
 
-        int scaledSpacing = (int) (spacing * scale);
-        WritableImage wr = new WritableImage(scaledSpacing, scaledSpacing);
-        PixelWriter   pw = wr.getPixelWriter();
-        pw.setPixels(0, 0, scaledSpacing, scaledSpacing, sheet.getPixelReader(),
-                     scaledSpacing * x, scaledSpacing * y);
+        int           scaledSpacing = (int) (spacing * scale);
+        WritableImage sprite        = new WritableImage(scaledSpacing, scaledSpacing);
+        PixelWriter   pixelWriter   = sprite.getPixelWriter();
+        pixelWriter.setPixels(0, 0, scaledSpacing, scaledSpacing, sheet.getPixelReader(),
+                              scaledSpacing * x, scaledSpacing * y);
 
-        return wr;
+        IMAGES.put(key, sprite);
+        return sprite;
     }
 
     private static InputStream getInputStream(String name) {
         try {
-            if (IMAGES.containsKey(name)) {
-                InputStream inputStream = IMAGES.get(name);
+            if (DATA.containsKey(name)) {
+                InputStream inputStream = DATA.get(name);
                 inputStream.reset();
                 return inputStream;
             }
@@ -81,7 +99,7 @@ public final class ImageManager {
             InputStream bis = new ByteArrayInputStream(fis.readAllBytes());
             fis.close();
 
-            IMAGES.put(name, bis);
+            DATA.put(name, bis);
             return bis;
         } catch (IOException e) {
             e.printStackTrace();

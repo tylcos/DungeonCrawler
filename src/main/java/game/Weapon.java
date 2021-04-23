@@ -1,10 +1,8 @@
 package game;
 
-import core.InputManager;
-import game.entities.Player;
-import javafx.geometry.Point2D;
+import core.ImageManager;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import utilities.RandomUtil;
 
 /**
  * Stores weapon info and utility methods
@@ -17,24 +15,36 @@ public class Weapon {
 
     private Image image;
 
-    private static final double HOLD_DISTANCE = 90d;
+    /**
+     * Creates an instance of a weapon.
+     *
+     * @param type the type
+     * @param tier the tier
+     */
+    public Weapon(WeaponType type, int tier) {
+        this(getRandomWeaponName(type), type, tier);
+    }
 
     /**
      * Creates an instance of a weapon.
      *
-     * @param name     the name
-     * @param type     the type
-     * @param damage   the damage done on attack
-     * @param fireRate the fire rate
-     * @param image    the image
+     * @param name the name
+     * @param type the type
+     * @param tier the tier
      */
-    public Weapon(String name, WeaponType type, int damage, double fireRate, Image image) {
-        this.name     = name;
-        this.type     = type;
-        this.damage   = damage;
-        this.fireRate = fireRate;
+    public Weapon(String name, WeaponType type, int tier) {
+        this.name = name;
+        this.type = type;
 
-        this.image = image;
+        if (type == WeaponType.Sword || type == WeaponType.Bow) {
+            damage   = tier / 3 + 1;
+            fireRate = 1d - .25d * (tier % 4);
+        } else if (type == WeaponType.Axe || type == WeaponType.Staff) {
+            damage   = 2 * (tier / 3 + 1);
+            fireRate = 2d - .25d * (tier % 4);
+        }
+
+        image = ImageManager.getSprite("weapons.png", type.getValue(), tier, 32, 3);
     }
 
     /**
@@ -44,15 +54,6 @@ public class Weapon {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Sets the weapon to a new name.
-     *
-     * @param name the new name of the weapon
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -71,15 +72,6 @@ public class Weapon {
      */
     public int getDamage() {
         return damage;
-    }
-
-    /**
-     * Sets the damage of the weapon to a new amount.
-     *
-     * @param damage the new amount of damage the weapon does
-     */
-    public void setDamage(int damage) {
-        this.damage = damage;
     }
 
     public void addDamageMultiplier(double multiplier) {
@@ -102,24 +94,96 @@ public class Weapon {
      *
      * @return the String display of the weapon
      */
-    public String toStringFormatted() {
-        return String.format("%s, %d damage", name, damage);
-    }
-
     @Override
     public String toString() {
-        return toStringFormatted();
+        return String.format("%s, %d dmg %.2fs fire rate", name, damage, fireRate);
     }
 
-    public static void setWeaponPosition(ImageView heldWeapon) {
-        Point2D playerPosition  = Player.getPlayer().getPosition();
-        Point2D mousePosition   = InputManager.getMousePosition();
-        Point2D facingDirection = mousePosition.subtract(playerPosition).normalize();
-        Point2D weaponPosition  = playerPosition.add(facingDirection.multiply(HOLD_DISTANCE));
-        double angle = Math.toDegrees(Math.atan2(facingDirection.getY(), facingDirection.getX()));
+    private static final String[][] WEAPON_NAMES = {
+        {"Divine Light",
+         "Storm-Weaver",
+         "The Oculus",
+         "Blood Infused Mageblade",
+         "Vengeful Spellblade",
+         "Desolation Copper Quickblade",
+         "Blood Infused Skeletal Protector",
+         "Shadowsteel-Call of Mourning",
+         "Oblivion-Sabre of Magic",
+         "Nethersbane-Runed Blade of Inception",
+         "Abyssal Shard",
+         "Ghostwalker",
+         "Eternal Harmony",
+         "Soul-Forged Mageblade",
+         "Wind-Forged Slicer",
+         "Venom Iron Sword",
+         "Ghostly Steel Reaver",
+         "Grasscutter-Bond of Trembling Hands",
+         "The End-Betrayer of Shifting Sands",
+         "Treachery-Soul of Torment"
+        },
+        {"Doombringer",
+         "Crimson",
+         "Peacemaker",
+         "Engraved Axe",
+         "Heartless Dualblade",
+         "Firesoul Iron Battle Axe",
+         "Greedy Obsidian Ravager",
+         "Pride-Reaper of Magic",
+         "Ashes-Doomblade of Blood",
+         "Reign-Gift of the Incoming Storm",
+         "Peacekeeper",
+         "Catastrophe",
+         "The End",
+         "Wind's Chopper",
+         "Liar's War Axe",
+         "Reincarnated Steel Battle Axe",
+         "Eerie Glass Edge",
+         "Massacre-Gift of the Leviathan",
+         "Epilogue-Axe of the South",
+         "Peacemaker-War Axe of the Harvest"
+        },
+        {"Bolt",
+         "Falling Star",
+         "Honed Yew Bow",
+         "Haunted Willow Heavy Crossbow",
+         "Hurricane-Voice of the Caged Mind",
+         "Arcus-Might of the Lone Wolf",
+         "Twister-Dawn of the Sky",
+         "Needle Threader",
+         "Windlass",
+         "Meteor",
+         "Driftwood Hunting Bow",
+         "Bone Crushing Ashwood Arbalest",
+         "Hollow Warpwood Bolter",
+         "Snipe-Piercer of Zeal",
+         "Phantom Strike-Chord of the Talon",
+         "Shadow Strike-Dawn of the Lost"
+        },
+        {"Dreamcaller",
+         "Maelstrom",
+         "Omen",
+         "Venom Greatstaff",
+         "Frost Warden Staff",
+         "Grieving Sagewood Spiritstaff",
+         "Destiny's Iron Warden Staff",
+         "Treachery-Defender of Time",
+         "Catastrophe-Executioner of Power",
+         "Storm-Tribute of the Earth",
+         "Anarchy",
+         "Cloudscorcher",
+         "Corrupted Will",
+         "Mage's Scepter",
+         "Bonecarvin Spire",
+         "Barbarian Bone Energy Staff",
+         "Cursed Sagewood Spiritstaff",
+         "Lifebinder-Oath of the Beast",
+         "The Void-Reach of Unholy Might",
+         "Torment-Favor of the Blessed"
+        }
+    };
 
-        heldWeapon.setTranslateX(weaponPosition.getX());
-        heldWeapon.setTranslateY(weaponPosition.getY());
-        heldWeapon.setRotate(angle + 45);
+    public static String getRandomWeaponName(WeaponType type) {
+        String[] tierNames = WEAPON_NAMES[type.getValue()];
+        return tierNames[RandomUtil.getInt(tierNames.length)];
     }
 }
