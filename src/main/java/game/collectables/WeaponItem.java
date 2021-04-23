@@ -28,7 +28,7 @@ public class WeaponItem extends Collectable {
 
     @Override
     public void onCollision(Collidable other) {
-        if (isCollected || !(other instanceof Player) || !InputManager.get(KeyCode.E)) {
+        if (isCollected || !(other instanceof Player) || !InputManager.getKeyDown(KeyCode.E)) {
             return;
         }
 
@@ -36,6 +36,7 @@ public class WeaponItem extends Collectable {
 
         Weapon replaced = Player.getPlayer().addWeapon(weapon);
         if (replaced != null) {
+            weapon = replaced;
             setImage(replaced.getImage());
         } else {
             setCollected();

@@ -100,7 +100,7 @@ public class MageEntityController extends EntityController<Mage> {
 
         // Predicts where the player will be
         double timeToReach = difference.magnitude() / speed;
-        double radius      = player.getPosition().magnitude();
+        double radius      = playerPosition.magnitude();
         double currentTheta = (Math.atan2(playerPosition.getY(), playerPosition.getX())
                                + TWO_PI) % TWO_PI;
 

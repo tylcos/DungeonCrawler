@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 public class WeaponHolder {
     private Weapon[]  weapons;
     private int       weaponIndex;
-    private ImageView weaponImage;
+    private ImageView weaponImageView;
 
     private double radiusOffset;
     private double angleOffset;
@@ -21,18 +21,22 @@ public class WeaponHolder {
         weapons = new Weapon[size];
     }
 
-    public Weapon add(Weapon weapon) {
+    public Weapon add(Weapon addedWeapon) {
+        // Free slot
         for (int i = 0; i < weapons.length; i++) {
             if (weapons[i] == null) {
-                weapons[i] = weapon;
+                weapons[i] = addedWeapon;
                 changeWeapon(i);
 
                 return null;
             }
         }
 
-        Weapon current = getWeapon();
-        weapons[weaponIndex] = weapon;
+        // Replace current weapon
+        Weapon current = weapons[weaponIndex];
+
+        weapons[weaponIndex] = addedWeapon;
+        changeWeapon(weaponIndex);
         return current;
     }
 
@@ -46,18 +50,22 @@ public class WeaponHolder {
     }
 
     private void changeWeapon(int index) {
+        if (weapons[index] == null) {
+            return;
+        }
+
         weaponIndex = index;
 
-        if (weaponImage != null) {
-            weaponImage.setImage(weapons[index].getImage());
+        if (weaponImageView != null) {
+            weaponImageView.setImage(weapons[index].getImage());
             Inventory.changeWeapon(weapons[index]);
         }
     }
 
     public void render() {
-        if (weaponImage == null || weaponImage.getParent() == null) {
-            weaponImage = new ImageView(getWeapon().getImage());
-            GameEngine.addToLayer(GameEngine.VFX, weaponImage);
+        if (weaponImageView == null || weaponImageView.getParent() == null) {
+            weaponImageView = new ImageView(weapons[weaponIndex].getImage());
+            GameEngine.addToLayer(GameEngine.VFX, weaponImageView);
         }
 
         Point2D playerPosition  = Player.getPlayer().getPosition();
@@ -72,12 +80,16 @@ public class WeaponHolder {
         Point2D weaponPosition = playerPosition.add(
             adjustedDirection.multiply(WEAPON_HOLD_DISTANCE + radiusOffset));
 
-        weaponImage.setTranslateX(weaponPosition.getX());
-        weaponImage.setTranslateY(weaponPosition.getY());
-        weaponImage.setRotate(adjustedAngleDeg + 45);
+        weaponImageView.setTranslateX(weaponPosition.getX());
+        weaponImageView.setTranslateY(weaponPosition.getY());
+        weaponImageView.setRotate(adjustedAngleDeg + 45);
     }
 
     public Weapon getWeapon() {
         return weapons[weaponIndex];
+    }
+
+    public ImageView getWeaponImageView() {
+        return weaponImageView;
     }
 }
