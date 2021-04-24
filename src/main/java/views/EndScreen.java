@@ -44,7 +44,7 @@ public class EndScreen {
             endGameText.setText("You Died");
             totalKill.setText("total monster kill: " + totalNumKill);
             totalPostion.setText("total position obtained: " + totalPostionObtain);
-            totalNuke.setText("total number of nuke used: " + totalNuked);
+            totalNuke.setText("number of nuke used: " + totalNuked);
 
 
             color.setColor(Color.RED);
