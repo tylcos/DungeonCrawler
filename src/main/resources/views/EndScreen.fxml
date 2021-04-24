@@ -28,20 +28,26 @@
                         <Bloom threshold="0.0"/>
                     </effect>
                 </Label>
-                <VBox prefHeight="200.0" prefWidth="100.0" stylesheets="@../styles/Global.css">
-                    <children>
-                        <Label fx:id="totalKills" prefHeight="70.0" prefWidth="576.0" text="totalKills" styleClass="gameInfoText">
-                        </Label>
-                        <Label fx:id="totalPotions" prefHeight="70.0" prefWidth="536.0" text="totalPotions" styleClass="gameInfoText">
-                        </Label>
-                        <Label fx:id="totalNukes" prefHeight="70.0" prefWidth="755.0" text="totalNukes" styleClass="gameInfoText">
-                        </Label>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                    </VBox.margin>
-                </VBox>
             </children>
+        </VBox>
+        <VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0" stylesheets="@../styles/Global.css" StackPane.alignment="BOTTOM_LEFT">
+            <children>
+                <Label fx:id="totalKills" styleClass="gameInfoText" text="totalKills">
+                </Label>
+                <Label fx:id="totalPotions" styleClass="gameInfoText" text="totalPotions">
+                </Label>
+                <Label fx:id="totalNukes" styleClass="gameInfoText" text="totalNukes">
+                </Label>
+            </children>
+            <StackPane.margin>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            </StackPane.margin>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0"/>
+            </padding>
+            <effect>
+                <Glow level="1.0"/>
+            </effect>
         </VBox>
         <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" stylesheets="@../styles/Global.css" StackPane.alignment="BOTTOM_RIGHT">
             <children>
