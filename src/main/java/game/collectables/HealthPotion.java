@@ -7,6 +7,7 @@ import game.inventory.IItem;
 import game.inventory.Inventory;
 import javafx.geometry.Point2D;
 import utilities.RandomUtil;
+import views.EndScreen;
 
 /**
  * A health potion that allows the player to regain two HP.
@@ -27,7 +28,7 @@ public class HealthPotion extends Collectable implements IItem {
         if (isCollected || !(other instanceof Player)) {
             return;
         }
-
+        EndScreen.addTotalPostionObtain();
         SoundManager.playPotionCollected();
         setCollected();
 

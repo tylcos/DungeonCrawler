@@ -8,13 +8,14 @@ import game.inventory.Inventory;
 import javafx.geometry.Point2D;
 import utilities.RandomUtil;
 import utilities.TimerUtil;
+import views.EndScreen;
 
 /**
  * A Item that speeds up the Player's movement
  */
 public class SpeedPotion extends Collectable implements IItem {
-    private static final int    ITEM_ID = 2;
-    private static final String IMAGE   = "PotionOfSpeed.gif";
+    private static final int ITEM_ID = 2;
+    private static final String IMAGE = "PotionOfSpeed.gif";
 
     private static final double POTION_DURATION = 5d;
     private static final double POTION_STRENGTH = 4d / 3d;
@@ -28,7 +29,7 @@ public class SpeedPotion extends Collectable implements IItem {
         if (isCollected || !(other instanceof Player)) {
             return;
         }
-
+        EndScreen.addTotalPostionObtain();
         SoundManager.playPotionCollected();
         setCollected();
 
@@ -39,7 +40,7 @@ public class SpeedPotion extends Collectable implements IItem {
         Player.getPlayer().addSpeedMultiplier(POTION_STRENGTH);
 
         TimerUtil.schedule(POTION_DURATION,
-                           () -> Player.getPlayer().addSpeedMultiplier(1 / POTION_STRENGTH));
+                () -> Player.getPlayer().addSpeedMultiplier(1 / POTION_STRENGTH));
     }
 
     public int getItemID() {

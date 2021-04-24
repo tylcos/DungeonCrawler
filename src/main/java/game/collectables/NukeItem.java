@@ -9,14 +9,15 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 import utilities.RandomUtil;
 import utilities.TimerUtil;
+import views.EndScreen;
 import views.GameScreen;
 
 /**
  * A Item that kills all enemies and possibly the Player
  */
 public class NukeItem extends Collectable implements IItem {
-    private static final int    ITEM_ID = 3;
-    private static final String IMAGE   = "Nuke.png";
+    private static final int ITEM_ID = 3;
+    private static final String IMAGE = "Nuke.png";
 
     private static final double BACKFIRE_CHANCE = .01d;
 
@@ -41,6 +42,7 @@ public class NukeItem extends Collectable implements IItem {
         if (RandomUtil.get() < BACKFIRE_CHANCE) {
             Player.getPlayer().damage(Player.getPlayer().getHealth());
         }
+        EndScreen.addTotalNukedUsed();
 
         ImageView blast = new ImageView(ImageManager.getImage("nukeImage.gif"));
         blast.setScaleX(ScreenManager.getScale());
@@ -50,7 +52,7 @@ public class NukeItem extends Collectable implements IItem {
 
         GameEngine.addToLayer(GameEngine.VFX, blast);
         TimerUtil.lerp(5d, t -> blast.setOpacity(1 - t),
-                       () -> GameEngine.removeFromLayer(GameEngine.VFX, blast));
+                () -> GameEngine.removeFromLayer(GameEngine.VFX, blast));
     }
 
     public int getItemID() {

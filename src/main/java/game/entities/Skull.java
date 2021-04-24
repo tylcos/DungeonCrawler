@@ -3,6 +3,7 @@ package game.entities;
 import core.SoundManager;
 import javafx.geometry.Point2D;
 import utilities.RandomUtil;
+import views.EndScreen;
 
 /**
  * Skull enemy
@@ -31,7 +32,7 @@ public class Skull extends Entity {
     @Override
     public void onDeath() {
         setVisible(false);
-
+        EndScreen.addTotalNumKill();
         SoundManager.playEnemyKilled();
     }
 }
