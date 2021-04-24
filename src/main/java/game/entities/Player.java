@@ -1,10 +1,10 @@
 package game.entities;
 
 import core.*;
-import game.Weapon;
-import game.WeaponType;
 import game.collectables.Key;
 import game.collidables.Collidable;
+import game.inventory.Weapon;
+import game.inventory.WeaponType;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;

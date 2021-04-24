@@ -1,4 +1,4 @@
-package game.levels;
+package game.level;
 
 import core.GameEngine;
 import game.collectables.*;

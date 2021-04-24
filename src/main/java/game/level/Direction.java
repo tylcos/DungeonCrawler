@@ -1,4 +1,4 @@
-package game.levels;
+package game.level;
 
 import javafx.geometry.Point2D;
 
