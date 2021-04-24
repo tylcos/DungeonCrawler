@@ -7,6 +7,7 @@ import game.inventory.IItem;
 import game.inventory.Inventory;
 import javafx.geometry.Point2D;
 import utilities.RandomUtil;
+import views.EndScreen;
 
 /**
  * An attack potion that increases the player's weapon damage by a factor of 2.
@@ -30,7 +31,7 @@ public class AttackPotion extends Collectable implements IItem {
         if (isCollected || !(other instanceof Player)) {
             return;
         }
-
+        EndScreen.addTotalPostionObtain();
         SoundManager.playPotionCollected();
         setCollected();
 

@@ -18,6 +18,11 @@ public class EndScreen {
     @FXML
     private Label version;
 
+    //stats variable
+    private static int totalNumKill = 0;
+    private static int totalPostionObtain = 0;
+    private static int totoalNuked = 0;
+
     /**
      * Initializes the configuration screen
      */
@@ -30,7 +35,8 @@ public class EndScreen {
         color.setHeight(50);
 
         if (Player.getPlayer() != null && Player.getPlayer().isDead()) {
-            endGameText.setText("You Died In The Dungeon!");
+            endGameText.setText("You Died");
+
             color.setColor(Color.RED);
         } else {
             endGameText.setText("You Escaped The Dungeon!");
@@ -60,4 +66,18 @@ public class EndScreen {
     public void onExitClick() {
         System.exit(0);
     }
+
+    public static void addTotalPostionObtain() {
+        totalPostionObtain++;
+    }
+
+    public static void addTotalNumKill() {
+        totalNumKill++;
+    }
+
+    public static void addTotalNukedUsed() {
+        totoalNuked++;
+    }
+
+
 }
