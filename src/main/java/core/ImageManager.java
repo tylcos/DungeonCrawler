@@ -23,7 +23,7 @@ public final class ImageManager {
             File imagesDir = getPath("");
 
             try (Stream<Path> paths = Files.walk(imagesDir.toPath())) {
-                paths.filter(p -> p.toString().endsWith(".png") || p.toString().endsWith(".gif"))
+                paths.filter(p -> (p.toString().endsWith(".png") || p.toString().endsWith(".gif")))
                     .forEach(p -> getInputStream(p.getFileName().toString()));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -66,7 +66,11 @@ public final class ImageManager {
     }
 
     public static Image getSprite(String name, int x, int y, int spacing, double scale) {
-        String key = String.format("%s_%d_%d_%d_%f", name, x, y, spacing, scale);
+        return getSprite(name, x, y, spacing, 0, scale);
+    }
+
+    public static Image getSprite(String name, int x, int y, int spacing, int crop, double scale) {
+        String key = String.format("%s_%d_%d_%d_%d_%f", name, x, y, spacing, crop, scale);
         if (IMAGES.containsKey(key)) {
             return IMAGES.get(key);
         }
@@ -77,11 +81,17 @@ public final class ImageManager {
                              (int) (sheet.getHeight() * scale), false);
         }
 
-        int           scaledSpacing = (int) (spacing * scale);
-        WritableImage sprite        = new WritableImage(scaledSpacing, scaledSpacing);
-        PixelWriter   pixelWriter   = sprite.getPixelWriter();
-        pixelWriter.setPixels(0, 0, scaledSpacing, scaledSpacing, sheet.getPixelReader(),
-                              scaledSpacing * x, scaledSpacing * y);
+        int scaledSpacing = (int) (scale * spacing);
+        int scaledCrop    = (int) (scale * crop);
+        int trueSize      = scaledSpacing - 2 * scaledCrop;
+        if (trueSize <= 0) {
+            throw new IllegalArgumentException("Invalid crop: " + crop);
+        }
+
+        WritableImage sprite      = new WritableImage(trueSize, trueSize);
+        PixelWriter   pixelWriter = sprite.getPixelWriter();
+        pixelWriter.setPixels(0, 0, trueSize, trueSize, sheet.getPixelReader(),
+                              scaledSpacing * x + scaledCrop, scaledSpacing * y + scaledCrop);
 
         IMAGES.put(key, sprite);
         return sprite;
@@ -110,9 +120,12 @@ public final class ImageManager {
     private static File getPath(String name) {
         try {
             URL nameURL = ImageManager.class.getClassLoader().getResource("images/" + name);
-            assert nameURL != null;
 
-            return Paths.get(nameURL.toURI()).toFile();
+            if (nameURL != null) {
+                return Paths.get(nameURL.toURI()).toFile();
+            }
+
+            throw new IllegalArgumentException("Failed to load: images/" + name);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             throw new IllegalArgumentException("Failed to load: images/" + name);

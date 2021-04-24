@@ -22,7 +22,7 @@ public class WeaponItem extends Collectable {
     public WeaponItem() {
         super("blank.png", RandomUtil.getPoint2D(300), new Point2D(64, 64));
 
-        int tier = highestTierSpawned + RandomUtil.getInt(2);
+        int tier = highestTierSpawned + RandomUtil.getInt(3);
         weapon = new Weapon(WeaponType.random(), tier);
         setImage(weapon.getImage());
 
