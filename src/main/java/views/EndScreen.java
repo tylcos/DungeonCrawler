@@ -18,16 +18,16 @@ public class EndScreen {
     @FXML
     private Label version;
     @FXML
-    private Label totalPostion;
+    private Label totalPotions;
     @FXML
-    private Label totalKill;
+    private Label totalKills;
     @FXML
-    private Label totalNuke;
+    private Label totalNukes;
 
     //stats variable
-    private static int totalNumKill = 0;
-    private static int totalPostionObtain = 0;
-    private static int totalNuked = 0;
+    private static int totalNumKill;
+    private static int totalPotionsObtained;
+    private static int totalNuked;
 
     /**
      * Initializes the configuration screen
@@ -42,17 +42,17 @@ public class EndScreen {
 
         if (Player.getPlayer() != null && Player.getPlayer().isDead()) {
             endGameText.setText("You Died");
-            totalKill.setText("total monster kill: " + totalNumKill);
-            totalPostion.setText("total position obtained: " + totalPostionObtain);
-            totalNuke.setText("number of nuke used: " + totalNuked);
-
+            totalKills.setText("Monsters killed: " + totalNumKill);
+            totalPotions.setText("Total potions obtained: " + totalPotionsObtained);
+            totalNukes.setText("Number of nukes used: " + totalNuked);
 
             color.setColor(Color.RED);
         } else {
             endGameText.setText("You Escaped The Dungeon!");
-            totalKill.setText("total monster kill: " + totalNumKill);
-            totalPostion.setText("total position obtained: " + totalPostionObtain);
-            totalNuke.setText("total number of nuke used: " + totalNuked);
+            totalKills.setText("Monsters killed: " + totalNumKill);
+            totalPotions.setText("Total potions obtained: " + totalPotionsObtained);
+            totalNukes.setText("Number of nukes used: " + totalNuked);
+
             color.setColor(Color.BLUE);
         }
 
@@ -80,8 +80,8 @@ public class EndScreen {
         System.exit(0);
     }
 
-    public static void addTotalPostionObtain() {
-        totalPostionObtain++;
+    public static void addTotalPotionsObtained() {
+        totalPotionsObtained++;
     }
 
     public static void addTotalNumKill() {
@@ -91,6 +91,5 @@ public class EndScreen {
     public static void addTotalNukedUsed() {
         totalNuked++;
     }
-
 
 }

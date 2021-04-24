@@ -51,8 +51,8 @@ public class GolemEntityController extends EntityController<Golem> {
         speed       = RandomUtil.getInt(200, 250);
         inputSmooth = RandomUtil.get(0.02d, 0.03d);
 
-        strafingDistance  = RandomUtil.get(100d, 150d);
-        attackingDistance = 50;
+        strafingDistance  = RandomUtil.get(300d, 500d);
+        attackingDistance = 100;
 
         predictionGuessScale = RandomUtil.get(.6d, 1d);
 

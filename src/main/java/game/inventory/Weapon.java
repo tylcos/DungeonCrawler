@@ -25,7 +25,7 @@ public class Weapon {
     private double rotationOffset;
 
     public static final double WEAPON_HOLD_DISTANCE = 90d;
-    public static final double SWORD_ATTACK_ANGLE   = 45d;
+    public static final double SWORD_ATTACK_ANGLE   = 60d;
     public static final double SPEAR_ATTACK_RANGE   = 150d;
     public static final double SPEAR_ATTACK_ANGLE   = 10d;
     public static final double BOW_OFFSET           = -30d;
@@ -58,6 +58,10 @@ public class Weapon {
             damage = tier / 3 + 1;
             fireRate = 1d - .25d * (tier % 4);
             break;
+        case Spear:
+            damage = 2 * (tier / 3 + 1);
+            fireRate = 1.5d - .25d * (tier % 4);
+            break;
         case Bow:
             radiusOffset = BOW_OFFSET;
             rotationOffset = 180;
@@ -65,9 +69,8 @@ public class Weapon {
             damage = tier / 3 + 1;
             fireRate = 1d - .25d * (tier % 4);
             break;
-        case Spear:
         case Staff:
-            damage = 2 * (tier / 3 + 1);
+            damage = tier / 3 + 1;
             fireRate = 1.5d - .25d * (tier % 4);
             break;
         default:
