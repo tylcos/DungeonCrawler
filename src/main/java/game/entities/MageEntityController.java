@@ -85,9 +85,8 @@ public class MageEntityController extends EntityController<Mage> {
 
         // Predicts where the player will be
         double timeToReach = difference.magnitude() / speed;
-        double radius      = playerPosition.magnitude();
-        double currentTheta = (Math.atan2(playerPosition.getY(), playerPosition.getX())
-                               + TWO_PI) % TWO_PI;
+        double radius      = player.getPosition().magnitude();
+        double currentTheta = MathUtil.getAngle(playerPosition);
 
         double dTheta = (currentTheta - previousTheta);
         if (Math.abs(dTheta) > 3) {
@@ -99,8 +98,7 @@ public class MageEntityController extends EntityController<Mage> {
 
         // Iteratively approximate time to reach player and prediction
         double predictedTheta = currentTheta + timeToReach * thetaDot * predictionGuessScale;
-        Point2D prediction = new Point2D(radius * Math.cos(predictedTheta),
-                                         radius * Math.sin(predictedTheta));
+        Point2D prediction = MathUtil.getVector(predictedTheta, radius);
         for (int i = 0; i < 3; i++) {
             if (useDebugPoints) {
                 DebugPoint.debug(prediction);
@@ -109,8 +107,7 @@ public class MageEntityController extends EntityController<Mage> {
             difference     = prediction.subtract(entity.getPosition());
             timeToReach    = difference.magnitude() / speed;
             predictedTheta = currentTheta + timeToReach * thetaDot * predictionGuessScale;
-            prediction     = new Point2D(radius * Math.cos(predictedTheta),
-                                         radius * Math.sin(predictedTheta));
+            prediction     = MathUtil.getVector(predictedTheta, radius);
         }
         if (useDebugPoints) {
             DebugPoint.debug(prediction);

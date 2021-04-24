@@ -2,12 +2,11 @@ package game.entities;
 
 import core.*;
 import game.Weapon;
+import game.collidables.DebugPoint;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import views.GameScreen;
-
-import java.util.List;
+import utilities.MathUtil;
 
 /**
  * Player behavior is to move and attack based on the user's input
@@ -72,6 +71,22 @@ public class PlayerEntityController extends EntityController<Player> {
         // Weapon input
         Weapon weapon = weaponHolder.getWeapon();
         attacking = System.nanoTime() - lastAttackTime < weapon.getFireRate() * 1e9;
+
+        if (GameDriver.isDebug()) {
+            Point2D playerPosition = entity.getPosition();
+            Point2D range          = entity.getWeaponHolder().getWeapon().getAttackRange();
+
+            Point2D mousePosition  = InputManager.getMousePosition();
+            Point2D facingDirection = mousePosition.subtract(playerPosition).normalize();
+            double  facingAngle    = MathUtil.getAngleDeg(facingDirection);
+
+            DebugPoint.debug(MathUtil.getVectorDeg(facingAngle + range.getY()).multiply(
+                range.getX()).add(playerPosition));
+            DebugPoint.debug(MathUtil.getVectorDeg(facingAngle - range.getY()).multiply(
+                range.getX()).add(playerPosition));
+            DebugPoint.debug(MathUtil.getVectorDeg(facingAngle).multiply(
+                range.getX()).add(playerPosition));
+        }
     }
 
     @Override
@@ -80,9 +95,21 @@ public class PlayerEntityController extends EntityController<Player> {
             return;
         }
 
-        List<Entity> enemies = GameScreen.getLevel().getCurrentRoom().getEntities();
+        Weapon weapon = weaponHolder.getWeapon();
+        switch (weapon.getType()) {
+        case Sword:
+        case Spear:
+            weaponHolder.getCollidingEnemies().forEach(e -> e.damage(weapon.getDamage()));
+            break;
+        case Bow:
+        case Staff:
 
-        weaponHolder.updateWeaponOffsets();
+            break;
+        default:
+            throw new IllegalArgumentException("Illegal Weapon type: " + weapon.getType());
+        }
+
+        weaponHolder.getWeapon().attack();
 
         lastAttackTime = System.nanoTime();
     }

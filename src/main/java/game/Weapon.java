@@ -1,8 +1,13 @@
 package game;
 
 import core.ImageManager;
+import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.scene.image.Image;
 import utilities.RandomUtil;
+import utilities.TimerUtil;
+
+import java.util.function.Consumer;
 
 /**
  * Stores weapon info and utility methods
@@ -14,6 +19,15 @@ public class Weapon {
     private double     fireRate;
 
     private Image image;
+
+    private double radiusOffset;
+    private double angleOffset;
+    private double rotationOffset;
+
+    public static final double WEAPON_HOLD_DISTANCE = 90d;
+    public static final double SWORD_ATTACK_ANGLE   = 45d;
+    public static final double SPEAR_ATTACK_RANGE   = 150d;
+    public static final double BOW_OFFSET           = -30d;
 
     /**
      * Creates an instance of a weapon.
@@ -36,15 +50,72 @@ public class Weapon {
         this.name = name;
         this.type = type;
 
-        if (type == WeaponType.Sword || type == WeaponType.Bow) {
-            damage   = tier / 3 + 1;
+        switch (type) {
+        case Sword:
+            angleOffset = 45;
+
+            damage = tier / 3 + 1;
             fireRate = 1d - .25d * (tier % 4);
-        } else if (type == WeaponType.Spear || type == WeaponType.Staff) {
-            damage   = 2 * (tier / 3 + 1);
+            break;
+        case Bow:
+            radiusOffset = BOW_OFFSET;
+            rotationOffset = 180;
+
+            damage = tier / 3 + 1;
+            fireRate = 1d - .25d * (tier % 4);
+            break;
+        case Spear:
+        case Staff:
+            damage = 2 * (tier / 3 + 1);
             fireRate = 1.5d - .25d * (tier % 4);
+            break;
+        default:
+            throw new IllegalArgumentException("Illegal Weapon type: " + type);
         }
 
-        image = ImageManager.getSprite("weapons.png", type.getValue(), tier, 32, 3);
+        image = tier > 12 ? ImageManager.getSprite("weapons.png", type.getValue(), 12, 32, 3)
+                          : ImageManager.getSprite("weapons.png", type.getValue(), tier, 32, 3);
+    }
+
+    public void attack() {
+        Consumer<Double> attackAction;
+
+        switch (type) {
+        case Sword:
+            double direction = angleOffset >= 0 ? 1 : -1;
+            attackAction = t -> angleOffset = direction * -SWORD_ATTACK_ANGLE * (2 * t - 1);
+            break;
+        case Spear:
+            attackAction = t -> radiusOffset = SPEAR_ATTACK_RANGE * (1d - 2 * Math.abs(t - .5d));
+            break;
+        case Bow:
+            attackAction = t -> radiusOffset = -50d * (.5d - Math.abs(t - .5d)) + BOW_OFFSET;
+            break;
+        case Staff:
+            attackAction = t -> radiusOffset = -50d * (.5d - Math.abs(t - .5d));
+            break;
+        default:
+            throw new IllegalArgumentException("Illegal Weapon type: " + type);
+        }
+
+        TimerUtil.lerp(fireRate / 8d, attackAction);
+    }
+
+    public Point3D getOffsets() {
+        return new Point3D(radiusOffset, angleOffset, rotationOffset);
+    }
+
+    public Point2D getAttackRange() {
+        double weaponSize = Math.hypot(image.getWidth(), image.getHeight()) / 2d;
+
+        switch (type) {
+        case Sword:
+            return new Point2D(WEAPON_HOLD_DISTANCE + weaponSize, SWORD_ATTACK_ANGLE);
+        case Spear:
+            return new Point2D(WEAPON_HOLD_DISTANCE + SPEAR_ATTACK_RANGE + weaponSize, 5d);
+        default:
+            return Point2D.ZERO;
+        }
     }
 
     /**
