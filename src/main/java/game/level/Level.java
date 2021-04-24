@@ -91,7 +91,7 @@ public class Level {
                 RandomUtil.get() < .2 ? 1 : 0, // Attack Potion 20% spawn chance
                 RandomUtil.get() < .2 ? 1 : 0, // Speed Potion 20% spawn chance
                 RandomUtil.get() < .1 ? 1 : 0, // Nuke 10% spawn chance
-                1 // Weapon 50% spawn chance
+                RandomUtil.get() < .6 ? 1 : 0  // Weapon 60% spawn chance
             };
         }
 
@@ -116,6 +116,8 @@ public class Level {
                 RandomUtil.getInt(1, 2 + difficulty),
                 RandomUtil.getInt(0, 1 + difficulty)
             };
+
+            room.addEntity(new Golem());
 
             // Add enemies to the current room
             for (int tier = 0; tier < 3; tier++) {

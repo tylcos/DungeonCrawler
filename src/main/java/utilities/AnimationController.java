@@ -14,12 +14,13 @@ public final class AnimationController {
     private ImageView imageView;
     private String    spriteSheet;
 
-    private int row;
-    private int cols;
-    private int spacing;
-    private int scale;
-    private int crop;
-    private int totalImages;
+    private int     row;
+    private int     cols;
+    private int     spacing;
+    private double  scale;
+    private int     crop;
+    private int     totalImages;
+    private boolean repeat = true;
 
     private int i;
 
@@ -51,8 +52,9 @@ public final class AnimationController {
 
     private AnimationController() { }
 
-    public static void add(ImageView imageView, String spriteSheet,
-                           int row, int rows, int cols, int spacing, int crop, int scale) {
+    public static AnimationController add(ImageView imageView, String spriteSheet,
+                                          int row, int rows, int cols, int spacing, int crop,
+                                          double scale) {
         AnimationController ac = new AnimationController();
         ac.imageView   = imageView;
         ac.spriteSheet = spriteSheet;
@@ -66,13 +68,23 @@ public final class AnimationController {
 
         ac.updateImage();
         controllers.add(ac);
+
+        return ac;
     }
 
     private void updateImage() {
-        i = ++i % totalImages;
+        if (!repeat && i == totalImages - 1) {
+            imageView.setVisible(false);
+            return;
+        }
 
+        i = ++i % totalImages;
         Image image = ImageManager.getSprite(spriteSheet, (i % cols), row + i / cols,
                                              spacing, crop, scale);
         imageView.setImage(image);
+    }
+
+    public void setRepeat(boolean repeat) {
+        this.repeat = repeat;
     }
 }

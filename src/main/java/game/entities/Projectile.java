@@ -21,6 +21,7 @@ public class Projectile extends Entity {
      */
     public Projectile(String image, Point2D position, Point2D velocity, Consumer<Entity> onHit) {
         super(image, position);
+
         setVelocity(velocity);
         setRotate(MathUtil.getAngleDeg(velocity));
 
@@ -45,5 +46,11 @@ public class Projectile extends Entity {
                 GameEngine.destroy(GameEngine.VFX, this);
             }
         }
+    }
+
+    public static boolean canHit(Collidable other) {
+        return (other instanceof CollidableTile)
+               || ((other instanceof Entity && !(other instanceof Player))
+                   && !((Entity) other).isDead());
     }
 }
