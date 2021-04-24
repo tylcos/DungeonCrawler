@@ -2,6 +2,7 @@ import core.GameDriver;
 import core.SceneManager;
 import game.entities.Entity;
 import game.entities.Player;
+import game.inventory.WeaponType;
 import game.level.Level;
 import javafx.event.Event;
 import javafx.scene.input.MouseButton;
@@ -65,7 +66,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
         clickOnEnemies(entity -> initialHealth.set(entity.getHealth()),
                        entity -> assertEquals(entity.getHealth(), initialHealth.get()));
 
-        Player.setPlayer("Team Azula", "Sword", "Debug");
+        Player.setPlayer("Team Azula", WeaponType.Sword, "Debug");
     }
 
     @Test
@@ -88,7 +89,7 @@ public class GameScreenEnemyTests extends ApplicationTest {
         assertTrue(player.isDead());
         assertNotEquals(90, player.getRotate());
 
-        Player.setPlayer("Team Azula", "Sword", "Debug");
+        Player.setPlayer("Team Azula", WeaponType.Sword, "Debug");
     }
 
     @Test

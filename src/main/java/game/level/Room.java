@@ -3,6 +3,9 @@ package game.level;
 import game.collectables.Collectable;
 import game.collidables.*;
 import game.entities.Entity;
+import game.entities.Player;
+import game.inventory.IItem;
+import game.inventory.Inventory;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -14,6 +17,8 @@ import utilities.RandomUtil;
 
 import java.io.*;
 import java.util.*;
+
+import core.GameEngine;
 
 /**
  * Room is a GridPane that displays a given room as a grid of Labels.
@@ -81,6 +86,7 @@ public class Room extends GridPane {
     private int     distanceFromEntrance = 999; // # of doorways separating this room from the
     // entrance
     private Direction source; // Direction pointing to the room that created this one
+    private boolean challengeActive = false;    // Whether the challenge is currently active
 
     // A list of all collidable bodies making up this room
     private ArrayList<Collidable> bodies = new ArrayList<>();
@@ -88,8 +94,11 @@ public class Room extends GridPane {
     // Objects in this room. Names correspond to render layers in Level
     // WARNING: IF YOU GET ERRORS ABOUT CONCURRENCY, THERE'S A DECENT CHANCE THESE TWO ARRAYLISTS
     // NEED TO BE TURNED INTO ARRAYBLOCKINGQUEUES
-    private ArrayList<Collectable> collectables = new ArrayList<>();
-    private ArrayList<Entity>      entities     = new ArrayList<>();
+    private ArrayList<Collectable> collectables     = new ArrayList<>();
+    private ArrayList<Entity>      entities         = new ArrayList<>();
+    private ArrayList<Entity>      challengeEnemies = new ArrayList<>();
+    private int challengeRewardGold;
+    private ArrayList<IItem> challengeRewardItems = new ArrayList<>();
 
     // Contains valid door tiles for each direction.
     // Used by createDoor() to add doors to rooms that are already generated.
@@ -515,6 +524,24 @@ public class Room extends GridPane {
             }
         }
     }
+    
+    public void activateChallenge() {
+        // TODO play a sound
+        GameEngine.instantiate(GameEngine.ENTITY, getChallengeEnemies());
+        lockDoors();
+        challengeActive = true;
+    }
+    
+    public void endChallenge() {
+        // TODO play a sound
+        GameEngine.destroy(GameEngine.ENTITY, getChallengeEnemies());
+        unlockDoors();
+        challengeActive = false;
+        Player.getPlayer().addMoney(challengeRewardGold);
+        for (IItem i : challengeRewardItems) {
+            Inventory.addItem(i);
+        }
+    }
 
     /**
      * Get the doors that are on the {@code direction} wall of this room.
@@ -577,7 +604,17 @@ public class Room extends GridPane {
      * @return the entities in this room
      */
     public List<Entity> getEntities() {
-        return Collections.unmodifiableList(entities);
+        // as a workaround for damaging enemies, when a challenge is active, the challenge entities
+        // are added in to the getEntities() list.
+        // A more robust solution would be getting enemies from GameEngine's dynamicBodies list
+        if (!challengeActive) {
+            return Collections.unmodifiableList(entities);
+        } else {
+            ArrayList<Entity> test = new ArrayList<Entity>();
+            test.addAll(entities);
+            test.addAll(challengeEnemies);
+            return Collections.unmodifiableList(test);
+        }
     }
 
     /**
@@ -587,6 +624,24 @@ public class Room extends GridPane {
      */
     public void addEntity(Entity entity) {
         entities.add(entity);
+    }
+
+    /**
+     * Returns a list of all challenge enemies in this room.
+     *
+     * @return the entities in this room
+     */
+    public List<Entity> getChallengeEnemies() {
+        return Collections.unmodifiableList(challengeEnemies);
+    }
+
+    /**
+     * Adds an entity to this room's challenge.
+     *
+     * @param entity the entity to add
+     */
+    public void addChallengeEnemy(Entity entity) {
+        challengeEnemies.add(entity);
     }
 
     /**
@@ -634,6 +689,24 @@ public class Room extends GridPane {
     public boolean isGenerated() {
         return generated;
     }
+    
+    /**
+     * Turn this room into a challenge room.
+     */
+    public void makeChallenge() {
+        challenge = true;
+    }
+    
+    /**
+     * Set the challenge rewards.
+     * 
+     * @param gold  money to reward the player
+     * @param items items to reward the player
+     */
+    public void setChallengeReward(int gold, ArrayList<IItem> items) {
+        challengeRewardGold = gold;
+        challengeRewardItems = items;
+    }
 
     /**
      * Set whether this room has had game elements generated.
@@ -671,8 +744,13 @@ public class Room extends GridPane {
      * @return {@code true} if there are no enemies in the room
      */
     public boolean isClear() {
-        // Is clear when all entities are the main player or dead
-        return entities.stream().allMatch(e -> e.isMainPlayer() || e.isDead());
+        if (challengeActive) {
+            // Clear when challenge enemies are all dead
+            return challengeEnemies.stream().allMatch(e -> e.isMainPlayer() || e.isDead());
+        } else {
+            // Is clear when all entities are the main player or dead
+            return entities.stream().allMatch(e -> e.isMainPlayer() || e.isDead());
+        }
     }
 
     /**
