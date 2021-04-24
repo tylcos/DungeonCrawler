@@ -91,7 +91,7 @@ public class Level {
                 RandomUtil.get() < .2 ? 1 : 0, // Attack Potion 20% spawn chance
                 RandomUtil.get() < .2 ? 1 : 0, // Speed Potion 20% spawn chance
                 RandomUtil.get() < .1 ? 1 : 0, // Nuke 10% spawn chance
-                RandomUtil.get() < .5 ? 1 : 0  // Weapon 50% spawn chance
+                1 // Weapon 50% spawn chance
             };
         }
 

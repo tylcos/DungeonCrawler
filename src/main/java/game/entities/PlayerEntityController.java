@@ -5,7 +5,6 @@ import game.Weapon;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import utilities.TimerUtil;
 import views.GameScreen;
 
 import java.util.List;
@@ -23,8 +22,6 @@ public class PlayerEntityController extends EntityController<Player> {
 
     private boolean      attacking;
     private long         lastAttackTime;
-    private double       radiusOffset;
-    private double       angleOffset;
     private WeaponHolder weaponHolder;
 
     /**
@@ -36,13 +33,9 @@ public class PlayerEntityController extends EntityController<Player> {
         super(entity);
         weaponHolder = entity.getWeaponHolder();
 
-        updateWeaponOffsets(); // Set initial offsets for current weapon
         SceneManager.getStage().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> attack());
 
-        InputManager.addKeyHandler(KeyCode.TAB, () -> {
-            weaponHolder.changeWeapon();
-            updateWeaponOffsets();
-        });
+        InputManager.addKeyHandler(KeyCode.TAB, () -> weaponHolder.changeWeapon());
     }
 
     public void act() {
@@ -79,7 +72,6 @@ public class PlayerEntityController extends EntityController<Player> {
         // Weapon input
         Weapon weapon = weaponHolder.getWeapon();
         attacking = System.nanoTime() - lastAttackTime < weapon.getFireRate() * 1e9;
-        weaponHolder.setOffsets(radiusOffset, angleOffset);
     }
 
     @Override
@@ -90,24 +82,8 @@ public class PlayerEntityController extends EntityController<Player> {
 
         List<Entity> enemies = GameScreen.getLevel().getCurrentRoom().getEntities();
 
-        updateWeaponOffsets();
+        weaponHolder.updateWeaponOffsets();
 
         lastAttackTime = System.nanoTime();
-    }
-
-    private void updateWeaponOffsets() {
-        Weapon weapon = weaponHolder.getWeapon();
-        switch (weapon.getType()) {
-        case Bow:
-
-            break;
-        case Sword:
-            double sign = angleOffset >= 0 ? 1 : -1;
-            TimerUtil.lerp(weapon.getFireRate() / 8, t -> angleOffset = sign * -45 * (2 * t - 1));
-
-            break;
-        default:
-            break;
-        }
     }
 }

@@ -12,16 +12,13 @@ import utilities.RandomUtil;
 import views.GameScreen;
 
 /**
- * A coin that the player can collect to increase their money
+ * A weapon that the player can pickup by pressing E
  */
 public class WeaponItem extends Collectable {
     private Weapon weapon;
 
     private static int highestTierSpawned;
 
-    /**
-     * Creates an instance of a items placed randomly within the room.
-     */
     public WeaponItem() {
         super("blank.png", RandomUtil.getPoint2D(300), new Point2D(64, 64));
 

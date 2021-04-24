@@ -39,9 +39,9 @@ public class Weapon {
         if (type == WeaponType.Sword || type == WeaponType.Bow) {
             damage   = tier / 3 + 1;
             fireRate = 1d - .25d * (tier % 4);
-        } else if (type == WeaponType.Axe || type == WeaponType.Staff) {
+        } else if (type == WeaponType.Spear || type == WeaponType.Staff) {
             damage   = 2 * (tier / 3 + 1);
-            fireRate = 2d - .25d * (tier % 4);
+            fireRate = 1.5d - .25d * (tier % 4);
         }
 
         image = ImageManager.getSprite("weapons.png", type.getValue(), tier, 32, 3);
@@ -74,11 +74,13 @@ public class Weapon {
         return damage;
     }
 
-    public void addDamageMultiplier(double multiplier) {
-        // Rounds (damage * multiplier) to the nearest int
-        double modifiedDamage = damage * multiplier + .5d;
+    public void setDamage(int damage) {
+        if (damage < 0) {
+            this.damage = Integer.MAX_VALUE;
+            return;
+        }
 
-        damage = modifiedDamage < Integer.MAX_VALUE ? (int) modifiedDamage : Integer.MAX_VALUE;
+        this.damage = damage;
     }
 
     public double getFireRate() {
@@ -96,7 +98,7 @@ public class Weapon {
      */
     @Override
     public String toString() {
-        return String.format("%s, %d dmg %.2fs fire rate", name, damage, fireRate);
+        return String.format("%s %s, %d dmg %.2fs fire rate", name, type, damage, fireRate);
     }
 
     private static final String[][] WEAPON_NAMES = {
