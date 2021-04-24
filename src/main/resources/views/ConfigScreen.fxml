@@ -44,9 +44,9 @@
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Sword"/>
-                            <String fx:value="Axe"/>
-                            <String fx:value="Bow"/>
+                            <String fx:value="Spear"/>
                             <String fx:value="Staff"/>
+                            <String fx:value="Bow"/>
                         </FXCollections>
                     </items>
                 </ComboBox>

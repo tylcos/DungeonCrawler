@@ -6,6 +6,7 @@ import game.Inventory;
 import game.Weapon;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
+import utilities.TimerUtil;
 
 public class WeaponHolder {
     private Weapon[]  weapons;
@@ -14,11 +15,43 @@ public class WeaponHolder {
 
     private double radiusOffset;
     private double angleOffset;
+    private double rotationOffset;
 
     private static final double WEAPON_HOLD_DISTANCE = 90d;
 
     public WeaponHolder(int size) {
         weapons = new Weapon[size];
+    }
+
+    public void updateWeaponOffsets() {
+        Weapon weapon     = getWeapon();
+        double attackTime = weapon.getFireRate() / 8d;
+
+        switch (weapon.getType()) {
+        case Sword:
+            radiusOffset = 0;
+            rotationOffset = 0;
+            double direction = angleOffset >= 0 ? 1 : -1;
+            TimerUtil.lerp(attackTime, t -> angleOffset = direction * -45 * (2 * t - 1));
+            break;
+        case Spear:
+            angleOffset = 0;
+            rotationOffset = 0;
+            TimerUtil.lerp(attackTime, t -> radiusOffset = 200d * (.5d - Math.abs(t - .5d)));
+            break;
+        case Bow:
+            radiusOffset = 0;
+            rotationOffset = 0;
+            rotationOffset = 180;
+            break;
+        case Staff:
+            angleOffset = 0;
+            rotationOffset = 0;
+            TimerUtil.lerp(attackTime, t -> radiusOffset = -50d * (.5d - Math.abs(t - .5d)));
+            break;
+        default:
+            throw new IllegalArgumentException("Illegal Weapon type: " + weapon.getType());
+        }
     }
 
     public Weapon add(Weapon addedWeapon) {
@@ -42,7 +75,7 @@ public class WeaponHolder {
 
     public void setOffsets(double radiusOffset, double angleOffset) {
         this.radiusOffset = radiusOffset;
-        this.angleOffset = angleOffset;
+        this.angleOffset  = angleOffset;
     }
 
     public void changeWeapon() {
@@ -55,8 +88,11 @@ public class WeaponHolder {
         }
 
         weaponIndex = index;
+        updateWeaponOffsets();
 
         if (weaponImageView != null) {
+            TimerUtil.lerp(.5d, t -> weaponImageView.setOpacity(t));
+
             weaponImageView.setImage(weapons[index].getImage());
             Inventory.changeWeapon(weapons[index]);
         }
@@ -82,7 +118,18 @@ public class WeaponHolder {
 
         weaponImageView.setTranslateX(weaponPosition.getX());
         weaponImageView.setTranslateY(weaponPosition.getY());
-        weaponImageView.setRotate(adjustedAngleDeg + 45);
+        weaponImageView.setRotate(adjustedAngleDeg + rotationOffset + 45);
+    }
+
+    public void addDamageMultiplier(double multiplier, double effectTime) {
+        // Rounds (damage * multiplier) to the nearest int
+        Weapon currentWeapon  = getWeapon();
+        double modifiedDamage = currentWeapon.getDamage() * multiplier + .5d;
+
+        currentWeapon.setDamage((int) modifiedDamage);
+        TimerUtil.schedule(effectTime, () -> {
+            currentWeapon.setDamage((int) (currentWeapon.getDamage() / multiplier + .5d));
+        });
     }
 
     public Weapon getWeapon() {

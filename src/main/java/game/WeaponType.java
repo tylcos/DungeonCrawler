@@ -3,7 +3,7 @@ package game;
 import utilities.RandomUtil;
 
 public enum WeaponType {
-    Sword(0), Axe(1), Bow(2), Staff(3);
+    Sword(0), Spear(1), Staff(2), Bow(3);
 
     private final int value;
 

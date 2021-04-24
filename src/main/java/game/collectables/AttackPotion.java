@@ -7,7 +7,6 @@ import game.collidables.Collidable;
 import game.entities.Player;
 import javafx.geometry.Point2D;
 import utilities.RandomUtil;
-import utilities.TimerUtil;
 
 /**
  * An attack potion that increases the player's weapon damage by a factor of 2.
@@ -39,11 +38,7 @@ public class AttackPotion extends Collectable implements IItem {
     }
 
     public void activate() {
-        Player.getPlayer().getWeaponHolder().getWeapon().addDamageMultiplier(POTION_STRENGTH);
-
-        TimerUtil.schedule(POTION_DURATION,
-                           () -> Player.getPlayer().getWeaponHolder().getWeapon()
-                                     .addDamageMultiplier(1 / POTION_STRENGTH));
+        Player.getPlayer().getWeaponHolder().addDamageMultiplier(POTION_STRENGTH, POTION_DURATION);
     }
 
     public int getItemID() {
