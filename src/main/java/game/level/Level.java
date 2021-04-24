@@ -85,8 +85,8 @@ public class Level {
         if (room.isChallenge()) {
             ChallengeShrine shrine = new ChallengeShrine(room);
             room.addCollectable(shrine);
-            int rewardGold = RandomUtil.getInt(15, 25);
-            ArrayList<IItem> rewardItems = new ArrayList<IItem>();
+            int              rewardGold  = RandomUtil.getInt(15, 25);
+            ArrayList<IItem> rewardItems = new ArrayList<>();
             if (RandomUtil.get() < .4) {
                 rewardItems.add(new HealthPotion());
             }
@@ -115,7 +115,7 @@ public class Level {
             }
             return; // end challenge room logic
         }
-        
+
         // Add Collectables
 
         int[] collectablesToSpawn = null;
@@ -193,7 +193,7 @@ public class Level {
             map = new Room[MAX_DIAMETER][MAX_DIAMETER];
             generateMap();
         }
-        exit.addCollectable(new Key());
+        exit.addEntity(new Golem());
     }
 
     /**
@@ -228,7 +228,6 @@ public class Level {
         if (fromDir != null) {
             Point2D doorPos = currentRoom.getDoorCoords(fromDir);
             player.setPosition(doorPos);
-            //todo: comment
             if (!currentRoom.isClear() && !doorsNeverLock) {
                 currentRoom.lockDoors(fromDir);
             } else {
@@ -326,9 +325,9 @@ public class Level {
                 existing.createDoor(next.dir.opposite(), next.from);
             }
         }
-        for(int i = 0; i < NUM_CHALLENGES; ++i) {
-            int rand = RandomUtil.getInt(addedRooms.size());
-            Room sel = addedRooms.remove(rand);
+        for (int i = 0; i < NUM_CHALLENGES; ++i) {
+            int  rand = RandomUtil.getInt(addedRooms.size());
+            Room sel  = addedRooms.remove(rand);
             sel.makeChallenge();
         }
     }
