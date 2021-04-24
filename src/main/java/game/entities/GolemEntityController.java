@@ -12,7 +12,7 @@ import utilities.RandomUtil;
  * The behavior is to move to where the player is predicted to be assuming the player maintains
  * a constant radius and constant dθ/dt around the center of the room.
  */
-public class MageEntityController extends EntityController<Mage> {
+public class GolemEntityController extends EntityController<Golem> {
     private State state = State.relaxing;
 
     // Variables for movement
@@ -45,10 +45,10 @@ public class MageEntityController extends EntityController<Mage> {
      *
      * @param entity the entity to control
      */
-    public MageEntityController(Mage entity) {
+    public GolemEntityController(Golem entity) {
         super(entity);
 
-        speed       = RandomUtil.getInt(400, 500);
+        speed       = RandomUtil.getInt(200, 250);
         inputSmooth = RandomUtil.get(0.02d, 0.03d);
 
         strafingDistance  = RandomUtil.get(100d, 150d);
@@ -81,8 +81,8 @@ public class MageEntityController extends EntityController<Mage> {
         double  distance        = difference.magnitude();
 
         // Predicts where the player will be
-        double timeToReach = difference.magnitude() / speed;
-        double radius      = player.getPosition().magnitude();
+        double timeToReach  = difference.magnitude() / speed;
+        double radius       = player.getPosition().magnitude();
         double currentTheta = MathUtil.getAngle(playerPosition);
 
         double dTheta = (currentTheta - previousTheta);
@@ -92,10 +92,9 @@ public class MageEntityController extends EntityController<Mage> {
         double currentThetaDot = dTheta / GameEngine.getDt();
         thetaDot += (currentThetaDot - thetaDot) * .02d;
 
-
         // Iteratively approximate time to reach player and prediction
-        double predictedTheta = currentTheta + timeToReach * thetaDot * predictionGuessScale;
-        Point2D prediction = MathUtil.getVector(predictedTheta, radius);
+        double  predictedTheta = currentTheta + timeToReach * thetaDot * predictionGuessScale;
+        Point2D prediction     = MathUtil.getVector(predictedTheta, radius);
         for (int i = 0; i < 3; i++) {
             if (useDebugPoints) {
                 DebugPoint.debug(prediction);
