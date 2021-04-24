@@ -30,7 +30,7 @@ public final class GameEngine {
     private static double         dt;
     private static double         averageFps;
 
-    private static final int       RENDER_LAYERS = 4;
+    private static final int       RENDER_LAYERS = 5;
     private static       StackPane renderPane;
     private static       Pane[]    renderLayers  = new Pane[RENDER_LAYERS];
 
@@ -39,6 +39,7 @@ public final class GameEngine {
     public static final int ITEM   = 1;
     public static final int ENTITY = 2;
     public static final int VFX    = 3;
+    public static final int DEBUG  = 4;
 
     /**
      * Private constructor so no instances of GameEngine can be created.
@@ -53,6 +54,23 @@ public final class GameEngine {
     public static void start(StackPane renderPane) {
         GameEngine.renderPane = renderPane;
 
+        // Setup rendering layers
+        ObservableList<Node> children = renderPane.getChildren();
+        for (int i = 0; i < RENDER_LAYERS; i++) {
+            renderLayers[i] = new StackPane();
+            children.add(renderLayers[i]);
+        }
+
+        renderLayers[VFX].setMouseTransparent(true);
+        renderLayers[DEBUG].setMouseTransparent(true);
+
+        // Clear up variables
+        staticBodies.clear();
+        dynamicBodies.clear();
+
+        t            = 0;
+        frameCounter = 0;
+
         // Setup game loop
         frameTimer = new AnimationTimer() {
             private long lastFrameTime = System.nanoTime();
@@ -63,27 +81,12 @@ public final class GameEngine {
                 t += dt;
                 averageFps += (1d / dt - averageFps) * .1;
 
+                renderLayers[DEBUG].getChildren().clear();
                 GameEngine.update();
                 frameCounter++;
             }
         };
         frameTimer.start();
-
-        // Setup rendering layers
-        ObservableList<Node> children = renderPane.getChildren();
-        for (int i = 0; i < RENDER_LAYERS; i++) {
-            renderLayers[i] = new StackPane();
-            children.add(renderLayers[i]);
-        }
-
-        renderLayers[VFX].setMouseTransparent(true);
-
-        // Clear up variables
-        staticBodies.clear();
-        dynamicBodies.clear();
-
-        t            = 0;
-        frameCounter = 0;
     }
 
     /**
