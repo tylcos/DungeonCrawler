@@ -5,7 +5,6 @@ import game.Weapon;
 import game.WeaponType;
 import game.collectables.Key;
 import game.collidables.Collidable;
-import game.collidables.CollidableTile;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -99,29 +98,16 @@ public final class Player extends Entity {
 
     @Override
     public void onCollision(Collidable other) {
-        if (other instanceof CollidableTile) {
-            bounceBack((int) (getVelocity().magnitude() * GameEngine.getDt()));
-        }
+        super.onCollision(other);
 
         if (other instanceof Key) {
             key = (Key) other;
         }
     }
 
-    /**
-     * Makes the entity bounce back from wall or enemy
-     *
-     * @param bounceDistance the distance to bounce
-     */
-    private void bounceBack(int bounceDistance) {
-        Point2D dp = new Point2D(-bounceDistance * Math.signum(position.getX()),
-                                 -bounceDistance * Math.signum(position.getY()));
-
-        setPosition(position.add(dp));
-    }
-
     @Override
     public void damage(int amount) {
+        super.damage(amount);
         if (isDead) {
             return;
         }
@@ -129,8 +115,6 @@ public final class Player extends Entity {
         SoundManager.playPlayerAttacked();
         getScene().getRoot().setEffect(GameEffects.RED_EDGES);
         TimerUtil.lerp(1, t -> GameEffects.RED_EDGES.setColor(Color.color(1, 0, 0, 1 - t)));
-
-        super.damage(amount);
     }
 
     /**
@@ -171,6 +155,17 @@ public final class Player extends Entity {
 
     public Weapon addWeapon(Weapon weapon) {
         return weaponHolder.add(weapon);
+    }
+
+    public void addDamageMultiplier(double multiplier, double effectTime) {
+        // Rounds (damage * multiplier) to the nearest int
+        Weapon currentWeapon  = weaponHolder.getWeapon();
+        double modifiedDamage = currentWeapon.getDamage() * multiplier + .5d;
+
+        currentWeapon.setDamage((int) modifiedDamage);
+        TimerUtil.schedule(effectTime, () -> {
+            currentWeapon.setDamage((int) (currentWeapon.getDamage() / multiplier + .5d));
+        });
     }
 
     public WeaponHolder getWeaponHolder() {
