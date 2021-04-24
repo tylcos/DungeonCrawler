@@ -28,7 +28,6 @@ public final class InputManager {
         stage.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
             if (keyStates.get(key.getCode()) <= 0) {
                 keyStates.put(key.getCode(), GameEngine.getFrameCounter());
-                System.out.println(key + " put " + GameEngine.getFrameCounter());
 
                 // Run all events assigned to this key
                 if (keyEvents.containsKey(key.getCode())) {

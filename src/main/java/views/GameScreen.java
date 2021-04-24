@@ -6,7 +6,6 @@ import game.WeaponType;
 import game.entities.Player;
 import game.levels.Level;
 import javafx.fxml.FXML;
-import javafx.scene.chart.LineChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
@@ -30,9 +29,6 @@ public class GameScreen {
     private StackPane renderPane;
     @FXML
     private Label     version;
-
-    @FXML
-    private static LineChart<Number, Number> fpsGraph;
 
     private static Level level;
 
@@ -61,7 +57,7 @@ public class GameScreen {
 
             // Blurs the screen on scene load
             top.setEffect(GameEffects.GAME_BLUR);
-            TimerUtil.lerp(1, t -> GameEffects.GAME_BLUR.setRadius(20 * (1 - t)));
+            TimerUtil.lerp(2, t -> GameEffects.GAME_BLUR.setRadius(30 * (1 - t)));
         });
 
         // Exiting Game scene
