@@ -79,36 +79,34 @@ public class Level {
      * @param room the room to be added to
      */
     private void generateGameElements(Room room) {
-        if (!spawnEnemiesInEntrance && !spawnItemsInEntrance && room.isEntrance()) {
-            return;
-        }
-
         // Add Collectables
 
-        int[] collectablesToSpawn;
+        int[] collectablesToSpawn = null;
         if (spawnItemsInEntrance) {
             collectablesToSpawn = IntStream.generate(() -> 1).limit(COLLECTABLES.size()).toArray();
-        } else {
+        } else if (!room.isEntrance()) {
             collectablesToSpawn = new int[] {
-                RandomUtil.getInt(1, 5),        // Coin [1,4]
-                RandomUtil.get() < .25 ? 1 : 0, // Health Potion 25% spawn chance
-                RandomUtil.get() < .25 ? 1 : 0, // Attack Potion 25% spawn chance
-                RandomUtil.get() < .25 ? 1 : 0, // Speed Potion 25% spawn chance
-                RandomUtil.get() < .10 ? 1 : 0, // Nuke 10% spawn chance
-                RandomUtil.get() < .50 ? 1 : 0  // Weapon 50% spawn chance
+                RandomUtil.getInt(1, 4),       // Coin [1,3]
+                RandomUtil.get() < .2 ? 1 : 0, // Health Potion 20% spawn chance
+                RandomUtil.get() < .2 ? 1 : 0, // Attack Potion 20% spawn chance
+                RandomUtil.get() < .2 ? 1 : 0, // Speed Potion 20% spawn chance
+                RandomUtil.get() < .1 ? 1 : 0, // Nuke 10% spawn chance
+                RandomUtil.get() < .5 ? 1 : 0  // Weapon 50% spawn chance
             };
         }
 
         // Add collectables to the current room
-        for (int type = 0; type < COLLECTABLES.size(); type++) {
-            for (int i = 0; i < collectablesToSpawn[type]; i++) {
-                room.addCollectable(COLLECTABLES.get(type).get());
+        if (collectablesToSpawn != null) {
+            for (int type = 0; type < COLLECTABLES.size(); type++) {
+                for (int i = 0; i < collectablesToSpawn[type]; i++) {
+                    room.addCollectable(COLLECTABLES.get(type).get());
+                }
             }
         }
 
-        if (!spawnItemsInEntrance) {
-            // Add Entities
+        // Add Entities
 
+        if (!room.isEntrance() || spawnEnemiesInEntrance) {
             // Enemies spawned: Boring [2,3], Normal [2,6], Hard [2, 9]
             // Each element in the array is a different tier
             // https://www.desmos.com/calculator/k4ten4ecln
@@ -147,6 +145,8 @@ public class Level {
         loadRoom(map[mapOffset][mapOffset]);
         // Spawn the player
         GameEngine.instantiate(GameEngine.ENTITY, Player.getPlayer());
+        // Reset weapon progression system
+        WeaponItem.resetHighestTierSpawned();
 
         if (exit == null) {
             System.err.println("exit room not spawned");

@@ -9,6 +9,7 @@ import game.entities.Player;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import utilities.RandomUtil;
+import views.GameScreen;
 
 /**
  * A coin that the player can collect to increase their money
@@ -16,14 +17,22 @@ import utilities.RandomUtil;
 public class WeaponItem extends Collectable {
     private Weapon weapon;
 
+    private static int highestTierSpawned;
+
     /**
      * Creates an instance of a items placed randomly within the room.
      */
     public WeaponItem() {
         super("blank.png", RandomUtil.getPoint2D(300), new Point2D(64, 64));
 
-        weapon = new Weapon(WeaponType.random(), RandomUtil.getInt(12));
+        int tier = highestTierSpawned + RandomUtil.getInt(1, 3);
+        weapon = new Weapon(WeaponType.random(), tier);
         setImage(weapon.getImage());
+
+        // Was spawned by level, not the best way to do this
+        if (GameScreen.getLevel() != null) {
+            highestTierSpawned = tier;
+        }
     }
 
     @Override
@@ -41,5 +50,9 @@ public class WeaponItem extends Collectable {
         } else {
             setCollected();
         }
+    }
+
+    public static void resetHighestTierSpawned() {
+        highestTierSpawned = 0;
     }
 }
