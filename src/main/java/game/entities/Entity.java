@@ -1,7 +1,9 @@
 package game.entities;
 
+import core.GameEngine;
 import core.ImageManager;
 import game.collidables.Collidable;
+import game.collidables.CollidableTile;
 import game.levels.Room;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -70,6 +72,11 @@ public abstract class Entity extends Collidable {
 
     @Override
     public void onCollision(Collidable other) {
+        if (other instanceof CollidableTile) {
+            double magnitude = Math.max(100d, velocity.magnitude());
+
+            bounceBack((int) (-magnitude * GameEngine.getDt()), Point2D.ZERO);
+        }
     }
 
     /**
@@ -100,6 +107,7 @@ public abstract class Entity extends Collidable {
         }
 
         health -= amount;
+        bounceBack(Player.getPlayer().getPosition());
 
         if (health <= 0) {
             isDead = true;
@@ -202,5 +210,29 @@ public abstract class Entity extends Collidable {
 
     public final boolean isMainPlayer() {
         return this == Player.getPlayer();
+    }
+
+    /**
+     * Makes the entity bounce back from a point
+     *
+     * @param fromPoint      the point to bounce back from
+     */
+    protected final void bounceBack(Point2D fromPoint) {
+        bounceBack(20, fromPoint);
+    }
+
+    /**
+     * Makes the entity bounce back from a point
+     *
+     * @param bounceDistance the distance to bounce
+     * @param fromPoint      the point to bounce back from
+     */
+    protected final void bounceBack(int bounceDistance, Point2D fromPoint) {
+        Point2D difference = position.subtract(fromPoint);
+
+        Point2D dp = new Point2D(bounceDistance * Math.signum(difference.getX()),
+                                 bounceDistance * Math.signum(difference.getY()));
+
+        setPosition(position.add(dp));
     }
 }
