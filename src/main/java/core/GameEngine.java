@@ -271,8 +271,9 @@ public final class GameEngine {
             if (collidable.isStatic()) {
                 staticBodies.remove(collidable);
             } else {
-                ((Entity) collidable).setVelocity(Point2D.ZERO);
-                dynamicBodies.remove(collidable);
+                Entity entity = (Entity) collidable;
+                entity.setVelocity(Point2D.ZERO);
+                dynamicBodies.remove(entity);
             }
         }
     }

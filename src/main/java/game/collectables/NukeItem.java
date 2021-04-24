@@ -1,10 +1,10 @@
 package game.collectables;
 
 import core.*;
-import game.IItem;
-import game.Inventory;
 import game.collidables.Collidable;
 import game.entities.Player;
+import game.inventory.IItem;
+import game.inventory.Inventory;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 import utilities.RandomUtil;

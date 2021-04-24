@@ -1,4 +1,4 @@
-package game.levels;
+package game.level;
 
 import game.collectables.Collectable;
 import game.collidables.*;

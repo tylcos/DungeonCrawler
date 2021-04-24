@@ -1,9 +1,10 @@
 package game.entities;
 
-import core.ImageManager;
-import core.SoundManager;
+import core.*;
 import javafx.geometry.Point2D;
 import utilities.RandomUtil;
+
+import java.util.List;
 
 /**
  * Basic slime enemy
@@ -52,6 +53,7 @@ public class Slime extends Entity {
     public void onDeath() {
         setImage(ImageManager.getImage(SLIME_DEAD_SPRITES[slimeType], 300, 60, true));
 
+        GameEngine.removeFromPhysics(List.of(this));
         SoundManager.playEnemyKilled();
     }
 }

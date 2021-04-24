@@ -1,4 +1,4 @@
-package game;
+package game.inventory;
 
 import core.ImageManager;
 import javafx.geometry.Point2D;
@@ -27,6 +27,7 @@ public class Weapon {
     public static final double WEAPON_HOLD_DISTANCE = 90d;
     public static final double SWORD_ATTACK_ANGLE   = 45d;
     public static final double SPEAR_ATTACK_RANGE   = 150d;
+    public static final double SPEAR_ATTACK_ANGLE   = 10d;
     public static final double BOW_OFFSET           = -30d;
 
     /**
@@ -73,7 +74,7 @@ public class Weapon {
             throw new IllegalArgumentException("Illegal Weapon type: " + type);
         }
 
-        image = tier > 12 ? ImageManager.getSprite("weapons.png", type.getValue(), 12, 32, 3)
+        image = tier > 11 ? ImageManager.getSprite("weapons.png", type.getValue(), 11, 32, 3)
                           : ImageManager.getSprite("weapons.png", type.getValue(), tier, 32, 3);
     }
 
@@ -112,7 +113,8 @@ public class Weapon {
         case Sword:
             return new Point2D(WEAPON_HOLD_DISTANCE + weaponSize, SWORD_ATTACK_ANGLE);
         case Spear:
-            return new Point2D(WEAPON_HOLD_DISTANCE + SPEAR_ATTACK_RANGE + weaponSize, 5d);
+            return new Point2D(WEAPON_HOLD_DISTANCE + SPEAR_ATTACK_RANGE + weaponSize,
+                               SPEAR_ATTACK_ANGLE);
         default:
             return Point2D.ZERO;
         }

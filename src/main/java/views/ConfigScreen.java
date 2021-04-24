@@ -2,8 +2,8 @@ package views;
 
 import core.GameDriver;
 import core.SceneManager;
-import game.WeaponType;
 import game.entities.Player;
+import game.inventory.WeaponType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import utilities.RandomUtil;
