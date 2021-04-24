@@ -27,9 +27,6 @@ public class SkullEntityController extends EntityController<Skull> {
     private double timeFactorX;
     private double timeFactorY;
 
-    // Small dot for debugging where the entity is moving towards
-    private DebugPoint debugPoint;
-
     // All possible states of the entity
     private enum State {
         attacking, charging, running, relaxing
@@ -52,10 +49,6 @@ public class SkullEntityController extends EntityController<Skull> {
         biasScale   = 100;
         timeFactorX = RandomUtil.get(1d, 2d);
         timeFactorY = RandomUtil.get(1d, 2d);
-
-        if (useDebugPoints) {
-            debugPoint = new DebugPoint();
-        }
     }
 
     public void act() {
@@ -68,11 +61,6 @@ public class SkullEntityController extends EntityController<Skull> {
         timeSinceRoomLoad += GameEngine.getDt();
         if (state == State.relaxing && timeSinceRoomLoad > 1d) {
             state = State.running;
-        }
-
-        // Spawn debug point for the first time
-        if (useDebugPoints && debugPoint.isNotRendered() && !stopped) {
-            GameEngine.addToLayer(GameEngine.VFX, debugPoint);
         }
 
         // Bias that follows a Lissajous figure, used for random movement
@@ -136,16 +124,7 @@ public class SkullEntityController extends EntityController<Skull> {
 
         // Shows where the entity is moving towards
         if (useDebugPoints) {
-            debugPoint.setPosition(entity.getPosition().add(target));
-        }
-    }
-
-    @Override
-    public void stop() {
-        stopped = true;
-
-        if (useDebugPoints) {
-            GameEngine.removeFromLayer(GameEngine.VFX, debugPoint);
+            DebugPoint.debug(entity.getPosition().add(target));
         }
     }
 }

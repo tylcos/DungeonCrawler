@@ -3,9 +3,8 @@ package game.entities;
 import core.GameEngine;
 import game.collidables.DebugPoint;
 import javafx.geometry.Point2D;
+import utilities.MathUtil;
 import utilities.RandomUtil;
-
-import java.util.Arrays;
 
 /**
  * Defines the Mage AI.
@@ -62,23 +61,9 @@ public class MageEntityController extends EntityController<Mage> {
 
         timeFactorX = RandomUtil.get(1d, 2d);
         timeFactorY = RandomUtil.get(1d, 2d);
-
-        if (useDebugPoints) {
-            debugPoints = new DebugPoint[]{
-                new DebugPoint(),
-                new DebugPoint(),
-                new DebugPoint(),
-                new DebugPoint()
-            };
-        }
     }
 
     public void act() {
-        // Spawn debug point for the first time
-        if (useDebugPoints && debugPoints[0].isNotRendered() && !stopped) {
-            GameEngine.addToLayer(GameEngine.VFX, Arrays.asList(debugPoints));
-        }
-
         // Stop the entity if needed
         if (stopped) {
             return;
@@ -118,7 +103,7 @@ public class MageEntityController extends EntityController<Mage> {
                                          radius * Math.sin(predictedTheta));
         for (int i = 0; i < 3; i++) {
             if (useDebugPoints) {
-                debugPoints[i].setPosition(prediction);
+                DebugPoint.debug(prediction);
             }
 
             difference     = prediction.subtract(entity.getPosition());
@@ -128,7 +113,7 @@ public class MageEntityController extends EntityController<Mage> {
                                          radius * Math.sin(predictedTheta));
         }
         if (useDebugPoints) {
-            debugPoints[3].setPosition(prediction);
+            DebugPoint.debug(prediction);
         }
 
         // Points to where the entity should move
@@ -176,14 +161,5 @@ public class MageEntityController extends EntityController<Mage> {
         entity.setVelocity(entity.getVelocity().interpolate(velocity, inputSmooth));
 
         previousTheta = currentTheta;
-    }
-
-    @Override
-    public void stop() {
-        stopped = true;
-
-        if (useDebugPoints) {
-            GameEngine.removeFromLayer(GameEngine.VFX, Arrays.asList(debugPoints));
-        }
     }
 }

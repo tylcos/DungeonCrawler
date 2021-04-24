@@ -1,5 +1,6 @@
 package game.collidables;
 
+import core.GameEngine;
 import game.collectables.Collectable;
 import javafx.geometry.Point2D;
 
@@ -8,10 +9,18 @@ import javafx.geometry.Point2D;
  */
 public class DebugPoint extends Collectable {
     public DebugPoint() {
-        super("debugPoint.png", Point2D.ZERO, new Point2D(16, 16));
+        this(Point2D.ZERO);
+    }
+
+    public DebugPoint(Point2D position) {
+        super("debugPoint.png", position, new Point2D(16, 16));
     }
 
     @Override
     public void onCollision(Collidable other) {
+    }
+
+    public static void debug(Point2D position) {
+        GameEngine.addToLayer(GameEngine.DEBUG, new DebugPoint(position));
     }
 }
