@@ -38,7 +38,7 @@ public final class ScreenManager {
      */
     public static Point2D screenToGame(Point2D screenCoordinates) {
         Point2D sceneCoordinates = SceneManager.getRoot().screenToLocal(screenCoordinates);
-        return sceneToGame(sceneCoordinates);
+        return sceneCoordinates != null ? sceneToGame(sceneCoordinates) : Point2D.ZERO;
     }
 
     public static void updateScreen() {
