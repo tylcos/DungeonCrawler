@@ -107,17 +107,19 @@ public class GameScreenItemsTests extends ApplicationTest {
      */
     @Test
     public void testAttackPotionDoubleDamageFiveSeconds() {
-        int startWeaponDamage = Player.getPlayer().getWeapon().getDamage();
+        int startWeaponDamage = Player.getPlayer().getWeaponHolder().getWeapon().getDamage();
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
             if (collectable instanceof AttackPotion) {
                 Player.getPlayer().setPosition(collectable.getPosition());
                 sleep(500);
                 push(KeyCode.getKeyCode(String.valueOf(((IItem) collectable).getItemID() + 1)));
                 sleep(500);
-                assertEquals(startWeaponDamage * 2, Player.getPlayer().getWeapon().getDamage());
+                assertEquals(startWeaponDamage * 2,
+                        Player.getPlayer().getWeaponHolder().getWeapon().getDamage());
 
                 sleep(5000); // reset back to normal attack damage after 5 seconds
-                assertEquals(startWeaponDamage, Player.getPlayer().getWeapon().getDamage());
+                assertEquals(startWeaponDamage,
+                        Player.getPlayer().getWeaponHolder().getWeapon().getDamage());
             }
         }
     }
@@ -145,9 +147,9 @@ public class GameScreenItemsTests extends ApplicationTest {
             if (collectable instanceof WeaponItem) {
                 Player.getPlayer().setPosition(collectable.getPosition());
                 sleep(500);
-                Player.getPlayer().getWeapon().getName();
+                Player.getPlayer().getWeaponHolder().getWeapon().getName();
                 push(KeyCode.TAB);
-                assertEquals("Axe", Player.getPlayer().getWeapon().getName());
+                assertEquals("Axe", Player.getPlayer().getWeaponHolder().getWeapon().getName());
 
             }
         }
@@ -160,9 +162,10 @@ public class GameScreenItemsTests extends ApplicationTest {
     public void testNoWeaponChange() {
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
             if (collectable instanceof WeaponItem) {
-                Player.getPlayer().getWeapon().getName();
+                Player.getPlayer().getWeaponHolder().getWeapon().getName();
                 push(KeyCode.TAB);
-                assertEquals("Starting Weapon", Player.getPlayer().getWeapon().getName());
+                assertEquals("Starting Weapon",
+                        Player.getPlayer().getWeaponHolder().getWeapon().getName());
             }
         }
 
@@ -173,11 +176,12 @@ public class GameScreenItemsTests extends ApplicationTest {
      */
     @Test
     public void testInventoryUsingItem() {
-        int          startWeaponDamage = Player.getPlayer().getWeapon().getDamage();
-        AttackPotion attackPotion      = new AttackPotion();
+        int startWeaponDamage = Player.getPlayer().getWeaponHolder().getWeapon().getDamage();
+        AttackPotion attackPotion = new AttackPotion();
         attackPotion.activate();
 
         push(KeyCode.getKeyCode(String.valueOf(attackPotion.getItemID() + 1)));
-        assertEquals(startWeaponDamage * 2, Player.getPlayer().getWeapon().getDamage());
+        assertEquals(startWeaponDamage * 2,
+                Player.getPlayer().getWeaponHolder().getWeapon().getDamage());
     }
 }

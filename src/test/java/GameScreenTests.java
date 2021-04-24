@@ -153,4 +153,41 @@ public class GameScreenTests extends ApplicationTest {
 
         assertEquals(1, numExit);
     }
+    
+    @Test
+    public void testNumChallenges() {
+        Room[][] rooms   = GameScreen.getLevel().getMap();
+        int      numChallenge = 0;
+        for (int i = 0; i < rooms.length; ++i) {
+            for (int j = 0; j < rooms[i].length; ++j) {
+                if (rooms[i][j] != null && rooms[i][j].isChallenge()) {
+                    ++numChallenge;
+                }
+            }
+        }
+
+        assertTrue(numChallenge >= 2);
+    }
+    
+    @Test
+    public void testNoWeirdRooms() {
+        // This might seem stupid but you'd be surprised how frequently this happens when we
+        // tweak the level generation algorithm
+        Room[][] rooms   = GameScreen.getLevel().getMap();
+        int      weird = 0;
+        for (int i = 0; i < rooms.length; ++i) {
+            for (int j = 0; j < rooms[i].length; ++j) {
+                if (rooms[i][j] != null) {
+                    int exit = rooms[i][j].isExit() ? 1 : 0;
+                    int entrance = rooms[i][j].isEntrance() ? 1 : 0;
+                    int challenge = rooms[i][j].isChallenge() ? 1 : 0;
+                    if (exit + entrance + challenge > 1) {
+                        weird++;
+                    }
+                }
+            }
+        }
+
+        assertEquals(0, weird);
+    }
 }
