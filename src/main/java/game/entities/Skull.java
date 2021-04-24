@@ -1,10 +1,7 @@
 package game.entities;
 
-import core.GameEngine;
-import game.collidables.Collidable;
-import game.collidables.CollidableTile;
+import core.SoundManager;
 import javafx.geometry.Point2D;
-import javafx.scene.input.MouseEvent;
 import utilities.RandomUtil;
 
 /**
@@ -21,8 +18,6 @@ public class Skull extends Entity {
         money  = 10;
 
         entityController = new SkullEntityController(this);
-
-        setOnMouseClicked(this::attackedByPlayer);
     }
 
     @Override
@@ -31,48 +26,12 @@ public class Skull extends Entity {
     }
 
     /**
-     * Enemy retreat one step after mainPlayer attack enemy.
-     *
-     * @param event Mouse click event
-     */
-    public void attackedByPlayer(MouseEvent event) {
-        if (isDead || Player.getPlayer().isDead()) {
-            return;
-        }
-
-        damage(1);
-        bounceBack(-20, Player.getPlayer().getPosition());
-    }
-
-    /**
      * Destroys the entity
      */
     @Override
     public void onDeath() {
         setVisible(false);
-    }
 
-    @Override
-    public void onCollision(Collidable other) {
-        if (other instanceof CollidableTile) {
-            double magnitude = Math.max(100d, velocity.magnitude());
-
-            bounceBack((int) (magnitude * GameEngine.getDt()), Point2D.ZERO);
-        }
-    }
-
-    /**
-     * Makes the entity bounce back from wall or enemy
-     *
-     * @param bounceDistance the distance to bounce
-     * @param fromPoint      the point to bounce back from
-     */
-    private void bounceBack(int bounceDistance, Point2D fromPoint) {
-        Point2D difference = position.subtract(fromPoint);
-
-        Point2D dp = new Point2D(-bounceDistance * Math.signum(difference.getX()),
-                                 -bounceDistance * Math.signum(difference.getY()));
-
-        setPosition(position.add(dp));
+        SoundManager.playEnemyKilled();
     }
 }
