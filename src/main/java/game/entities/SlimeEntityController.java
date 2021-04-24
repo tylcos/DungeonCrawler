@@ -27,9 +27,6 @@ public class SlimeEntityController extends EntityController<Slime> {
     private double timeFactorX;
     private double timeFactorY;
 
-    // Small dot for debugging where the entity is moving towards
-    private DebugPoint debugPoint;
-
     // All possible states of the entity
     private enum State {
         attacking, charging, running, relaxing
@@ -52,18 +49,9 @@ public class SlimeEntityController extends EntityController<Slime> {
         biasScale   = 200;
         timeFactorX = RandomUtil.get(1d, 2d);
         timeFactorY = RandomUtil.get(1d, 2d);
-
-        if (useDebugPoints) {
-            debugPoint = new DebugPoint();
-        }
     }
 
     public void act() {
-        // Spawn debug point for the first time
-        if (useDebugPoints && debugPoint.isNotRendered()) {
-            GameEngine.addToLayer(GameEngine.VFX, debugPoint);
-        }
-
         // Smoothly stop the entity if needed
         if (stopped) {
             entity.setVelocity(entity.getVelocity().interpolate(Point2D.ZERO, .01d));
@@ -132,16 +120,7 @@ public class SlimeEntityController extends EntityController<Slime> {
 
         // Shows where the entity is moving towards
         if (useDebugPoints) {
-            debugPoint.setPosition(entity.getPosition().add(target));
-        }
-    }
-
-    @Override
-    public void stop() {
-        stopped = true;
-
-        if (useDebugPoints) {
-            GameEngine.removeFromLayer(GameEngine.VFX, debugPoint);
+            DebugPoint.debug(entity.getPosition().add(target));
         }
     }
 }
