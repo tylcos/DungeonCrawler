@@ -101,6 +101,7 @@ public class WeaponHolder {
             double  height        = localBounds.getHeight() / 2;
             Point2D enemyPosition = enemy.getPosition().subtract(playerPosition);
             Stream<Point2D> bounds = Stream.of(
+                enemyPosition,
                 enemyPosition.add(new Point2D(-width, -height)),
                 enemyPosition.add(new Point2D(width, -height)),
                 enemyPosition.add(new Point2D(-width, height)),

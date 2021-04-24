@@ -4,7 +4,6 @@ import game.collidables.Collidable;
 import game.entities.Entity;
 import javafx.animation.AnimationTimer;
 import javafx.collections.ObservableList;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -271,9 +270,7 @@ public final class GameEngine {
             if (collidable.isStatic()) {
                 staticBodies.remove(collidable);
             } else {
-                Entity entity = (Entity) collidable;
-                entity.setVelocity(Point2D.ZERO);
-                dynamicBodies.remove(entity);
+                dynamicBodies.remove(collidable);
             }
         }
     }

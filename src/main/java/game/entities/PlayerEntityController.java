@@ -7,6 +7,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import utilities.AnimationController;
 import utilities.MathUtil;
 
 /**
@@ -109,13 +110,23 @@ public class PlayerEntityController extends EntityController<Player> {
             weaponHolder.getCollidingEnemies().forEach(e -> e.damage(weapon.getDamage()));
             break;
         case Bow:
-            Projectile arrow = new Projectile("arrow.png", weaponHolder.getWeaponPosition(),
-                                              weaponHolder.getFacingDirection().multiply(2000d),
-                                              e -> e.damage(weapon.getDamage()));
+            Projectile arrow =
+                new Projectile("Arrow.png",
+                               weaponHolder.getWeaponPosition(),
+                               weaponHolder.getFacingDirection().multiply(2000d),
+                               e -> e.damage(weapon.getDamage()));
             GameEngine.instantiate(GameEngine.VFX, arrow);
             break;
         case Staff:
-
+            ExplosiveProjectile energyBall =
+                new ExplosiveProjectile("blank.png",
+                                        weaponHolder.getWeaponPosition(),
+                                        weaponHolder.getFacingDirection().multiply(1000d),
+                                        200d,
+                                        enemies -> enemies
+                                                       .forEach(e -> e.damage(weapon.getDamage())));
+            AnimationController.add(energyBall, "EnergyBall.png", 0, 1, 9, 128, 20, 1);
+            GameEngine.instantiate(GameEngine.VFX, energyBall);
             break;
         default:
             throw new IllegalArgumentException("Illegal Weapon type: " + weapon.getType());
