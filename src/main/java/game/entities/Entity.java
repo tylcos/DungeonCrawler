@@ -117,8 +117,10 @@ public abstract class Entity extends Collidable {
             setMouseTransparent(true);
 
             Room currentRoom = GameScreen.getLevel().getCurrentRoom();
-            if (currentRoom.isClear()) {
+            if (!currentRoom.isChallenge() && currentRoom.isClear()) {
                 currentRoom.unlockDoors();
+            } else if (currentRoom.isChallenge() && currentRoom.isClear()) {
+                currentRoom.endChallenge();
             }
 
             onDeath();

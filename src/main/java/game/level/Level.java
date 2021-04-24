@@ -4,6 +4,7 @@ import core.GameEngine;
 import game.collectables.*;
 import game.collidables.Door;
 import game.entities.*;
+import game.inventory.IItem;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -20,6 +21,7 @@ import java.util.stream.IntStream;
 public class Level {
     public static final int MAX_DIAMETER     = 15; // Width/height of map. ODD NUMBERS ONLY
     public static final int MIN_END_DISTANCE = 6;  // Minimum distance away the exit must be (6)
+    public static final int NUM_CHALLENGES   = 2; // Number of challenge rooms
 
     /* CHEATS */
     private static boolean spawnEnemiesInEntrance;
@@ -79,6 +81,41 @@ public class Level {
      * @param room the room to be added to
      */
     private void generateGameElements(Room room) {
+        // Special logic for challenge rooms
+        if (room.isChallenge()) {
+            ChallengeShrine shrine = new ChallengeShrine(room);
+            room.addCollectable(shrine);
+            int rewardGold = RandomUtil.getInt(15, 25);
+            ArrayList<IItem> rewardItems = new ArrayList<IItem>();
+            if (RandomUtil.get() < .4) {
+                rewardItems.add(new HealthPotion());
+            }
+            if (RandomUtil.get() < .4) {
+                rewardItems.add(new AttackPotion());
+            }
+            if (RandomUtil.get() < .4) {
+                rewardItems.add(new SpeedPotion());
+            }
+            room.setChallengeReward(rewardGold, rewardItems);
+            int difficulty = Player.getPlayer().getDifficulty();
+            int[] enemiesToSpawnPerTier = {
+                RandomUtil.getInt(2, 4 + difficulty),
+                RandomUtil.getInt(2, 3 + difficulty),
+                RandomUtil.getInt(1, 3 + difficulty)
+            };
+
+            for (int tier = 0; tier < 3; tier++) {
+                List<Supplier<Entity>> currentTier = ENEMIES.get(tier);
+
+                for (int i = 0; i < enemiesToSpawnPerTier[tier]; i++) {
+                    int    randomIndex  = RandomUtil.getInt(currentTier.size());
+                    Entity currentEnemy = currentTier.get(randomIndex).get();
+                    room.addChallengeEnemy(currentEnemy);
+                }
+            }
+            return; // end challenge room logic
+        }
+        
         // Add Collectables
 
         int[] collectablesToSpawn = null;
@@ -117,7 +154,7 @@ public class Level {
                 RandomUtil.getInt(0, 1 + difficulty)
             };
 
-            room.addEntity(new Golem());
+            //room.addEntity(new Golem());
 
             // Add enemies to the current room
             for (int tier = 0; tier < 3; tier++) {
@@ -267,6 +304,7 @@ public class Level {
      * has been made and the queue has been emptied.
      */
     private void dequeueAndLinkRooms() {
+        ArrayList<Room> addedRooms = new ArrayList<Room>();
         while (!roomLinkQueue.isEmpty()) {
             QueueLink next     = roomLinkQueue.remove();
             Room      existing = getRoomIfExists(next.from, next.dir);
@@ -280,11 +318,18 @@ public class Level {
                 newRoom.createDoor(next.dir.opposite(), next.from);
                 if (newRoom.isExit()) {
                     exit = newRoom;
+                } else {
+                    addedRooms.add(newRoom);
                 }
             } else {
                 next.door.setDestination(existing);
                 existing.createDoor(next.dir.opposite(), next.from);
             }
+        }
+        for(int i = 0; i < NUM_CHALLENGES; ++i) {
+            int rand = RandomUtil.getInt(addedRooms.size());
+            Room sel = addedRooms.remove(rand);
+            sel.makeChallenge();
         }
     }
 
