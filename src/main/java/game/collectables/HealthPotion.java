@@ -28,7 +28,7 @@ public class HealthPotion extends Collectable implements IItem {
         if (isCollected || !(other instanceof Player)) {
             return;
         }
-        EndScreen.addTotalPostionObtain();
+        EndScreen.addTotalPotionsObtained();
         SoundManager.playPotionCollected();
         setCollected();
 
