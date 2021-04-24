@@ -1,4 +1,4 @@
-package game;
+package game.inventory;
 
 import utilities.RandomUtil;
 

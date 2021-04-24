@@ -1,11 +1,12 @@
 package game.entities;
 
 import core.*;
-import game.Weapon;
 import game.collidables.DebugPoint;
+import game.inventory.Weapon;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import utilities.MathUtil;
 
 /**
@@ -32,7 +33,9 @@ public class PlayerEntityController extends EntityController<Player> {
         super(entity);
         weaponHolder = entity.getWeaponHolder();
 
-        SceneManager.getStage().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> attack());
+        Stage stage = SceneManager.getStage();
+        stage.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> attacking = true);
+        stage.addEventFilter(MouseEvent.MOUSE_RELEASED, event -> attacking = false);
 
         InputManager.addKeyHandler(KeyCode.TAB, () -> weaponHolder.changeWeapon());
     }
@@ -69,16 +72,13 @@ public class PlayerEntityController extends EntityController<Player> {
         entity.setVelocity(dVelocity < .01 ? rawVelocity : velocity);
 
         // Weapon input
-        Weapon weapon = weaponHolder.getWeapon();
-        attacking = System.nanoTime() - lastAttackTime < weapon.getFireRate() * 1e9;
-
         if (GameDriver.isDebug()) {
             Point2D playerPosition = entity.getPosition();
             Point2D range          = entity.getWeaponHolder().getWeapon().getAttackRange();
 
-            Point2D mousePosition  = InputManager.getMousePosition();
+            Point2D mousePosition   = InputManager.getMousePosition();
             Point2D facingDirection = mousePosition.subtract(playerPosition).normalize();
-            double  facingAngle    = MathUtil.getAngleDeg(facingDirection);
+            double  facingAngle     = MathUtil.getAngleDeg(facingDirection);
 
             DebugPoint.debug(MathUtil.getVectorDeg(facingAngle + range.getY()).multiply(
                 range.getX()).add(playerPosition));
@@ -87,21 +87,33 @@ public class PlayerEntityController extends EntityController<Player> {
             DebugPoint.debug(MathUtil.getVectorDeg(facingAngle).multiply(
                 range.getX()).add(playerPosition));
         }
+
+        if (attacking) {
+            attack();
+        }
     }
 
     @Override
     void attack() {
-        if (attacking) {
+        Weapon weapon          = weaponHolder.getWeapon();
+        double timeSinceAttack = 1e-9d * (System.nanoTime() - lastAttackTime);
+        if (timeSinceAttack < weapon.getFireRate()) {
             return;
         }
 
-        Weapon weapon = weaponHolder.getWeapon();
+        lastAttackTime = System.nanoTime();
+
         switch (weapon.getType()) {
         case Sword:
         case Spear:
             weaponHolder.getCollidingEnemies().forEach(e -> e.damage(weapon.getDamage()));
             break;
         case Bow:
+            Projectile arrow = new Projectile("arrow.png", weaponHolder.getWeaponPosition(),
+                                              weaponHolder.getFacingDirection().multiply(2000d),
+                                              e -> e.damage(weapon.getDamage()));
+            GameEngine.instantiate(GameEngine.VFX, arrow);
+            break;
         case Staff:
 
             break;
@@ -109,8 +121,6 @@ public class PlayerEntityController extends EntityController<Player> {
             throw new IllegalArgumentException("Illegal Weapon type: " + weapon.getType());
         }
 
-        weaponHolder.getWeapon().attack();
-
-        lastAttackTime = System.nanoTime();
+        weapon.attack();
     }
 }

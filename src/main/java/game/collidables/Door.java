@@ -3,7 +3,7 @@ package game.collidables;
 import core.SceneManager;
 import core.SoundManager;
 import game.entities.Player;
-import game.levels.Room;
+import game.level.Room;
 import javafx.scene.image.Image;
 import views.GameScreen;
 
@@ -13,7 +13,7 @@ import views.GameScreen;
 public class Door extends CollidableTile {
     private Room destination;    // Room this door leads to
     private boolean locked;      // Whether this door can be entered
-    private boolean win = false; // Whether touching this door with the key wins the game
+    private boolean win; // Whether touching this door with the key wins the game
 
     /**
      * Constructor taking an Image of a door.

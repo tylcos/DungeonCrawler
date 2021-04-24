@@ -1,10 +1,10 @@
 package views;
 
 import core.*;
-import game.Inventory;
-import game.WeaponType;
 import game.entities.Player;
-import game.levels.Level;
+import game.inventory.Inventory;
+import game.inventory.WeaponType;
+import game.level.Level;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;

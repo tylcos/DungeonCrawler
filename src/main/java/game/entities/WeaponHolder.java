@@ -2,8 +2,8 @@ package game.entities;
 
 import core.GameEngine;
 import core.InputManager;
-import game.Inventory;
-import game.Weapon;
+import game.inventory.Inventory;
+import game.inventory.Weapon;
 import javafx.geometry.*;
 import javafx.scene.image.ImageView;
 import utilities.MathUtil;
@@ -18,6 +18,7 @@ public class WeaponHolder {
     private int       weaponIndex;
     private ImageView weaponImageView;
 
+    private Point2D weaponPosition;
     private Point2D facingDirection;
 
     public WeaponHolder(int size) {
@@ -76,7 +77,7 @@ public class WeaponHolder {
         double  facingAngleDeg   = Math.toDegrees(MathUtil.getAngle(facingDirection));
         double  adjustedAngleDeg = facingAngleDeg + offsets.getY();
         Point2D adjustedFacing   = MathUtil.getVectorDeg(adjustedAngleDeg);
-        Point2D weaponPosition = playerPosition.add(
+        weaponPosition = playerPosition.add(
             adjustedFacing.multiply(Weapon.WEAPON_HOLD_DISTANCE + offsets.getX()));
 
         weaponImageView.setTranslateX(weaponPosition.getX());
@@ -112,5 +113,13 @@ public class WeaponHolder {
 
     public Weapon getWeapon() {
         return weapons[weaponIndex];
+    }
+
+    public Point2D getWeaponPosition() {
+        return weaponPosition;
+    }
+
+    public Point2D getFacingDirection() {
+        return facingDirection;
     }
 }

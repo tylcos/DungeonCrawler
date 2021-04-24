@@ -1,6 +1,6 @@
 package core;
 
-import game.levels.Level;
+import game.level.Level;
 import javafx.geometry.Point2D;
 import javafx.scene.image.*;
 

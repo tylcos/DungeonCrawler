@@ -4,7 +4,7 @@ import core.GameEngine;
 import core.ImageManager;
 import game.collidables.Collidable;
 import game.collidables.CollidableTile;
-import game.levels.Room;
+import game.level.Room;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import views.GameScreen;
@@ -82,7 +82,7 @@ public abstract class Entity extends Collidable {
     /**
      * Runs once the health is non-positive
      */
-    protected abstract void onDeath();
+    protected void onDeath() { }
 
     /**
      * Gets the entity's health.
@@ -218,7 +218,7 @@ public abstract class Entity extends Collidable {
      * @param fromPoint      the point to bounce back from
      */
     protected final void bounceBack(Point2D fromPoint) {
-        bounceBack(20, fromPoint);
+        bounceBack(40, fromPoint);
     }
 
     /**

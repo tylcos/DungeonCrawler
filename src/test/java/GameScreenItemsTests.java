@@ -1,9 +1,9 @@
 import core.GameDriver;
 import core.SceneManager;
-import game.IItem;
 import game.collectables.*;
 import game.entities.Player;
-import game.levels.Level;
+import game.inventory.IItem;
+import game.level.Level;
 import javafx.scene.input.KeyCode;
 import org.junit.Before;
 import org.junit.Test;

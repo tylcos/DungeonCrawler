@@ -2,7 +2,7 @@ import core.GameDriver;
 import core.SceneManager;
 import game.entities.Entity;
 import game.entities.Player;
-import game.levels.Level;
+import game.level.Level;
 import javafx.event.Event;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;

@@ -1,4 +1,4 @@
-package game;
+package game.inventory;
 
 /**
  * Interface for items that can be stored in the inventory
