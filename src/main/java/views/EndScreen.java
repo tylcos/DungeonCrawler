@@ -17,11 +17,17 @@ public class EndScreen {
     private Label endGameText;
     @FXML
     private Label version;
+    @FXML
+    private Label totalPostion;
+    @FXML
+    private Label totalKill;
+    @FXML
+    private Label totalNuke;
 
     //stats variable
     private static int totalNumKill = 0;
     private static int totalPostionObtain = 0;
-    private static int totoalNuked = 0;
+    private static int totalNuked = 0;
 
     /**
      * Initializes the configuration screen
@@ -36,10 +42,17 @@ public class EndScreen {
 
         if (Player.getPlayer() != null && Player.getPlayer().isDead()) {
             endGameText.setText("You Died");
+            totalKill.setText("total monster kill: " + totalNumKill);
+            totalPostion.setText("total position obtained: " + totalPostionObtain);
+            totalNuke.setText("total number of nuke used: " + totalNuked);
+
 
             color.setColor(Color.RED);
         } else {
             endGameText.setText("You Escaped The Dungeon!");
+            totalKill.setText("total monster kill: " + totalNumKill);
+            totalPostion.setText("total position obtained: " + totalPostionObtain);
+            totalNuke.setText("total number of nuke used: " + totalNuked);
             color.setColor(Color.BLUE);
         }
 
@@ -76,7 +89,7 @@ public class EndScreen {
     }
 
     public static void addTotalNukedUsed() {
-        totoalNuked++;
+        totalNuked++;
     }
 
 
