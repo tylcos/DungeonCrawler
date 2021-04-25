@@ -1,11 +1,10 @@
 package game.level;
 
+import core.GameEngine;
 import game.collectables.Collectable;
 import game.collidables.*;
 import game.entities.Entity;
 import game.entities.Player;
-import game.inventory.IItem;
-import game.inventory.Inventory;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -17,8 +16,6 @@ import utilities.RandomUtil;
 
 import java.io.*;
 import java.util.*;
-
-import core.GameEngine;
 
 /**
  * Room is a GridPane that displays a given room as a grid of Labels.
@@ -74,35 +71,35 @@ public class Room extends GridPane {
      * A cache for the contents of room files we have read before. With this, we don't have to make
      * read requests to a file more than once! Disks are slow and flash storage is fast :)
      */
-    private static HashMap<String, ArrayList<String>> fileCache       = new HashMap<>();
+    private static HashMap<String, ArrayList<String>>           fileCache       = new HashMap<>();
     private static HashMap<String, EnumMap<Direction, Point2D>> doorOffsetCache = new HashMap<>();
 
-    private Level   level;                      // The level this room belongs to
-    private Point2D position;                   // The position of this room in the level
-    private boolean exit;                       // Whether this room is the exit
-    private boolean entrance;                   // Whether this room is the entrance
-    private boolean challenge;                  // Whether this room is a challenge room
-    private boolean generated;                  // Whether this room has had game elements generated
-    private int     distanceFromEntrance = 999; // # of doorways separating this room from the
+    private Level     level;                      // The level this room belongs to
+    private Point2D   position;                   // The position of this room in the level
+    private boolean   exit;                       // Whether this room is the exit
+    private boolean   entrance;                   // Whether this room is the entrance
+    private boolean   challenge;                  // Whether this room is a challenge room
+    private boolean   generated;                  // Whether this room has had game elements
+    // generated
+    private int       distanceFromEntrance = 999; // # of doorways separating this room from the
     // entrance
     private Direction source; // Direction pointing to the room that created this one
-    private boolean challengeActive = false;    // Whether the challenge is currently active
+    private boolean   challengeActive;    // Whether the challenge is currently active
 
     // A list of all collidable bodies making up this room
-    private ArrayList<Collidable> bodies = new ArrayList<>();
+    private List<Collidable> bodies = new ArrayList<>();
 
     // Objects in this room. Names correspond to render layers in Level
-    // WARNING: IF YOU GET ERRORS ABOUT CONCURRENCY, THERE'S A DECENT CHANCE THESE TWO ARRAYLISTS
-    // NEED TO BE TURNED INTO ARRAYBLOCKINGQUEUES
-    private ArrayList<Collectable> collectables     = new ArrayList<>();
-    private ArrayList<Entity>      entities         = new ArrayList<>();
-    private ArrayList<Entity>      challengeEnemies = new ArrayList<>();
-    private int challengeRewardGold;
-    private ArrayList<IItem> challengeRewardItems = new ArrayList<>();
+    private List<Collectable> collectables         = new ArrayList<>();
+    private List<Entity>      entities             = new ArrayList<>();
+    private List<Entity>      challengeEnemies     = new ArrayList<>();
+    private int               challengeRewardGold;
+    private List<Collectable> challengeRewardItems = new ArrayList<>();
 
     // Contains valid door tiles for each direction.
     // Used by createDoor() to add doors to rooms that are already generated.
     private EnumMap<Direction, ArrayList<StackPane>> doors = new EnumMap<>(Direction.class);
+
     {
         for (Direction direction : Direction.values()) {
             doors.put(direction, new ArrayList<>());
@@ -146,16 +143,17 @@ public class Room extends GridPane {
             // the exit
             if (distanceFromEntrance >= Level.MIN_END_DISTANCE && level.missingExit()) {
                 exit = true;
+                template = "/rooms/rectangle.room";
             }
-            
+
             source = Direction.vectorToDirection(creator.position.subtract(position));
         }
         if (start) {
             distanceFromEntrance = 0;
-            entrance = true;
+            entrance             = true;
         }
         this.position = position;
-        this.level = level;
+        this.level    = level;
 
         // By default GridPanes are aligned to the top-left, but we want the room's
         // tiles centered
@@ -174,12 +172,12 @@ public class Room extends GridPane {
      * @return an ArrayList where each index {@code n} is the {@code n}th line of the file
      */
     private ArrayList<String> readFile(String name) {
-        ArrayList<String> lines = new ArrayList<>();
-        ArrayList<String> cache = fileCache.get(name);
+        ArrayList<String>           lines  = new ArrayList<>();
+        ArrayList<String>           cache  = fileCache.get(name);
         EnumMap<Direction, Point2D> dCache = doorOffsetCache.get(name);
         if (cache != null) {
             // File is cached. Load from cache.
-            lines = cache;
+            lines       = cache;
             doorOffsets = dCache;
         } else {
             // File does not exist in cache. Read from file.
@@ -205,8 +203,8 @@ public class Room extends GridPane {
                 }
             }
             // Get height and width of room by checking size of list and lines of list
-            double heightR = ((lines.size() - 3) / 2.0) * CELL_SIZE;
-            double widthR = ((lines.get(0).length() - 3) / 2.0) * CELL_SIZE;
+            double                      heightR = ((lines.size() - 3) / 2.0) * CELL_SIZE;
+            double                      widthR  = ((lines.get(0).length() - 3) / 2.0) * CELL_SIZE;
             EnumMap<Direction, Point2D> dOffset = new EnumMap<>(Direction.class);
             // TODO CELL_SIZE is added an additional time because the player's sprite can be extra
             // wide if they have a sword equipped
@@ -260,7 +258,7 @@ public class Room extends GridPane {
         // Activate door to the creator, if applicable
         if (creator != null) {
             Direction creatorDirection =
-                    Direction.vectorToDirection(creator.position.subtract(position));
+                Direction.vectorToDirection(creator.position.subtract(position));
             activeDoors[creatorDirection.toValue()] = true;
             testedDoors[creatorDirection.toValue()] = false;
             ++branches;
@@ -278,8 +276,8 @@ public class Room extends GridPane {
 
         int numberOfDoors = 0; // tracks number of doors that can be activated
         // Initialize numberOfDoors
-        for (int i = 0; i < testedDoors.length; ++i) {
-            if (testedDoors[i]) {
+        for (boolean testedDoor : testedDoors) {
+            if (testedDoor) {
                 ++numberOfDoors;
             }
         }
@@ -298,7 +296,7 @@ public class Room extends GridPane {
             // The magic below will randomly choose a door to make active/inactive
             // Beginning of magic
             int randomInt = RandomUtil.getInt(0, numberOfDoors);
-            int counter = 0;
+            int counter   = 0;
             while (randomInt > 0 || !testedDoors[counter]) {
                 ++counter;
                 if (testedDoors[counter]) {
@@ -336,7 +334,7 @@ public class Room extends GridPane {
         // Read the blueprint character by character and add the appropriate tiles to the room
         for (int row = 0; row < blueprint.size(); ++row) {
             for (int col = 0; col < blueprint.get(row).length(); ++col) {
-                Image img = SPRITE_TABLE.get(blueprint.get(row).charAt(col));
+                Image     img  = SPRITE_TABLE.get(blueprint.get(row).charAt(col));
                 StackPane cell = new StackPane();
                 // By setting min and max size to the same thing, the StackPane will always take
                 // up the same amount of space in the GridPane
@@ -367,7 +365,7 @@ public class Room extends GridPane {
                     break;
                 default:
                     System.err.println("Detected an invalid character in room " + fileName
-                            + "! Please check file for errors!");
+                                       + "! Please check file for errors!");
                 }
 
                 add(cell, col, row);
@@ -432,7 +430,7 @@ public class Room extends GridPane {
     private void generateDoor(Image image, StackPane cell, Direction direction, Room destination) {
         if (destination == null && exit) {
             Door door =
-                    new Door(SPRITE_TABLE.get(Character.toLowerCase(direction.toLetter())), true);
+                new Door(SPRITE_TABLE.get(Character.toLowerCase(direction.toLetter())), true);
             door.setWin();
             bodies.add(door);
             cell.getChildren().add(door);
@@ -492,7 +490,7 @@ public class Room extends GridPane {
             }
         }
     }
-    
+
     /**
      * Lock all doors.
      */
@@ -524,22 +522,23 @@ public class Room extends GridPane {
             }
         }
     }
-    
+
     public void activateChallenge() {
         // TODO play a sound
         GameEngine.instantiate(GameEngine.ENTITY, getChallengeEnemies());
         lockDoors();
         challengeActive = true;
     }
-    
+
     public void endChallenge() {
         // TODO play a sound
         GameEngine.destroy(GameEngine.ENTITY, getChallengeEnemies());
         unlockDoors();
         challengeActive = false;
         Player.getPlayer().addMoney(challengeRewardGold);
-        for (IItem i : challengeRewardItems) {
-            Inventory.addItem(i);
+        collectables.addAll(challengeRewardItems);
+        for (Collidable item : challengeRewardItems) {
+            GameEngine.instantiate(GameEngine.ITEM, item);
         }
     }
 
@@ -550,8 +549,8 @@ public class Room extends GridPane {
      * @return a list of Doors in that direction. If there are none the list will be empty.
      */
     public List<Door> getDoors(Direction direction) {
-        ArrayList<Door> trueDoors = new ArrayList<Door>();
-        ArrayList<StackPane> doorList = doors.get(direction);
+        ArrayList<Door>      trueDoors = new ArrayList<>();
+        ArrayList<StackPane> doorList  = doors.get(direction);
         for (StackPane p : doorList) {
             Node node = p.getChildren().get(0); // the only child should be a door
             if (node instanceof Door) {
@@ -563,7 +562,7 @@ public class Room extends GridPane {
 
     /**
      * Return coordinates that the player should be at when they pass through a door
-     * 
+     *
      * @param direction the direction the player came from
      * @return the coordinates the player should be at
      */
@@ -610,7 +609,7 @@ public class Room extends GridPane {
         if (!challengeActive) {
             return Collections.unmodifiableList(entities);
         } else {
-            ArrayList<Entity> test = new ArrayList<Entity>();
+            ArrayList<Entity> test = new ArrayList<>();
             test.addAll(entities);
             test.addAll(challengeEnemies);
             return Collections.unmodifiableList(test);
@@ -624,6 +623,15 @@ public class Room extends GridPane {
      */
     public void addEntity(Entity entity) {
         entities.add(entity);
+    }
+
+    /**
+     * Adds an entity to this room.
+     *
+     * @param entity the entity to add
+     */
+    public void addEntity(List<Entity> entity) {
+        entities.addAll(entity);
     }
 
     /**
@@ -670,11 +678,10 @@ public class Room extends GridPane {
     public boolean isEntrance() {
         return entrance;
     }
-    
 
     /**
      * Whether this room is a challenge room.
-     * 
+     *
      * @return true if this room is a challenge room
      */
     public boolean isChallenge() {
@@ -689,22 +696,22 @@ public class Room extends GridPane {
     public boolean isGenerated() {
         return generated;
     }
-    
+
     /**
      * Turn this room into a challenge room.
      */
     public void makeChallenge() {
         challenge = true;
     }
-    
+
     /**
      * Set the challenge rewards.
-     * 
+     *
      * @param gold  money to reward the player
      * @param items items to reward the player
      */
-    public void setChallengeReward(int gold, ArrayList<IItem> items) {
-        challengeRewardGold = gold;
+    public void setChallengeReward(int gold, List<Collectable> items) {
+        challengeRewardGold  = gold;
         challengeRewardItems = items;
     }
 

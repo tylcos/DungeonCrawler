@@ -24,16 +24,13 @@ public class MageEntityController extends EntityController<Mage> {
     private double attackingDistance;
 
     // Variables for generating bias
-    private double predictionGuessScale;
-
-    // Variables for predicting the Player's position
-    private              double previousTheta;
-    private              double thetaDot = .1d;
-    private static final double TWO_PI   = 2 * Math.PI;
-
-    // Variables for generating bias
     private double timeFactorX;
     private double timeFactorY;
+
+    // Variables for predicting the Player's position
+    private double predictionGuessScale;
+    private double previousTheta;
+    private double thetaDot = .1d;
 
     // All possible states of the entity
     private enum State {
@@ -81,21 +78,20 @@ public class MageEntityController extends EntityController<Mage> {
         double  distance        = difference.magnitude();
 
         // Predicts where the player will be
-        double timeToReach = difference.magnitude() / speed;
-        double radius      = player.getPosition().magnitude();
+        double timeToReach  = difference.magnitude() / speed;
+        double radius       = player.getPosition().magnitude();
         double currentTheta = MathUtil.getAngle(playerPosition);
 
         double dTheta = (currentTheta - previousTheta);
         if (Math.abs(dTheta) > 3) {
-            dTheta = TWO_PI - currentTheta - previousTheta;
+            dTheta = MathUtil.TAU - currentTheta - previousTheta;
         }
         double currentThetaDot = dTheta / GameEngine.getDt();
         thetaDot += (currentThetaDot - thetaDot) * .02d;
 
-
         // Iteratively approximate time to reach player and prediction
-        double predictedTheta = currentTheta + timeToReach * thetaDot * predictionGuessScale;
-        Point2D prediction = MathUtil.getVector(predictedTheta, radius);
+        double  predictedTheta = currentTheta + timeToReach * thetaDot * predictionGuessScale;
+        Point2D prediction     = MathUtil.getVector(predictedTheta, radius);
         for (int i = 0; i < 3; i++) {
             if (useDebugPoints) {
                 DebugPoint.debug(prediction);

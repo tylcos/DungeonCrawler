@@ -14,10 +14,11 @@ public class Golem extends Entity {
         super("blank.png", RandomUtil.getPoint2D(300));
         setPickOnBounds(false);
 
-        health = 10;
-        money  = 500;
+        health    = 50;
+        maxHealth = health;
+        money     = 500;
 
-        AnimationController.add(this, "Golem.png", 1, 1, 8, 100, 24, 4);
+        AnimationController.add(this, "Golem.png", 1, 1, 8, 100, 24, 5);
 
         entityController = new GolemEntityController(this);
     }
@@ -41,7 +42,7 @@ public class Golem extends Entity {
         death.setTranslateX(position.getX());
         death.setTranslateY(position.getY());
 
-        AnimationController.add(death, "GolemDeath.png", 0, 2, 5, 400, 0, 1);
+        AnimationController.add(death, "GolemDeath.png", 0, 2, 5, 400, 0, 2);
 
         TimerUtil.lerp(5, key::setOpacity);
         TimerUtil.lerp(5, t -> setOpacity(1 - t), () -> setVisible(false));

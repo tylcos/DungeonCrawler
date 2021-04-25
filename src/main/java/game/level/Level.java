@@ -4,7 +4,6 @@ import core.GameEngine;
 import game.collectables.*;
 import game.collidables.Door;
 import game.entities.*;
-import game.inventory.IItem;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -81,22 +80,32 @@ public class Level {
      * @param room the room to be added to
      */
     private void generateGameElements(Room room) {
+        int[] collectablesToSpawn = null;
+
         // Special logic for challenge rooms
         if (room.isChallenge()) {
             ChallengeShrine shrine = new ChallengeShrine(room);
             room.addCollectable(shrine);
-            int              rewardGold  = RandomUtil.getInt(15, 25);
-            ArrayList<IItem> rewardItems = new ArrayList<>();
-            if (RandomUtil.get() < .4) {
-                rewardItems.add(new HealthPotion());
+
+            List<Collectable> rewardItems = new ArrayList<>();
+            collectablesToSpawn = new int[] {
+                0,
+                RandomUtil.getBoolean(.4d) ? 1 : 0, // Health Potion 40% spawn chance
+                RandomUtil.getBoolean(.4d) ? 1 : 0, // Attack Potion 40% spawn chance
+                RandomUtil.getBoolean(.4d) ? 1 : 0, // Speed Potion 40% spawn chance
+                0,                                  // Nuke 0% spawn chance
+                RandomUtil.getInt(2, 5)             // Weapon [2,4]
+            };
+
+            for (int type = 0; type < COLLECTABLES.size(); type++) {
+                for (int i = 0; i < collectablesToSpawn[type]; i++) {
+                    rewardItems.add(COLLECTABLES.get(type).get());
+                }
             }
-            if (RandomUtil.get() < .4) {
-                rewardItems.add(new AttackPotion());
-            }
-            if (RandomUtil.get() < .4) {
-                rewardItems.add(new SpeedPotion());
-            }
+
+            int rewardGold = RandomUtil.getInt(15, 25);
             room.setChallengeReward(rewardGold, rewardItems);
+
             int difficulty = Player.getPlayer().getDifficulty();
             int[] enemiesToSpawnPerTier = {
                 RandomUtil.getInt(2, 4 + difficulty),
@@ -113,22 +122,22 @@ public class Level {
                     room.addChallengeEnemy(currentEnemy);
                 }
             }
+
             return; // end challenge room logic
         }
 
         // Add Collectables
 
-        int[] collectablesToSpawn = null;
         if (spawnItemsInEntrance) {
             collectablesToSpawn = IntStream.generate(() -> 1).limit(COLLECTABLES.size()).toArray();
         } else if (!room.isEntrance()) {
             collectablesToSpawn = new int[] {
-                RandomUtil.getInt(1, 4),       // Coin [1,3]
-                RandomUtil.get() < .2 ? 1 : 0, // Health Potion 20% spawn chance
-                RandomUtil.get() < .2 ? 1 : 0, // Attack Potion 20% spawn chance
-                RandomUtil.get() < .2 ? 1 : 0, // Speed Potion 20% spawn chance
-                RandomUtil.get() < .1 ? 1 : 0, // Nuke 10% spawn chance
-                RandomUtil.get() < .6 ? 1 : 0  // Weapon 60% spawn chance
+                RandomUtil.getInt(1, 4),            // Coin [1,3]
+                RandomUtil.getBoolean(.2d) ? 1 : 0, // Health Potion 20% spawn chance
+                RandomUtil.getBoolean(.2d) ? 1 : 0, // Attack Potion 20% spawn chance
+                RandomUtil.getBoolean(.2d) ? 1 : 0, // Speed Potion 20% spawn chance
+                RandomUtil.getBoolean(.1d) ? 1 : 0, // Nuke 10% spawn chance
+                RandomUtil.getBoolean(.6d) ? 1 : 0  // Weapon 60% spawn chance
             };
         }
 
@@ -142,16 +151,17 @@ public class Level {
         }
 
         // Add Entities
+        //room.addEntity(new Golem());
 
         if (!room.isEntrance() || spawnEnemiesInEntrance) {
-            // Enemies spawned: Boring [2,3], Normal [2,6], Hard [2, 9]
+            // Enemies spawned: Boring [2,3], Normal [2,8], Hard [3, 11]
             // Each element in the array is a different tier
             // https://www.desmos.com/calculator/k4ten4ecln
             int difficulty = Player.getPlayer().getDifficulty();
             int[] enemiesToSpawnPerTier = {
                 RandomUtil.getInt(1, 3 + difficulty),
                 RandomUtil.getInt(1, 2 + difficulty),
-                RandomUtil.getInt(0, 1 + difficulty)
+                RandomUtil.getInt(difficulty / 2, 1 + 2 * difficulty)
             };
 
             //room.addEntity(new Golem());

@@ -41,7 +41,7 @@ public class EndScreen {
         color.setHeight(50);
 
         if (Player.getPlayer() != null && Player.getPlayer().isDead()) {
-            endGameText.setText("You Died");
+            endGameText.setText("You Died In The Dungeon");
             totalKills.setText("Monsters killed: " + totalNumKill);
             totalPotions.setText("Total potions obtained: " + totalPotionsObtained);
             totalNukes.setText("Number of nukes used: " + totalNuked);

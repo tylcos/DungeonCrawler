@@ -1,10 +1,14 @@
 package game.entities;
 
 import core.GameEngine;
-import game.collidables.DebugPoint;
-import javafx.geometry.Point2D;
-import utilities.MathUtil;
-import utilities.RandomUtil;
+import javafx.geometry.*;
+import javafx.scene.image.ImageView;
+import utilities.*;
+import views.GameScreen;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Defines the Mage AI.
@@ -13,32 +17,26 @@ import utilities.RandomUtil;
  * a constant radius and constant dθ/dt around the center of the room.
  */
 public class GolemEntityController extends EntityController<Golem> {
-    private State state = State.relaxing;
-
     // Variables for movement
     private double speed;
     private double inputSmooth;
-
-    // Variables for changing the state of the entity
-    private double strafingDistance;
-    private double attackingDistance;
-
-    // Variables for generating bias
-    private double predictionGuessScale;
-
-    // Variables for predicting the Player's position
-    private              double previousTheta;
-    private              double thetaDot = .1d;
-    private static final double TWO_PI   = 2 * Math.PI;
 
     // Variables for generating bias
     private double timeFactorX;
     private double timeFactorY;
 
-    // All possible states of the entity
-    private enum State {
-        attacking, charging, running, relaxing
-    }
+    // Variables for attacking
+    private ImageView beam;
+    private Point2D   beamDirection;
+    private double    lastBeamAttackTime;
+    private double    beamWait;
+    private boolean   beamHit;
+
+    private int lastReleaseHealth = entity.maxHealth;
+
+    private double lastProjectileTime;
+
+    private static final double BEAM_ANGLE = 3d;
 
     /**
      * Sets up random parameters for the Controller
@@ -48,16 +46,13 @@ public class GolemEntityController extends EntityController<Golem> {
     public GolemEntityController(Golem entity) {
         super(entity);
 
-        speed       = RandomUtil.getInt(200, 250);
-        inputSmooth = RandomUtil.get(0.02d, 0.03d);
-
-        strafingDistance  = RandomUtil.get(300d, 500d);
-        attackingDistance = 100;
-
-        predictionGuessScale = RandomUtil.get(.6d, 1d);
+        speed       = 200;
+        inputSmooth = 0.03d;
 
         timeFactorX = RandomUtil.get(1d, 2d);
         timeFactorY = RandomUtil.get(1d, 2d);
+
+        entity.setPosition(Point2D.ZERO);
     }
 
     public void act() {
@@ -68,91 +63,126 @@ public class GolemEntityController extends EntityController<Golem> {
 
         // Delay the Entity from moving for 1 second
         timeSinceRoomLoad += GameEngine.getDt();
-        if (state == State.relaxing && timeSinceRoomLoad > 1d) {
-            state = State.running;
+        if (timeSinceRoomLoad < 1d) {
+            return;
         }
 
-        // Start predicting the player position
-        Player  player         = Player.getPlayer();
-        Point2D playerPosition = player.getPosition();
-        // Points directly to the Player
-        Point2D difference      = playerPosition.subtract(entity.getPosition());
-        Point2D playerDirection = difference.normalize();
-        double  distance        = difference.magnitude();
+        // Change velocity
+        double  t            = GameEngine.getT();
+        Point2D velocity     = new Point2D(Math.cos(t * timeFactorX), Math.cos(t * timeFactorY));
+        Point2D biasToCenter = entity.position.normalize().multiply(-.1);
+        velocity = velocity.add(biasToCenter);
+        velocity = velocity.normalize().multiply(speed);
 
-        // Predicts where the player will be
-        double timeToReach  = difference.magnitude() / speed;
-        double radius       = player.getPosition().magnitude();
-        double currentTheta = MathUtil.getAngle(playerPosition);
-
-        double dTheta = (currentTheta - previousTheta);
-        if (Math.abs(dTheta) > 3) {
-            dTheta = TWO_PI - currentTheta - previousTheta;
-        }
-        double currentThetaDot = dTheta / GameEngine.getDt();
-        thetaDot += (currentThetaDot - thetaDot) * .02d;
-
-        // Iteratively approximate time to reach player and prediction
-        double  predictedTheta = currentTheta + timeToReach * thetaDot * predictionGuessScale;
-        Point2D prediction     = MathUtil.getVector(predictedTheta, radius);
-        for (int i = 0; i < 3; i++) {
-            if (useDebugPoints) {
-                DebugPoint.debug(prediction);
-            }
-
-            difference     = prediction.subtract(entity.getPosition());
-            timeToReach    = difference.magnitude() / speed;
-            predictedTheta = currentTheta + timeToReach * thetaDot * predictionGuessScale;
-            prediction     = MathUtil.getVector(predictedTheta, radius);
-        }
-        if (useDebugPoints) {
-            DebugPoint.debug(prediction);
-        }
-
-        // Points to where the entity should move
-        Point2D target          = prediction.subtract(entity.getPosition());
-        Point2D targetDirection = target.normalize();
-
-        // Change states based on position
-        if (state != State.relaxing && distance >= strafingDistance) {
-            state = State.charging;
-        } else if (state == State.charging && distance < strafingDistance) {
-            state = State.attacking;
-        } else if (state == State.attacking && distance < attackingDistance) {
-            state = State.running;
-
-            attack();
-        }
-
-        // Swarm the Player on death
-        if (player.isDead()) {
-            strafingDistance = 10;
-        }
-
-        // Change velocity based on state
-        Point2D velocity;
-        switch (state) {
-        case attacking:
-            velocity = playerDirection.multiply(speed);
-            break;
-        case charging:
-            velocity = targetDirection.multiply(speed);
-            break;
-        case running:
-            velocity = targetDirection.multiply(-speed);
-            break;
-        case relaxing:
-            double t = GameEngine.getT();
-            velocity = new Point2D(relaxingBiasScale * Math.cos(t * timeFactorX),
-                                   relaxingBiasScale * Math.cos(t * timeFactorY));
-            break;
-        default:
-            throw new IllegalStateException("Invalid state: " + state);
-        }
-
-        // Smoothly change velocity
         entity.setVelocity(entity.getVelocity().interpolate(velocity, inputSmooth));
 
-        previousTheta = currentTheta;
+        // Attack
+        if (t > 2d + lastBeamAttackTime + beamWait) {
+            lastBeamAttackTime = t;
+            beamWait           = RandomUtil.get(0, 6d * entity.health / entity.maxHealth);
+
+            beamAttack();
+        } else {
+            updateBeam();
+        }
+
+        // Release
+        if (lastReleaseHealth - entity.health > 15) {
+            lastReleaseHealth = entity.health;
+
+            List<Entity> enemies = List.of(new Skull(), new Skull(), new Mage(), new Mage());
+            GameScreen.getLevel().getCurrentRoom().addEntity(enemies);
+            GameEngine.instantiate(GameEngine.ENTITY, enemies);
+        }
+
+        if (t > 3d + lastProjectileTime) {
+            lastProjectileTime = t;
+
+            releaseProjectiles();
+        }
+    }
+
+    private void releaseProjectiles() {
+        int count = RandomUtil.getInt(1, 7);
+
+        Entity  player         = Player.getPlayer();
+        Point2D startDirection = player.position.subtract(entity.position).normalize();
+        double  startAngle     = MathUtil.getAngle(startDirection);
+        double  dAngle = MathUtil.TAU / count;
+
+        List<TrackingProjectile> projectiles = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            Point2D direction = MathUtil.getVector(startAngle + dAngle * i);
+            projectiles.add(new TrackingProjectile("GolemProjectile.png",
+                                                   entity.position,
+                                                   direction));
+        }
+
+        GameEngine.instantiate(GameEngine.VFX, projectiles);
+    }
+
+    private void beamAttack() {
+        Entity  player   = Player.getPlayer();
+        Point2D position = entity.position.add(5, -70).add(RandomUtil.getPoint2D(50));
+        beamDirection = player.position.subtract(position).normalize();
+        Point2D center = position.add(beamDirection.multiply(1200 - 46));
+
+        beam = new ImageView();
+        beam.setTranslateX(center.getX());
+        beam.setTranslateY(center.getY());
+        beam.setRotate(MathUtil.getAngleDeg(beamDirection) - 1.8d);
+        var ac = AnimationController.add(beam, "GolemLaser.png", 0, 15, 1, 1200, 100, 0, 2d);
+        ac.setOnFinish(() -> {
+            TimerUtil.lerp(.5, t -> beam.setOpacity(1 - t), () -> {
+                GameEngine.removeFromLayer(GameEngine.VFX, beam);
+                beam = null;
+            });
+        });
+        GameEngine.addToLayer(GameEngine.VFX, beam);
+
+        beamHit = false;
+    }
+
+    private void updateBeam() {
+        if (beam == null) {
+            return;
+        }
+
+        Entity  player            = Player.getPlayer();
+        Point2D position          = entity.position.add(5, -70);
+        Point2D directionToPlayer = player.position.subtract(position).normalize();
+
+        double det = beamDirection.crossProduct(directionToPlayer)
+                         .dotProduct(new Point3D(0, 0, 1));
+        double rotate = 1 * Math.signum(det);
+        beamDirection =
+            MathUtil.getVector(MathUtil.getAngle(beamDirection)
+                               + rotate * GameEngine.getDt());
+
+        Point2D center = position.add(beamDirection.multiply(1200 - 46));
+
+        beam.setTranslateX(center.getX());
+        beam.setTranslateY(center.getY());
+        beam.setRotate(MathUtil.getAngleDeg(beamDirection) - 1.8d);
+
+        // Collision detection
+        if (!beamHit && GameEngine.getT() - lastBeamAttackTime > .8d) {
+            Point2D enemyPosition = player.getPosition().subtract(position);
+
+            Bounds localBounds = player.getBoundsInLocal();
+            double width       = localBounds.getWidth() / 2;
+            double height      = localBounds.getHeight() / 2;
+            Stream<Point2D> bounds = Stream.of(
+                enemyPosition,
+                enemyPosition.add(new Point2D(-width, -height)),
+                enemyPosition.add(new Point2D(width, -height)),
+                enemyPosition.add(new Point2D(-width, height)),
+                enemyPosition.add(new Point2D(width, height)));
+
+            if (bounds.anyMatch(b -> beamDirection.angle(b) < BEAM_ANGLE)) {
+                beamHit = true;
+                attack();
+            }
+        }
     }
 }

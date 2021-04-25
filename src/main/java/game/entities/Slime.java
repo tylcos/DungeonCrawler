@@ -33,7 +33,7 @@ public class Slime extends Entity {
     public Slime() {
         super(SLIME_SPRITES[0], RandomUtil.getPoint2D(300), new Point2D(96, 36));
 
-        health = 2;
+        health = 5;
         money  = 20;
 
         slimeType = RandomUtil.getInt(SLIME_SPRITES.length);

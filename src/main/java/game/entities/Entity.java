@@ -17,6 +17,7 @@ public abstract class Entity extends Collidable {
     protected Point2D velocity = new Point2D(0, 0);
 
     protected int     health;
+    protected int     maxHealth;
     protected boolean isDead;
     protected int     money;
 
@@ -25,8 +26,8 @@ public abstract class Entity extends Collidable {
     /**
      * Initializes the Image and position of an entity.
      *
-     * @param imagePath  the path to the image of the entity
-     * @param position   the position to create the entity at
+     * @param imagePath the path to the image of the entity
+     * @param position  the position to create the entity at
      */
     protected Entity(String imagePath, Point2D position) {
         super(ImageManager.getImage(imagePath), false);
@@ -48,8 +49,8 @@ public abstract class Entity extends Collidable {
     /**
      * Initializes the Image and position of an entity.
      *
-     * @param image      the image of the entity
-     * @param position   the position to create the entity at
+     * @param image    the image of the entity
+     * @param position the position to create the entity at
      */
     protected Entity(Image image, Point2D position) {
         super(image, false);
@@ -107,7 +108,13 @@ public abstract class Entity extends Collidable {
         }
 
         health -= amount;
-        bounceBack(Player.getPlayer().getPosition());
+
+        // This is beyond jank
+        if (this instanceof Golem) {
+            bounceBack(10, Player.getPlayer().getPosition());
+        } else {
+            bounceBack(Player.getPlayer().getPosition());
+        }
 
         if (health <= 0) {
             isDead = true;
@@ -217,7 +224,7 @@ public abstract class Entity extends Collidable {
     /**
      * Makes the entity bounce back from a point
      *
-     * @param fromPoint      the point to bounce back from
+     * @param fromPoint the point to bounce back from
      */
     protected final void bounceBack(Point2D fromPoint) {
         bounceBack(40, fromPoint);
