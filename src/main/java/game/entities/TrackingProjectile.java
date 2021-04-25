@@ -9,6 +9,8 @@ import utilities.AnimationController;
 import utilities.MathUtil;
 
 public class TrackingProjectile extends Entity {
+    private boolean hit;
+
     /**
      * Creates an instance of Projectile.
      *
@@ -44,10 +46,11 @@ public class TrackingProjectile extends Entity {
             GameEngine.destroy(GameEngine.VFX, this);
         }
 
-        if (other instanceof Player) {
+        if (!hit && other instanceof Player) {
             Entity entity = (Entity) other;
 
             entity.damage(1);
+            hit = true;
 
             GameEngine.destroy(GameEngine.VFX, this);
         }

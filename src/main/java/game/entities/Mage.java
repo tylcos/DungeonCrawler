@@ -32,7 +32,7 @@ public class Mage extends Entity {
     @Override
     public void onDeath() {
         setVisible(false);
-        EndScreen.addTotalNumKill();
+        EndScreen.addTotalKilled();
         SoundManager.playEnemyKilled();
 
     }

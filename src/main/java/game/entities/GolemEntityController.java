@@ -100,6 +100,11 @@ public class GolemEntityController extends EntityController<Golem> {
 
             releaseProjectiles();
         }
+
+        double scale = 1.5d - .5d * entity.health / entity.maxHealth;
+        scale += (scale - entity.getScaleX()) * .001d;
+        entity.setScaleX(scale);
+        entity.setScaleY(scale);
     }
 
     private void releaseProjectiles() {
@@ -108,7 +113,7 @@ public class GolemEntityController extends EntityController<Golem> {
         Entity  player         = Player.getPlayer();
         Point2D startDirection = player.position.subtract(entity.position).normalize();
         double  startAngle     = MathUtil.getAngle(startDirection);
-        double  dAngle = MathUtil.TAU / count;
+        double  dAngle         = MathUtil.TAU / count;
 
         List<TrackingProjectile> projectiles = new ArrayList<>();
         for (int i = 0; i < count; i++) {
@@ -131,9 +136,14 @@ public class GolemEntityController extends EntityController<Golem> {
         beam.setTranslateX(center.getX());
         beam.setTranslateY(center.getY());
         beam.setRotate(MathUtil.getAngleDeg(beamDirection) - 1.8d);
-        var ac = AnimationController.add(beam, "GolemLaser.png", 0, 15, 1, 1200, 100, 0, 2d);
+        double scale = 2d + 4d * entity.health / entity.maxHealth;
+        var    ac    = AnimationController.add(beam, "GolemLaser.png", 0, 15, 1, 1200, 100, 0, 2d);
         ac.setOnFinish(() -> {
-            TimerUtil.lerp(.5, t -> beam.setOpacity(1 - t), () -> {
+            TimerUtil.lerp(.5, t -> {
+                if (beam != null) {
+                    beam.setOpacity(1 - t);
+                }
+            }, () -> {
                 GameEngine.removeFromLayer(GameEngine.VFX, beam);
                 beam = null;
             });

@@ -47,22 +47,22 @@ public final class Player extends Entity {
         name = playerName;
 
         weaponHolder = new WeaponHolder(2);
-        weaponHolder.add(new Weapon("Starting " + weaponType, weaponType, 0));
+        weaponHolder.add(new Weapon("Starting", weaponType, 0));
 
         switch (difficulty) {
         case "Boring":
             money = 100;
-            maxHealth = 100;
+            maxHealth = 20;
             this.difficulty = 0;
             break;
         case "Normal":
             money = 75;
-            maxHealth = 5;
+            maxHealth = 10;
             this.difficulty = 1;
             break;
         case "Hard":
             money = 50;
-            maxHealth = 3;
+            maxHealth = 5;
             this.difficulty = 2;
             break;
         case "Debug":
@@ -118,11 +118,17 @@ public final class Player extends Entity {
     }
 
     /**
-     * Increases the Player's health by two HP upon drinking the health potion. The Player cannot
-     * regain more health than they started out with.
+     * Increases the Player's health. The Player cannot regain more health than they started out
+     * with.
+     *
+     * @param health health to add
      */
-    public void regenerate() {
-        health = Math.min(health + 2, maxHealth);
+    public void addHealth(int health) {
+        this.health += health;
+
+        if (this.health > maxHealth) {
+            this.health = maxHealth;
+        }
     }
 
     /**
