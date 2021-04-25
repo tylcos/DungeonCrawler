@@ -2,6 +2,7 @@ package game.collectables;
 
 import core.*;
 import game.collidables.Collidable;
+import game.entities.Golem;
 import game.entities.Player;
 import game.inventory.IItem;
 import game.inventory.Inventory;
@@ -38,11 +39,17 @@ public class NukeItem extends Collectable implements IItem {
     }
 
     public void activate() {
-        GameScreen.getLevel().getCurrentRoom().getEntities().forEach(e -> e.damage(e.getHealth()));
+        GameScreen.getLevel().getCurrentRoom().getEntities().forEach(e -> {
+            // Jank
+            if (!(e instanceof Golem)) {
+                e.damage(e.getHealth());
+            }
+        });
+
         if (RandomUtil.get() < BACKFIRE_CHANCE) {
             Player.getPlayer().damage(Player.getPlayer().getHealth());
         }
-        EndScreen.addTotalNukedUsed();
+        EndScreen.addTotalNukesUsed();
 
         ImageView blast = new ImageView(ImageManager.getImage("nukeImage.gif"));
         blast.setScaleX(ScreenManager.getScale());
