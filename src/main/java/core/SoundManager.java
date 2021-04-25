@@ -11,7 +11,7 @@ import java.nio.file.Paths;
  * kinda spotty sometimes, but we can add more as we go.
  */
 public final class SoundManager {
-    private static double  volume  = .1d;
+    private static double  volume  = .05d;
     private static boolean soundOn = true;
 
     private SoundManager() { }

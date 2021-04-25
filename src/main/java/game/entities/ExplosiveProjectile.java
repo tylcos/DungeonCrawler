@@ -65,7 +65,7 @@ public class ExplosiveProjectile extends Entity {
             impact.setRotate(getRotate());
 
             var ac = AnimationController.add(impact, "EnergyBallImpact.png", 0, 8, 1, 128, 0, 2d);
-            ac.setRepeat(false);
+            ac.setOnFinish(() -> impact.setVisible(false));
 
             GameEngine.addToLayer(GameEngine.VFX, impact);
             isExploded = true;

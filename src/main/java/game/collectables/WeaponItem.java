@@ -22,12 +22,13 @@ public class WeaponItem extends Collectable {
     public WeaponItem() {
         super("blank.png", RandomUtil.getPoint2D(300), new Point2D(64, 64));
 
-        int tier = highestTierSpawned + RandomUtil.getInt(3);
+        int tier = highestTierSpawned + RandomUtil.getInt(1, 3);
         weapon = new Weapon(WeaponType.random(), tier);
         setImage(weapon.getImage());
 
         // Was spawned by level, not the best way to do this
-        if (GameScreen.getLevel() != null) {
+        if (GameScreen.getLevel() != null
+            && !GameScreen.getLevel().getCurrentRoom().isChallenge()) {
             highestTierSpawned = tier;
         }
     }

@@ -89,7 +89,7 @@ public final class Player extends Entity {
             handleKey();
         }
 
-        // Setup weapon image
+        // Display weapon image
         weaponHolder.render();
 
         // Used for player movement and attacking
@@ -147,8 +147,9 @@ public final class Player extends Entity {
      */
     private void handleKey() {
         if (key != null) {
-            setImage(ImageManager.getImage("rightPlayerWithKey.png", 125, 80, true));
+            setImage(ImageManager.getImage("rightPlayerWithKey.png", 100, 70, true));
             keyActivated = true;
+
             SoundManager.playKeyActivated();
         }
     }
