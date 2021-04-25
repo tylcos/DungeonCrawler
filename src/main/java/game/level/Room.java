@@ -53,7 +53,7 @@ public class Room extends GridPane {
     private static final HashMap<Character, Image> SPRITE_TABLE = new HashMap<>() {
         {
             put('.', new Image(Room.class.getResource("/images/Floor.png").toString()));
-            put('x', new Image(Room.class.getResource("/images/Wall.png").toString()));
+            put('x', new Image(Room.class.getResource("/images/WallNorth.png").toString()));
             put('N', new Image(Room.class.getResource("/images/DoorE.png").toString()));
             put('E', new Image(Room.class.getResource("/images/DoorN.png").toString()));
             put('S', new Image(Room.class.getResource("/images/DoorE.png").toString()));

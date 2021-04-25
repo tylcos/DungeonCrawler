@@ -32,6 +32,8 @@
         </VBox>
         <VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0" stylesheets="@../styles/Global.css" StackPane.alignment="BOTTOM_LEFT">
             <children>
+                <Label fx:id="totalMoney" styleClass="gameInfoText" text="totalMoney">
+                </Label>
                 <Label fx:id="totalKills" styleClass="gameInfoText" text="totalKills">
                 </Label>
                 <Label fx:id="totalPotions" styleClass="gameInfoText" text="totalPotions">

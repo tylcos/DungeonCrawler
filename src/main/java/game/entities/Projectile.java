@@ -20,7 +20,7 @@ public class Projectile extends Entity {
      * @param onHit    called when the projectile hits a entity
      */
     public Projectile(String image, Point2D position, Point2D velocity, Consumer<Entity> onHit) {
-        super(image, position);
+        super(image, position, new Point2D(50, 50));
 
         setVelocity(velocity);
         setRotate(MathUtil.getAngleDeg(velocity));

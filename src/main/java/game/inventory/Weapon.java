@@ -59,6 +59,7 @@ public class Weapon {
             fireRate = 1d - .25d * (tier % 4);
             break;
         case Spear:
+        case Staff:
             damage = 2 * (tier / 4 + 1);
             fireRate = 1.5d - .25d * (tier % 4);
             break;
@@ -68,10 +69,6 @@ public class Weapon {
 
             damage = tier / 4 + 1;
             fireRate = 1d - .25d * (tier % 4);
-            break;
-        case Staff:
-            damage = tier / 4 + 1;
-            fireRate = 1.5d - .25d * (tier % 4);
             break;
         default:
             throw new IllegalArgumentException("Illegal Weapon type: " + type);

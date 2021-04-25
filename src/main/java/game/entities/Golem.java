@@ -18,7 +18,7 @@ public class Golem extends Entity {
         maxHealth = health;
         money     = 500;
 
-        AnimationController.add(this, "Golem.png", 1, 1, 8, 100, 24, 5);
+        AnimationController.add(this, "Golem.png", 1, 1, 8, 100, 24, 4);
 
         entityController = new GolemEntityController(this);
     }

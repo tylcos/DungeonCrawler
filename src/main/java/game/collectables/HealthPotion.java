@@ -36,7 +36,7 @@ public class HealthPotion extends Collectable implements IItem {
     }
 
     public void activate() {
-        Player.getPlayer().regenerate();
+        Player.getPlayer().addHealth(3);
     }
 
     public int getItemID() {

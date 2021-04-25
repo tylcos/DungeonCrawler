@@ -118,7 +118,9 @@ public abstract class Entity extends Collidable {
 
         if (health <= 0) {
             isDead = true;
-            entityController.stop();
+            if (entityController != null) {
+                entityController.stop();
+            }
 
             // So that you can kill other entities beneath a dead one
             setMouseTransparent(true);

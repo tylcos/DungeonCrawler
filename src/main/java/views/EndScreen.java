@@ -18,16 +18,18 @@ public class EndScreen {
     @FXML
     private Label version;
     @FXML
-    private Label totalPotions;
+    private Label totalMoney;
     @FXML
     private Label totalKills;
     @FXML
+    private Label totalPotions;
+    @FXML
     private Label totalNukes;
 
-    //stats variable
-    private static int totalNumKill;
+    // Stats variables
+    private static int totalKilled;
     private static int totalPotionsObtained;
-    private static int totalNuked;
+    private static int totalNukesUsed;
 
     /**
      * Initializes the configuration screen
@@ -42,19 +44,22 @@ public class EndScreen {
 
         if (Player.getPlayer() != null && Player.getPlayer().isDead()) {
             endGameText.setText("You Died In The Dungeon");
-            totalKills.setText("Monsters killed: " + totalNumKill);
-            totalPotions.setText("Total potions obtained: " + totalPotionsObtained);
-            totalNukes.setText("Number of nukes used: " + totalNuked);
 
             color.setColor(Color.RED);
         } else {
             endGameText.setText("You Escaped The Dungeon!");
-            totalKills.setText("Monsters killed: " + totalNumKill);
-            totalPotions.setText("Total potions obtained: " + totalPotionsObtained);
-            totalNukes.setText("Number of nukes used: " + totalNuked);
 
             color.setColor(Color.BLUE);
         }
+
+        totalMoney.setText("Money Gathered: " + Player.getPlayer().getMoney());
+        totalKills.setText("Monsters killed: " + totalKilled);
+        totalPotions.setText("Total potions obtained: " + totalPotionsObtained);
+        totalNukes.setText("Number of nukes used: " + totalNukesUsed);
+
+        totalKilled          = 0;
+        totalPotionsObtained = 0;
+        totalNukesUsed       = 0;
 
         endGameText.setEffect(color);
     }
@@ -84,12 +89,11 @@ public class EndScreen {
         totalPotionsObtained++;
     }
 
-    public static void addTotalNumKill() {
-        totalNumKill++;
+    public static void addTotalKilled() {
+        totalKilled++;
     }
 
-    public static void addTotalNukedUsed() {
-        totalNuked++;
+    public static void addTotalNukesUsed() {
+        totalNukesUsed++;
     }
-
 }
