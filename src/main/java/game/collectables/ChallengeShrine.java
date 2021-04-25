@@ -1,20 +1,17 @@
 package game.collectables;
 
 import core.InputManager;
-import core.SoundManager;
 import game.collidables.Collidable;
 import game.entities.Player;
 import game.level.Room;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
 public class ChallengeShrine extends Collectable {
-    
     private Room room;
 
     public ChallengeShrine(Room room) {
-        super("debug wall.png", new Point2D(0, 0), new Point2D(64, 64));
+        super("Chest.png", new Point2D(0, 0), new Point2D(64, 64));
         this.room = room;
     }
 
@@ -27,5 +24,4 @@ public class ChallengeShrine extends Collectable {
         setCollected();
         room.activateChallenge();
     }
-
 }

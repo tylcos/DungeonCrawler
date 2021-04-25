@@ -55,22 +55,22 @@ public class Weapon {
         case Sword:
             angleOffset = 45;
 
-            damage = tier / 3 + 1;
+            damage = tier / 4 + 1;
             fireRate = 1d - .25d * (tier % 4);
             break;
         case Spear:
-            damage = 2 * (tier / 3 + 1);
+            damage = 2 * (tier / 4 + 1);
             fireRate = 1.5d - .25d * (tier % 4);
             break;
         case Bow:
             radiusOffset = BOW_OFFSET;
             rotationOffset = 180;
 
-            damage = tier / 3 + 1;
+            damage = tier / 4 + 1;
             fireRate = 1d - .25d * (tier % 4);
             break;
         case Staff:
-            damage = tier / 3 + 1;
+            damage = tier / 4 + 1;
             fireRate = 1.5d - .25d * (tier % 4);
             break;
         default:

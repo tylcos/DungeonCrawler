@@ -70,7 +70,14 @@ public final class ImageManager {
     }
 
     public static Image getSprite(String name, int x, int y, int spacing, int crop, double scale) {
-        String key = String.format("%s_%d_%d_%d_%d_%f", name, x, y, spacing, crop, scale);
+        return getSprite(name, x, y, spacing, spacing, 0, scale);
+    }
+
+    public static Image getSprite(String name, int x, int y,
+                                  int spacingX, int spacingY,
+                                  int crop, double scale) {
+        String key = String.format("%s_%d_%d_%d_%d_%d_%f", name, x, y, spacingX, spacingY, crop,
+                                   scale);
         if (IMAGES.containsKey(key)) {
             return IMAGES.get(key);
         }
@@ -81,17 +88,19 @@ public final class ImageManager {
                              (int) (sheet.getHeight() * scale), false);
         }
 
-        int scaledSpacing = (int) (scale * spacing);
-        int scaledCrop    = (int) (scale * crop);
-        int trueSize      = scaledSpacing - 2 * scaledCrop;
-        if (trueSize <= 0) {
+        int scaledSpacingX = (int) (scale * spacingX);
+        int scaledSpacingY = (int) (scale * spacingY);
+        int scaledCrop     = (int) (scale * crop);
+        int trueSizeX      = scaledSpacingX - 2 * scaledCrop;
+        int trueSizeY      = scaledSpacingY - 2 * scaledCrop;
+        if (trueSizeX <= 0 || trueSizeY <= 0) {
             throw new IllegalArgumentException("Invalid crop: " + crop);
         }
 
-        WritableImage sprite      = new WritableImage(trueSize, trueSize);
+        WritableImage sprite      = new WritableImage(trueSizeX, trueSizeY);
         PixelWriter   pixelWriter = sprite.getPixelWriter();
-        pixelWriter.setPixels(0, 0, trueSize, trueSize, sheet.getPixelReader(),
-                              scaledSpacing * x + scaledCrop, scaledSpacing * y + scaledCrop);
+        pixelWriter.setPixels(0, 0, trueSizeX, trueSizeY, sheet.getPixelReader(),
+                              scaledSpacingX * x + scaledCrop, scaledSpacingY * y + scaledCrop);
 
         IMAGES.put(key, sprite);
         return sprite;
