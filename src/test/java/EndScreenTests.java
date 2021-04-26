@@ -55,7 +55,7 @@ public class EndScreenTests extends ApplicationTest {
         assertEquals(EndScreen.getTotalNukesUsed(),1);
     }
     @Test
-    public void testTotalPositionIncreased(){
+    public void testTotalPotionsIncreased(){
         EndScreen.addTotalPotionsObtained();
         assertEquals(EndScreen.getTotalPotionsObtained(),1);
     }
