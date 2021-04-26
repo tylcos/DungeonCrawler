@@ -2,43 +2,63 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import java.net.URL?>
 <StackPane id="Top" fx:id="top" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GameScreen">
     <children>
-        <StackPane fx:id="renderPane" />
-        <AnchorPane pickOnBounds="false" StackPane.alignment="CENTER">
+        <StackPane>
             <children>
-                <TextArea fx:id="uiInfoText" editable="false" minHeight="500.0" minWidth="500.0" mouseTransparent="true" styleClass="uiInfoText" text="Player Info&#10;Test&#10;Test&#10;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                </TextArea>
-                <TextArea fx:id="uiMinimap" editable="false" minHeight="500.0" minWidth="500.0" mouseTransparent="true" styleClass="minimap" text="minimap&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <StackPane fx:id="renderPane">
                <effect>
-                  <InnerShadow choke="0.5" height="20.0" radius="9.5" width="20.0">
+                  <DropShadow height="255.0" radius="127.0" spread="0.09" width="255.0">
                      <color>
-                        <Color red="0.3199999928474426" green="0.41600000858306885" blue="0.800000011920929" />
+                        <Color red="0.19342105090618134" blue="0.2368421107530594" />
                      </color>
-                     <input>
-                        <DropShadow blurType="GAUSSIAN" height="20.0" radius="9.5" spread="0.4" width="20.0" />
-                     </input>
-                  </InnerShadow>
-               </effect></TextArea>
-            <HBox fx:id="hotbar" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" />
+                  </DropShadow>
+               </effect>
+                </StackPane>
+                <AnchorPane pickOnBounds="false">
+                    <children>
+                        <TextArea fx:id="uiInfoText" editable="false" minHeight="500.0" minWidth="500.0" mouseTransparent="true" styleClass="uiInfoText" text="Player Info&#10;Test&#10;Test&#10;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        </TextArea>
+                        <TextArea fx:id="uiMinimap" editable="false" minHeight="500.0" minWidth="500.0" mouseTransparent="true" styleClass="minimap" text="minimap&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <effect>
+                                <InnerShadow choke="0.5" height="20.0" radius="9.5" width="20.0">
+                                    <color>
+                                        <Color red="0.3199999928474426" green="0.41600000858306885" blue="0.800000011920929" />
+                                    </color>
+                                    <input>
+                                        <DropShadow blurType="GAUSSIAN" height="20.0" radius="9.5" spread="0.4" width="20.0" />
+                                    </input>
+                                </InnerShadow>
+                            </effect>
+                        </TextArea>
+                        <HBox fx:id="hotbar" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" />
+                    </children>
+                </AnchorPane>
+                <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" prefHeight="215.0" prefWidth="705.0" StackPane.alignment="BOTTOM_RIGHT">
+                    <children>
+                        <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" layoutX="527.0" layoutY="188.0" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Team Azula - Team 03" />
+                        <Label fx:id="version" alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Version" />
+                    </children>
+                    <effect>
+                        <Glow level="1.0" />
+                    </effect>
+                    <StackPane.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </StackPane.margin>
+                </VBox>
             </children>
-        </AnchorPane>
-        <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" prefHeight="215.0" prefWidth="705.0" StackPane.alignment="BOTTOM_RIGHT">
-            <children>
-                <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" layoutX="527.0" layoutY="188.0" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Team Azula - Team 03" />
-                <Label fx:id="version" alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Version" />
-            </children>
-            <StackPane.margin>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </StackPane.margin>
+            <cursor>
+                <Cursor fx:constant="CROSSHAIR" />
+            </cursor>
          <effect>
-            <Glow level="1.0" />
+            <Blend mode="COLOR_DODGE" opacity="0.5" />
          </effect>
-        </VBox>
+        </StackPane>
     </children>
     <stylesheets>
         <URL value="@../styles/Global.css" />

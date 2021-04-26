@@ -96,8 +96,7 @@ public class SkullEntityController extends EntityController<Skull> {
 
         // Swarm the Player on death
         if (player.isDead()) {
-            strafingDistance = 10;
-            biasScale        = 30;
+            strafingDistance = 50;
         }
 
         // Change velocity based on state

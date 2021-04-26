@@ -1,30 +1,30 @@
 package views;
 
-import core.GameDriver;
 import core.SceneManager;
 import game.entities.Player;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Glow;
-import javafx.scene.effect.InnerShadow;
+import javafx.scene.effect.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import utilities.TimerUtil;
 
 /**
  * The screen that is displayed upon defeating the last monster and escaping the dungeon.
  */
 public class EndScreen {
     @FXML
-    private Label endGameText;
+    private StackPane endTop;
     @FXML
-    private Label version;
+    private Label     endGameText;
     @FXML
-    private Label totalMoney;
+    private Label     totalMoney;
     @FXML
-    private Label totalKills;
+    private Label     totalKills;
     @FXML
-    private Label totalPotions;
+    private Label     totalPotions;
     @FXML
-    private Label totalNukes;
+    private Label     totalNukes;
 
     // Stats variables
     private static int totalKilled;
@@ -35,17 +35,19 @@ public class EndScreen {
      * Initializes the configuration screen
      */
     public void initialize() {
-        version.setText(GameDriver.GAME_VERSION);
+        TimerUtil.lerp(1, t -> endTop.setOpacity(t));
 
         InnerShadow color = new InnerShadow();
-        color.setInput(new Glow(1));
+        color.setInput(new Glow());
         color.setWidth(50);
         color.setHeight(50);
+        DropShadow shadow = new DropShadow(20, Color.BLACK);
+        shadow.setInput(color);
 
         if (Player.getPlayer() != null && Player.getPlayer().isDead()) {
             endGameText.setText("You Died In The Dungeon");
 
-            color.setColor(Color.RED);
+            color.setColor(Color.PURPLE);
         } else {
             endGameText.setText("You Escaped The Dungeon!");
 
@@ -61,7 +63,7 @@ public class EndScreen {
         totalPotionsObtained = 0;
         totalNukesUsed       = 0;
 
-        endGameText.setEffect(color);
+        endGameText.setEffect(shadow);
     }
 
     /**

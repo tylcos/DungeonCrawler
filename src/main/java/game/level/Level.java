@@ -7,7 +7,6 @@ import game.entities.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import utilities.GameEffects;
 import utilities.RandomUtil;
 
 import java.util.*;
@@ -164,6 +163,14 @@ public class Level {
                 RandomUtil.getInt(difficulty / 2, 1 + 2 * difficulty)
             };
 
+            if (room.isExit()) {
+                enemiesToSpawnPerTier = new int[] {
+                    0,
+                    RandomUtil.getInt(2, 3 + difficulty),
+                    RandomUtil.getInt(difficulty / 2 + 1, 2 + 2 * difficulty)
+                };
+            }
+
             //room.addEntity(new Golem());
 
             // Add enemies to the current room
@@ -251,8 +258,6 @@ public class Level {
         if (uiEventHandler != null) {
             uiEventHandler.handle(null);
         }
-
-        currentRoom.setEffect(GameEffects.ROOM_SHADOW);
     }
 
     /**
