@@ -35,28 +35,35 @@ public class EndScreenTests extends ApplicationTest {
     }
 
     @Test
-    public void testKillLabelExist(){assertEquals(0, EndScreen.getTotalKill()); }
+    public void testKillLabelExist() {
+        assertEquals(0, EndScreen.getTotalKill());
+    }
 
     @Test
-    public void testPotionLabelExist(){assertEquals(0, EndScreen.getTotalPotionsObtained()); }
+    public void testPotionLabelExist() {
+        assertEquals(0, EndScreen.getTotalPotionsObtained());
+    }
 
     @Test
-    public void testNukeLabelExist(){ assertEquals(0, EndScreen.getTotalNukesUsed());}
+    public void testNukeLabelExist() {
+        assertEquals(0, EndScreen.getTotalNukesUsed());
+    }
 
     @Test
-    public void testMonsterKillIncreased(){
+    public void testMonsterKillIncreased() {
         EndScreen.addTotalKilled();
         assertEquals(EndScreen.getTotalKill(), 1);
     }
 
     @Test
-    public void testTotalNukeIncreased(){
+    public void testTotalNukeIncreased() {
         EndScreen.addTotalNukesUsed();
-        assertEquals(EndScreen.getTotalNukesUsed(),1);
+        assertEquals(EndScreen.getTotalNukesUsed(), 1);
     }
+
     @Test
-    public void testTotalPotionsIncreased(){
+    public void testTotalPotionsIncreased() {
         EndScreen.addTotalPotionsObtained();
-        assertEquals(EndScreen.getTotalPotionsObtained(),1);
+        assertEquals(EndScreen.getTotalPotionsObtained(), 1);
     }
 }

@@ -44,7 +44,8 @@ public class EndScreen {
         DropShadow shadow = new DropShadow(20, Color.BLACK);
         shadow.setInput(color);
 
-        if (Player.getPlayer() != null && Player.getPlayer().isDead()) {
+        Player player = Player.getPlayer();
+        if (player != null && player.isDead()) {
             endGameText.setText("You Died In The Dungeon");
 
             color.setColor(Color.PURPLE);
@@ -54,7 +55,8 @@ public class EndScreen {
             color.setColor(Color.BLUE);
         }
 
-        totalMoney.setText("Money Gathered:   " + Player.getPlayer().getMoney());
+        int money = player == null ? 0 : player.getMoney();
+        totalMoney.setText("Money Gathered:   " + money);
         totalKills.setText("Monsters Killed:  " + totalKilled);
         totalPotions.setText("Potions Obtained: " + totalPotionsObtained);
         totalNukes.setText("Nukes Used:       " + totalNukesUsed);
