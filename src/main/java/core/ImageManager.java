@@ -5,12 +5,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.*;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.*;
 import java.util.HashMap;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 public final class ImageManager {
     private static final HashMap<String, InputStream> DATA   = new HashMap<>();
@@ -20,15 +17,6 @@ public final class ImageManager {
     static {
         // Preload all images in a background thread for better performance while running
         new Thread(() -> {
-            File imagesDir = getPath("");
-
-            try (Stream<Path> paths = Files.walk(imagesDir.toPath())) {
-                paths.filter(p -> (p.toString().endsWith(".png") || p.toString().endsWith(".gif")))
-                    .forEach(p -> getInputStream(p.getFileName().toString()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
             Level.ENEMIES.forEach(tier -> tier.forEach(Supplier::get));
             Level.COLLECTABLES.forEach(Supplier::get);
         }).start();
@@ -62,15 +50,15 @@ public final class ImageManager {
     }
 
     public static Image getSprite(String name, int x, int y, int spacing) {
-        return getSprite(name, x, y, spacing, 1d);
+        return getSprite(name, x, y, spacing, spacing, 0, 1d);
     }
 
     public static Image getSprite(String name, int x, int y, int spacing, double scale) {
-        return getSprite(name, x, y, spacing, 0, scale);
+        return getSprite(name, x, y, spacing, spacing, 0, scale);
     }
 
     public static Image getSprite(String name, int x, int y, int spacing, int crop, double scale) {
-        return getSprite(name, x, y, spacing, spacing, 0, scale);
+        return getSprite(name, x, y, spacing, spacing, crop, scale);
     }
 
     public static Image getSprite(String name, int x, int y,
@@ -114,7 +102,7 @@ public final class ImageManager {
                 return inputStream;
             }
 
-            InputStream fis = new FileInputStream(getPath(name));
+            InputStream fis = getURL(name).openStream();
             InputStream bis = new ByteArrayInputStream(fis.readAllBytes());
             fis.close();
 
@@ -122,23 +110,17 @@ public final class ImageManager {
             return bis;
         } catch (IOException e) {
             e.printStackTrace();
-            throw new IllegalArgumentException("Failed to load: images/" + name);
+            throw new IllegalArgumentException("Failed to load: /images/" + name);
         }
     }
 
-    private static File getPath(String name) {
-        try {
-            URL nameURL = ImageManager.class.getClassLoader().getResource("/images/" + name);
+    private static URL getURL(String name) {
+        URL nameURL = ImageManager.class.getResource("/images/" + name);
 
-            if (nameURL != null) {
-                return Paths.get(nameURL.toURI()).toFile();
-            }
-
-            throw new IllegalArgumentException("File does not exist: /images/" + name);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Failed to load: /images/" + name
-                                               + " because it is not a file");
+        if (nameURL != null) {
+            return nameURL;
         }
+
+        throw new IllegalArgumentException("Resource does not exist: /images/" + name);
     }
 }

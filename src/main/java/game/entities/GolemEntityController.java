@@ -98,7 +98,7 @@ public class GolemEntityController extends EntityController<Golem> {
 
         // Attack
 
-        if (t > 2d + lastBeamAttackTime + beamWait) {
+        if (t > 3d + lastBeamAttackTime + beamWait) {
             lastBeamAttackTime = t;
             beamWait           = RandomUtil.get() * healthRatio;
 
@@ -174,7 +174,7 @@ public class GolemEntityController extends EntityController<Golem> {
                                          0, 15, 1, 600, 100, 0, 2d);
 
         ac.setOnFinish(() -> {
-            double beamTime = entity.isDead() ? 3d : .5d;
+            double beamTime = entity.isDead() ? 3d : 1d;
 
             TimerUtil.lerp(beamTime, t -> {
                 if (beam != null) {
@@ -201,6 +201,8 @@ public class GolemEntityController extends EntityController<Golem> {
         GameEngine.addToLayer(GameEngine.VFX, beam);
 
         beamHit = false;
+
+        SoundManager.playBeam();
     }
 
     private void updateBeam() {

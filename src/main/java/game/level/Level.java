@@ -208,6 +208,7 @@ public class Level {
             System.err.println("exit room not spawned");
 
             map = new Room[MAX_DIAMETER][MAX_DIAMETER];
+            GameEngine.destroy(GameEngine.ENTITY, Player.getPlayer());
             generateMap();
         }
         exit.addEntity(new Golem());
@@ -413,22 +414,11 @@ public class Level {
                 }
 
                 boolean[] info = room.getActiveDoors();
-                if (!room.isExit()) {
-                    if (info[Direction.NORTH.toValue()]) {
-                        line2.setCharAt((x - leftBound) * 2, '|');
-                    }
-                    if (info[Direction.EAST.toValue()]) {
-                        line1.setCharAt((x - leftBound) * 2 + 1, '\u2015');
-                    }
-                } else {
-                    if (info[Direction.NORTH.toValue()]
-                        && room.getSourceDirection() == Direction.NORTH) {
-                        line2.setCharAt((x - leftBound) * 2, '|');
-                    }
-                    if (info[Direction.EAST.toValue()]
-                        && room.getSourceDirection() == Direction.EAST) {
-                        line1.setCharAt((x - leftBound) * 2 + 1, '\u2015');
-                    }
+                if (info[Direction.NORTH.toValue()]) {
+                    line2.setCharAt((x - leftBound) * 2, '|');
+                }
+                if (info[Direction.EAST.toValue()]) {
+                    line1.setCharAt((x - leftBound) * 2 + 1, '\u2015');
                 }
             }
 

@@ -1,6 +1,7 @@
 package core;
 
 import javafx.application.Application;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -41,6 +42,8 @@ public class GameDriver extends Application {
         primaryStage.setTitle(GAME_TITLE);
 
         SceneManager.setStage(primaryStage);
+        InputManager.addKeyHandler(KeyCode.F11,
+                                   () -> primaryStage.setFullScreen(!primaryStage.isFullScreen()));
 
         // Implement any program parameters
         Map<String, String> named = getParameters().getNamed();
