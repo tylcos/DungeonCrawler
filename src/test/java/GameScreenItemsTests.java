@@ -125,6 +125,57 @@ public class GameScreenItemsTests extends ApplicationTest {
     }
 
     /**
+     * Tests if speed potion was collected
+     */
+    @Test
+    public void testSpeedPotionCollected() {
+        for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
+            System.out.println(collectable);
+            if (collectable instanceof SpeedPotion) {
+                Player.getPlayer().setPosition(collectable.getPosition());
+                sleep(500);
+                assertTrue(collectable.isCollected());
+            }
+        }
+    }
+
+    /**
+     * Tests if speed potion only gives player extra speed for 5 seconds
+     */
+    @Test
+    public void testSpeedPotionDoubleDamageFiveSeconds() {
+        double startSpeed = Player.getPlayer().getSpeedMultiplier();
+        for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
+            if (collectable instanceof SpeedPotion) {
+                Player.getPlayer().setPosition(collectable.getPosition());
+                sleep(500);
+                push(KeyCode.getKeyCode(String.valueOf(((IItem) collectable).getItemID() + 1)));
+                sleep(500);
+                assertEquals(startSpeed * (4d / 3d),
+                        Player.getPlayer().getSpeedMultiplier(), 0.01);
+
+                sleep(5000); // reset back to normal attack damage after 5 seconds
+                assertEquals(startSpeed,
+                        Player.getPlayer().getSpeedMultiplier(), 0.01);
+            }
+        }
+    }
+
+    /**
+     * Tests if nuke item was collected
+     */
+    @Test
+    public void testNukePotionCollected() {
+        for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
+            if (collectable instanceof NukeItem) {
+                Player.getPlayer().setPosition(collectable.getPosition());
+                sleep(500);
+                assertTrue(collectable.isCollected());
+            }
+        }
+    }
+
+    /**
      * Tests if weapon items can be collected
      */
     @Test
