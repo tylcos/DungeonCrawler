@@ -1,19 +1,23 @@
 import core.GameDriver;
 import core.SceneManager;
+import game.collectables.NukeItem;
 import game.collidables.Door;
 import game.entities.Player;
 import game.level.Direction;
 import game.level.Room;
+import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.matcher.base.NodeMatchers;
 import views.GameScreen;
 
 import java.util.*;
 
 import static org.junit.Assert.*;
+import static org.testfx.api.FxAssert.verifyThat;
 
 public class GameScreenTests extends ApplicationTest {
 
@@ -189,5 +193,16 @@ public class GameScreenTests extends ApplicationTest {
         }
 
         assertEquals(0, weird);
+    }
+
+    @Test
+    public void testStatistics() {
+        Platform.runLater(() -> {
+            new NukeItem().activate();
+
+            SceneManager.loadScene(SceneManager.END);
+
+            verifyThat("Nukes Used:       1", NodeMatchers.isVisible());
+        });
     }
 }

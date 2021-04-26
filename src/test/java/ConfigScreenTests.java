@@ -67,7 +67,7 @@ public class ConfigScreenTests extends ApplicationTest {
         ComboBox<String> weaponTest = lookup("#inputWeapon").queryComboBox();
 
         verifyThat(weaponTest, ComboBoxMatchers.containsItems(
-                "Knife", "Axe", "Sword", "Bow", "Staff"));
+                "Spear", "Sword", "Bow", "Staff"));
     }
 
     @Test
