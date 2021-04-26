@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  */
 public class GameDriver extends Application {
     public static final String GAME_TITLE   = "Dungeon Crawler - Team Azula";
-    public static final String GAME_VERSION = "Version 0.50";
+    public static final String GAME_VERSION = "Version 1.00";
 
     public static final double WIDTH      = 1920d;
     public static final double HEIGHT     = 1080d;
