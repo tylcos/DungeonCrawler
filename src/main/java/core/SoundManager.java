@@ -16,7 +16,11 @@ public final class SoundManager {
 
     private SoundManager() { }
 
-    private static void playSound(String audioPath, double rate) {
+    private static void playSound(String audioPath) {
+        playSound(audioPath, 1, 1d);
+    }
+
+    private static void playSound(String audioPath, double rate, double volumeAdjust) {
         if (!soundOn) {
             return;
         }
@@ -24,7 +28,8 @@ public final class SoundManager {
         AudioClip clip = new AudioClip(Paths.get(audioPath).toUri().toString());
 
         clip.setRate(rate);
-        clip.setVolume(Player.getPlayer().isDead() ? volume / 3d : volume);
+        clip.setVolume(Player.getPlayer().isDead() ? volumeAdjust * volume / 3d
+                                                   : volumeAdjust * volume);
         clip.play();
     }
 
@@ -33,34 +38,38 @@ public final class SoundManager {
     }
 
     public static void playDoorCreak() {
-        playSound("src/main/resources/audio/jail_cell_door.mp3", 1.5d);
+        playSound("src/main/resources/audio/jail_cell_door.mp3");
     }
 
     public static void playPlayerAttacked() {
-        playSound("src/main/resources/audio/lose sound 2 - 2.wav", 1.5d);
+        playSound("src/main/resources/audio/lose sound 2 - 2.wav");
     }
 
     public static void playEnemyKilled() {
-        playSound("src/main/resources/audio/positive 1.mp3", 1.5d);
+        playSound("src/main/resources/audio/positive 1.mp3");
     }
 
     public static void playCoinOrKeyCollected() {
-        playSound("src/main/resources/audio/Coin-collect-sound-effect.mp3", 1.5d);
+        playSound("src/main/resources/audio/Coin-collect-sound-effect.mp3");
     }
 
     public static void playPotionCollected() {
-        playSound("src/main/resources/audio/healspell3.aif", 1.5d);
+        playSound("src/main/resources/audio/healspell3.aif");
     }
 
     public static void playKeyActivated() {
-        playSound("src/main/resources/audio/key2 pickup.mp3", 1.5d);
+        playSound("src/main/resources/audio/key2 pickup.mp3");
     }
 
     public static void playVictory() {
-        playSound("src/main/resources/audio/Old victory sound roblox.mp3", 1.5d);
+        playSound("src/main/resources/audio/Old victory sound roblox.mp3");
     }
 
     public static void playBeam() {
-        playSound("src/main/resources/audio/GolemBeamNoise.mp3", 1d);
+        playSound("src/main/resources/audio/GolemBeamNoise.mp3", 1d, .5d);
+    }
+
+    public static void playDeath() {
+        playSound("src/main/resources/audio/Win sound.wav", 1, 10d);
     }
 }

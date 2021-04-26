@@ -160,7 +160,7 @@ public final class Player extends Entity {
      */
     @Override
     protected void onDeath() {
-        setRotate(90); // You can rotate the image instead of changing it to PlayerDead.png
+        setRotate(90);
 
         // Blurs and changes color to red
         Parent root = getScene().getRoot();
@@ -171,12 +171,18 @@ public final class Player extends Entity {
 
             GameEffects.GAME_BLUR.setRadius(50 * t);
             GameEffects.DEATH_COLOR.setPaint(Color.color(1, x, x));
+        }, () -> {
+            SceneManager.loadPane(SceneManager.END);
+            SoundManager.playDeath();
         });
 
-        TimerUtil.schedule(5, () -> SceneManager.loadPane(SceneManager.END));
         TimerUtil.schedule(15, () -> {
             TimerUtil.lerp(5, t -> room.setOpacity(1 - t));
-            SoundManager.playSound(false);
+
+            // Make sure a new game hasn't started
+            if (Player.getPlayer().isDead) {
+                SoundManager.playSound(false);
+            }
         });
     }
 
