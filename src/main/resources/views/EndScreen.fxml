@@ -5,32 +5,32 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<StackPane id="Top" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.EndScreen">
+<StackPane fx:id="endTop" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.EndScreen">
     <children>
         <VBox alignment="CENTER" StackPane.alignment="CENTER">
             <StackPane.margin>
-                <Insets/>
+                <Insets />
             </StackPane.margin>
             <children>
-                <Label fx:id="endGameText" alignment="CENTER" styleClass="titleText" text="End Game Text"/>
+                <Label fx:id="endGameText" alignment="CENTER" styleClass="titleText" text="End Game Text" />
                 <Label alignment="CENTER" onMouseClicked="#onPlayAgainClicked" styleClass="buttonText" text="Play Again" textAlignment="CENTER">
                     <effect>
-                        <Bloom threshold="0.0"/>
+                        <Bloom threshold="0.0" />
                     </effect>
                 </Label>
                 <Label alignment="CENTER" onMouseClicked="#onMainMenuClicked" styleClass="buttonText" text="Main Menu" textAlignment="CENTER">
                     <effect>
-                        <Bloom threshold="0.0"/>
+                        <Bloom threshold="0.0" />
                     </effect>
                 </Label>
                 <Label alignment="CENTER" onMouseClicked="#onExitClick" styleClass="buttonText" text="Exit Game" textAlignment="RIGHT">
                     <effect>
-                        <Bloom threshold="0.0"/>
+                        <Bloom threshold="0.0" />
                     </effect>
                 </Label>
             </children>
         </VBox>
-        <VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0" stylesheets="@../styles/Global.css" StackPane.alignment="BOTTOM_LEFT">
+        <VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0" stylesheets="@../styles/Global.css" StackPane.alignment="CENTER_LEFT">
             <children>
                 <Label fx:id="totalMoney" styleClass="gameInfoText" text="totalMoney">
                 </Label>
@@ -42,30 +42,18 @@
                 </Label>
             </children>
             <StackPane.margin>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </StackPane.margin>
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0"/>
+                <Insets bottom="20.0" left="20.0" right="20.0" />
             </padding>
             <effect>
-                <Glow level="1.0"/>
-            </effect>
-        </VBox>
-        <VBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" stylesheets="@../styles/Global.css" StackPane.alignment="BOTTOM_RIGHT">
-            <children>
-                <Label alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" layoutX="527.0" layoutY="188.0" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Team Azula - Team 03"/>
-                <Label fx:id="version" alignment="BOTTOM_RIGHT" contentDisplay="BOTTOM" prefHeight="40" prefWidth="400" styleClass="gameInfoText" text="Version"/>
-            </children>
-            <StackPane.margin>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-            </StackPane.margin>
-            <effect>
-                <Glow level="1.0"/>
+                <Glow level="1.0" />
             </effect>
         </VBox>
     </children>
     <stylesheets>
-        <URL value="@../styles/Global.css"/>
-        <URL value="@../styles/EndScreenStyle.css"/>
+        <URL value="@../styles/Global.css" />
+        <URL value="@../styles/EndScreenStyle.css" />
     </stylesheets>
 </StackPane>

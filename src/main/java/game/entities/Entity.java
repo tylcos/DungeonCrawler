@@ -32,6 +32,7 @@ public abstract class Entity extends Collidable {
     protected Entity(String imagePath, Point2D position) {
         super(ImageManager.getImage(imagePath), false);
         setPosition(position);
+        toBack();
     }
 
     /**
@@ -44,6 +45,7 @@ public abstract class Entity extends Collidable {
     protected Entity(String imagePath, Point2D position, Point2D dimensions) {
         super(ImageManager.getImage(imagePath, dimensions, false), false);
         setPosition(position);
+        toBack();
     }
 
     /**
@@ -55,6 +57,7 @@ public abstract class Entity extends Collidable {
     protected Entity(Image image, Point2D position) {
         super(image, false);
         setPosition(position);
+        toBack();
     }
 
     /**

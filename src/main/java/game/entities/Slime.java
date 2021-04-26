@@ -52,6 +52,7 @@ public class Slime extends Entity {
      */
     @Override
     public void onDeath() {
+        toBack();
         setImage(ImageManager.getImage(SLIME_DEAD_SPRITES[slimeType], 300, 60, true));
         EndScreen.addTotalKilled();
         GameEngine.removeFromPhysics(List.of(this));

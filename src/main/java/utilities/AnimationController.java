@@ -38,10 +38,15 @@ public final class AnimationController {
 
                 if (dt > frameLength) {
                     for (int i = 0; i < controllers.size(); ) {
-                        if (controllers.get(i).imageView.isVisible()) {
-                            controllers.get(i).updateImage();
+                        AnimationController controller = controllers.get(i);
+                        if (controller.imageView.isVisible()) {
+                            controller.updateImage();
                             i++;
                         } else {
+                            if (controller.onFinish != null) {
+                                controller.onFinish.run();
+                            }
+
                             controllers.remove(i);
                         }
                     }
