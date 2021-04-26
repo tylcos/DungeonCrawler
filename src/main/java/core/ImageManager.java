@@ -128,16 +128,17 @@ public final class ImageManager {
 
     private static File getPath(String name) {
         try {
-            URL nameURL = ImageManager.class.getClassLoader().getResource("images/" + name);
+            URL nameURL = ImageManager.class.getClassLoader().getResource("/images/" + name);
 
             if (nameURL != null) {
                 return Paths.get(nameURL.toURI()).toFile();
             }
 
-            throw new IllegalArgumentException("Failed to load: images/" + name);
+            throw new IllegalArgumentException("File does not exist: /images/" + name);
         } catch (URISyntaxException e) {
             e.printStackTrace();
-            throw new IllegalArgumentException("Failed to load: images/" + name);
+            throw new IllegalArgumentException("Failed to load: /images/" + name
+                                               + " because it is not a file");
         }
     }
 }
