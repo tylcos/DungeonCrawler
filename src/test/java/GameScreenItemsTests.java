@@ -5,13 +5,16 @@ import game.entities.Player;
 import game.entities.WeaponHolder;
 import game.inventory.IItem;
 import game.level.Level;
+import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.matcher.base.NodeMatchers;
 import views.GameScreen;
 
 import static org.junit.Assert.*;
+import static org.testfx.api.FxAssert.verifyThat;
 
 public class GameScreenItemsTests extends ApplicationTest {
 
@@ -143,7 +146,7 @@ public class GameScreenItemsTests extends ApplicationTest {
      * Tests if speed potion only gives player extra speed for 5 seconds
      */
     @Test
-    public void testSpeedPotionDoubleDamageFiveSeconds() {
+    public void testSpeedPotionDuration() {
         double startSpeed = Player.getPlayer().getSpeedMultiplier();
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
             if (collectable instanceof SpeedPotion) {
@@ -236,5 +239,19 @@ public class GameScreenItemsTests extends ApplicationTest {
         push(KeyCode.getKeyCode(String.valueOf(attackPotion.getItemID() + 1)));
         assertEquals(startWeaponDamage * 2,
                 Player.getPlayer().getWeaponHolder().getWeapon().getDamage());
+    }
+
+    /**
+     * Tests if the nukes used statistic increases after using a nuke
+     */
+    @Test
+    public void testNukesUsedWhenPressed() {
+        Platform.runLater(() -> {
+            new NukeItem().activate();
+
+            SceneManager.loadScene(SceneManager.END);
+
+            verifyThat("Nukes Used:       1", NodeMatchers.isVisible());
+        });
     }
 }
