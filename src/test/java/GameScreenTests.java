@@ -6,6 +6,7 @@ import game.entities.Player;
 import game.level.Direction;
 import game.level.Room;
 import javafx.application.Platform;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import org.junit.Before;
@@ -123,11 +124,11 @@ public class GameScreenTests extends ApplicationTest {
 
     @Test
     public void testExitDoor() {
-        Room end      = GameScreen.getLevel().getExit();
-        int  exitDirs = 0;
+        Room end = GameScreen.getLevel().getExit();
+        int exitDirs = 0;
         for (Direction dir : Direction.values()) {
-            List<Door> doors    = end.getDoors(dir);
-            int        numExits = 0;
+            List<Door> doors = end.getDoors(dir);
+            int numExits = 0;
             for (Door d : doors) {
                 if (d.getWin()) {
                     ++numExits;
@@ -145,8 +146,8 @@ public class GameScreenTests extends ApplicationTest {
 
     @Test
     public void testNumExits() {
-        Room[][] rooms   = GameScreen.getLevel().getMap();
-        int      numExit = 0;
+        Room[][] rooms = GameScreen.getLevel().getMap();
+        int numExit = 0;
         for (int i = 0; i < rooms.length; ++i) {
             for (int j = 0; j < rooms[i].length; ++j) {
                 if (rooms[i][j] != null && rooms[i][j].isExit()) {
@@ -157,11 +158,11 @@ public class GameScreenTests extends ApplicationTest {
 
         assertEquals(1, numExit);
     }
-    
+
     @Test
     public void testNumChallenges() {
-        Room[][] rooms   = GameScreen.getLevel().getMap();
-        int      numChallenge = 0;
+        Room[][] rooms = GameScreen.getLevel().getMap();
+        int numChallenge = 0;
         for (int i = 0; i < rooms.length; ++i) {
             for (int j = 0; j < rooms[i].length; ++j) {
                 if (rooms[i][j] != null && rooms[i][j].isChallenge()) {
@@ -172,13 +173,13 @@ public class GameScreenTests extends ApplicationTest {
 
         assertTrue(numChallenge >= 2);
     }
-    
+
     @Test
     public void testNoWeirdRooms() {
         // This might seem stupid but you'd be surprised how frequently this happens when we
         // tweak the level generation algorithm
-        Room[][] rooms   = GameScreen.getLevel().getMap();
-        int      weird = 0;
+        Room[][] rooms = GameScreen.getLevel().getMap();
+        int weird = 0;
         for (int i = 0; i < rooms.length; ++i) {
             for (int j = 0; j < rooms[i].length; ++j) {
                 if (rooms[i][j] != null) {
@@ -193,6 +194,30 @@ public class GameScreenTests extends ApplicationTest {
         }
 
         assertEquals(0, weird);
+    }
+
+    @Test
+    public void testChallengeActivation() {
+        Platform.runLater(() -> {
+            Room[][] rooms = GameScreen.getLevel().getMap();
+            for (int i = 0; i < rooms.length; ++i) {
+                for (int j = 0; j < rooms[i].length; ++j) {
+                    if (rooms[i][j] != null && rooms[i][j].isChallenge()) {
+                        GameScreen.getLevel().loadRoom(rooms[i][j]);
+                        i = rooms.length;
+                        break;
+                    }
+                }
+            }
+            assertTrue(GameScreen.getLevel().getCurrentRoom().isClear());
+
+            sleep(1000);
+            press(KeyCode.E);
+            sleep(500);
+            release(KeyCode.E);
+
+            assertFalse(GameScreen.getLevel().getCurrentRoom().isClear());
+        });
     }
 
     @Test
