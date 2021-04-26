@@ -54,10 +54,10 @@ public class EndScreen {
             color.setColor(Color.BLUE);
         }
 
-        totalMoney.setText("Money Gathered: " + Player.getPlayer().getMoney());
-        totalKills.setText("Monsters killed: " + totalKilled);
-        totalPotions.setText("Total potions obtained: " + totalPotionsObtained);
-        totalNukes.setText("Number of nukes used: " + totalNukesUsed);
+        totalMoney.setText("Money Gathered:   " + Player.getPlayer().getMoney());
+        totalKills.setText("Monsters Killed:  " + totalKilled);
+        totalPotions.setText("Potions Obtained: " + totalPotionsObtained);
+        totalNukes.setText("Nukes Used:       " + totalNukesUsed);
 
         totalKilled          = 0;
         totalPotionsObtained = 0;

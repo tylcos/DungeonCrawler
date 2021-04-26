@@ -171,9 +171,13 @@ public final class Player extends Entity {
 
             GameEffects.GAME_BLUR.setRadius(50 * t);
             GameEffects.DEATH_COLOR.setPaint(Color.color(1, x, x));
-        }, () -> TimerUtil.lerp(5, t -> room.setOpacity(1 - t)));
+        });
 
-        TimerUtil.schedule(4, () -> SceneManager.loadPane(SceneManager.END));
+        TimerUtil.schedule(5, () -> SceneManager.loadPane(SceneManager.END));
+        TimerUtil.schedule(15, () -> {
+            TimerUtil.lerp(5, t -> room.setOpacity(1 - t));
+            SoundManager.playSound(false);
+        });
     }
 
     /**

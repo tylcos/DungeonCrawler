@@ -50,6 +50,7 @@ public class GameScreen {
             Inventory.initializeInventory(hotbar);
 
             // Start Game
+            SoundManager.playSound(true);
             GameEngine.start(renderPane);
 
             level = new Level();

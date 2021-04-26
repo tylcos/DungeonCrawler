@@ -468,6 +468,8 @@ public class Room extends GridPane {
             bodies.add(d);
             p.getChildren().add(d);
         }
+
+        activeDoors[direction.toValue()] = true;
     }
 
     /**

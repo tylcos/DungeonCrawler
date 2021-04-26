@@ -15,9 +15,9 @@ import views.GameScreen;
  * The door of a room
  */
 public class Door extends CollidableTile {
-    private Room    destination;    // Room this door leads to
+    private Room    destination; // Room this door leads to
     private boolean locked;      // Whether this door can be entered
-    private boolean win; // Whether touching this door with the key wins the game
+    private boolean win;         // Whether touching this door with the key wins the game
 
     /**
      * Constructor taking an Image of a door.
@@ -44,12 +44,12 @@ public class Door extends CollidableTile {
 
     @Override
     public void onCollision(Collidable other) {
-        if (!(other instanceof Player) || locked) {
+        Player player = Player.getPlayer();
+        if (!(other instanceof Player) || locked || player.hasWon()) {
             return;
         }
 
-        Player player = Player.getPlayer();
-        if (player.isKeyActivated() && !player.hasWon()) {
+        if (player.isKeyActivated()) {
             SoundManager.playVictory();
 
             Parent root = getScene().getRoot();

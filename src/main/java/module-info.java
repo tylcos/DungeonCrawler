@@ -1,4 +1,4 @@
-module org.dungeon_game {
+module main {
     requires javafx.fxml;
     requires javafx.controls;
     requires javafx.media;
@@ -7,4 +7,12 @@ module org.dungeon_game {
 
     opens core;
     opens views to javafx.fxml;
+
+    exports core;
+    exports game.entities;
+    exports game.inventory;
+    exports views;
+    exports game.level;
+    exports game.collidables;
+    exports utilities;
 }
