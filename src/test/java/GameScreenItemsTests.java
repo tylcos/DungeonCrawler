@@ -2,6 +2,7 @@ import core.GameDriver;
 import core.SceneManager;
 import game.collectables.*;
 import game.entities.Player;
+import game.entities.WeaponHolder;
 import game.inventory.IItem;
 import game.level.Level;
 import javafx.scene.input.KeyCode;
@@ -10,8 +11,7 @@ import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import views.GameScreen;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class GameScreenItemsTests extends ApplicationTest {
 
@@ -125,7 +125,7 @@ public class GameScreenItemsTests extends ApplicationTest {
     }
 
     /**
-     * Test if the weapon item was collected
+     * Tests if weapon items can be collected
      */
     @Test
     public void testWeaponItemCollected() {
@@ -133,42 +133,44 @@ public class GameScreenItemsTests extends ApplicationTest {
             if (collectable instanceof WeaponItem) {
                 Player.getPlayer().setPosition(collectable.getPosition());
                 sleep(500);
+                push(KeyCode.E);
                 assertTrue(collectable.isCollected());
             }
         }
     }
 
     /**
-     * Test if weapon is changeable after the weapon item collected
+     * Tests if the weapon changes after the weapon item is collected
      */
     @Test
-    public void testWeaponChangedAfterCollected() {
+    public void testWeaponChangesAfterCollected() {
+        WeaponHolder weaponHolder = Player.getPlayer().getWeaponHolder();
+        String initialWeapon = weaponHolder.getWeapon().getName();
+
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
             if (collectable instanceof WeaponItem) {
                 Player.getPlayer().setPosition(collectable.getPosition());
                 sleep(500);
-                Player.getPlayer().getWeaponHolder().getWeapon().getName();
-                push(KeyCode.TAB);
-                assertEquals("Axe", Player.getPlayer().getWeaponHolder().getWeapon().getName());
+                push(KeyCode.E);
 
+                assertNotEquals(initialWeapon, weaponHolder.getWeapon().getName());
             }
         }
     }
 
     /**
-     * Test if weapon is not changeable until player collect the weapon item.
+     * Tests that the key E has to be pressed to collect weapon items.
      */
     @Test
-    public void testNoWeaponChange() {
+    public void testPressEToCollectWeapon() {
         for (Collectable collectable : GameScreen.getLevel().getCurrentRoom().getCollectables()) {
             if (collectable instanceof WeaponItem) {
-                Player.getPlayer().getWeaponHolder().getWeapon().getName();
-                push(KeyCode.TAB);
+                Player.getPlayer().setPosition(collectable.getPosition());
+                sleep(500);
                 assertEquals("Starting Weapon",
                         Player.getPlayer().getWeaponHolder().getWeapon().getName());
             }
         }
-
     }
 
     /**
