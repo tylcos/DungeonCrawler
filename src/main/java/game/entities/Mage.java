@@ -34,6 +34,5 @@ public class Mage extends Entity {
         setVisible(false);
         EndScreen.addTotalKilled();
         SoundManager.playEnemyKilled();
-
     }
 }

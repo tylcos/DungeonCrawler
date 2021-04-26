@@ -129,7 +129,7 @@ public class GolemEntityController extends EntityController<Golem> {
     }
 
     private void releaseProjectiles() {
-        int count = RandomUtil.getInt(2, 10 - (int) (7 * healthRatio));
+        int count = 12 - (int) (11 * healthRatio);
 
         Entity  player         = Player.getPlayer();
         Point2D startDirection = player.position.subtract(entity.position).normalize();
