@@ -26,13 +26,7 @@ public final class GameEffects {
     public static final InnerShadow RED_EDGES = new InnerShadow(200 * ScreenManager.getScale(),
                                                                 Color.RED);
 
-    // Adds shadow around rooms
-    public static final DropShadow ROOM_SHADOW = new DropShadow(100, Color.valueOf("#661455"));
-
     static {
-        ROOM_SHADOW.setWidth(255);
-        ROOM_SHADOW.setHeight(255);
-
         SceneManager.getStage().widthProperty().addListener((observable, oldValue, newValue) -> {
             DEATH_COLOR.setWidth(newValue.doubleValue());
         });

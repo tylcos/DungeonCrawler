@@ -69,7 +69,8 @@ public class WeaponHolder {
             GameEngine.addToLayer(GameEngine.VFX, weaponImageView);
         }
 
-        Point2D playerPosition = Player.getPlayer().getPosition();
+        Player  player         = Player.getPlayer();
+        Point2D playerPosition = player.getPosition();
         Point2D mousePosition  = InputManager.getMousePosition();
         facingDirection = mousePosition.subtract(playerPosition).normalize();
 
@@ -83,6 +84,7 @@ public class WeaponHolder {
         weaponImageView.setTranslateX(weaponPosition.getX());
         weaponImageView.setTranslateY(weaponPosition.getY());
         weaponImageView.setRotate(adjustedAngleDeg + offsets.getZ() + 45);
+        weaponImageView.setOpacity(player.getOpacity());
     }
 
     public Stream<Entity> getCollidingEnemies() {

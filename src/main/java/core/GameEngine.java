@@ -35,8 +35,8 @@ public final class GameEngine {
 
     // Layers are rendered from the bottom up, so layer 1 appears above layer 0
     public static final int ROOM   = 0;
-    public static final int ENTITY = 1;
-    public static final int ITEM   = 2;
+    public static final int ITEM   = 1;
+    public static final int ENTITY = 2;
     public static final int VFX    = 3;
     public static final int DEBUG  = 4;
 

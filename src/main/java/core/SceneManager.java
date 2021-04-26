@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -35,7 +36,7 @@ public final class SceneManager {
     /**
      * Loads normal scenes and displays them
      *
-     * @param fxmlPath Scene to load
+     * @param fxmlPath FXML path to load
      */
     public static void loadScene(String fxmlPath) {
         if (onUnload != null) {
@@ -46,20 +47,46 @@ public final class SceneManager {
         try {
             sceneName = fxmlPath;
 
-            FXMLLoader fxmlLoader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
-            Pane       newRoot    = fxmlLoader.load();
-            root = newRoot;
+            FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+            Pane       pane   = loader.load();
+            root = pane;
 
             if (onLoad != null) {
                 onLoad.run();
                 onLoad = null;
             }
 
-            scene.setRoot(newRoot);
+            scene.setRoot(pane);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            System.err.println("Error loading fxml scene: " + fxmlPath);
+            System.err.println("Error loading fxml file: " + fxmlPath);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Adds a pane to the current scene
+     *
+     * @param fxmlPath FXML path to load
+     */
+    public static void loadPane(String fxmlPath) {
+        try {
+            sceneName = fxmlPath;
+
+            FXMLLoader fxmlLoader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+            Pane       pane       = fxmlLoader.load();
+
+            root = new StackPane(root, pane);
+
+            if (onLoad != null) {
+                onLoad.run();
+                onLoad = null;
+            }
+
+            scene.setRoot(root);
+        } catch (IOException e) {
+            System.err.println("Error loading fxml file: " + fxmlPath);
             e.printStackTrace();
         }
     }

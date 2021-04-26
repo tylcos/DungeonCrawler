@@ -123,7 +123,8 @@ public class MageEntityController extends EntityController<Mage> {
 
         // Swarm the Player on death
         if (player.isDead()) {
-            strafingDistance = 10;
+            strafingDistance = 100;
+            state = State.relaxing;
         }
 
         // Change velocity based on state

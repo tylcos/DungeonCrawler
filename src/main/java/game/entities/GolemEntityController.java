@@ -1,8 +1,12 @@
 package game.entities;
 
-import core.GameEngine;
+import core.*;
 import javafx.geometry.*;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.effect.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import utilities.*;
 import views.GameScreen;
 
@@ -26,8 +30,11 @@ public class GolemEntityController extends EntityController<Golem> {
     private double timeFactorY;
 
     // Variables for attacking
+    private double healthRatio = 1;
+
     private ImageView beam;
     private Point2D   beamDirection;
+    private double    beamScale;
     private double    lastBeamAttackTime;
     private double    beamWait;
     private boolean   beamHit;
@@ -37,6 +44,10 @@ public class GolemEntityController extends EntityController<Golem> {
     private double lastProjectileTime;
 
     private static final double BEAM_ANGLE = 3d;
+
+    private Blend      roomEffect;
+    private Blend      bottomInput;
+    private ColorInput topInput2;
 
     /**
      * Sets up random parameters for the Controller
@@ -53,6 +64,8 @@ public class GolemEntityController extends EntityController<Golem> {
         timeFactorY = RandomUtil.get(1d, 2d);
 
         entity.setPosition(Point2D.ZERO);
+        act();
+        entity.toFront();
     }
 
     public void act() {
@@ -60,6 +73,13 @@ public class GolemEntityController extends EntityController<Golem> {
         if (stopped) {
             return;
         }
+
+        healthRatio = (double) entity.health / entity.maxHealth;
+        double r = .4 + .2 * healthRatio;
+        double g = .3 + .5 * healthRatio;
+        entity.setEffect(new Blend(BlendMode.COLOR_BURN,
+                                   new InnerShadow(255, new Color(r, g, 1, 1)),
+                                   new Bloom(0)));
 
         // Delay the Entity from moving for 1 second
         timeSinceRoomLoad += GameEngine.getDt();
@@ -77,9 +97,10 @@ public class GolemEntityController extends EntityController<Golem> {
         entity.setVelocity(entity.getVelocity().interpolate(velocity, inputSmooth));
 
         // Attack
+
         if (t > 2d + lastBeamAttackTime + beamWait) {
             lastBeamAttackTime = t;
-            beamWait           = RandomUtil.get(0, 6d * entity.health / entity.maxHealth);
+            beamWait           = RandomUtil.get() * healthRatio;
 
             beamAttack();
         } else {
@@ -101,14 +122,14 @@ public class GolemEntityController extends EntityController<Golem> {
             releaseProjectiles();
         }
 
-        double scale = 1.5d - .5d * entity.health / entity.maxHealth;
+        double scale = 1.5d - .5d * healthRatio;
         scale += (scale - entity.getScaleX()) * .001d;
         entity.setScaleX(scale);
         entity.setScaleY(scale);
     }
 
     private void releaseProjectiles() {
-        int count = RandomUtil.getInt(1, 7);
+        int count = RandomUtil.getInt(2, 10 - (int) (7 * healthRatio));
 
         Entity  player         = Player.getPlayer();
         Point2D startDirection = player.position.subtract(entity.position).normalize();
@@ -127,25 +148,54 @@ public class GolemEntityController extends EntityController<Golem> {
     }
 
     private void beamAttack() {
-        Entity  player   = Player.getPlayer();
-        Point2D position = entity.position.add(5, -70).add(RandomUtil.getPoint2D(50));
+        beamScale = 2d - healthRatio;
+        Entity player = Player.getPlayer();
+        Point2D position = entity.position.add(5 * entity.getScaleY(),
+                                               -70 * entity.getScaleX());
         beamDirection = player.position.subtract(position).normalize();
-        Point2D center = position.add(beamDirection.multiply(1200 - 46));
+        Point2D center = position.add(beamDirection.multiply(beamScale * 560));
+
+        if (beam != null) {
+            beam.setVisible(false);
+        }
 
         beam = new ImageView();
         beam.setTranslateX(center.getX());
         beam.setTranslateY(center.getY());
-        beam.setRotate(MathUtil.getAngleDeg(beamDirection) - 1.8d);
-        double scale = 2d + 4d * entity.health / entity.maxHealth;
-        var    ac    = AnimationController.add(beam, "GolemLaser.png", 0, 15, 1, 1200, 100, 0, 2d);
+        beam.setRotate(MathUtil.getAngleDeg(beamDirection) - 3.6d);
+        beam.setScaleX(beamScale);
+        beam.setScaleY(beamScale);
+
+        beam.setEffect(new Blend(BlendMode.COLOR_BURN,
+                                 new DropShadow(255, new Color(beamScale - 1, 0, 1, 1)),
+                                 new Bloom(0)));
+
+        var ac = AnimationController.add(beam, "GolemLaser.png",
+                                         0, 15, 1, 600, 100, 0, 2d);
+
         ac.setOnFinish(() -> {
-            TimerUtil.lerp(.5, t -> {
+            double beamTime = entity.isDead() ? 3d : .5d;
+
+            TimerUtil.lerp(beamTime, t -> {
                 if (beam != null) {
                     beam.setOpacity(1 - t);
+
+                    if (!player.isDead) {
+                        ((MotionBlur) bottomInput.getBottomInput()).setRadius(10 * (1 - t));
+
+                        topInput2.setPaint(new Color(0, 0, 1, .1 * (1 - t)));
+                    }
                 }
             }, () -> {
-                GameEngine.removeFromLayer(GameEngine.VFX, beam);
-                beam = null;
+                if (beam != null) {
+                    GameEngine.removeFromLayer(GameEngine.VFX, beam);
+                    beam.setVisible(false);
+                    beam = null;
+
+                    if (!player.isDead) {
+                        roomEffect.setBottomInput(null);
+                    }
+                }
             });
         });
         GameEngine.addToLayer(GameEngine.VFX, beam);
@@ -158,8 +208,9 @@ public class GolemEntityController extends EntityController<Golem> {
             return;
         }
 
-        Entity  player            = Player.getPlayer();
-        Point2D position          = entity.position.add(5, -70);
+        Entity player = Player.getPlayer();
+        Point2D position = entity.position.add(5 * entity.getScaleY(),
+                                               -70 * entity.getScaleX());
         Point2D directionToPlayer = player.position.subtract(position).normalize();
 
         double det = beamDirection.crossProduct(directionToPlayer)
@@ -169,14 +220,26 @@ public class GolemEntityController extends EntityController<Golem> {
             MathUtil.getVector(MathUtil.getAngle(beamDirection)
                                + rotate * GameEngine.getDt());
 
-        Point2D center = position.add(beamDirection.multiply(1200 - 46));
+        Point2D center = position.add(beamDirection.multiply(beamScale * 560));
 
         beam.setTranslateX(center.getX());
         beam.setTranslateY(center.getY());
-        beam.setRotate(MathUtil.getAngleDeg(beamDirection) - 1.8d);
+        beam.setRotate(MathUtil.getAngleDeg(beamDirection) - 3.6d);
 
         // Collision detection
         if (!beamHit && GameEngine.getT() - lastBeamAttackTime > .8d) {
+            Parent root = SceneManager.getStage().getScene().getRoot();
+            Node   room = root.getChildrenUnmodifiable().get(0);
+            roomEffect  = (Blend) room.getEffect();
+            topInput2   = new ColorInput(0, 0, ScreenManager.getWidth(),
+                                         ScreenManager.getHeight(),
+                                         new Color(0, 0, 1, .1));
+            bottomInput = new Blend(BlendMode.COLOR_BURN, new MotionBlur(),
+                                    topInput2);
+            if (!player.isDead) {
+                roomEffect.setBottomInput(bottomInput);
+            }
+
             Point2D enemyPosition = player.getPosition().subtract(position);
 
             Bounds localBounds = player.getBoundsInLocal();
@@ -194,5 +257,31 @@ public class GolemEntityController extends EntityController<Golem> {
                 attack();
             }
         }
+    }
+
+    @Override
+    void stop() {
+        if (!stopped && beam == null) {
+            beamAttack();
+        }
+
+        TimerUtil.lerp(5, t -> {
+            if (beam == null) {
+                return;
+            }
+
+            beamDirection = MathUtil.getVector(MathUtil.getAngle(beamDirection)
+                                               + t * 3 * GameEngine.getDt());
+
+            Point2D position = entity.position.add(5 * entity.getScaleY(),
+                                                   -70 * entity.getScaleX());
+            Point2D center = position.add(beamDirection.multiply(beamScale * 560));
+
+            beam.setTranslateX(center.getX());
+            beam.setTranslateY(center.getY());
+            beam.setRotate(MathUtil.getAngleDeg(beamDirection) - 3.6d);
+        });
+
+        super.stop();
     }
 }

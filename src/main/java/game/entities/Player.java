@@ -5,12 +5,16 @@ import game.collectables.Key;
 import game.collidables.Collidable;
 import game.inventory.Weapon;
 import game.inventory.WeaponType;
+import game.level.Level;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import utilities.GameEffects;
 import utilities.TimerUtil;
+import views.GameScreen;
 
 /**
  * Singleton-like controller for the player
@@ -26,6 +30,7 @@ public final class Player extends Entity {
 
     private Key     key;
     private boolean keyActivated;
+    private boolean hasWon;
 
     private WeaponHolder weaponHolder;
 
@@ -69,6 +74,7 @@ public final class Player extends Entity {
             money = 10000;
             maxHealth = 10000;
             this.difficulty = 1;
+            weaponHolder.add(new Weapon("Starting", weaponType, 11));
             break;
         default:
             throw new IllegalArgumentException("Unexpected difficulty: " + difficulty);
@@ -83,6 +89,24 @@ public final class Player extends Entity {
         uiInfoText.setText(toStringFormatted());
         if (isDead) {
             return;
+        }
+
+        if (InputManager.get(KeyCode.F1)) {
+            maxHealth = 50;
+            health    = maxHealth;
+        }
+
+        if (InputManager.get(KeyCode.F2)) {
+            Level level = GameScreen.getLevel();
+            level.loadRoom(level.getExit());
+        }
+
+        if (InputManager.get(KeyCode.F3)) {
+            weaponHolder.add(new Weapon("Cheat ", WeaponType.Spear, 11));
+        }
+
+        if (InputManager.get(KeyCode.L)) {
+            damage(health);
         }
 
         if (InputManager.get(KeyCode.K)) {
@@ -139,13 +163,17 @@ public final class Player extends Entity {
         setRotate(90); // You can rotate the image instead of changing it to PlayerDead.png
 
         // Blurs and changes color to red
-        getScene().getRoot().setEffect(GameEffects.DEATH);
+        Parent root = getScene().getRoot();
+        Node   room = root.getChildrenUnmodifiable().get(0);
+        root.setEffect(GameEffects.DEATH);
         TimerUtil.lerp(5, t -> {
             double x = 1 - .5 * t;
 
-            GameEffects.GAME_BLUR.setRadius(20 * t);
+            GameEffects.GAME_BLUR.setRadius(50 * t);
             GameEffects.DEATH_COLOR.setPaint(Color.color(1, x, x));
-        }, () -> SceneManager.loadScene(SceneManager.END));
+        }, () -> TimerUtil.lerp(5, t -> room.setOpacity(1 - t)));
+
+        TimerUtil.schedule(4, () -> SceneManager.loadPane(SceneManager.END));
     }
 
     /**
@@ -189,6 +217,14 @@ public final class Player extends Entity {
 
     public boolean isKeyActivated() {
         return keyActivated;
+    }
+
+    public boolean hasWon() {
+        return hasWon;
+    }
+
+    public void setHasWon(boolean hasWon) {
+        this.hasWon = hasWon;
     }
 
     /**

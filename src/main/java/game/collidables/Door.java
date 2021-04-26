@@ -4,14 +4,18 @@ import core.SceneManager;
 import core.SoundManager;
 import game.entities.Player;
 import game.level.Room;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.image.Image;
+import utilities.GameEffects;
+import utilities.TimerUtil;
 import views.GameScreen;
 
 /**
  * The door of a room
  */
 public class Door extends CollidableTile {
-    private Room destination;    // Room this door leads to
+    private Room    destination;    // Room this door leads to
     private boolean locked;      // Whether this door can be entered
     private boolean win; // Whether touching this door with the key wins the game
 
@@ -40,25 +44,31 @@ public class Door extends CollidableTile {
 
     @Override
     public void onCollision(Collidable other) {
-        if (win && !locked) {
-            // if door is win door try to win
-            if (other instanceof Player) {
-                if (Player.getPlayer().isKeyActivated()) {
-                    SoundManager.playVictory();
-                    SceneManager.loadScene(SceneManager.END);
-                }
-            }
-        } else {
-            // if door is not win door act normally
-            if (!locked) {
-                if (other instanceof Player) {
-                    SoundManager.playDoorCreak();
-                    GameScreen.getLevel().loadRoom(destination);
-                }
-            }
+        if (!(other instanceof Player) || locked) {
+            return;
+        }
+
+        Player player = Player.getPlayer();
+        if (player.isKeyActivated() && !player.hasWon()) {
+            SoundManager.playVictory();
+
+            Parent root = getScene().getRoot();
+            Node   room = root.getChildrenUnmodifiable().get(0);
+            root.setEffect(GameEffects.GAME_BLUR);
+            TimerUtil.lerp(1, t -> player.setOpacity(1 - t));
+            TimerUtil.lerp(5, t -> GameEffects.GAME_BLUR.setRadius(50 * t),
+                           () -> TimerUtil.lerp(5, t -> room.setOpacity(1 - t)));
+
+            TimerUtil.schedule(2, () -> SceneManager.loadPane(SceneManager.END));
+
+            player.stop();
+            player.setHasWon(true);
+        } else if (destination != null) {
+            GameScreen.getLevel().loadRoom(destination);
+
+            SoundManager.playDoorCreak();
         }
     }
-
 
     // victory if: keyActivated && unlocked
     // bounce back if: key not activated or locked
@@ -80,30 +90,31 @@ public class Door extends CollidableTile {
     public Room getDestination() {
         return destination;
     }
-    
+
     /**
      * Lock the door.
      */
     public void lock() {
         locked = true;
     }
-    
+
     /**
      * Unlock the door.
      */
     public void unlock() {
         locked = false;
     }
-    
+
     /**
      * Make touching this door with a key the victory condition.
      */
     public void setWin() {
         win = true;
     }
-    
+
     /**
      * Checks if touching this door with a key the victory condition.
+     *
      * @return true if this is the victory door
      */
     public boolean getWin() {

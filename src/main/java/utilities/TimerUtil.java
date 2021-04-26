@@ -3,7 +3,6 @@ package utilities;
 import javafx.animation.AnimationTimer;
 
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.function.Consumer;
 
 /**
@@ -21,7 +20,7 @@ public final class TimerUtil {
      * @param action the action to run
      */
     public static void schedule(double delay, Runnable action) {
-        TIMER.schedule(new RunnableTimerTask(action), (long) (delay * 1000d));
+        lerp(delay, t -> { }, action);
     }
 
     /**
@@ -65,21 +64,5 @@ public final class TimerUtil {
         }.start();
 
         action.accept(0d);
-    }
-
-    /**
-     * Wrapper to convert a Runnable into a TimerTask
-     */
-    private static final class RunnableTimerTask extends TimerTask {
-        private Runnable action;
-
-        private RunnableTimerTask(Runnable action) {
-            this.action = action;
-        }
-
-        @Override
-        public void run() {
-            action.run();
-        }
     }
 }
