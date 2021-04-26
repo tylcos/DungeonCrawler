@@ -98,4 +98,16 @@ public class EndScreen {
     public static void addTotalNukesUsed() {
         totalNukesUsed++;
     }
+
+    public static int getTotalKill() {
+        return totalKilled;
+    }
+
+    public static int getTotalNukesUsed() {
+        return totalNukesUsed;
+    }
+
+    public static int getTotalPotionsObtained() {
+        return totalPotionsObtained;
+    }
 }
