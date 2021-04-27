@@ -39,6 +39,8 @@ public class NukeItem extends Collectable implements IItem {
     }
 
     public void activate() {
+        SoundManager.playNuke();
+
         GameScreen.getLevel().getCurrentRoom().getEntities().forEach(e -> {
             // Jank
             if (!(e instanceof Golem)) {

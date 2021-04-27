@@ -42,6 +42,8 @@ public class GameDriver extends Application {
         primaryStage.setTitle(GAME_TITLE);
 
         SceneManager.setStage(primaryStage);
+
+        primaryStage.setFullScreen(true);
         InputManager.addKeyHandler(KeyCode.F11,
                                    () -> primaryStage.setFullScreen(!primaryStage.isFullScreen()));
 
