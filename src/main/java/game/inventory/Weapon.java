@@ -51,6 +51,10 @@ public class Weapon {
         this.name = name;
         this.type = type;
 
+        if (tier > 11) {
+            tier = 11;
+        }
+
         switch (type) {
         case Sword:
             angleOffset = 45;
@@ -74,8 +78,7 @@ public class Weapon {
             throw new IllegalArgumentException("Illegal Weapon type: " + type);
         }
 
-        image = tier > 11 ? ImageManager.getSprite("weapons.png", type.getValue(), 11, 32, 3)
-                          : ImageManager.getSprite("weapons.png", type.getValue(), tier, 32, 3);
+        image = ImageManager.getSprite("weapons.png", type.getValue(), tier, 32, 3);
     }
 
     public void attack() {

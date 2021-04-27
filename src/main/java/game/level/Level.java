@@ -132,10 +132,10 @@ public class Level {
         } else if (!room.isEntrance()) {
             collectablesToSpawn = new int[] {
                 RandomUtil.getInt(1, 4),            // Coin [1,3]
-                RandomUtil.getBoolean(.2d) ? 1 : 0, // Health Potion 20% spawn chance
-                RandomUtil.getBoolean(.2d) ? 1 : 0, // Attack Potion 20% spawn chance
-                RandomUtil.getBoolean(.2d) ? 1 : 0, // Speed Potion 20% spawn chance
-                RandomUtil.getBoolean(.1d) ? 1 : 0, // Nuke 10% spawn chance
+                RandomUtil.getBoolean(.5d) ? 1 : 0, // Health Potion 20% spawn chance
+                RandomUtil.getBoolean(.5d) ? 1 : 0, // Attack Potion 20% spawn chance
+                RandomUtil.getBoolean(.5d) ? 1 : 0, // Speed Potion 20% spawn chance
+                RandomUtil.getBoolean(.2d) ? 1 : 0, // Nuke 10% spawn chance
                 RandomUtil.getBoolean(.6d) ? 1 : 0  // Weapon 60% spawn chance
             };
         }

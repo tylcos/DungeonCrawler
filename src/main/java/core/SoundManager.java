@@ -28,7 +28,7 @@ public final class SoundManager {
         AudioClip clip = new AudioClip(Paths.get(audioPath).toUri().toString());
 
         clip.setRate(rate);
-        clip.setVolume(Player.getPlayer().isDead() ? volumeAdjust * volume / 3d
+        clip.setVolume(Player.getPlayer().isDead() ? volumeAdjust * volume / 2d
                                                    : volumeAdjust * volume);
         clip.play();
     }
@@ -71,5 +71,9 @@ public final class SoundManager {
 
     public static void playDeath() {
         playSound("src/main/resources/audio/Win sound.wav", 1, 10d);
+    }
+
+    public static void playNuke() {
+        playSound("src/main/resources/audio/Nuke.mp3");
     }
 }

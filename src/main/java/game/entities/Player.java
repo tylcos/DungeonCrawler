@@ -1,10 +1,9 @@
 package game.entities;
 
 import core.*;
-import game.collectables.Key;
+import game.collectables.*;
 import game.collidables.Collidable;
-import game.inventory.Weapon;
-import game.inventory.WeaponType;
+import game.inventory.*;
 import game.level.Level;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -91,18 +90,30 @@ public final class Player extends Entity {
             return;
         }
 
-        if (InputManager.get(KeyCode.F1)) {
-            maxHealth = 50;
+        if (InputManager.getKeyDown(KeyCode.F1)) {
+            maxHealth = 500;
             health    = maxHealth;
+
+            Inventory.addItem(new AttackPotion());
+            Inventory.addItem(new SpeedPotion());
         }
 
-        if (InputManager.get(KeyCode.F2)) {
+        if (InputManager.getKeyDown(KeyCode.F2)) {
             Level level = GameScreen.getLevel();
             level.loadRoom(level.getExit());
         }
 
-        if (InputManager.get(KeyCode.F3)) {
+        if (InputManager.getKeyDown(KeyCode.F3)) {
             weaponHolder.add(new Weapon("Cheat ", WeaponType.Spear, 11));
+        }
+
+        if (InputManager.get(KeyCode.F4)) {
+            Inventory.addItem(new NukeItem());
+        }
+
+        if (InputManager.getKeyDown(KeyCode.F5)) {
+            GameScreen.getLevel().getExit().addEntity(new Golem());
+            GameScreen.getLevel().getExit().addEntity(new Golem());
         }
 
         if (InputManager.get(KeyCode.L)) {

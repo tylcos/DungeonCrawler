@@ -28,6 +28,7 @@ public class GolemEntityController extends EntityController<Golem> {
     // Variables for generating bias
     private double timeFactorX;
     private double timeFactorY;
+    private double startTime;
 
     // Variables for attacking
     private double healthRatio = 1;
@@ -57,11 +58,12 @@ public class GolemEntityController extends EntityController<Golem> {
     public GolemEntityController(Golem entity) {
         super(entity);
 
-        speed       = 200;
+        speed       = RandomUtil.get(200d, 300d);
         inputSmooth = 0.03d;
 
-        timeFactorX = RandomUtil.get(1d, 2d);
-        timeFactorY = RandomUtil.get(1d, 2d);
+        timeFactorX = RandomUtil.get(1.5d, 2d);
+        timeFactorY = RandomUtil.get(1d, 1.5d);
+        startTime   = RandomUtil.get() * 500;
 
         entity.setPosition(Point2D.ZERO);
         act();
@@ -88,10 +90,13 @@ public class GolemEntityController extends EntityController<Golem> {
         }
 
         // Change velocity
-        double  t            = GameEngine.getT();
-        Point2D velocity     = new Point2D(Math.cos(t * timeFactorX), Math.cos(t * timeFactorY));
-        Point2D biasToCenter = entity.position.normalize().multiply(-.1);
-        velocity = velocity.add(biasToCenter);
+        double  t      = GameEngine.getT();
+        Entity  player = Player.getPlayer();
+        Point2D dPos   = player.position.subtract(entity.position);
+        Point2D velocity = new Point2D(Math.cos(t * timeFactorX + startTime),
+                                       Math.cos(t * timeFactorY + startTime));
+        Point2D bias = dPos.multiply(.002d);
+        velocity = velocity.add(bias);
         velocity = velocity.normalize().multiply(speed);
 
         entity.setVelocity(entity.getVelocity().interpolate(velocity, inputSmooth));

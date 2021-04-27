@@ -19,7 +19,7 @@ public final class InputManager {
     // Initializer for setting up inputState
     static {
         for (KeyCode keyCode : KeyCode.values()) {
-            keyStates.put(keyCode, 0L);
+            keyStates.put(keyCode, Long.MIN_VALUE);
         }
 
         Stage stage = SceneManager.getStage();
